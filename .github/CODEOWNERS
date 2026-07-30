@@ -1,0 +1,11 @@
+# GitHub 사용자명이 정해지면 주석을 해제하고 실제 계정으로 교체합니다.
+# /accounts/         @github-id-a
+# /locations/        @github-id-b
+# /records/          @github-id-c
+# /diary/            @github-id-d
+#
+# 공용 파일은 통합 담당자가 관리합니다.
+# /config/           @github-id-integrator
+# /common/           @github-id-integrator
+# /templates/        @github-id-integrator
+# /requirements.txt  @github-id-integrator
