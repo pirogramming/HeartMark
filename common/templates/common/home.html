@@ -5,32 +5,53 @@
 
 {% block content %}
 <section class="home-page">
-    <div class="home-hero">
-        <div class="home-character home-character-top">
-            <img src="{% static 'accounts/images/1.png' %}" alt="">
-        </div>
-        <div class="home-character home-character-left">
-            <img src="{% static 'accounts/images/2.png' %}" alt="">
-        </div>
-        <div class="home-character home-character-right">
-            <img src="{% static 'accounts/images/3.png' %}" alt="">
-        </div>
+    <section class="home-hero" aria-labelledby="home-hero-title">
+        <img class="home-character home-character-one" src="{% static 'accounts/images/1.png' %}" alt="">
+        <img class="home-character home-character-two" src="{% static 'accounts/images/2.png' %}" alt="">
+        <img class="home-character home-character-three" src="{% static 'accounts/images/3.png' %}" alt="">
+        <img class="home-character home-character-four" src="{% static 'accounts/images/4.png' %}" alt="">
+        <img class="home-character home-character-five" src="{% static 'accounts/images/5.png' %}" alt="">
 
-        <h1>내 마음이 머문 순간을 기록해요</h1>
-        <a class="home-cta" href="{% url 'accounts:login' %}">Let's go<br><span>기록하기</span></a>
-    </div>
+        <h1 id="home-hero-title">내 마음이 머문 순간을 기록해요</h1>
+        <a class="home-cta" href="{% if user.is_authenticated %}#{% else %}{% url 'accounts:login' %}{% endif %}">
+            <span class="home-cta-text">Let's go</span>
+            <span class="home-cta-subtext">기록하기</span>
+        </a>
+    </section>
 
-    <div class="home-start">
-        <div>
-            <h2>영은님,<br>오늘을 기록하세요</h2>
+    <section class="home-start" aria-labelledby="home-start-title">
+        <div class="home-start-copy">
+            {% if user.is_authenticated %}
+                <h2 id="home-start-title">{{ user.username }}님,<br>오늘을 기록하세요</h2>
+            {% else %}
+                <h2 id="home-start-title">로그인을 해주세요!</h2>
+            {% endif %}
             <p>장소를 인증하고 그곳의 하루 기분을 남겨봐요</p>
         </div>
-        <div class="home-actions">
-            <a href="{% url 'accounts:login' %}">나의 기분 기록하기</a>
-            <a href="#">다이어리</a>
-            <a href="#">공유하기</a>
+
+        {% if user.is_authenticated %}
+            <div class="home-actions home-actions-user">
+                <img class="home-speech-image" src="{% static 'accounts/images/download.png' %}" alt="">
+                <div class="home-actions-content">
+                    <a href="#">나의 기분 기록하기</a>
+                    <a href="#">다이어리</a>
+                    <a href="#">공유하기</a>
+                </div>
+            </div>
+        {% else %}
+            <a class="home-actions home-actions-locked" href="{% url 'accounts:login' %}" aria-label="로그인하러 가기">
+                <img class="home-speech-image" src="{% static 'accounts/images/download.png' %}" alt="">
+                <span aria-hidden="true">🔒</span>
+            </a>
+        {% endif %}
+
+        <div class="home-feature-character">
+            {% if user.is_authenticated %}
+                <img src="{% static 'accounts/images/'|add:selected_character_image %}" alt="선택한 캐릭터">
+            {% else %}
+                <img src="{% static 'accounts/images/mistery.png' %}" alt="미스터리 캐릭터">
+            {% endif %}
         </div>
-        <img src="{% static 'accounts/images/5.png' %}" alt="" class="home-main-character">
-    </div>
+    </section>
 </section>
 {% endblock %}

@@ -1,3 +1,49 @@
 {% extends "base.html" %}
-{% block content %}<!-- 담당 A: 캐릭터 선택 -->{% endblock %}
+{% load static %}
 
+{% block title %}캐릭터 선택 | HeartMark{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="character-page" aria-labelledby="character-title">
+    <form class="character-form" action="{% url 'accounts:character_select' %}" method="post">
+        {% csrf_token %}
+        <div class="character-heading">
+            <h1 id="character-title">내 프로필 이미지를 골라주세요</h1>
+            <p>마음자국에서 사용할 캐릭터를 선택해요</p>
+        </div>
+
+        <label class="profile-name-field">
+            <span>프로필 이름</span>
+            <input type="text" name="display_name" value="{{ display_name }}" maxlength="30" autocomplete="off">
+        </label>
+        {% if errors.display_name %}
+            <p class="character-error">{{ errors.display_name }}</p>
+        {% endif %}
+
+        <div class="character-grid">
+            {% for character in characters %}
+                <label class="character-card {% if character.id == selected_character %}is-selected{% endif %}">
+                    <input type="radio" name="character_id" value="{{ character.id }}" {% if character.id == selected_character %}checked{% endif %}>
+                    <img src="{% static 'accounts/images/'|add:character.image %}" alt="{{ character.label }}">
+                    <span class="character-check" aria-hidden="true">✓</span>
+                </label>
+            {% endfor %}
+        </div>
+        {% if errors.character_id %}
+            <p class="character-error">{{ errors.character_id }}</p>
+        {% endif %}
+
+        <button class="character-submit" type="submit" aria-label="시작하기">
+            <img src="{% static 'accounts/images/start.png' %}" alt="">
+        </button>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock %}

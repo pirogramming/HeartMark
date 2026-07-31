@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector(".auth-form");
     const passwordToggles = document.querySelectorAll(".password-toggle");
+    const characterCards = document.querySelectorAll(".character-card");
 
     passwordToggles.forEach((passwordToggle) => {
         const field = passwordToggle.closest(".auth-field");
@@ -15,6 +16,19 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordInput.type = isHidden ? "text" : "password";
             passwordToggle.textContent = isHidden ? "숨김" : "보기";
             passwordToggle.setAttribute("aria-label", isHidden ? "비밀번호 숨기기" : "비밀번호 보기");
+        });
+    });
+
+    characterCards.forEach((card) => {
+        const radio = card.querySelector('input[type="radio"]');
+
+        card.addEventListener("click", () => {
+            characterCards.forEach((item) => item.classList.remove("is-selected"));
+            card.classList.add("is-selected");
+
+            if (radio) {
+                radio.checked = true;
+            }
         });
     });
 
