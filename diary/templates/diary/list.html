@@ -1,3 +1,482 @@
-{% extends "base.html" %}
-{% block content %}<!-- 담당 D: 다이어리 목록 -->{% endblock %}
+<!-- 담당 D: 다이어리 목록 -->
 
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}다이어리 목록 | HeartMark{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="diary-list-page">
+    <div class="diary-list-container">
+
+        <!-- 전체 / 감정별 / 장소별 탭 -->
+        {% include "diary/partials/diary_tab.html" %}
+
+        <!-- =========================
+                전체 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'all' or not selected_tab %}active{% endif %}"
+            data-panel="all"
+            {% if selected_tab and selected_tab != "all" %}hidden{% endif %}
+        >
+            <div class="diary-list-header">
+                <div class="diary-list-summary">
+                    <h1 class="diary-list-title">전체 기록</h1>
+                    <span class="diary-list-count">
+                        {{ records|length }}개
+                    </span>
+                </div>
+
+                <!-- 최신순 / 과거순 / 기간 설정 -->
+                <form
+                    method="get"
+                    action=""
+                    class="diary-filter-form"
+                    id="diary-filter-form"
+                >
+                    <input type="hidden" name="tab" value="all">
+
+                    <label class="sr-only" for="diary-sort">
+                        기록 정렬 방식
+                    </label>
+
+                    <select
+                        name="sort"
+                        id="diary-sort"
+                        class="diary-sort-select"
+                    >
+                        <option
+                            value="latest"
+                            {% if selected_sort == "latest" or not selected_sort %}
+                                selected
+                            {% endif %}
+                        >
+                            최신순
+                        </option>
+
+                        <option
+                            value="oldest"
+                            {% if selected_sort == "oldest" %}
+                                selected
+                            {% endif %}
+                        >
+                            과거순
+                        </option>
+                    </select>
+
+                    <button
+                        type="button"
+                        class="period-toggle-button"
+                        id="period-toggle-button"
+                        aria-expanded="false"
+                        aria-controls="period-filter"
+                    >
+                        기간 설정
+                    </button>
+
+                    <div
+                        class="period-filter"
+                        id="period-filter"
+                        hidden
+                    >
+                        <div class="period-input-group">
+                            <label for="start-date">시작일</label>
+                            <input
+                                type="date"
+                                name="start_date"
+                                id="start-date"
+                                value="{{ selected_start_date|default:'' }}"
+                            >
+                        </div>
+
+                        <span class="period-separator" aria-hidden="true">
+                            ~
+                        </span>
+
+                        <div class="period-input-group">
+                            <label for="end-date">종료일</label>
+                            <input
+                                type="date"
+                                name="end_date"
+                                id="end-date"
+                                value="{{ selected_end_date|default:'' }}"
+                            >
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="period-apply-button"
+                        >
+                            적용
+                        </button>
+
+                        <a
+                            href="?tab=all&sort={{ selected_sort|default:'latest' }}"
+                            class="period-reset-button"
+                        >
+                            초기화
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="diary-grid">
+                {% for record in records %}
+                    <article class="diary-card">
+                        <a
+                            href="{% url 'diary:detail' record.pk %}"
+                            class="diary-card-link"
+                        >
+                            <div class="diary-card-image-wrapper">
+                                {% if record.image %}
+                                    <img
+                                        src="{{ record.image.url }}"
+                                        alt="{{ record.title }} 기록 사진"
+                                        class="diary-card-image"
+                                    >
+                                {% else %}
+                                    <div class="diary-card-image-placeholder">
+                                        <span>사진 없음</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if record.emotion %}
+                                    <div class="diary-card-emotion">
+                                        {% if record.emotion.image %}
+                                            <img
+                                                src="{{ record.emotion.image.url }}"
+                                                alt="{{ record.emotion.name }}"
+                                            >
+                                        {% else %}
+                                            <span>
+                                                {{ record.emotion.name }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="diary-card-content">
+                                <time
+                                    class="diary-card-date"
+                                    datetime="{{ record.created_at|date:'Y-m-d' }}"
+                                >
+                                    {{ record.created_at|date:"Y/m/d" }}
+                                </time>
+
+                                <h2 class="diary-card-title">
+                                    {{ record.title }}
+                                </h2>
+
+                                {% if record.location %}
+                                    <p class="diary-card-location">
+                                        <span aria-hidden="true">⌖</span>
+                                        {{ record.location.name }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </article>
+                {% empty %}
+                    <div class="diary-empty">
+                        <p class="diary-empty-title">
+                            아직 작성한 기록이 없어요.
+                        </p>
+
+                        <p class="diary-empty-description">
+                            오늘의 마음을 첫 기록으로 남겨보세요.
+                        </p>
+
+                        <a
+                            href="{% url 'diary:create' %}"
+                            class="diary-empty-button"
+                        >
+                            기록 작성하기
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- =========================
+             감정별 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'emotion' %}active{% endif %}"
+            data-panel="emotion"
+            {% if selected_tab != "emotion" %}hidden{% endif %}
+        >
+            <div class="diary-list-header">
+                <div class="diary-list-summary">
+                    <div>
+                        <h1 class="diary-list-title">감정별 기록</h1>
+                        <p class="diary-list-description">
+                            감정을 선택하면 해당 감정으로 남긴 기록을 확인할 수 있어요.
+                        </p>
+                    </div>
+
+                    <span class="diary-list-count">
+                        {{ records|length }}개
+                    </span>
+                </div>
+            </div>
+
+            <form
+                method="get"
+                action=""
+                class="emotion-filter-form"
+            >
+                <input type="hidden" name="tab" value="emotion">
+
+                <div class="emotion-selector">
+                    <button
+                        type="submit"
+                        name="emotion"
+                        value=""
+                        class="emotion-button
+                        {% if not selected_emotion %}active{% endif %}"
+                    >
+                        전체 감정
+                    </button>
+
+                    {% for emotion in emotions %}
+                        <button
+                            type="submit"
+                            name="emotion"
+                            value="{{ emotion.id }}"
+                            class="emotion-button
+                            {% if selected_emotion|stringformat:'s' == emotion.id|stringformat:'s' %}
+                                active
+                            {% endif %}"
+                        >
+                            {% if emotion.image %}
+                                <img
+                                    src="{{ emotion.image.url }}"
+                                    alt=""
+                                    class="emotion-button-image"
+                                >
+                            {% endif %}
+
+                            <span>{{ emotion.name }}</span>
+                        </button>
+                    {% endfor %}
+                </div>
+            </form>
+
+            <div class="diary-grid">
+                {% for record in records %}
+                    <article class="diary-card">
+                        <a
+                            href="{% url 'diary:detail' record.pk %}"
+                            class="diary-card-link"
+                        >
+                            <div class="diary-card-image-wrapper">
+                                {% if record.image %}
+                                    <img
+                                        src="{{ record.image.url }}"
+                                        alt="{{ record.title }} 기록 사진"
+                                        class="diary-card-image"
+                                    >
+                                {% else %}
+                                    <div class="diary-card-image-placeholder">
+                                        <span>사진 없음</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if record.emotion %}
+                                    <div class="diary-card-emotion">
+                                        {% if record.emotion.image %}
+                                            <img
+                                                src="{{ record.emotion.image.url }}"
+                                                alt="{{ record.emotion.name }}"
+                                            >
+                                        {% else %}
+                                            <span>
+                                                {{ record.emotion.name }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="diary-card-content">
+                                <time
+                                    class="diary-card-date"
+                                    datetime="{{ record.created_at|date:'Y-m-d' }}"
+                                >
+                                    {{ record.created_at|date:"Y/m/d" }}
+                                </time>
+
+                                <h2 class="diary-card-title">
+                                    {{ record.title }}
+                                </h2>
+
+                                {% if record.location %}
+                                    <p class="diary-card-location">
+                                        <span aria-hidden="true">⌖</span>
+                                        {{ record.location.name }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </article>
+                {% empty %}
+                    <div class="diary-empty">
+                        <p class="diary-empty-title">
+                            해당 감정의 기록이 없어요.
+                        </p>
+
+                        <p class="diary-empty-description">
+                            다른 감정을 선택해 보세요.
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- =========================
+             장소별 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'location' %}active{% endif %}"
+            data-panel="location"
+            {% if selected_tab != "location" %}hidden{% endif %}
+        >
+            <div class="diary-list-header">
+                <div class="diary-list-summary">
+                    <div>
+                        <h1 class="diary-list-title">장소별 기록</h1>
+                        <p class="diary-list-description">
+                            장소를 선택하면 그곳에서 남긴 기록을 확인할 수 있어요.
+                        </p>
+                    </div>
+
+                    <span class="diary-list-count">
+                        {{ records|length }}개
+                    </span>
+                </div>
+            </div>
+
+            <form
+                method="get"
+                action=""
+                class="location-filter-form"
+            >
+                <input type="hidden" name="tab" value="location">
+
+                <div class="location-selector">
+                    <button
+                        type="submit"
+                        name="location"
+                        value=""
+                        class="location-button
+                        {% if not selected_location %}active{% endif %}"
+                    >
+                        전체 장소
+                    </button>
+
+                    {% for location in locations %}
+                        <button
+                            type="submit"
+                            name="location"
+                            value="{{ location.id }}"
+                            class="location-button
+                            {% if selected_location|stringformat:'s' == location.id|stringformat:'s' %}
+                                active
+                            {% endif %}"
+                        >
+                            <span>{{ location.name }}</span>
+
+                            {% if location.record_count %}
+                                <span class="location-record-count">
+                                    {{ location.record_count }}개
+                                </span>
+                            {% endif %}
+                        </button>
+                    {% endfor %}
+                </div>
+            </form>
+
+            <div class="diary-grid">
+                {% for record in records %}
+                    <article class="diary-card">
+                        <a
+                            href="{% url 'diary:detail' record.pk %}"
+                            class="diary-card-link"
+                        >
+                            <div class="diary-card-image-wrapper">
+                                {% if record.image %}
+                                    <img
+                                        src="{{ record.image.url }}"
+                                        alt="{{ record.title }} 기록 사진"
+                                        class="diary-card-image"
+                                    >
+                                {% else %}
+                                    <div class="diary-card-image-placeholder">
+                                        <span>사진 없음</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if record.emotion %}
+                                    <div class="diary-card-emotion">
+                                        {% if record.emotion.image %}
+                                            <img
+                                                src="{{ record.emotion.image.url }}"
+                                                alt="{{ record.emotion.name }}"
+                                            >
+                                        {% else %}
+                                            <span>
+                                                {{ record.emotion.name }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="diary-card-content">
+                                <time
+                                    class="diary-card-date"
+                                    datetime="{{ record.created_at|date:'Y-m-d' }}"
+                                >
+                                    {{ record.created_at|date:"Y/m/d" }}
+                                </time>
+
+                                <h2 class="diary-card-title">
+                                    {{ record.title }}
+                                </h2>
+
+                                {% if record.location %}
+                                    <p class="diary-card-location">
+                                        <span aria-hidden="true">⌖</span>
+                                        {{ record.location.name }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </article>
+                {% empty %}
+                    <div class="diary-empty">
+                        <p class="diary-empty-title">
+                            해당 장소의 기록이 없어요.
+                        </p>
+
+                        <p class="diary-empty-description">
+                            다른 장소를 선택해 보세요.
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'diary/js/diary.js' %}"></script>
+{% endblock %}
