@@ -10,7 +10,9 @@
 </head>
 <body>
     {% include "includes/header.html" %}
-    <main>{% block content %}{% endblock %}</main>
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
     {% include "includes/bottom_nav.html" %}
     <script src="{% static 'common/js/base.js' %}"></script>
     {% block extra_js %}{% endblock %}
