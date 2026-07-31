@@ -1,3 +1,52 @@
 {% extends "base.html" %}
-{% block content %}<!-- 담당 A: 회원가입 -->{% endblock %}
+{% load static %}
 
+{% block title %}회원가입 | HeartMark{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-signup" aria-labelledby="signup-title">
+    <div class="auth-image-frame signup-image-frame">
+        <img class="auth-login-image" src="{% static 'accounts/images/signin.png' %}" alt="마음자국 회원가입 화면">
+
+        <form class="auth-form signup-form" action="{% url 'accounts:signup' %}" method="post" autocomplete="off" novalidate>
+            {% csrf_token %}
+            <h1 id="signup-title" class="sr-only">회원가입</h1>
+
+            <label class="auth-field signup-field-id {% if errors.username %}has-error{% endif %}">
+                <span class="sr-only">아이디</span>
+                <input type="text" name="username" value="{{ username }}" placeholder="아이디를 입력해주세요" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+                <small class="field-message" aria-live="polite">{{ errors.username }}</small>
+            </label>
+
+            <label class="auth-field signup-field-password {% if errors.password %}has-error{% endif %}">
+                <span class="sr-only">비밀번호</span>
+                <input type="password" name="password" placeholder="비밀번호를 입력해주세요" autocomplete="new-password" required>
+                <button class="password-toggle" type="button" aria-label="비밀번호 보기">보기</button>
+                <small class="field-message" aria-live="polite">{{ errors.password }}</small>
+            </label>
+
+            <label class="auth-field signup-field-password-confirm {% if errors.password_confirm %}has-error{% endif %}">
+                <span class="sr-only">비밀번호 확인</span>
+                <input type="password" name="password_confirm" placeholder="비밀번호를 다시 입력해주세요" autocomplete="new-password" required>
+                <button class="password-toggle password-toggle-confirm" type="button" aria-label="비밀번호 확인 보기">보기</button>
+                <small class="field-message" aria-live="polite">{{ errors.password_confirm }}</small>
+            </label>
+
+            <button class="auth-hotspot signup-submit" type="submit">
+                <span class="sr-only">가입하기</span>
+            </button>
+            <a class="auth-hotspot signup-login-link" href="{% url 'accounts:login' %}">
+                <span class="sr-only">로그인</span>
+            </a>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock %}

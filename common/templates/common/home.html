@@ -1,6 +1,36 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}마음자국 | HeartMark{% endblock %}
 
 {% block content %}
-<!-- 통합 시 아래 앱별 partial을 이곳에서 조립합니다. -->
-{% endblock %}
+<section class="home-page">
+    <div class="home-hero">
+        <div class="home-character home-character-top">
+            <img src="{% static 'accounts/images/1.png' %}" alt="">
+        </div>
+        <div class="home-character home-character-left">
+            <img src="{% static 'accounts/images/2.png' %}" alt="">
+        </div>
+        <div class="home-character home-character-right">
+            <img src="{% static 'accounts/images/3.png' %}" alt="">
+        </div>
 
+        <h1>내 마음이 머문 순간을 기록해요</h1>
+        <a class="home-cta" href="{% url 'accounts:login' %}">Let's go<br><span>기록하기</span></a>
+    </div>
+
+    <div class="home-start">
+        <div>
+            <h2>영은님,<br>오늘을 기록하세요</h2>
+            <p>장소를 인증하고 그곳의 하루 기분을 남겨봐요</p>
+        </div>
+        <div class="home-actions">
+            <a href="{% url 'accounts:login' %}">나의 기분 기록하기</a>
+            <a href="#">다이어리</a>
+            <a href="#">공유하기</a>
+        </div>
+        <img src="{% static 'accounts/images/5.png' %}" alt="" class="home-main-character">
+    </div>
+</section>
+{% endblock %}
