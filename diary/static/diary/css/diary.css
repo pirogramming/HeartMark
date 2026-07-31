@@ -1,2 +1,719 @@
 /* 담당 D 전용 */
 
+.diary-list-container {
+    width: min(1200px, calc(100% - 80px));
+    margin: 0 auto;
+    padding: 40px 0 80px;
+}
+
+.diary-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 36px;
+}
+
+.diary-tab {
+    display: inline-flex;
+    min-width: 72px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 18px;
+    border: 1px solid #e4ddd1;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #555555;
+    font-size: 14px;
+    text-decoration: none;
+
+    box-shadow: 0 2px 6px rgb(0 0 0 / 6%);
+}
+
+.diary-tab:hover {
+    background: #fffaf0;
+}
+
+.diary-tab.active {
+    border-color: #e2c36b;
+    background: #fff4cb;
+    color: #222222;
+    font-weight: 700;
+}
+.diary-list-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.diary-list-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.diary-list-title {
+    margin: 0;
+    font-size: 26px;
+}
+
+.diary-list-count {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #fff1ba;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.diary-filter-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.diary-sort-select,
+.period-toggle-button {
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid #e6ded0;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #333333;
+    font: inherit;
+    cursor: pointer;
+}
+
+.diary-sort-select:focus,
+.period-toggle-button:focus,
+.period-filter input:focus {
+    outline: 2px solid #e9c767;
+    outline-offset: 2px;
+}
+
+.period-toggle-button.active {
+    border-color: #e1bd55;
+    background: #fff7d9;
+    font-weight: 700;
+}
+
+.period-filter {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 10px);
+    right: 0;
+
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+
+    min-width: 500px;
+    padding: 18px;
+
+    border: 1px solid #e6ded0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 12%);
+}
+
+.period-filter[hidden] {
+    display: none;
+}
+
+.period-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.period-input-group label {
+    color: #666666;
+    font-size: 12px;
+}
+
+.period-input-group input {
+    min-height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ded7cb;
+    border-radius: 9px;
+    font: inherit;
+}
+
+.period-separator {
+    padding-bottom: 10px;
+    color: #999999;
+}
+
+.period-apply-button,
+.period-reset-button {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    border-radius: 9px;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.period-apply-button {
+    border: 1px solid #e0bd59;
+    background: #ffe99c;
+    color: #222222;
+}
+
+.period-reset-button {
+    border: 1px solid #ded7cb;
+    background: #ffffff;
+    color: #555555;
+}
+
+@media (max-width: 760px) {
+    .diary-list-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .diary-filter-form {
+        width: 100%;
+    }
+}
+
+/* =========================
+   감정별 화면
+========================= */
+
+.emotion-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.emotion-month-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 18px;
+    border: 1px solid #eadfce;
+    border-radius: 14px;
+    background: #ffffff;
+
+    font-size: 13px;
+}
+
+.emotion-month-summary strong {
+    color: #d98d36;
+    font-size: 18px;
+}
+
+.emotion-bubble-area {
+    position: relative;
+
+    width: 100%;
+    min-height: 560px;
+
+    border-radius: 24px;
+    background: rgba(255, 251, 238, 0.5);
+}
+
+.emotion-bubble {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    border: 2px solid #e8c578;
+    background: rgba(255, 250, 231, 0.95);
+    color: #333333;
+    font: inherit;
+    cursor: pointer;
+
+    /* emotion-bubble의 각 꼭짓점의 둥근 정도 다르게 */
+    border-radius: 42% 58% 53% 47% / 45% 41% 59% 49%;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.emotion-bubble:hover {
+    z-index: 5;
+
+    transform: scale(1.08);
+
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.emotion-bubble-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.emotion-bubble-count {
+    color: #8e877c;
+    font-size: 11px;
+}
+
+/* 기록 개수에 따른 크기 */
+
+.emotion-bubble--large {
+    width: 130px;
+    height: 130px;
+}
+
+.emotion-bubble--medium {
+    width: 92px;
+    height: 92px;
+}
+
+.emotion-bubble--small {
+    width: 64px;
+    height: 64px;
+}
+
+/* 임시 위치 배치 */
+
+.emotion-bubble:nth-child(1) {
+    top: 30px;
+    left: 9%;
+}
+
+.emotion-bubble:nth-child(2) {
+    top: 70px;
+    left: 25%;
+}
+
+.emotion-bubble:nth-child(3) {
+    top: 160px;
+    left: 15%;
+}
+
+.emotion-bubble:nth-child(4) {
+    top: 110px;
+    left: 44%;
+}
+
+.emotion-bubble:nth-child(5) {
+    top: 260px;
+    left: 34%;
+}
+
+.emotion-bubble:nth-child(6) {
+    top: 80px;
+    left: 68%;
+}
+
+.emotion-bubble:nth-child(7) {
+    top: 210px;
+    left: 75%;
+}
+
+.emotion-bubble:nth-child(8) {
+    top: 340px;
+    left: 60%;
+}
+
+.emotion-bubble:nth-child(9) {
+    top: 390px;
+    left: 20%;
+}
+
+.emotion-bubble:nth-child(10) {
+    top: 370px;
+    left: 80%;
+}
+
+/* =========================
+   감정 팝업
+========================= */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.emotion-modal {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+}
+
+.emotion-modal[hidden] {
+    display: none;
+}
+
+.emotion-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(35, 30, 25, 0.45);
+    backdrop-filter: blur(3px);
+}
+
+.emotion-modal-content {
+    position: relative;
+    z-index: 1;
+
+    width: min(1040px, calc(100% - 60px));
+    max-height: calc(100vh - 80px);
+    margin: 40px auto;
+    padding: 30px;
+
+    overflow-y: auto;
+
+    border: 1px solid #eadfce;
+    border-radius: 24px;
+    background: #fffdf7;
+
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+.emotion-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+.emotion-modal-label {
+    margin: 0 0 6px;
+
+    color: #8d857b;
+    font-size: 13px;
+}
+
+.emotion-modal-header h2 {
+    margin: 0;
+
+    font-size: 28px;
+}
+
+.emotion-modal-close {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid #e5ddd1;
+    border-radius: 50%;
+    background: #ffffff;
+
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.emotion-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.emotion-modal-empty {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .emotion-modal-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .emotion-page-header {
+        flex-direction: column;
+    }
+
+    .emotion-bubble-area {
+        min-height: 720px;
+    }
+
+    .emotion-modal-content {
+        width: calc(100% - 28px);
+        padding: 20px;
+    }
+
+    .emotion-modal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================
+        기록 카드 목록
+========================= */
+
+.diary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 22px;
+    width: 100%;
+}
+
+.diary-card {
+    min-width: 0;
+    overflow: hidden;
+
+    border: 1px solid #ebe5da;
+    border-radius: 14px;
+    background-color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.08),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.diary-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.12),
+        0 3px 6px rgba(0, 0, 0, 0.06);
+}
+
+.diary-card-link {
+    display: block;
+    height: 100%;
+
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================
+        카드 이미지
+========================= */
+
+.diary-card-image-wrapper {
+    position: relative;
+
+    width: 100%;
+    aspect-ratio: 4 / 3;
+
+    overflow: hidden;
+    background-color: #f3efe8;
+}
+
+.diary-card-image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+.diary-card:hover .diary-card-image {
+    transform: scale(1.04);
+}
+
+.diary-card-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #f4f0e8;
+    color: #aaa397;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+        감정 표시
+========================= */
+
+.diary-card-emotion {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 34px;
+    height: 34px;
+    padding: 0 9px;
+
+    border: 2px solid #ffffff;
+    border-radius: 999px;
+    background-color: #fff3f3;
+
+    color: #d65d69;
+    font-size: 12px;
+    font-weight: 700;
+
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12);
+}
+
+.diary-card-emotion img {
+    display: block;
+
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+}
+
+
+/* =========================
+        카드 내용
+========================= */
+
+.diary-card-content {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 130px;
+    padding: 15px 14px 16px;
+}
+
+.diary-card-date {
+    margin-bottom: 8px;
+
+    color: #7f7a72;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.diary-card-title {
+    display: -webkit-box;
+    overflow: hidden;
+
+    min-height: 44px;
+    margin: 0;
+
+    color: #222222;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    word-break: keep-all;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.diary-card-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    overflow: hidden;
+
+    margin: auto 0 0;
+    padding-top: 13px;
+
+    color: #7c776f;
+    font-size: 12px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================
+        기록 없음
+========================= */
+
+.diary-empty {
+    grid-column: 1 / -1;
+
+    padding: 80px 20px;
+
+    text-align: center;
+}
+
+.diary-empty-title {
+    margin: 0 0 10px;
+
+    color: #333333;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.diary-empty-description {
+    margin: 0 0 24px;
+
+    color: #777777;
+    font-size: 14px;
+}
+
+.diary-empty-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 0 20px;
+
+    border: 1px solid #e3c566;
+    border-radius: 12px;
+    background-color: #fff1b8;
+
+    color: #2e2a20;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.diary-empty-button:hover {
+    transform: translateY(-2px);
+    background-color: #ffe894;
+}
+
+
+/* =========================
+        반응형
+========================= */
+
+@media (max-width: 1200px) {
+    .diary-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .diary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .diary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .diary-card-content {
+        min-height: 118px;
+        padding: 12px;
+    }
+
+    .diary-card-title {
+        font-size: 14px;
+    }
+}
