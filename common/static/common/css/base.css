@@ -20,15 +20,15 @@ input {
 
 .site-header {
     position: absolute;
-    top: 0;
+    top: 34px;
     left: 0;
     right: 0;
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: min(1120px, calc(100% - 64px));
-    height: 76px;
+    width: min(1560px, calc(100% - 72px));
+    height: 88px;
     margin: 0 auto;
     padding: 0;
     background: transparent;
@@ -36,7 +36,7 @@ input {
 
 .site-logo {
     color: #111;
-    font-size: 18px;
+    font-size: 30px;
     font-weight: 800;
     text-decoration: none;
 }
@@ -44,14 +44,18 @@ input {
 .site-nav {
     display: flex;
     align-items: center;
-    gap: 34px;
+    gap: 62px;
 }
 
 .site-nav a {
     color: #111;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 21px;
+    font-weight: 800;
     text-decoration: none;
+}
+
+.site-nav .nav-auth-link {
+    color: #d86f12;
 }
 
 .page-shell {
@@ -188,16 +192,18 @@ input {
         align-items: flex-start;
         gap: 14px;
         padding: 18px 0;
+        top: 12px;
     }
 
     .site-nav {
         width: 100%;
-        gap: 12px;
+        gap: 18px;
         overflow-x: auto;
         padding-bottom: 4px;
     }
 
     .site-nav a {
+        font-size: 14px;
         white-space: nowrap;
     }
 
