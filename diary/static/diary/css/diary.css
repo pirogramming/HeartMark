@@ -501,6 +501,23 @@ body.modal-open {
     stroke: #789447;
     stroke-width: 2;
 }
+/* 지도 위 구 이름 */
+.district-labels {
+    pointer-events: none;
+}
+
+.district-labels text {
+    fill: #444;
+    font-size: 25px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: middle;
+
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 5px;
+    stroke-linejoin: round;
+}
 
 /* =========================
         기록 카드 목록
