@@ -1,1 +1,52 @@
-# 담당 C: Record 생성, 상세, 수정, 삭제
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.db import models
+
+
+class Record(models.Model):
+    class Weather(models.TextChoices):
+        SUNNY = "sunny", "해"
+        CLOUDY = "cloudy", "구름"
+        RAINY = "rainy", "비"
+        THUNDER = "thunder", "천둥"
+        DUST = "dust", "황사"
+        SNOWY = "snowy", "눈"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="heartmark_records",
+    )
+    weather = models.CharField(max_length=10, choices=Weather.choices)
+    content = models.TextField(max_length=500)
+    image = models.ImageField(upload_to="records/%Y/%m/%d/", blank=True)
+    emotions = models.JSONField(default=list)
+
+    # TODO: locations.Place 규격 확정 후 ForeignKey 연결을 검토합니다.
+    place_name = models.CharField(max_length=100, blank=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user}의 기록 ({self.created_at:%Y-%m-%d})"
+
+    @property
+    def weather_image_name(self):
+        return f"{self.weather}.png"
+
+    @property
+    def emotion_image_names(self):
+        return [f"emotion-{int(number):02d}.png" for number in self.emotions]
+
+    def clean(self):
+        super().clean()
+        if not isinstance(self.emotions, list):
+            raise ValidationError({"emotions": "감정은 목록 형태여야 합니다."})
+        if len(self.emotions) > 3:
+            raise ValidationError({"emotions": "감정은 최대 3개까지 선택할 수 있습니다."})

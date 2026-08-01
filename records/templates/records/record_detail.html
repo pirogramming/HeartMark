@@ -1,5 +1,54 @@
 {% extends "base.html" %}
-{% block content %}
-<!-- 담당 C: 기록 상세 및 수정/삭제 진입 -->
+{% load static %}
+
+{% block title %}{{ record.created_at|date:"Y년 n월 j일" }} 기록 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'records/css/records.css' %}">
 {% endblock %}
 
+{% block content %}
+<section class="record-detail-shell">
+    <article class="record-detail-card">
+        <header class="record-detail-header">
+            <div>
+                <p>{{ record.created_at|date:"Y년 n월 j일 l" }}</p>
+                {% if record.place_name %}<span>📍 {{ record.place_name }}</span>{% endif %}
+            </div>
+            <img
+                class="record-detail-weather"
+                src="{% static 'records/images/weather/' %}{{ record.weather_image_name }}"
+                alt="{{ record.get_weather_display }}"
+            >
+        </header>
+
+        <div class="record-detail-layout">
+            <div class="record-detail-photo">
+                {% if record.image %}
+                <img src="{{ record.image.url }}" alt="기록 사진">
+                {% else %}
+                <p>등록된 사진이 없어요.</p>
+                {% endif %}
+            </div>
+
+            <div class="record-detail-content">{{ record.content|linebreaksbr }}</div>
+        </div>
+
+        <section class="record-detail-emotions" aria-label="선택한 감정">
+            {% for emotion_image in record.emotion_image_names %}
+            <img
+                src="{% static 'records/images/emotions/' %}{{ emotion_image }}"
+                alt="선택한 감정 {{ forloop.counter }}"
+            >
+            {% empty %}
+            <span>선택한 감정이 없어요.</span>
+            {% endfor %}
+        </section>
+
+        <footer class="record-detail-actions">
+            <a class="record-secondary-button" href="{% url 'records:update' record.pk %}">수정</a>
+            <a class="record-danger-button" href="{% url 'records:delete' record.pk %}">삭제</a>
+        </footer>
+    </article>
+</section>
+{% endblock %}

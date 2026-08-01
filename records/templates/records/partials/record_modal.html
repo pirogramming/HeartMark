@@ -39,6 +39,7 @@
             class="record-paper"
             id="record-create-form"
             method="post"
+            action="{% url 'records:create' %}"
             enctype="multipart/form-data"
         >
             {% csrf_token %}
@@ -65,7 +66,7 @@
                                     <span>사진 불러오기</span>
                                     <input
                                         type="file"
-                                        name="gallery_image"
+                                        name="image"
                                         accept="image/*"
                                     >
                                 </label>
@@ -131,6 +132,10 @@
                 </label>
 
                 </section>
+
+                <input type="hidden" name="place_name" id="record-place-name">
+                <input type="hidden" name="latitude" id="record-latitude">
+                <input type="hidden" name="longitude" id="record-longitude">
 
                 <section class="emotion-picker" aria-labelledby="emotion-picker-title">
                     <div class="emotion-picker__heading">

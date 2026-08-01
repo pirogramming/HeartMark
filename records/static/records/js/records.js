@@ -15,7 +15,7 @@
     const emotionCount = document.querySelector("#emotion-count");
     const fileInputs = [
         ...document.querySelectorAll(
-            'input[name="gallery_image"]'
+            'input[name="image"]'
         ),
     ];
     const photoPreview = document.querySelector("#record-photo-preview");
@@ -35,7 +35,8 @@
         }).format(new Date());
     };
 
-    const openModal = () => {
+    const openModal = (event) => {
+        event?.preventDefault();
         lastFocusedElement = document.activeElement;
         overlay.hidden = false;
         document.body.classList.add("record-modal-open");
