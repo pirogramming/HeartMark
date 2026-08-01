@@ -186,7 +186,7 @@
 }
 
 /* =========================
-   감정별 화면
+        감정별 화면
 ========================= */
 
 .emotion-page-header {
@@ -246,6 +246,31 @@
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease;
+}
+
+.emotion-bubble--yellow {
+    background: #FEE8B3;
+    border-color: #F9D472;
+}
+
+.emotion-bubble--purple {
+    background: #ECEDEE;
+    border-color: #879ABC;
+}
+
+.emotion-bubble--blue {
+    background: #a9ccec;
+    border-color: #82add5;
+}
+
+.emotion-bubble--green {
+    background: #c8e69a;
+    border-color: #a9ce72;
+}
+
+.emotion-bubble--default {
+    background: #dedede;
+    border-color: #c5c5c5;
 }
 
 .emotion-bubble:hover {
