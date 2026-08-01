@@ -1,4 +1,7 @@
 /* 공통 담당자만 수정: 디자인 토큰 및 전체 레이아웃 */
+.site-main {
+    padding-top: 100px;
+}
 
 body {
     margin: 0;
@@ -57,6 +60,9 @@ input {
 }
 
 @media (max-width: 820px) {
+    .site-main {
+        padding-top: 100px;
+    }
     .site-header {
         top: 12px;
         width: calc(100% - 32px);
