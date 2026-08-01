@@ -45,7 +45,7 @@
     color: #222222;
     font-weight: 700;
 }
-
+/*
 .diary-list-header {
     position: relative;
     display: flex;
@@ -73,7 +73,7 @@
     font-size: 13px;
     font-weight: 700;
 }
-
+*/
 .diary-filter-form {
     position: relative;
     display: flex;
@@ -479,8 +479,8 @@ body.modal-open {
 
 .location-map-wrapper {
     position: relative;
-    width: min(700px, 100%); 
-    margin: -50px auto 0;
+    width: min(580px, 100%); 
+    margin: 0 auto;
 }
 
 .seoul-map {
@@ -490,7 +490,7 @@ body.modal-open {
 }
 
 .seoul-map path {
-    fill: #fffaf0;
+    fill: #fff;
     stroke: #777;
     stroke-width: 1;
 }
