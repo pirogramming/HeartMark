@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}마이페이지 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mypage/css/mypage.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="mypage-screen">
+    <span class="mypage-doodle mypage-doodle--coral" aria-hidden="true"></span>
+    <span class="mypage-doodle mypage-doodle--blue" aria-hidden="true"></span>
+    <span class="mypage-doodle mypage-doodle--green" aria-hidden="true"></span>
+    <span class="mypage-doodle mypage-doodle--yellow" aria-hidden="true"></span>
+
+    <section class="mypage-profile" aria-labelledby="mypage-user-name">
+        <div class="mypage-character-wrap">
+            {% if character_url %}
+            <img class="mypage-character" src="{{ character_url }}" alt="선택한 메인 캐릭터">
+            {% else %}
+            <div class="mypage-character-fallback" aria-label="기본 프로필">
+                <span>{{ request.user.username|first|upper }}</span>
+            </div>
+            {% endif %}
+            <button
+                class="mypage-edit-button"
+                id="open-profile-editor"
+                type="button"
+                aria-label="프로필 수정"
+            ><span aria-hidden="true">✎</span></button>
+        </div>
+        <h1 id="mypage-user-name">
+            {{ request.user.first_name|default:request.user.username }}
+        </h1>
+    </section>
+
+    <section class="attendance-card" aria-labelledby="attendance-title">
+        <div class="attendance-heading">
+            <div>
+                <p>가입일부터 오늘까지</p>
+                <h2 id="attendance-title">출석체크</h2>
+            </div>
+            <strong>{{ attendance_count }}일 기록</strong>
+        </div>
+
+        <div class="attendance-slider" id="attendance-slider">
+            <button class="attendance-arrow attendance-arrow--prev" type="button" aria-label="이전 출석 기간">‹</button>
+            <div class="attendance-viewport">
+                <div class="attendance-track">
+                    {% for page in attendance_pages %}
+                    <section class="attendance-page" aria-label="{{ page.label }}"{% if not forloop.first %} aria-hidden="true"{% endif %}>
+                        <ol class="attendance-road">
+                            {% for day in page.days %}
+                            <li class="attendance-day{% if day.record %} attendance-day--checked{% endif %}{% if day.is_future %} attendance-day--future{% endif %}">
+                                <span class="attendance-day__circle">
+                                    {% if day.emotion_number %}
+                                    <img
+                                        src="{% static 'records/images/emotions/emotion-' %}{{ day.emotion_number }}.png"
+                                        alt="{{ day.date|date:'n월 j일' }}의 대표 감정"
+                                    >
+                                    {% elif day.record %}
+                                    <span class="attendance-check" aria-label="출석 완료">✓</span>
+                                    {% endif %}
+                                </span>
+                                <time datetime="{{ day.date|date:'Y-m-d' }}">{{ day.date|date:"n/j" }}</time>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </section>
+                    {% endfor %}
+                </div>
+            </div>
+            <button class="attendance-arrow attendance-arrow--next" type="button" aria-label="다음 출석 기간">›</button>
+        </div>
+        <div class="attendance-pagination" role="tablist" aria-label="출석 기간 페이지">
+            {% for page in attendance_pages %}
+            <button
+                type="button"
+                class="attendance-dot{% if forloop.first %} attendance-dot--active{% endif %}"
+                aria-label="{{ forloop.counter }}번째 기간"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            ></button>
+            {% endfor %}
+        </div>
+        <p class="attendance-guide">기록을 작성하면 첫 번째 감정으로 자동 출석돼요.</p>
+    </section>
+
+    <div class="profile-editor" id="profile-editor" hidden>
+        <div
+            class="profile-editor__panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="profile-editor-title"
+        >
+            <button class="profile-editor__close" type="button" aria-label="닫기">×</button>
+            <h2 id="profile-editor-title">프로필 수정</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="display-name">이름</label>
+                <input
+                    id="display-name"
+                    name="display_name"
+                    maxlength="30"
+                    value="{{ request.user.first_name|default:request.user.username }}"
+                    required
+                >
+                <button class="mypage-save-button" type="submit">이름 저장</button>
+            </form>
+            <button class="profile-character-pending" type="button" disabled>
+                캐릭터 바꾸기 · 연결 예정
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mypage/js/mypage.js' %}"></script>
+{% endblock %}

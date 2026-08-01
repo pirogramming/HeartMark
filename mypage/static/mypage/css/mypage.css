@@ -1,0 +1,398 @@
+:root {
+    --mypage-paper: #fff9eb;
+    --mypage-panel: #fffff4;
+    --mypage-accent: #ffe7d0;
+    --mypage-ink: #46372d;
+    --mypage-muted: #8d796a;
+}
+
+.mypage-screen,
+.mypage-screen * {
+    box-sizing: border-box;
+}
+
+.mypage-screen {
+    position: relative;
+    min-height: calc(100vh - 100px);
+    overflow: hidden;
+    padding: 125px max(24px, 7vw) 78px;
+    color: var(--mypage-ink);
+    background: var(--mypage-paper);
+}
+
+.mypage-profile {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    width: min(960px, 100%);
+    margin: 0 auto 52px;
+}
+
+.mypage-character-wrap {
+    position: relative;
+    display: grid;
+    width: 142px;
+    height: 142px;
+    place-items: center;
+    border: 1.5px solid var(--mypage-ink);
+    border-radius: 50%;
+    background: #fff;
+}
+
+.mypage-character {
+    width: 112px;
+    height: 112px;
+    object-fit: contain;
+}
+
+.mypage-character-fallback {
+    display: grid;
+    width: 104px;
+    height: 104px;
+    place-items: center;
+    border-radius: 48% 52% 46% 54%;
+    color: var(--mypage-ink);
+    background: #dce8d0;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.mypage-edit-button {
+    position: absolute;
+    right: 2px;
+    bottom: 4px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    place-items: center;
+    border: 1.5px solid var(--mypage-ink);
+    border-radius: 50%;
+    color: var(--mypage-ink);
+    background: var(--mypage-accent);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.mypage-profile h1 {
+    margin: 14px 0 0;
+    font-size: 1rem;
+}
+
+.attendance-card {
+    position: relative;
+    z-index: 1;
+    width: min(1120px, 88vw);
+    padding: 24px 48px 28px;
+    margin: 0 auto;
+    border: 2px solid #ffe0c5;
+    border-radius: 52px;
+    background: rgba(255, 255, 244, 0.78);
+}
+
+.attendance-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.attendance-heading p,
+.attendance-heading h2 {
+    margin: 0;
+}
+
+.attendance-heading p,
+.attendance-heading strong,
+.attendance-guide {
+    color: var(--mypage-muted);
+    font-size: 0.8rem;
+}
+
+.attendance-road {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 18px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.attendance-slider {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    align-items: center;
+    gap: 8px;
+}
+
+.attendance-viewport {
+    overflow: hidden;
+}
+
+.attendance-track {
+    display: flex;
+    transition: transform 280ms ease;
+}
+
+.attendance-page {
+    min-width: 100%;
+}
+
+.attendance-period {
+    margin: 0 0 8px;
+    color: var(--mypage-muted);
+    font-size: 0.72rem;
+    text-align: center;
+}
+
+.attendance-arrow {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(70, 55, 45, 0.28);
+    border-radius: 50%;
+    color: var(--mypage-ink);
+    background: var(--mypage-paper);
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.attendance-arrow:disabled {
+    opacity: 0.28;
+    cursor: default;
+}
+
+.attendance-day {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+}
+
+.attendance-day::after {
+    position: absolute;
+    top: 27px;
+    left: calc(50% + 27px);
+    z-index: -1;
+    width: calc(100% - 54px);
+    height: 8px;
+    content: "";
+    background: #ffe2ca;
+}
+
+.attendance-day:nth-child(7n)::after {
+    display: none;
+}
+
+.attendance-day__circle {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    place-items: center;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    background: #ffe2ca;
+}
+
+.attendance-day--checked .attendance-day__circle {
+    border-color: #efb88e;
+    background: var(--mypage-paper);
+    box-shadow: 0 3px 9px rgba(91, 67, 49, 0.13);
+}
+
+.attendance-day__circle img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.attendance-day time {
+    color: var(--mypage-muted);
+    font-size: 0.68rem;
+}
+
+.attendance-check {
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.attendance-guide {
+    margin: 14px 0 0;
+    text-align: center;
+}
+
+.attendance-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 14px;
+}
+
+.attendance-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #ead6c4;
+    cursor: pointer;
+}
+
+.attendance-dot--active {
+    width: 22px;
+    border-radius: 999px;
+    background: #e7a97e;
+}
+
+.mypage-doodle {
+    position: absolute;
+    border-radius: 48% 52% 44% 56%;
+    transform: rotate(-18deg);
+}
+
+.mypage-doodle--coral {
+    top: 36px;
+    left: -30px;
+    width: 74px;
+    height: 74px;
+    background: #ef6868;
+}
+
+.mypage-doodle--blue {
+    top: 62px;
+    right: 18%;
+    width: 34px;
+    height: 50px;
+    background: #7fc9e6;
+}
+
+.mypage-doodle--green {
+    top: 280px;
+    left: 6%;
+    width: 24px;
+    height: 32px;
+    background: #02b77c;
+}
+
+.mypage-doodle--yellow {
+    top: 320px;
+    right: 7%;
+    width: 42px;
+    height: 42px;
+    background: #e7ed68;
+}
+
+.profile-editor[hidden] {
+    display: none;
+}
+
+.profile-editor {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    padding: 24px;
+    place-items: center;
+    background: rgba(57, 52, 48, 0.58);
+}
+
+.profile-editor__panel {
+    position: relative;
+    width: min(430px, 100%);
+    padding: 34px;
+    border: 1.5px solid var(--mypage-ink);
+    border-radius: 22px;
+    background: var(--mypage-paper);
+}
+
+.profile-editor__panel h2 {
+    margin-top: 0;
+}
+
+.profile-editor__panel form {
+    display: grid;
+    gap: 12px;
+}
+
+.profile-editor__panel input {
+    padding: 12px;
+    border: 1px solid rgba(70, 55, 45, 0.3);
+    border-radius: 10px;
+    font: inherit;
+}
+
+.mypage-save-button {
+    padding: 11px 18px;
+    border: 1px solid var(--mypage-ink);
+    border-radius: 11px;
+    color: var(--mypage-ink);
+    background: var(--mypage-accent);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.profile-editor__close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border: 0;
+    background: transparent;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.profile-character-pending {
+    width: 100%;
+    padding: 11px;
+    margin-top: 12px;
+    border: 1px dashed rgba(70, 55, 45, 0.3);
+    border-radius: 10px;
+    color: var(--mypage-muted);
+    background: transparent;
+}
+
+@media (max-width: 720px) {
+    .mypage-screen {
+        padding: 96px 14px 60px;
+    }
+
+    .attendance-card {
+        width: 100%;
+        padding: 22px 12px;
+        border-radius: 30px;
+    }
+
+    .attendance-slider {
+        grid-template-columns: 28px minmax(0, 1fr) 28px;
+        gap: 3px;
+    }
+
+    .attendance-arrow {
+        width: 28px;
+        height: 28px;
+        font-size: 1.25rem;
+    }
+
+    .attendance-day__circle {
+        width: 42px;
+        height: 42px;
+    }
+
+    .attendance-day__circle img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .attendance-day::after {
+        top: 19px;
+        left: calc(50% + 19px);
+        width: calc(100% - 38px);
+        height: 6px;
+    }
+
+}

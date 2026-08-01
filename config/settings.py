@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "common",
     "accounts",
+    "mypage",
     "locations",
     "records",
     "diary",
