@@ -249,22 +249,22 @@
 }
 
 .emotion-bubble--yellow {
-    background: #FEE8B3;
+    background: #fff7e3;
     border-color: #F9D472;
 }
 
-.emotion-bubble--purple {
-    background: #ECEDEE;
-    border-color: #879ABC;
+.emotion-bubble--blue {
+    background: #eff7ff;
+    border-color: #DAE6F3;
 }
 
-.emotion-bubble--blue {
-    background: #a9ccec;
-    border-color: #82add5;
+.emotion-bubble--pink {
+    background: #fff2f2;
+    border-color: #F8B3B4;
 }
 
 .emotion-bubble--green {
-    background: #c8e69a;
+    background: #f3fff1;
     border-color: #a9ce72;
 }
 

@@ -233,14 +233,14 @@
                             emotion-bubble
                             emotion-bubble--{{ emotion.size|default:'medium' }}
 
-                            {% if emotion.name == '기쁨' or emotion.name == '행복' or emotion.name == '설렘' or emotion.name == '안정' or emotion.name == '감사' %}
+                            {% if emotion.name == '기쁨' or emotion.name == '행복' or emotion.name == '설렘' or emotion.name == '안정' or emotion.name == '감사' or emotion.name == '평온'%}
                                 emotion-bubble--yellow
 
                             {% elif emotion.name == '걱정' or emotion.name == '슬픔' or emotion.name == '화남' or emotion.name == '불안' or emotion.name == '긴장' or emotion.name == '우울' or emotion.name == '피로' or emotion.name == '답답' or emotion.name == '지침' %}
-                                emotion-bubble--purple
+                                emotion-bubble--blue
 
                             {% elif emotion.name == '뿌듯' or emotion.name == '성취' or emotion.name == '기대' or emotion.name == '자신감' %}
-                                emotion-bubble--blue
+                                emotion-bubble--pink
 
                             {% elif emotion.name == '민망함' or emotion.name == '외로움' %}
                                 emotion-bubble--green
