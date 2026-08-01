@@ -1,14 +1,14 @@
 <header class="site-header">
     <a class="site-logo" href="/">마음자국</a>
     <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="#">기록작성</a>
-        <a href="#">기록보기</a>
-        <a href="#">달력</a>
-        <a href="#">마이페이지</a>
+        <a href="#" data-tutorial-target="record-write">기록작성</a>
+        <a href="#" data-tutorial-target="record-list">기록보기</a>
+        <a href="#" data-tutorial-target="calendar">달력</a>
+        <a href="#" data-tutorial-target="mypage">마이페이지</a>
         {% if user.is_authenticated %}
-            <a class="nav-auth-link" href="{% url 'accounts:logout' %}">로그아웃</a>
+            <a class="nav-auth-link" href="{% url 'accounts:logout' %}" data-tutorial-target="auth">로그아웃</a>
         {% else %}
-            <a class="nav-auth-link" href="{% url 'accounts:login' %}">로그인</a>
+            <a class="nav-auth-link" href="{% url 'accounts:login' %}" data-tutorial-target="auth">로그인</a>
         {% endif %}
     </nav>
 </header>
