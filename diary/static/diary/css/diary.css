@@ -479,8 +479,8 @@ body.modal-open {
 
 .location-map-wrapper {
     position: relative;
-    width: min(700px, 100%);
-    margin: 30px auto;
+    width: min(700px, 100%); 
+    margin: -50px auto 0;
 }
 
 .seoul-map {
