@@ -365,7 +365,7 @@
 }
 
 /* =========================
-   감정 팝업
+        감정 팝업
 ========================= */
 
 body.modal-open {
@@ -475,6 +475,24 @@ body.modal-open {
     .emotion-modal-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+}
+
+.location-map-wrapper {
+    position: relative;
+    width: min(700px, 100%);
+    margin: 30px auto;
+}
+
+.seoul-map {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.seoul-map path {
+    fill: #fffaf0;
+    stroke: #777;
+    stroke-width: 1;
 }
 
 /* =========================
