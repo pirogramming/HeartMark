@@ -1,6 +1,21 @@
 // 담당 D 전용
 
 document.addEventListener("DOMContentLoaded", () => {
+    const visitedDistricts = document.querySelectorAll(
+        "#visited-districts [data-district-name]"
+    );
+
+    visitedDistricts.forEach((districtElement) => {
+        const districtName = districtElement.dataset.districtName.trim();
+        const districtPath = document.getElementById(districtName);
+
+        if (districtPath) {
+            districtPath.classList.add("has-record");
+        } else {
+            console.warn(`SVG에서 구를 찾지 못했습니다: ${districtName}`);
+        }
+    });
+    
     const sortSelect = document.querySelector("#diary-sort");
     const filterForm = document.querySelector("#diary-filter-form");
 

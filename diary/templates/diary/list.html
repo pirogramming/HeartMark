@@ -649,20 +649,13 @@
                                 C730.596,766.053,735.563,764.919,737.012,767.305z"/>
                         </g>
                     </svg>
-                    {% comment %}
-                    {% for location in locations %}
+                    <div id="visited-districts" hidden>
+                        {% for location in locations %}
                         {% if location.record_count %}
-                            <button
-                                type="button"
-                                class="location-map-marker location-map-marker--{{ location.slug }}"
-                                data-location-id="{{ location.id }}"
-                                data-location-name="{{ location.name }}"
-                            >
-                                {{ location.record_count }}
-                            </button>
-                        {% endif %}
-                    {% endfor %}
-                    {% endcomment %}
+                            <span data-district-name="{{ location.name }}"></span>
+                            {% endif %}
+                            {% endfor %}
+                    </div>
                 </div>
             </div>
 
