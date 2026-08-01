@@ -2,7 +2,7 @@
 
 from datetime import date
 from django.shortcuts import render
-
+from collections import Counter
 
 def diary_list(request):
     selected_tab = request.GET.get("tab", "all")
@@ -48,7 +48,7 @@ def diary_list(request):
             "image": None,
             "emotion": {
                 "id": 3,
-                "name": "평온",
+                "name": "슬픔",
                 "image": None,
             },
             "location": {
@@ -78,7 +78,7 @@ def diary_list(request):
             "image": None,
             "emotion": {
                 "id": 2,
-                "name": "행복",
+                "name": "분노",
                 "image": None,
             },
             "location": {
@@ -132,6 +132,58 @@ def diary_list(request):
             },
         },
     ]
+
+    district_records = {}
+
+    for record in records:
+        location = record.get("location")
+        emotion = record.get("emotion")
+        created_at = record.get("created_at")
+
+        if not location or not emotion:
+            continue
+
+        district_name = location.get("name")
+        emotion_name = emotion.get("name")
+
+        if not district_name or not emotion_name:
+            continue
+
+        # 서울 자치구만 지도에 표시
+        if not district_name.endswith("구"):
+            continue
+
+        if district_name not in district_records:
+            district_records[district_name] = []
+
+        district_records[district_name].append({
+            "emotion_name": emotion_name,
+            "created_at": created_at,
+        })
+
+
+    district_map_data = []
+
+    for district_name, district_record_list in district_records.items():
+        emotion_names = [
+            item["emotion_name"]
+            for item in district_record_list
+        ]
+
+        emotion_counts = Counter(emotion_names)
+        dominant_emotion = emotion_counts.most_common(1)[0][0]
+
+        latest_record = max(
+            district_record_list,
+            key=lambda item: item["created_at"]
+        )
+
+        district_map_data.append({
+            "district_name": district_name,
+            "visit_count": len(district_record_list),
+            "dominant_emotion": dominant_emotion,
+            "latest_emotion": latest_record["emotion_name"],
+        })
 
     emotions = [
         {
@@ -202,6 +254,7 @@ def diary_list(request):
 
     context = {
         "records": records,
+        "district_map_data": district_map_data,
         "emotions": emotions,
         "locations": locations,
         "selected_tab": selected_tab,

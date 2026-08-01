@@ -189,6 +189,89 @@
     }
 }
 
+/* 점 세 개 메뉴 스타일 */
+
+.map-display-settings {
+    position: absolute;
+    z-index: 20;
+    top: 10px;
+    right: 10px;
+}
+
+.map-settings-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+    border: 1px solid #dedede;
+    border-radius: 50%;
+    background: #ffffff;
+
+    color: #444444;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-settings-button:hover {
+    background: #f7f7f7;
+}
+
+.map-settings-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+
+    width: 230px;
+    padding: 10px;
+
+    border: 1px solid #dedede;
+    border-radius: 14px;
+    background: #ffffff;
+
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+}
+
+.map-settings-menu[hidden] {
+    display: none;
+}
+
+.map-settings-title {
+    margin: 4px 8px 8px;
+
+    color: #777777;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.map-settings-menu button {
+    display: block;
+
+    width: 100%;
+    padding: 11px 12px;
+
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+
+    color: #333333;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.map-settings-menu button:hover,
+.map-settings-menu button.active {
+    background: #fff4cb;
+    font-weight: 700;
+}
+
 /* =========================
         감정별 화면
 ========================= */
@@ -493,13 +576,16 @@ body.modal-open {
     fill: #fff;
     stroke: #777;
     stroke-width: 1;
+
+    transition:
+        fill 0.25s ease,
+        stroke 0.25s ease;
 }
 
 /* 방문한 장소 채우기 */
 .seoul-map path.has-record {
-    fill: #dce9b7;
-    stroke: #789447;
-    stroke-width: 2;
+    /*stroke: #789447;*/
+    stroke-width: 3;
 }
 /* 지도 위 구 이름 */
 .district-labels {

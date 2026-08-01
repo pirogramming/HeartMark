@@ -299,6 +299,46 @@
 
             <div class="location-map-section">
                 <div class="location-map-wrapper">
+                    <div class="map-display-settings">
+                        <button
+                            type="button"
+                            class="map-settings-button"
+                            id="map-settings-button"
+                            aria-expanded="false"
+                            aria-controls="map-settings-menu"
+                            aria-label="지도 색상 설정"
+                        >
+                            ⋯
+                        </button>
+
+                        <div
+                            class="map-settings-menu"
+                            id="map-settings-menu"
+                            hidden
+                        >
+                            <p class="map-settings-title">지도 색상 방식</p>
+
+                            <button type="button" data-map-mode="uniform">
+                                같은 색으로 통일
+                            </button>
+
+                            <button type="button" data-map-mode="dominant">
+                                가장 많은 감정 색
+                            </button>
+
+                            <button type="button" data-map-mode="latest">
+                                가장 최근 감정 색
+                            </button>
+
+                            <button type="button" data-map-mode="intensity">
+                                방문 횟수에 따른 농도
+                            </button>
+
+                            <button type="button" data-map-mode="rainbow">
+                                구별로 다른 색
+                            </button>
+                        </div>
+                    </div>
                     <svg
                         class="seoul-map"
                         viewBox="0 0 1400 1400"
@@ -680,12 +720,15 @@
                             </g>
                         </g>
                     </svg>
-                    <div id="visited-districts" hidden>
-                        {% for location in locations %}
-                        {% if location.record_count %}
-                            <span data-district-name="{{ location.name }}"></span>
-                            {% endif %}
-                            {% endfor %}
+                    <div id="district-map-data" hidden>
+                        {% for district in district_map_data %}
+                            <span
+                                data-district="{{ district.district_name }}"
+                                data-count="{{ district.visit_count }}"
+                                data-dominant-emotion="{{ district.dominant_emotion }}"
+                                data-latest-emotion="{{ district.latest_emotion }}"
+                            ></span>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
