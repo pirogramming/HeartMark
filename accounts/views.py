@@ -17,7 +17,7 @@ CHARACTER_CHOICES = [
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("common:home")
+        return redirect("accounts:post_login_redirect")
 
     errors = {}
     username = ""
@@ -38,12 +38,26 @@ def login_view(request):
                 errors["password"] = "아이디 또는 비밀번호가 올바르지 않습니다."
             else:
                 login(request, user)
-                profile, _ = UserProfile.objects.get_or_create(user=user)
-                if not profile.onboarding_completed:
-                    return redirect("accounts:character_select")
-                return redirect("common:home")
+                return redirect("accounts:post_login_redirect")
 
     return render(request, "accounts/login.html", {"errors": errors, "username": username})
+
+
+@login_required(login_url="accounts:login")
+def post_login_redirect_view(request):
+    profile, _ = UserProfile.objects.get_or_create(
+        user=request.user,
+        defaults={"display_name": request.user.get_username()},
+    )
+
+    if not profile.display_name:
+        profile.display_name = request.user.get_username()
+        profile.save(update_fields=["display_name", "updated_at"])
+
+    if not profile.onboarding_completed:
+        return redirect("accounts:character_select")
+
+    return redirect("common:home")
 
 
 def signup_view(request):

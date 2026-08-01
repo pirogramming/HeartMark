@@ -32,15 +32,15 @@
             <button class="auth-hotspot auth-submit" type="submit">
                 <span class="sr-only">로그인하기</span>
             </button>
-            <button class="auth-hotspot social-google" type="button">
+            <a class="auth-hotspot social-google" href="{% url 'google_login' %}">
                 <span class="sr-only">Google로 시작하기</span>
-            </button>
-            <button class="auth-hotspot social-naver" type="button">
+            </a>
+            <a class="auth-hotspot social-naver" href="{% url 'naver_login' %}">
                 <span class="sr-only">네이버로 시작하기</span>
-            </button>
-            <button class="auth-hotspot social-kakao" type="button">
+            </a>
+            <a class="auth-hotspot social-kakao" href="{% url 'kakao_login' %}">
                 <span class="sr-only">카카오톡으로 시작하기</span>
-            </button>
+            </a>
             <a class="auth-hotspot auth-signup" href="{% url 'accounts:signup' %}">
                 <span class="sr-only">회원가입</span>
             </a>

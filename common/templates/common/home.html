@@ -3,6 +3,10 @@
 
 {% block title %}마음자국 | HeartMark{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'common/css/home.css' %}">
+{% endblock %}
+
 {% block content %}
 <section class="home-page">
     <section class="home-hero" aria-labelledby="home-hero-title">
@@ -45,7 +49,7 @@
             </a>
         {% endif %}
 
-        <div class="home-feature-character">
+        <div class="home-feature-character{% if not user.is_authenticated %} home-feature-character-guest{% endif %}">
             {% if user.is_authenticated %}
                 <img src="{% static 'accounts/images/'|add:selected_character_image %}" alt="선택한 캐릭터">
             {% else %}
