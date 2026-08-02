@@ -859,7 +859,7 @@ body.record-modal-open {
 }
 
 .record-detail-card {
-    width: min(1080px, 100%);
+    width: min(1180px, 100%);
     padding: clamp(28px, 4vw, 56px);
     margin: 0 auto;
     border: 1.5px solid var(--record-ink);
@@ -929,13 +929,38 @@ body.record-delete-modal-open {
 
 .record-detail-header {
     justify-content: space-between;
-    margin-bottom: 24px;
+    padding-bottom: 18px;
+    margin-bottom: 28px;
+    border-bottom: 1px dashed rgba(141, 121, 106, 0.38);
 }
 
 .record-detail-header p {
     margin: 0 0 6px;
     font-size: 1.25rem;
     font-weight: 800;
+}
+
+.record-detail-heading {
+    display: grid;
+    gap: 8px;
+}
+
+.record-detail-place {
+    width: fit-content;
+    padding: 6px 11px;
+    border-radius: 999px;
+    color: #795d48;
+    background: #ffe9d4;
+    font-size: 0.82rem;
+}
+
+.record-detail-weather-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--record-muted);
+    font-size: 0.76rem;
+    font-weight: 700;
 }
 
 .record-detail-weather {
@@ -947,10 +972,12 @@ body.record-delete-modal-open {
 .record-detail-layout {
     display: grid;
     grid-template-columns: minmax(260px, 0.8fr) minmax(360px, 1.4fr);
-    gap: 42px;
+    gap: clamp(38px, 5vw, 70px);
+    align-items: stretch;
 }
 
 .record-detail-photo {
+    position: relative;
     display: grid;
     aspect-ratio: 3 / 4;
     overflow: hidden;
@@ -982,22 +1009,86 @@ body.record-delete-modal-open {
 
 .record-detail-emotions {
     display: flex;
-    min-height: 80px;
+    min-width: 0;
     align-items: center;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 24px;
 }
 
-.record-detail-emotions img {
-    width: 70px;
-    height: 60px;
+.record-detail-emotions-heading h2 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+}
+
+.record-detail-emotions-heading span {
+    color: var(--record-muted);
+    font-size: 0.72rem;
+}
+
+.record-detail-emotion-list {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.record-detail-emotion {
+    position: relative;
+    display: grid;
+    width: 68px;
+    height: 68px;
+    margin: 0;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff4e5;
+    box-shadow: 0 4px 12px rgba(91, 67, 49, 0.11);
+}
+
+.record-detail-emotion img {
+    width: 58px;
+    height: 52px;
     object-fit: contain;
+}
+
+.record-detail-emotion--main {
+    width: 84px;
+    height: 84px;
+    border: 3px solid #e7a976;
+    background: #ffe8ce;
+    box-shadow: 0 0 0 4px rgba(255, 231, 208, 0.78), 0 5px 14px rgba(91, 67, 49, 0.14);
+}
+
+.record-detail-emotion--main img {
+    width: 70px;
+    height: 62px;
+}
+
+.record-detail-emotion--main > span {
+    position: absolute;
+    top: -13px;
+    right: -8px;
+    padding: 3px 7px;
+    border: 1px solid #d9925e;
+    border-radius: 999px;
+    color: #7d4b2d;
+    background: #fff0c9;
+    font-size: 0.64rem;
+    font-weight: 800;
+}
+
+.record-detail-footer {
+    display: flex;
+    min-height: 108px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding-top: 24px;
+    margin-top: 26px;
+    border-top: 1px dashed rgba(141, 121, 106, 0.38);
 }
 
 .record-detail-actions {
     justify-content: flex-end;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 0;
 }
 
 .record-secondary-button,
@@ -1055,6 +1146,16 @@ body.record-delete-modal-open {
 
     .record-detail-content {
         min-height: 280px;
+    }
+
+    .record-detail-footer,
+    .record-detail-emotions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .record-detail-actions {
+        align-self: flex-end;
     }
 }
 

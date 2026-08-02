@@ -97,6 +97,7 @@ class RecordCrudViewTests(TestCase):
             reverse("records:detail", args=[self.record.pk])
         )
         self.assertContains(detail_response, "수정 전 기록")
+        self.assertContains(detail_response, "대표 감정")
         self.assertContains(detail_response, 'id="record-delete-overlay"')
 
         edit_response = self.client.get(

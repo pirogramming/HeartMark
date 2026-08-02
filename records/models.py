@@ -48,6 +48,19 @@ class Record(models.Model):
     def emotion_image_names(self):
         return [f"emotion-{int(number):02d}.png" for number in self.emotions]
 
+    @property
+    def emotion_items(self):
+        numbers = [int(number) for number in self.emotions]
+        numbers.sort(key=lambda number: number != self.main_emotion)
+        return [
+            {
+                "number": number,
+                "image_name": f"emotion-{number:02d}.png",
+                "is_main": number == self.main_emotion,
+            }
+            for number in numbers
+        ]
+
     def clean(self):
         super().clean()
         if not isinstance(self.emotions, list):
