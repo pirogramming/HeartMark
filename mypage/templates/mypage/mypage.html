@@ -136,19 +136,35 @@
 
             <section class="insight-card frequent-place-card" aria-labelledby="frequent-place-title">
                 <h2 id="frequent-place-title" class="insight-label insight-label--blue">자주 남긴 장소</h2>
-                <div class="place-content">
-                    <span class="place-pin" aria-hidden="true">⌖</span>
-                    <div>
-                        {% if frequent_place %}
+                {% if frequent_place %}
+                <div class="place-map" aria-label="가장 자주 기록한 장소 {{ frequent_place }}">
+                    <span class="place-map__road place-map__road--one" aria-hidden="true"></span>
+                    <span class="place-map__road place-map__road--two" aria-hidden="true"></span>
+                    <span class="place-map__park" aria-hidden="true"></span>
+                    <span class="place-map__pin" aria-hidden="true"></span>
+                    <div class="place-map__label">
+                        <span>나의 마음 장소</span>
                         <strong>{{ frequent_place }}</strong>
-                        <p>가장 자주 마음을 기록한 장소예요.</p>
-                        {% else %}
-                        <strong>아직 장소가 없어요</strong>
-                        <p>장소를 인증하고 마음자국을 남겨 보세요.</p>
-                        {% endif %}
+                        <small>총 {{ frequent_place_count }}번 기록했어요</small>
                     </div>
                 </div>
-                <span class="place-route" aria-hidden="true"></span>
+                {% else %}
+                <div class="place-ticket" aria-label="아직 기록한 장소가 없습니다">
+                    <span class="place-ticket__hole place-ticket__hole--top" aria-hidden="true"></span>
+                    <span class="place-ticket__hole place-ticket__hole--bottom" aria-hidden="true"></span>
+                    <div class="place-ticket__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="place-ticket__copy">
+                        <span>마음자국 장소 티켓</span>
+                        <strong>아직 장소가 없어요</strong>
+                        <p>장소를 인증하고 첫 마음자국을 남겨 보세요.</p>
+                    </div>
+                </div>
+                {% endif %}
             </section>
         </div>
     </section>

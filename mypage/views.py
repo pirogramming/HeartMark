@@ -118,7 +118,9 @@ def _build_insights(records):
     weekly_emotion = Counter(weekly_emotions).most_common(1)[0][0] if weekly_emotions else None
 
     place_names = [name for record in records if (name := _record_place_name(record))]
-    frequent_place = Counter(place_names).most_common(1)[0][0] if place_names else None
+    frequent_place_data = Counter(place_names).most_common(1)[0] if place_names else None
+    frequent_place = frequent_place_data[0] if frequent_place_data else None
+    frequent_place_count = frequent_place_data[1] if frequent_place_data else 0
 
     if weekly_emotion:
         weekly_message = "이번 주에는 이 마음을 가장 자주 남겼어요. 내 마음을 천천히 돌아봐 주세요."
@@ -132,6 +134,7 @@ def _build_insights(records):
         "record_streak": streak,
         "total_record_count": len(records),
         "frequent_place": frequent_place,
+        "frequent_place_count": frequent_place_count,
     }
 
 
