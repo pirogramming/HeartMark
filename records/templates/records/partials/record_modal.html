@@ -139,6 +139,7 @@
                 <input type="hidden" name="place_name" id="record-place-name">
                 <input type="hidden" name="latitude" id="record-latitude">
                 <input type="hidden" name="longitude" id="record-longitude">
+                <input type="hidden" name="main_emotion" id="main-emotion">
 
                 <section class="emotion-picker" aria-labelledby="emotion-picker-title">
                     <div class="emotion-picker__heading">
@@ -157,6 +158,7 @@
                             <span
                                 class="emotion-icon emotion-icon--{{ forloop.counter }}"
                             ></span>
+                            <span class="emotion-main-badge" aria-hidden="true">대표</span>
                             <span class="sr-only">감정 {{ forloop.counter }}</span>
                         </label>
                         {% endfor %}

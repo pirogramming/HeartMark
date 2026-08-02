@@ -13,6 +13,7 @@
         ...document.querySelectorAll('input[name="emotions"]'),
     ];
     const emotionCount = document.querySelector("#emotion-count");
+    const mainEmotionInput = document.querySelector("#main-emotion");
     const fileInputs = [
         ...document.querySelectorAll(
             'input[name="image"]'
@@ -62,12 +63,21 @@
 
     const updateEmotionState = () => {
         const selected = emotionInputs.filter((input) => input.checked);
+        if (mainEmotionInput && !mainEmotionInput.value && selected.length) {
+            mainEmotionInput.value = selected[0].value;
+        }
         emotionCount.textContent = `${selected.length} / 3`;
         emotionInputs.forEach((input) => {
             input.disabled = selected.length >= 3 && !input.checked;
         });
         message.textContent =
             selected.length >= 3 ? "감정은 최대 3개까지 선택할 수 있어요." : "";
+        emotionInputs.forEach((input) => {
+            input.closest(".emotion-option")?.classList.toggle(
+                "emotion-option--main",
+                input.checked && input.value === mainEmotionInput?.value,
+            );
+        });
     };
 
     const showPhoto = (file) => {
@@ -119,6 +129,15 @@
     expandButton?.addEventListener("click", toggleFullscreen);
     emotionInputs.forEach((input) =>
         input.addEventListener("change", () => {
+            if (mainEmotionInput) {
+                if (input.checked && !mainEmotionInput.value) {
+                    mainEmotionInput.value = input.value;
+                } else if (!input.checked && mainEmotionInput.value === input.value) {
+                    mainEmotionInput.value = emotionInputs.find(
+                        (candidate) => candidate.checked
+                    )?.value || "";
+                }
+            }
             updateEmotionState();
             updateCompletionCard(!completionCard?.hidden);
         })

@@ -81,16 +81,19 @@
                         {% if number in selected_emotions %}checked{% endif %}
                     >
                     <span class="emotion-icon emotion-icon--{{ number }}"></span>
+                    <span class="emotion-main-badge" aria-hidden="true">대표</span>
                     <span class="sr-only">감정 {{ number }}</span>
                 </label>
                 {% endfor %}
             </div>
             {% for error in form.emotions.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
+            {% for error in form.main_emotion.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
         </section>
 
         <input type="hidden" name="place_name" value="{{ form.place_name.value|default_if_none:'' }}">
         <input type="hidden" name="latitude" value="{{ form.latitude.value|default_if_none:'' }}">
         <input type="hidden" name="longitude" value="{{ form.longitude.value|default_if_none:'' }}">
+        <input type="hidden" name="main_emotion" id="record-edit-main-emotion" value="{{ form.main_emotion.value|default_if_none:'' }}">
 
         <footer class="record-edit-actions">
             <p id="record-edit-message" class="record-form-message"></p>

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -21,6 +22,9 @@ class Record(models.Model):
     content = models.TextField(max_length=500)
     image = models.ImageField(upload_to="records/%Y/%m/%d/")
     emotions = models.JSONField(default=list)
+    main_emotion = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(20)],
+    )
 
     # TODO: locations.Place 규격 확정 후 ForeignKey 연결을 검토합니다.
     place_name = models.CharField(max_length=100, blank=True)
@@ -52,3 +56,7 @@ class Record(models.Model):
             raise ValidationError({"emotions": "감정을 1개 이상 선택해 주세요."})
         if len(self.emotions) > 3:
             raise ValidationError({"emotions": "감정은 최대 3개까지 선택할 수 있습니다."})
+        if self.main_emotion not in self.emotions:
+            raise ValidationError({
+                "main_emotion": "선택한 감정 중에서 대표 감정을 골라주세요."
+            })

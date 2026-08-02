@@ -19,7 +19,7 @@ class RecordFormTests(TestCase):
     def test_image_weather_content_and_emotion_are_required(self):
         form = RecordForm(data={})
         self.assertFalse(form.is_valid())
-        for field in ("image", "weather", "content", "emotions"):
+        for field in ("image", "weather", "content", "emotions", "main_emotion"):
             self.assertIn(field, form.errors)
 
     def test_more_than_three_emotions_are_rejected(self):
@@ -27,9 +27,23 @@ class RecordFormTests(TestCase):
             "weather": "sunny",
             "content": "오늘의 마음",
             "emotions": ["1", "2", "3", "4"],
+            "main_emotion": "1",
         })
         self.assertFalse(form.is_valid())
         self.assertIn("emotions", form.errors)
+
+    def test_main_emotion_must_be_one_of_selected_emotions(self):
+        form = RecordForm(
+            data={
+                "weather": "sunny",
+                "content": "오늘의 마음",
+                "emotions": ["2", "5"],
+                "main_emotion": "9",
+            },
+            files={"image": uploaded_image()},
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("main_emotion", form.errors)
 
 
 class RecordCreateViewTests(TestCase):
@@ -49,6 +63,7 @@ class RecordCreateViewTests(TestCase):
             "weather": "cloudy",
             "content": "기록 생성 테스트",
             "emotions": ["2", "5", "9"],
+            "main_emotion": "5",
             "place_name": "테스트 장소",
             "latitude": "37.5665000",
             "longitude": "126.9780000",
@@ -59,6 +74,7 @@ class RecordCreateViewTests(TestCase):
         self.assertRedirects(response, reverse("records:detail", args=[record.pk]))
         self.assertEqual(record.user, self.user)
         self.assertEqual(record.emotions, [2, 5, 9])
+        self.assertEqual(record.main_emotion, 5)
 
 
 class RecordCrudViewTests(TestCase):
@@ -71,6 +87,7 @@ class RecordCrudViewTests(TestCase):
             weather="sunny",
             content="수정 전 기록",
             emotions=[1],
+            main_emotion=1,
             image=uploaded_image("existing.gif"),
         )
 
@@ -90,13 +107,19 @@ class RecordCrudViewTests(TestCase):
 
         update_response = self.client.post(
             reverse("records:update", args=[self.record.pk]),
-            {"weather": "rainy", "content": "수정한 기록", "emotions": ["3"]},
+            {
+                "weather": "rainy",
+                "content": "수정한 기록",
+                "emotions": ["3"],
+                "main_emotion": "3",
+            },
         )
         self.assertRedirects(
             update_response, reverse("records:detail", args=[self.record.pk])
         )
         self.record.refresh_from_db()
         self.assertEqual(self.record.content, "수정한 기록")
+        self.assertEqual(self.record.main_emotion, 3)
 
     def test_other_user_cannot_view_record(self):
         self.client.force_login(self.other_user)

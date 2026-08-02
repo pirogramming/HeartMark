@@ -637,6 +637,31 @@
     font-size: 0.85rem;
 }
 
+.emotion-main-badge {
+    position: absolute;
+    top: -7px;
+    right: -5px;
+    display: none;
+    padding: 3px 6px;
+    border: 1px solid #d9925e;
+    border-radius: 999px;
+    color: #7d4b2d;
+    background: #fff0c9;
+    font-size: 0.62rem;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 1px 2px 0 rgba(70, 55, 45, 0.13);
+    transform: rotate(4deg);
+}
+
+.emotion-option--main .emotion-main-badge {
+    display: inline-block;
+}
+
+.emotion-option--main .emotion-icon {
+    box-shadow: 0 0 0 3px #e5a873, 0 0 0 6px rgba(255, 231, 208, 0.8) !important;
+}
+
 .record-completion-card {
     position: relative;
     display: grid;
