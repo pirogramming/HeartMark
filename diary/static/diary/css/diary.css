@@ -560,6 +560,106 @@ body.modal-open {
     }
 }
 
+/* =========================
+        장소별 기록 팝업
+========================= */
+
+.location-modal {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+}
+
+.location-modal[hidden] {
+    display: none;
+}
+
+.location-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(35, 30, 25, 0.45);
+    backdrop-filter: blur(3px);
+}
+
+.location-modal-content {
+    position: relative;
+    z-index: 1;
+
+    width: min(1040px, calc(100% - 60px));
+    max-height: calc(100vh - 80px);
+    margin: 40px auto;
+    padding: 30px;
+
+    overflow-y: auto;
+
+    border: 1px solid #eadfce;
+    border-radius: 24px;
+    background: #fffdf7;
+
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+.location-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+.location-modal-label {
+    margin: 0 0 6px;
+
+    color: #8d857b;
+    font-size: 13px;
+}
+
+.location-modal-header h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.location-modal-close {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid #e5ddd1;
+    border-radius: 50%;
+    background: #ffffff;
+
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.location-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.location-modal-empty {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .location-modal-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .location-modal-content {
+        width: calc(100% - 28px);
+        padding: 20px;
+    }
+
+    .location-modal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 .location-map-wrapper {
     position: relative;
     width: min(580px, 100%); 
@@ -584,9 +684,16 @@ body.modal-open {
 
 /* 방문한 장소 채우기 */
 .seoul-map path.has-record {
-    /*stroke: #789447;*/
+    stroke: #789447;
+    stroke-width: 2;
+    cursor: pointer;
+}
+
+.seoul-map path.has-record:hover {
+    filter: brightness(0.94);
     stroke-width: 3;
 }
+
 /* 지도 위 구 이름 */
 .district-labels {
     pointer-events: none;
@@ -603,6 +710,23 @@ body.modal-open {
     stroke: #fff;
     stroke-width: 5px;
     stroke-linejoin: round;
+}
+
+.seoul-map path {
+    pointer-events: all;
+}
+
+.seoul-map path:focus {
+    outline: none;
+}
+
+.seoul-map path.has-record {
+    cursor: pointer;
+}
+
+.seoul-map path.has-record:hover {
+    filter: brightness(0.94);
+    stroke-width: 3;
 }
 
 /* =========================

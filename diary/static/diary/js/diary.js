@@ -64,7 +64,31 @@ document.addEventListener("DOMContentLoaded", () => {
             "#district-map-data [data-district]"
         );
 
-    /* HTML 데이터를 JavaScripts 객체로 변환 */
+
+    /* =========================
+            장소 팝업 요소
+    ========================= */
+
+    const locationModal =
+        document.querySelector("#location-modal");
+
+    const locationModalName =
+        document.querySelector("#location-modal-name");
+
+    const locationModalRecords =
+        document.querySelectorAll(".location-modal-record");
+
+    const locationModalEmpty =
+        document.querySelector("#location-modal-empty");
+
+    const locationModalCloseButtons =
+        document.querySelectorAll(
+            "[data-location-modal-close]"
+        );
+
+
+    /* HTML 데이터를 JavaScript 객체로 변환 */
+
     function getDistrictMapData() {
         return Array.from(districtDataElements).map((element) => ({
             district: element.dataset.district.trim(),
@@ -76,7 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
     }
 
-    /* 기존 지도 색상 초기화하는 함수 */
+
+    /* 기존 지도 색상 초기화 */
+
     function clearDistrictStyles() {
         document
             .querySelectorAll(".seoul-map path")
@@ -86,7 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    /* 색상 방식 적용 함수 추가 */
+
+    /* 선택한 지도 색상 방식 적용 */
+
     function applyMapMode(mode) {
         clearDistrictStyles();
 
@@ -135,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     minimumOpacity
                     + ratio * (1 - minimumOpacity);
 
-                /* 노란색 */
                 path.style.fill =
                     `rgba(245, 196, 80, ${opacity})`;
             }
@@ -158,29 +185,125 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("diaryMapMode", mode);
     }
 
-    /* 점 세 개 메뉴 여닫는 코드 */
-    if (mapSettingsButton && mapSettingsMenu) {
-        mapSettingsButton.addEventListener("click", () => {
-            const isOpen = !mapSettingsMenu.hidden;
 
-            mapSettingsMenu.hidden = isOpen;
+    /* =========================
+            장소 팝업
+    ========================= */
+
+    function openLocationModal(locationName) {
+        if (!locationModal || !locationModalName) {
+            return;
+        }
+
+        let visibleRecordCount = 0;
+
+        locationModalName.textContent = locationName;
+
+        locationModalRecords.forEach((record) => {
+            const recordLocation =
+                record.dataset.recordLocation.trim();
+
+            const isMatched =
+                recordLocation === locationName;
+
+            record.hidden = !isMatched;
+
+            if (isMatched) {
+                visibleRecordCount += 1;
+            }
+        });
+
+        if (locationModalEmpty) {
+            locationModalEmpty.hidden =
+                visibleRecordCount !== 0;
+        }
+
+        locationModal.hidden = false;
+        document.body.classList.add("modal-open");
+    }
+
+
+    function closeLocationModal() {
+        if (!locationModal) {
+            return;
+        }
+
+        locationModal.hidden = true;
+        document.body.classList.remove("modal-open");
+    }
+
+
+    /* 기록이 있는 구에 클릭 이벤트 연결 */
+
+    districtDataElements.forEach((element) => {
+        const districtName =
+            element.dataset.district.trim();
+
+        const districtPath =
+            document.getElementById(districtName);
+
+        if (!districtPath) {
+            console.warn(
+                `클릭 이벤트를 연결할 구를 찾지 못했습니다: ${districtName}`
+            );
+            return;
+        }
+
+        /*
+        * tabindex를 넣지 않습니다.
+        * SVG에 직사각형 포커스 테두리가 나타나는 것을 방지합니다.
+        */
+        districtPath.addEventListener("click", () => {
+            openLocationModal(districtName);
+        });
+    });
+
+
+    /* 장소 팝업 닫기 */
+
+    locationModalCloseButtons.forEach((button) => {
+        button.addEventListener(
+            "click",
+            closeLocationModal
+        );
+    });
+
+
+    /* =========================
+            점 세 개 메뉴
+    ========================= */
+
+    if (mapSettingsButton && mapSettingsMenu) {
+        mapSettingsButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            const willOpen = mapSettingsMenu.hidden;
+
+            mapSettingsMenu.hidden = !willOpen;
 
             mapSettingsButton.setAttribute(
                 "aria-expanded",
-                String(!isOpen)
+                String(willOpen)
+            );
+        });
+
+        mapSettingsMenu.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+
+        document.addEventListener("click", () => {
+            mapSettingsMenu.hidden = true;
+
+            mapSettingsButton.setAttribute(
+                "aria-expanded",
+                "false"
             );
         });
     }
 
-    if (districtDataElements.length > 0) {
-        const savedMapMode =
-            localStorage.getItem("diaryMapMode")
-            || "dominant";
 
-        applyMapMode(savedMapMode);
-    }
+    /* 지도 색상 방식 선택 */
 
-    /* 색상 방식 클릭 */
     mapModeButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const selectedMode =
@@ -200,6 +323,17 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+
+    /* 페이지 진입 시 저장된 색상 모드 적용 */
+
+    if (districtDataElements.length > 0) {
+        const savedMapMode =
+            localStorage.getItem("diaryMapMode")
+            || "dominant";
+
+        applyMapMode(savedMapMode);
+    }
 
     const sortSelect = document.querySelector("#diary-sort");
     const filterForm = document.querySelector("#diary-filter-form");
@@ -286,8 +420,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !modal.hidden) {
+        if (event.key !== "Escape") {
+            return;
+        }
+
+        if (modal && !modal.hidden) {
             closeEmotionModal();
+        }
+
+        if (locationModal && !locationModal.hidden) {
+            closeLocationModal();
+        }
+
+        if (mapSettingsMenu && !mapSettingsMenu.hidden) {
+            mapSettingsMenu.hidden = true;
+
+            if (mapSettingsButton) {
+                mapSettingsButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
         }
     });
 });
