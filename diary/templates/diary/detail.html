@@ -1,1 +1,233 @@
-<!--작성 상세 기록 페이지-->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+기록 상세 | 마음자국
+{% endblock %}
+
+{% block extra_css %}
+<!--
+    기록 상세 페이지 전용 CSS 파일을 불러옵니다.
+    base.html의 추가 CSS 영역을 사용하여
+    이 페이지에서만 detail.css가 적용됩니다.
+-->
+<link
+    rel="stylesheet"
+    href="{% static 'diary/css/detail.css' %}"
+>
+{% endblock %}
+
+{% block content %}
+<section class="record-detail-page">
+
+    <!--
+        페이지 상단의 장소와 날짜 영역입니다.
+        나중에는 실제 Record 데이터로 교체합니다.
+
+        명동
+        → {{ record.location.name }}
+
+        날짜
+        → {{ record.created_at|date:"Y. m. d (D)" }}
+    -->
+    <header class="record-detail-header">
+
+        <!-- 기록이 작성된 장소 -->
+        <h1 class="record-detail-location">
+            명동
+        </h1>
+
+        <!-- 기록 작성 날짜 -->
+        <time
+            class="record-detail-date"
+            datetime="2026-08-02"
+        >
+            2026. 08. 02 (일)
+        </time>
+
+    </header>
+
+
+    <!--
+        감정 카드 3개가 들어가는 영역입니다.
+
+        왼쪽  : 보조 감정
+        가운데: 대표 감정
+        오른쪽: 보조 감정
+    -->
+    <section
+        class="emotion-summary"
+        aria-label="기록한 감정"
+    >
+
+        <!-- ====================================
+            왼쪽 보조 감정 카드
+        ==================================== -->
+        <article class="emotion-card emotion-card--secondary emotion-card--blue">
+
+            <!-- 보조 감정임을 알려주는 작은 라벨 -->
+            <span class="emotion-card-badge">
+                보조 감정
+            </span>
+
+            <!-- 감정 이미지 영역 -->
+            <div class="emotion-card-image-wrapper">
+
+                <!--
+                    지금은 임시 이미지입니다.
+
+                    실제 데이터 연결 후에는 대략:
+                    emotion-{{ 번호 }}.svg
+
+                    형식으로 바꿀 수 있습니다.
+                -->
+                <img
+                    class="emotion-card-image"
+                    src="{% static 'diary/images/emotion-01.svg' %}"
+                    alt="생각중이에요 감정"
+                >
+
+            </div>
+
+            <!-- 감정 이름 -->
+            <h2 class="emotion-card-name">
+                생각중이에요
+            </h2>
+
+        </article>
+
+
+        <!-- ====================================
+            가운데 대표 감정 카드
+        ==================================== -->
+        <article class="emotion-card emotion-card--main emotion-card--purple">
+
+            <!-- 대표 감정임을 알려주는 강조 라벨 -->
+            <span class="emotion-card-badge emotion-card-badge--main">
+                대표 감정
+            </span>
+
+            <!-- 대표 감정 이미지 영역 -->
+            <div class="emotion-card-image-wrapper emotion-card-image-wrapper--main">
+
+                <img
+                    class="emotion-card-image emotion-card-image--main"
+                    src="{% static 'diary/images/emotion-01.svg' %}"
+                    alt="차분해요 대표 감정"
+                >
+
+            </div>
+
+            <!-- 대표 감정 이름 -->
+            <h2 class="emotion-card-name emotion-card-name--main">
+                차분해요
+            </h2>
+
+        </article>
+
+
+        <!-- ====================================
+            오른쪽 보조 감정 카드
+        ==================================== -->
+        <article class="emotion-card emotion-card--secondary emotion-card--green">
+
+            <!-- 보조 감정 라벨 -->
+            <span class="emotion-card-badge">
+                보조 감정
+            </span>
+
+            <!-- 감정 이미지 영역 -->
+            <div class="emotion-card-image-wrapper">
+
+                <img
+                    class="emotion-card-image"
+                    src="{% static 'diary/images/emotion-01.svg' %}"
+                    alt="고마워요 감정"
+                >
+
+            </div>
+
+            <!-- 감정 이름 -->
+            <h2 class="emotion-card-name">
+                고마워요
+            </h2>
+
+        </article>
+
+    </section>
+
+
+    <!--
+        Photo / Read / Listen 기능 버튼 영역입니다.
+
+        지금은 버튼을 눌러도 동작하지 않습니다.
+        나중에 detail.js에서 모달이나 콘텐츠 영역을 열도록 연결합니다.
+    -->
+    <nav
+        class="record-detail-actions"
+        aria-label="기록 상세 기능"
+    >
+
+        <!-- 사진 보기 버튼 -->
+        <button
+            type="button"
+            class="record-action-button"
+            data-action="photo"
+        >
+            <!-- 카메라 모양을 글자로 임시 표시 -->
+            <span
+                class="record-action-icon"
+                aria-hidden="true"
+            >
+                ◉
+            </span>
+
+            <span class="record-action-label">
+                Photo
+            </span>
+        </button>
+
+
+        <!-- 일기 내용 읽기 버튼 -->
+        <button
+            type="button"
+            class="record-action-button"
+            data-action="read"
+        >
+            <!-- 책 모양 임시 아이콘 -->
+            <span
+                class="record-action-icon"
+                aria-hidden="true"
+            >
+                ▤
+            </span>
+
+            <span class="record-action-label">
+                Read
+            </span>
+        </button>
+
+
+        <!-- 음악 듣기 버튼 -->
+        <button
+            type="button"
+            class="record-action-button"
+            data-action="listen"
+        >
+            <!-- 헤드폰 느낌의 임시 아이콘 -->
+            <span
+                class="record-action-icon"
+                aria-hidden="true"
+            >
+                ◖
+            </span>
+
+            <span class="record-action-label">
+                Listen
+            </span>
+        </button>
+
+    </nav>
+
+</section>
+{% endblock %}
