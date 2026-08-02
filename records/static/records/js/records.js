@@ -23,9 +23,9 @@
     const photoEmpty = document.querySelector("#record-photo-empty");
     const photoRemove = document.querySelector("#record-photo-remove");
     const message = document.querySelector("#record-form-message");
-    const completionCard = document.querySelector("#record-completion-card");
     let lastFocusedElement = null;
     let previewUrl = null;
+    let showRequiredMessage = false;
 
     const setToday = () => {
         if (!today) return;
@@ -50,6 +50,8 @@
         modal?.classList.remove("record-modal--fullscreen");
         expandButton?.setAttribute("aria-pressed", "false");
         document.body.classList.remove("record-modal-open");
+        showRequiredMessage = false;
+        message.textContent = "";
         lastFocusedElement?.focus();
     };
 
@@ -109,18 +111,23 @@
         emotions: emotionInputs.some((input) => input.checked),
     });
 
-    const updateCompletionCard = (showWhenIncomplete = false) => {
-        if (!completionCard) return;
+    const updateRequiredMessage = () => {
         const state = getCompletionState();
-        Object.entries(state).forEach(([name, isComplete]) => {
-            const item = completionCard.querySelector(`[data-requirement="${name}"]`);
-            item?.classList.toggle("is-complete", isComplete);
-            const status = item?.querySelector("b");
-            if (status) status.textContent = isComplete ? "✓" : "!";
-        });
-        const isComplete = Object.values(state).every(Boolean);
-        completionCard.hidden = isComplete || (!showWhenIncomplete && completionCard.hidden);
-        return { state, isComplete };
+        const labels = {
+            image: "사진",
+            weather: "날씨",
+            content: "오늘의 마음",
+            emotions: "감정",
+        };
+        const missing = Object.entries(state)
+            .filter(([, isComplete]) => !isComplete)
+            .map(([name]) => labels[name]);
+        if (showRequiredMessage) {
+            message.textContent = missing.length
+                ? `${missing.join(" · ")} 입력이 필요해요.`
+                : "";
+        }
+        return missing.length === 0;
     };
 
     openButtons.forEach((button) =>
@@ -139,18 +146,18 @@
                 }
             }
             updateEmotionState();
-            updateCompletionCard(!completionCard?.hidden);
+            updateRequiredMessage();
         })
     );
     fileInputs.forEach((input) =>
         input.addEventListener("change", () => {
             showPhoto(input.files[0]);
-            updateCompletionCard(!completionCard?.hidden);
+            updateRequiredMessage();
         })
     );
     photoRemove?.addEventListener("click", () => {
         clearPhoto();
-        updateCompletionCard(!completionCard?.hidden);
+        updateRequiredMessage();
     });
 
     overlay.addEventListener("click", (event) => {
@@ -162,16 +169,15 @@
     });
 
     form?.addEventListener("submit", (event) => {
-        const completion = updateCompletionCard(true);
-        if (!completion?.isComplete) {
+        showRequiredMessage = true;
+        if (!updateRequiredMessage()) {
             event.preventDefault();
-            completionCard.hidden = false;
         }
     });
 
     form?.querySelectorAll('input[name="weather"], textarea[name="content"]')
         .forEach((field) => field.addEventListener("input", () => {
-            updateCompletionCard(!completionCard?.hidden);
+            updateRequiredMessage();
         }));
 
     setToday();

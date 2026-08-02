@@ -96,7 +96,7 @@
         <input type="hidden" name="main_emotion" id="record-edit-main-emotion" value="{{ form.main_emotion.value|default_if_none:'' }}">
 
         <footer class="record-edit-actions">
-            <p id="record-edit-message" class="record-form-message"></p>
+            <p id="record-edit-message" class="record-form-message" role="status" aria-live="polite"></p>
             <a href="{% url 'records:detail' record.pk %}">취소</a>
             <button class="record-submit" type="submit">수정 완료</button>
         </footer>

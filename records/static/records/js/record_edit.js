@@ -12,6 +12,32 @@
     const preview = form.querySelector("#record-edit-preview");
     const emptyState = form.querySelector("#record-edit-photo-empty");
     let previewUrl = null;
+    let showRequiredMessage = false;
+
+    const getMissingLabels = () => {
+        const weather = form.querySelector('input[name="weather"]:checked');
+        const content = form.querySelector('textarea[name="content"]');
+        const emotions = emotionInputs.filter((input) => input.checked);
+        const hasImage = Boolean(
+            emptyState?.hidden || imageInput?.files.length
+        );
+        const missing = [];
+        if (!hasImage) missing.push("사진");
+        if (!weather) missing.push("날씨");
+        if (!content?.value.trim()) missing.push("오늘의 마음");
+        if (!emotions.length) missing.push("감정");
+        return missing;
+    };
+
+    const updateRequiredMessage = () => {
+        const missing = getMissingLabels();
+        if (showRequiredMessage) {
+            message.textContent = missing.length
+                ? `${missing.join(" · ")} 입력이 필요해요.`
+                : "";
+        }
+        return missing.length === 0;
+    };
 
     const updateEmotions = () => {
         const selected = emotionInputs.filter((input) => input.checked);
@@ -44,6 +70,7 @@
             }
         }
         updateEmotions();
+        updateRequiredMessage();
     }));
     updateEmotions();
 
@@ -55,16 +82,16 @@
         preview.src = previewUrl;
         preview.hidden = false;
         emptyState.hidden = true;
+        updateRequiredMessage();
     });
 
     form.addEventListener("submit", (event) => {
-        const weather = form.querySelector('input[name="weather"]:checked');
-        const content = form.querySelector('textarea[name="content"]');
-        const emotions = emotionInputs.filter((input) => input.checked);
-        const hasImage = !emptyState || emptyState.hidden || imageInput?.files.length;
-        if (!weather || !hasImage || !content.value.trim() || !emotions.length) {
+        showRequiredMessage = true;
+        if (!updateRequiredMessage()) {
             event.preventDefault();
-            message.textContent = "사진, 날씨, 감정과 오늘의 마음을 모두 입력해 주세요.";
         }
     });
+
+    form.querySelectorAll('input[name="weather"], textarea[name="content"]')
+        .forEach((field) => field.addEventListener("input", updateRequiredMessage));
 })();

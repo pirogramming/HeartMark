@@ -368,14 +368,14 @@
 }
 
 .weather-option:hover .weather-icon {
-    transform: rotate(-3deg) scale(1.05);
+    transform: scale(1.05);
 }
 
 .weather-option input:checked + .weather-icon {
     border-color: #e8b78f;
     background-color: var(--record-accent);
     box-shadow: 0 0 0 3px rgba(255, 231, 208, 0.72);
-    transform: rotate(-4deg) scale(1.05);
+    transform: scale(1.05);
 }
 
 .photo-box {
@@ -534,7 +534,7 @@
     border-color: #e8b78f;
     background-color: var(--record-accent);
     box-shadow: 0 0 0 2px rgba(255, 231, 208, 0.75);
-    transform: rotate(-4deg) scale(1.04);
+    transform: scale(1.04);
 }
 
 .emotion-option input:disabled + .emotion-icon {
@@ -651,7 +651,7 @@
     font-weight: 800;
     line-height: 1;
     box-shadow: 1px 2px 0 rgba(70, 55, 45, 0.13);
-    transform: rotate(4deg);
+    transform: none;
 }
 
 .emotion-option--main .emotion-main-badge {
@@ -660,84 +660,6 @@
 
 .emotion-option--main .emotion-icon {
     box-shadow: 0 0 0 3px #e5a873, 0 0 0 6px rgba(255, 231, 208, 0.8) !important;
-}
-
-.record-completion-card {
-    position: relative;
-    display: grid;
-    gap: 9px;
-    min-width: 430px;
-    padding: 15px 18px 12px;
-    border: 1.5px dashed #c79b79;
-    border-radius: 9px 12px 8px 13px;
-    background-color: #fffaf0;
-    background-image: repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 24px,
-        rgba(199, 155, 121, 0.12) 25px
-    );
-    box-shadow: 0 5px 14px rgba(91, 67, 49, 0.12);
-    transform: rotate(-0.5deg);
-    animation: record-checklist-pop 180ms ease-out;
-}
-
-.record-completion-card[hidden] {
-    display: none;
-}
-
-.record-completion-card p {
-    margin: 0;
-    color: var(--record-ink);
-    font-size: 0.82rem;
-    font-weight: 800;
-    text-align: center;
-}
-
-.record-completion-card__tape {
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    width: 58px;
-    height: 16px;
-    background: rgba(255, 218, 158, 0.72);
-    transform: translateX(-50%) rotate(2deg);
-}
-
-.record-completion-card ul {
-    display: flex;
-    justify-content: center;
-    gap: 7px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.record-completion-card li {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 11px;
-    border-radius: 999px;
-    color: #a44f49;
-    background: #ffe1d8;
-    font-size: 0.75rem;
-    font-weight: 700;
-    transition: color 160ms ease, background 160ms ease;
-}
-
-.record-completion-card li.is-complete {
-    color: #58714d;
-    background: #e5efd9;
-}
-
-.record-completion-card b {
-    font-size: 0.8rem;
-}
-
-@keyframes record-checklist-pop {
-    from { opacity: 0; transform: translateY(6px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .record-submit {
@@ -764,6 +686,7 @@
 }
 
 .record-create-layout {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(260px, 0.78fr) minmax(430px, 1.55fr);
     grid-template-rows: minmax(0, 1fr) auto auto;
