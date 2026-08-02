@@ -33,14 +33,9 @@
 
                     <label class="record-edit-photo__button">
                         <span>{% if record.image %}사진 변경{% else %}사진 불러오기{% endif %}</span>
-                        <input id="record-edit-image-input" type="file" name="image" accept="image/*">
+                        <input id="record-edit-image-input" type="file" name="image" accept="image/*"{% if not record.image %} required{% endif %}>
                     </label>
                 </div>
-                {% if record.image %}
-                <label class="record-edit-clear-photo">
-                    <input type="checkbox" name="image-clear"> 사진 삭제
-                </label>
-                {% endif %}
                 {% for error in form.image.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
             </section>
 

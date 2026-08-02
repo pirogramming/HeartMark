@@ -39,9 +39,11 @@
     form.addEventListener("submit", (event) => {
         const weather = form.querySelector('input[name="weather"]:checked');
         const content = form.querySelector('textarea[name="content"]');
-        if (!weather || !content.value.trim()) {
+        const emotions = emotionInputs.filter((input) => input.checked);
+        const hasImage = !emptyState || emptyState.hidden || imageInput?.files.length;
+        if (!weather || !hasImage || !content.value.trim() || !emotions.length) {
             event.preventDefault();
-            message.textContent = "날씨와 오늘의 마음을 입력해 주세요.";
+            message.textContent = "사진, 날씨, 감정과 오늘의 마음을 모두 입력해 주세요.";
         }
     });
 })();

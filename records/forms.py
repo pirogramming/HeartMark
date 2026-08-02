@@ -6,7 +6,8 @@ from .models import Record
 class RecordForm(forms.ModelForm):
     emotions = forms.MultipleChoiceField(
         choices=[(str(number), f"감정 {number}") for number in range(1, 21)],
-        required=False,
+        required=True,
+        error_messages={"required": "감정을 1개 이상 선택해 주세요."},
     )
 
     class Meta:

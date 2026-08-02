@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
@@ -6,7 +7,21 @@ from .forms import RecordForm
 from .models import Record
 
 
+def uploaded_image(name="record.gif"):
+    return SimpleUploadedFile(
+        name,
+        b"GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;",
+        content_type="image/gif",
+    )
+
+
 class RecordFormTests(TestCase):
+    def test_image_weather_content_and_emotion_are_required(self):
+        form = RecordForm(data={})
+        self.assertFalse(form.is_valid())
+        for field in ("image", "weather", "content", "emotions"):
+            self.assertIn(field, form.errors)
+
     def test_more_than_three_emotions_are_rejected(self):
         form = RecordForm(data={
             "weather": "sunny",
@@ -37,6 +52,7 @@ class RecordCreateViewTests(TestCase):
             "place_name": "테스트 장소",
             "latitude": "37.5665000",
             "longitude": "126.9780000",
+            "image": uploaded_image(),
         })
 
         record = Record.objects.get()
@@ -55,6 +71,7 @@ class RecordCrudViewTests(TestCase):
             weather="sunny",
             content="수정 전 기록",
             emotions=[1],
+            image=uploaded_image("existing.gif"),
         )
 
     def test_owner_can_view_and_update_record(self):

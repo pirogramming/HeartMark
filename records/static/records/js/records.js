@@ -22,6 +22,7 @@
     const photoEmpty = document.querySelector("#record-photo-empty");
     const photoRemove = document.querySelector("#record-photo-remove");
     const message = document.querySelector("#record-form-message");
+    const completionCard = document.querySelector("#record-completion-card");
     let lastFocusedElement = null;
     let previewUrl = null;
 
@@ -91,17 +92,47 @@
         });
     };
 
+    const getCompletionState = () => ({
+        image: fileInputs.some((input) => input.files.length > 0),
+        weather: Boolean(form?.querySelector('input[name="weather"]:checked')),
+        content: Boolean(form?.querySelector('textarea[name="content"]')?.value.trim()),
+        emotions: emotionInputs.some((input) => input.checked),
+    });
+
+    const updateCompletionCard = (showWhenIncomplete = false) => {
+        if (!completionCard) return;
+        const state = getCompletionState();
+        Object.entries(state).forEach(([name, isComplete]) => {
+            const item = completionCard.querySelector(`[data-requirement="${name}"]`);
+            item?.classList.toggle("is-complete", isComplete);
+            const status = item?.querySelector("b");
+            if (status) status.textContent = isComplete ? "✓" : "!";
+        });
+        const isComplete = Object.values(state).every(Boolean);
+        completionCard.hidden = isComplete || (!showWhenIncomplete && completionCard.hidden);
+        return { state, isComplete };
+    };
+
     openButtons.forEach((button) =>
         button.addEventListener("click", openModal)
     );
     expandButton?.addEventListener("click", toggleFullscreen);
     emotionInputs.forEach((input) =>
-        input.addEventListener("change", updateEmotionState)
+        input.addEventListener("change", () => {
+            updateEmotionState();
+            updateCompletionCard(!completionCard?.hidden);
+        })
     );
     fileInputs.forEach((input) =>
-        input.addEventListener("change", () => showPhoto(input.files[0]))
+        input.addEventListener("change", () => {
+            showPhoto(input.files[0]);
+            updateCompletionCard(!completionCard?.hidden);
+        })
     );
-    photoRemove?.addEventListener("click", clearPhoto);
+    photoRemove?.addEventListener("click", () => {
+        clearPhoto();
+        updateCompletionCard(!completionCard?.hidden);
+    });
 
     overlay.addEventListener("click", (event) => {
         if (event.target === overlay) closeModal();
@@ -112,13 +143,17 @@
     });
 
     form?.addEventListener("submit", (event) => {
-        const weather = form.querySelector('input[name="weather"]:checked');
-        const content = form.querySelector('textarea[name="content"]');
-        if (!weather || !content.value.trim()) {
+        const completion = updateCompletionCard(true);
+        if (!completion?.isComplete) {
             event.preventDefault();
-            message.textContent = "날씨와 오늘의 마음을 입력해 주세요.";
+            completionCard.hidden = false;
         }
     });
+
+    form?.querySelectorAll('input[name="weather"], textarea[name="content"]')
+        .forEach((field) => field.addEventListener("input", () => {
+            updateCompletionCard(!completionCard?.hidden);
+        }));
 
     setToday();
     updateEmotionState();

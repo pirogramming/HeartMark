@@ -19,7 +19,7 @@ class Record(models.Model):
     )
     weather = models.CharField(max_length=10, choices=Weather.choices)
     content = models.TextField(max_length=500)
-    image = models.ImageField(upload_to="records/%Y/%m/%d/", blank=True)
+    image = models.ImageField(upload_to="records/%Y/%m/%d/")
     emotions = models.JSONField(default=list)
 
     # TODO: locations.Place 규격 확정 후 ForeignKey 연결을 검토합니다.
@@ -48,5 +48,7 @@ class Record(models.Model):
         super().clean()
         if not isinstance(self.emotions, list):
             raise ValidationError({"emotions": "감정은 목록 형태여야 합니다."})
+        if not self.emotions:
+            raise ValidationError({"emotions": "감정을 1개 이상 선택해 주세요."})
         if len(self.emotions) > 3:
             raise ValidationError({"emotions": "감정은 최대 3개까지 선택할 수 있습니다."})

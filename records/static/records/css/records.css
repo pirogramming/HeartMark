@@ -155,7 +155,7 @@
 .record-imagination-character {
     position: absolute;
     bottom: 12px;
-    left: -245px;
+    left: -285px;
     z-index: 2;
     width: 235px;
     pointer-events: none;
@@ -179,21 +179,21 @@
 
 .thought-dot--small {
     top: -6px;
-    right: 70px;
+    right: 45px;
     width: 12px;
     height: 12px;
 }
 
 .thought-dot--medium {
     top: -35px;
-    right: 40px;
+    right: 15px;
     width: 19px;
     height: 19px;
 }
 
 .thought-dot--large {
     top: -72px;
-    right: 8px;
+    right: -17px;
     width: 29px;
     height: 29px;
 }
@@ -635,6 +635,84 @@
     margin: 0;
     color: #b95a52;
     font-size: 0.85rem;
+}
+
+.record-completion-card {
+    position: relative;
+    display: grid;
+    gap: 9px;
+    min-width: 430px;
+    padding: 15px 18px 12px;
+    border: 1.5px dashed #c79b79;
+    border-radius: 9px 12px 8px 13px;
+    background-color: #fffaf0;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 24px,
+        rgba(199, 155, 121, 0.12) 25px
+    );
+    box-shadow: 0 5px 14px rgba(91, 67, 49, 0.12);
+    transform: rotate(-0.5deg);
+    animation: record-checklist-pop 180ms ease-out;
+}
+
+.record-completion-card[hidden] {
+    display: none;
+}
+
+.record-completion-card p {
+    margin: 0;
+    color: var(--record-ink);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.record-completion-card__tape {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 58px;
+    height: 16px;
+    background: rgba(255, 218, 158, 0.72);
+    transform: translateX(-50%) rotate(2deg);
+}
+
+.record-completion-card ul {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.record-completion-card li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    color: #a44f49;
+    background: #ffe1d8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: color 160ms ease, background 160ms ease;
+}
+
+.record-completion-card li.is-complete {
+    color: #58714d;
+    background: #e5efd9;
+}
+
+.record-completion-card b {
+    font-size: 0.8rem;
+}
+
+@keyframes record-checklist-pop {
+    from { opacity: 0; transform: translateY(6px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .record-submit {

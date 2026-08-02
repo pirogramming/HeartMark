@@ -25,7 +25,7 @@
             </button>
         </div>
 
-        <div class="record-imagination-character" aria-hidden="true">
+        <div class="record-imagination-character">
             <img
                 src="{% static 'records/images/main-character-writing.png' %}"
                 alt=""
@@ -41,6 +41,7 @@
             method="post"
             action="{% url 'records:create' %}"
             enctype="multipart/form-data"
+            novalidate
         >
             {% csrf_token %}
             <h1 class="sr-only" id="record-modal-title">오늘의 기록 작성</h1>
@@ -68,6 +69,7 @@
                                         type="file"
                                         name="image"
                                         accept="image/*"
+                                        required
                                     >
                                 </label>
                             </div>
@@ -89,7 +91,7 @@
                     <legend class="sr-only">날씨 선택</legend>
                     <div class="weather-picker__options">
                         <label class="weather-option" title="해">
-                            <input type="radio" name="weather" value="sunny">
+                            <input type="radio" name="weather" value="sunny" required>
                             <span class="weather-icon weather-icon--sunny"></span>
                             <span class="sr-only">해</span>
                         </label>
@@ -128,6 +130,7 @@
                     rows="4"
                     maxlength="500"
                     placeholder="오늘의 마음을 기록해 보세요..."
+                    required
                 ></textarea>
                 </label>
 
@@ -161,6 +164,22 @@
                 </section>
 
                 <footer class="record-paper__footer">
+                    <aside
+                        class="record-completion-card"
+                        id="record-completion-card"
+                        role="status"
+                        aria-live="polite"
+                        hidden
+                    >
+                        <span class="record-completion-card__tape" aria-hidden="true"></span>
+                        <p>오늘의 기록을 조금만 더 채워주세요!</p>
+                        <ul>
+                            <li data-requirement="image"><span>사진</span><b>!</b></li>
+                            <li data-requirement="weather"><span>날씨</span><b>!</b></li>
+                            <li data-requirement="content"><span>마음</span><b>!</b></li>
+                            <li data-requirement="emotions"><span>감정</span><b>!</b></li>
+                        </ul>
+                    </aside>
                     <p class="record-form-message" id="record-form-message"></p>
                     <button class="record-submit" type="submit">기록하기</button>
                 </footer>
