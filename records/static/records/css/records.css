@@ -875,6 +875,58 @@ body.record-modal-open {
     align-items: center;
 }
 
+.record-delete-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: grid;
+    padding: 24px;
+    place-items: center;
+    background: rgba(67, 62, 57, 0.58);
+    backdrop-filter: blur(2px);
+}
+
+.record-delete-overlay[hidden] {
+    display: none;
+}
+
+.record-delete-modal {
+    width: min(720px, calc(100vw - 48px));
+    padding: clamp(46px, 6vw, 72px);
+    border: 2px solid var(--record-ink);
+    border-radius: 32px;
+    color: var(--record-ink);
+    text-align: center;
+    background: var(--record-paper);
+    box-shadow: 0 22px 65px rgba(38, 30, 24, 0.28);
+}
+
+.record-delete-modal h2 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.55rem);
+}
+
+.record-delete-modal p {
+    margin: 28px 0 0;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+}
+
+.record-delete-modal form {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 36px;
+}
+
+.record-delete-modal button {
+    min-width: 112px;
+    font: inherit;
+}
+
+body.record-delete-modal-open {
+    overflow: hidden;
+}
+
 .record-detail-header {
     justify-content: space-between;
     margin-bottom: 24px;

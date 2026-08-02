@@ -47,8 +47,32 @@
 
         <footer class="record-detail-actions">
             <a class="record-secondary-button" href="{% url 'records:update' record.pk %}">수정</a>
-            <a class="record-danger-button" href="{% url 'records:delete' record.pk %}">삭제</a>
+            <button class="record-danger-button" id="open-record-delete-modal" type="button">삭제</button>
         </footer>
     </article>
 </section>
+
+<div class="record-delete-overlay" id="record-delete-overlay" hidden>
+    <section
+        class="record-delete-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="record-delete-title"
+        aria-describedby="record-delete-description"
+    >
+        <h2 id="record-delete-title">이 기록을 삭제할까요?</h2>
+        <p id="record-delete-description">
+            {{ record.created_at|date:"Y년 n월 j일" }}의 기록은 삭제 후 복구할 수 없어요.
+        </p>
+        <form method="post" action="{% url 'records:delete' record.pk %}">
+            {% csrf_token %}
+            <button class="record-cancel-button" id="close-record-delete-modal" type="button">취소</button>
+            <button class="record-danger-button" type="submit">삭제하기</button>
+        </form>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'records/js/record_detail.js' %}"></script>
 {% endblock %}
