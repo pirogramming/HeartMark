@@ -3,7 +3,7 @@
 .diary-list-container {
     width: min(1200px, calc(100% - 80px));
     margin: 0 auto;
-    padding: 40px 0 80px;
+    padding: 28px 0 50px;
 }
 
 .diary-tabs-wrapper {
@@ -660,9 +660,21 @@ body.modal-open {
     }
 }
 
+.location-map-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .location-map-wrapper {
     position: relative;
-    width: min(580px, 100%); 
+
+    width: min(
+        760px,
+        calc(100vw - 80px),
+        calc(100vh - 250px)
+    );
+
     margin: 0 auto;
 }
 
