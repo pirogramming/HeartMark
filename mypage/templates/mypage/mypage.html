@@ -38,13 +38,12 @@
     <section class="attendance-card" aria-labelledby="attendance-title">
         <div class="attendance-heading">
             <div>
-                <p>가입일부터 오늘까지</p>
                 <h2 id="attendance-title">출석체크</h2>
             </div>
             <strong>{{ attendance_count }}일 기록</strong>
         </div>
 
-        <div class="attendance-slider" id="attendance-slider">
+        <div class="attendance-slider" id="attendance-slider" data-current-page="{{ current_page_index }}">
             <button class="attendance-arrow attendance-arrow--prev" type="button" aria-label="이전 출석 기간">‹</button>
             <div class="attendance-viewport">
                 <div class="attendance-track">
@@ -52,10 +51,12 @@
                     <section class="attendance-page" aria-label="{{ page.label }}"{% if not forloop.first %} aria-hidden="true"{% endif %}>
                         <ol class="attendance-road">
                             {% for day in page.days %}
-                            <li class="attendance-day{% if day.record %} attendance-day--checked{% endif %}{% if day.is_future %} attendance-day--future{% endif %}">
-                                <span class="attendance-day__circle">
+                            <li class="attendance-day{% if day.record %} attendance-day--checked{% endif %}{% if day.is_future %} attendance-day--future{% endif %}{% if day.is_today %} attendance-day--today{% endif %}">
+                                <span class="attendance-day__stamp">
+                                    <span class="attendance-day__footprint" aria-hidden="true"></span>
                                     {% if day.emotion_number %}
                                     <img
+                                        class="attendance-day__emotion"
                                         src="{% static 'records/images/emotions/emotion-' %}{{ day.emotion_number }}.png"
                                         alt="{{ day.date|date:'n월 j일' }}의 대표 감정"
                                     >
@@ -83,7 +84,73 @@
             ></button>
             {% endfor %}
         </div>
-        <p class="attendance-guide">기록을 작성하면 첫 번째 감정으로 자동 출석돼요.</p>
+        <p class="attendance-guide">기록을 작성하면 대표 감정으로 자동 출석돼요.</p>
+    </section>
+
+    <section class="mypage-insights" aria-label="나의 마음 기록 요약">
+        <section class="insight-overview" aria-labelledby="overview-title">
+            <h2 id="overview-title" class="insight-label">나의 마음 한눈에</h2>
+            <div class="overview-items">
+                <article class="overview-item overview-item--emotion">
+                    <div class="overview-icon">
+                        {% if weekly_emotion %}
+                        <img src="{% static 'records/images/emotions/emotion-' %}{{ weekly_emotion }}.png" alt="이번 주 대표 감정">
+                        {% else %}
+                        <span class="overview-empty" aria-hidden="true">?</span>
+                        {% endif %}
+                    </div>
+                    <div><span>이번 주 대표 감정</span><strong>{% if weekly_emotion %}{{ weekly_emotion_label }}{% else %}아직 없어요{% endif %}</strong></div>
+                </article>
+                <article class="overview-item">
+                    <span class="overview-symbol overview-symbol--streak" aria-hidden="true">
+                        <img src="{% static 'mypage/images/streak-sprout.png' %}" alt="">
+                    </span>
+                    <div><span>연속 기록</span><strong>{{ record_streak }}일</strong></div>
+                </article>
+                <article class="overview-item">
+                    <span class="overview-symbol overview-symbol--total" aria-hidden="true">
+                        <img src="{% static 'mypage/images/total-diary.png' %}" alt="">
+                    </span>
+                    <div><span>총 기록</span><strong>{{ total_record_count }}개</strong></div>
+                </article>
+            </div>
+        </section>
+
+        <div class="insight-detail-grid">
+            <section class="insight-card weekly-mood-card" aria-labelledby="weekly-mood-title">
+                <h2 id="weekly-mood-title" class="insight-label">이번 주 마음</h2>
+                <div class="weekly-mood-content">
+                    <div class="weekly-mood-illustration">
+                        {% if weekly_emotion %}
+                        <img src="{% static 'records/images/emotions/emotion-' %}{{ weekly_emotion }}.png" alt="이번 주에 가장 많이 기록한 감정">
+                        {% else %}
+                        <span aria-hidden="true">?</span>
+                        {% endif %}
+                    </div>
+                    <div class="weekly-mood-copy">
+                        {% if weekly_emotion %}<strong>{{ weekly_emotion_label }}</strong>{% endif %}
+                        <p>{{ weekly_message }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="insight-card frequent-place-card" aria-labelledby="frequent-place-title">
+                <h2 id="frequent-place-title" class="insight-label insight-label--blue">자주 남긴 장소</h2>
+                <div class="place-content">
+                    <span class="place-pin" aria-hidden="true">⌖</span>
+                    <div>
+                        {% if frequent_place %}
+                        <strong>{{ frequent_place }}</strong>
+                        <p>가장 자주 마음을 기록한 장소예요.</p>
+                        {% else %}
+                        <strong>아직 장소가 없어요</strong>
+                        <p>장소를 인증하고 마음자국을 남겨 보세요.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <span class="place-route" aria-hidden="true"></span>
+            </section>
+        </div>
     </section>
 
     <div class="profile-editor" id="profile-editor" hidden>

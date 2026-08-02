@@ -26,7 +26,7 @@
     display: grid;
     justify-items: center;
     width: min(960px, 100%);
-    margin: 0 auto 52px;
+    margin: 0 auto 64px;
 }
 
 .mypage-character-wrap {
@@ -83,24 +83,44 @@
 .attendance-card {
     position: relative;
     z-index: 1;
-    width: min(1120px, 88vw);
-    padding: 24px 48px 28px;
+    width: min(980px, 86vw);
+    min-height: 0;
+    padding: 72px 68px 62px;
     margin: 0 auto;
     border: 2px solid #ffe0c5;
-    border-radius: 52px;
+    border-radius: 44px;
     background: rgba(255, 255, 244, 0.78);
 }
 
 .attendance-heading {
+    position: absolute;
+    top: 17px;
+    right: 48px;
+    left: 48px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
+    margin: 0;
 }
 
 .attendance-heading p,
-.attendance-heading h2 {
+.attendance-heading h2,
+.attendance-heading strong {
     margin: 0;
+}
+
+.attendance-heading h2 {
+    position: absolute;
+    top: -35px;
+    left: -24px;
+    padding: 12px 26px;
+    border-radius: 7px 14px 8px 12px;
+    background: #ffe7d0;
+    box-shadow: 0 3px 8px rgba(91, 67, 49, 0.1);
+    font-size: 1.12rem;
+    line-height: 1;
+    transform: rotate(-1deg);
+    white-space: nowrap;
 }
 
 .attendance-heading p,
@@ -113,7 +133,7 @@
 .attendance-road {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    row-gap: 18px;
+    gap: 24px 20px;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -121,10 +141,8 @@
 
 .attendance-slider {
     position: relative;
-    display: grid;
-    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    display: block;
     align-items: center;
-    gap: 8px;
 }
 
 .attendance-viewport {
@@ -148,72 +166,112 @@
 }
 
 .attendance-arrow {
+    position: absolute;
+    top: 56%;
+    z-index: 3;
     display: grid;
     width: 38px;
     height: 38px;
     padding: 0;
     place-items: center;
-    border: 1px solid rgba(70, 55, 45, 0.28);
+    border: 1.5px solid #fae7d9;
     border-radius: 50%;
-    color: var(--mypage-ink);
-    background: var(--mypage-paper);
-    font-size: 1.7rem;
+    color: #615953;
+    background: #fff0df;
+    font-size: 0;
     line-height: 1;
     cursor: pointer;
+    transform: translateY(-50%);
+    box-shadow: 0 3px 8px rgba(91, 67, 49, 0.13);
+}
+
+.attendance-arrow::before {
+    width: 10px;
+    height: 10px;
+    border-right: 3px solid currentColor;
+    border-bottom: 3px solid currentColor;
+    content: "";
+}
+
+.attendance-arrow--prev::before {
+    transform: translate(2px, 5px) rotate(135deg);
+}
+
+.attendance-arrow--next::before {
+    transform: translate(-2px, 5px) rotate(-45deg);
+}
+
+.attendance-arrow--prev {
+    left: -90px;
+}
+
+.attendance-arrow--next {
+    right: -90px;
 }
 
 .attendance-arrow:disabled {
-    opacity: 0.28;
+    border-color: #fae7d9;
+    color: #615953;
+    background: #fff0df;
+    opacity: 1;
     cursor: default;
+    box-shadow: 0 3px 8px rgba(91, 67, 49, 0.13);
 }
 
 .attendance-day {
     position: relative;
     display: grid;
     justify-items: center;
-    gap: 4px;
+    gap: 7px;
 }
 
-.attendance-day::after {
-    position: absolute;
-    top: 27px;
-    left: calc(50% + 27px);
-    z-index: -1;
-    width: calc(100% - 54px);
-    height: 8px;
-    content: "";
-    background: #ffe2ca;
-}
-
-.attendance-day:nth-child(7n)::after {
-    display: none;
-}
-
-.attendance-day__circle {
-    display: grid;
-    width: 58px;
-    height: 58px;
-    place-items: center;
+.attendance-day__stamp {
+    position: relative;
+    display: block;
+    width: 68px;
+    height: 63px;
     border: 3px solid transparent;
-    border-radius: 50%;
-    background: #ffe2ca;
+    border-radius: 46%;
 }
 
-.attendance-day--checked .attendance-day__circle {
-    border-color: #efb88e;
-    background: var(--mypage-paper);
-    box-shadow: 0 3px 9px rgba(91, 67, 49, 0.13);
+.attendance-day__footprint {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #76503a;
+    -webkit-mask: url("../images/footprint-stamp.png") center / contain no-repeat;
+    mask: url("../images/footprint-stamp.png") center / contain no-repeat;
+    opacity: 0.38;
 }
 
-.attendance-day__circle img {
-    width: 48px;
-    height: 48px;
+.attendance-day--checked .attendance-day__footprint {
+    opacity: 0;
+}
+
+.attendance-day__emotion {
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    width: 45px;
+    height: 45px;
     object-fit: contain;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 2px 2px rgba(70, 55, 45, 0.15));
+}
+
+.attendance-day--future .attendance-day__footprint {
+    opacity: 0.38;
 }
 
 .attendance-day time {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
     color: var(--mypage-muted);
-    font-size: 0.68rem;
+    font-size: 0.7rem;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .attendance-check {
@@ -222,31 +280,272 @@
 }
 
 .attendance-guide {
-    margin: 14px 0 0;
+    position: absolute;
+    right: 24px;
+    bottom: 12px;
+    left: 24px;
+    display: block;
+    margin: 0;
     text-align: center;
 }
 
 .attendance-pagination {
     display: flex;
     justify-content: center;
-    gap: 7px;
-    margin-top: 14px;
+    gap: 8px;
+    margin-top: 22px;
 }
 
 .attendance-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background: #ead6c4;
+    background: #cdb097;
     cursor: pointer;
 }
 
 .attendance-dot--active {
-    width: 22px;
+    width: 28px;
     border-radius: 999px;
-    background: #e7a97e;
+    background: #b87549;
+}
+
+.mypage-insights {
+    position: relative;
+    z-index: 1;
+    width: min(980px, 86vw);
+    margin: 46px auto 0;
+}
+
+.insight-overview,
+.insight-card {
+    position: relative;
+    border: 1.5px solid #f2d7bf;
+    background: rgba(255, 255, 244, 0.9);
+    box-shadow: 0 8px 20px rgba(92, 69, 51, 0.07);
+}
+
+.insight-overview {
+    min-height: 142px;
+    padding: 44px 34px 22px;
+    border-radius: 30px;
+}
+
+.insight-label {
+    position: absolute;
+    top: -16px;
+    left: 24px;
+    z-index: 2;
+    padding: 12px 26px;
+    margin: 0;
+    border-radius: 7px 14px 8px 12px;
+    color: var(--mypage-ink);
+    background: #ffe7d0;
+    box-shadow: 0 3px 8px rgba(91, 67, 49, 0.1);
+    font-size: 1.12rem;
+    transform: rotate(-1deg);
+}
+
+.insight-label--blue {
+    background: #ffe7d0;
+}
+
+.overview-items {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+}
+
+.overview-item {
+    display: flex;
+    min-height: 70px;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 4px 24px;
+    border-left: 1px dashed #e8ccb4;
+}
+
+.overview-item:first-child {
+    border-left: 0;
+}
+
+.overview-item div:last-child {
+    display: grid;
+    gap: 5px;
+}
+
+.overview-item span {
+    color: var(--mypage-muted);
+    font-size: 0.76rem;
+}
+
+.overview-item strong {
+    color: var(--mypage-ink);
+    font-size: 1.32rem;
+}
+
+.overview-icon,
+.overview-symbol {
+    display: grid;
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
+    place-items: center;
+    border-radius: 46% 54% 48% 52%;
+    background: #e4ddf3;
+}
+
+.overview-icon img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+.overview-empty {
+    color: #8b76a8 !important;
+    font-size: 1.5rem !important;
+    font-weight: 800;
+}
+
+.overview-symbol {
+    color: #fff !important;
+}
+
+.overview-symbol img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.overview-symbol--streak {
+    background: transparent;
+}
+
+.overview-symbol--total {
+    background: transparent;
+}
+
+.insight-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    margin-top: 42px;
+}
+
+.insight-card {
+    min-height: 260px;
+    padding: 48px 34px 30px;
+    border-radius: 26px;
+}
+
+.weekly-mood-content {
+    display: grid;
+    grid-template-columns: 145px 1fr;
+    align-items: center;
+    gap: 24px;
+    min-height: 170px;
+}
+
+.weekly-mood-illustration {
+    display: grid;
+    width: 140px;
+    height: 140px;
+    place-items: center;
+    border-radius: 45% 55% 48% 52%;
+    background: #e6ddf4;
+    box-shadow: inset 0 0 0 9px rgba(255, 255, 255, 0.32);
+}
+
+.weekly-mood-illustration img {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+}
+
+.weekly-mood-illustration span {
+    color: #8c73aa;
+    font-size: 3.2rem;
+}
+
+.weekly-mood-content p,
+.place-content p {
+    margin: 0;
+    color: var(--mypage-muted);
+    font-size: 0.84rem;
+    line-height: 1.8;
+}
+
+.weekly-mood-copy {
+    display: grid;
+    gap: 10px;
+}
+
+.weekly-mood-copy strong {
+    color: var(--mypage-ink);
+    font-size: 1.15rem;
+}
+
+.place-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: min(360px, 100%);
+    padding: 18px 22px;
+    margin: 34px auto 0;
+    border-radius: 15px;
+    background: #ffe3df;
+}
+
+.place-content div {
+    display: grid;
+    gap: 7px;
+}
+
+.place-content strong {
+    color: var(--mypage-ink);
+    font-size: 1rem;
+}
+
+.place-pin {
+    display: grid;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    place-items: center;
+    border: 2px solid #e78978;
+    border-radius: 50% 50% 50% 12%;
+    color: #d96f60;
+    background: #fff5ed;
+    font-size: 1.7rem;
+    transform: rotate(-45deg);
+}
+
+.place-pin::first-letter {
+    transform: rotate(45deg);
+}
+
+.place-route {
+    position: absolute;
+    right: 24px;
+    bottom: 22px;
+    width: 74px;
+    height: 38px;
+    border-bottom: 2px dashed #add3a0;
+    border-radius: 50%;
+    transform: rotate(-8deg);
+}
+
+.place-route::after {
+    position: absolute;
+    right: -2px;
+    bottom: -7px;
+    color: #80b779;
+    content: "⌂";
+    font-size: 1.8rem;
 }
 
 .mypage-doodle {
@@ -363,36 +662,87 @@
 
     .attendance-card {
         width: 100%;
-        padding: 22px 12px;
+        min-height: 0;
+        padding: 70px 34px 58px;
         border-radius: 30px;
     }
 
+    .attendance-heading {
+        right: 22px;
+        left: 22px;
+    }
+
+    .attendance-heading p,
+    .attendance-heading strong {
+        font-size: 0.66rem;
+    }
+
     .attendance-slider {
-        grid-template-columns: 28px minmax(0, 1fr) 28px;
-        gap: 3px;
+        display: block;
     }
 
     .attendance-arrow {
+        top: 55%;
         width: 28px;
         height: 28px;
-        font-size: 1.25rem;
     }
 
-    .attendance-day__circle {
-        width: 42px;
-        height: 42px;
+    .attendance-arrow::before {
+        width: 8px;
+        height: 8px;
+        border-width: 0 2px 2px 0;
     }
 
-    .attendance-day__circle img {
-        width: 36px;
-        height: 36px;
+    .attendance-arrow--prev {
+        left: -48px;
     }
 
-    .attendance-day::after {
-        top: 19px;
-        left: calc(50% + 19px);
-        width: calc(100% - 38px);
-        height: 6px;
+    .attendance-arrow--next {
+        right: -48px;
+    }
+
+    .attendance-road {
+        gap: 22px 2px;
+    }
+
+    .attendance-day__stamp {
+        width: 46px;
+        height: 43px;
+    }
+
+    .attendance-day__emotion {
+        width: 31px;
+        height: 31px;
+    }
+
+    .mypage-insights {
+        width: 100%;
+        margin-top: 38px;
+    }
+
+    .overview-items,
+    .insight-detail-grid,
+    .weekly-mood-content {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-item {
+        justify-content: flex-start;
+        border-top: 1px dashed #e8ccb4;
+        border-left: 0;
+    }
+
+    .overview-item:first-child {
+        border-top: 0;
+    }
+
+    .insight-detail-grid {
+        gap: 38px;
+    }
+
+    .weekly-mood-content {
+        justify-items: center;
+        text-align: center;
     }
 
 }

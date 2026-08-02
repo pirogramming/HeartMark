@@ -30,7 +30,7 @@
     const dots = [...document.querySelectorAll(".attendance-dot")];
     if (!slider || !track || !pages.length) return;
 
-    let currentPage = pages.length - 1;
+    let currentPage = Number.parseInt(slider.dataset.currentPage || "0", 10);
     let touchStartX = null;
 
     const showPage = (pageIndex) => {
@@ -64,5 +64,5 @@
         touchStartX = null;
     }, { passive: true });
 
-    showPage(pages.length - 1);
+    showPage(currentPage);
 })();
