@@ -30,8 +30,8 @@
        값이 클수록 더 둥글어집니다. */
     border-radius: 24px;
 
-    /* 캘린더 전체 상자의 연한 베이지색 배경입니다. */
-    background-color: #fff;
+    /* 캘린더 전체 상자의 배경입니다. */
+    /*background-color: #fff;*/
 }
 
 
