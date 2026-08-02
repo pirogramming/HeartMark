@@ -1,3 +1,59 @@
 {% extends "base.html" %}
-{% block content %}<!-- 담당 D: 캘린더 -->{% endblock %}
+{% load static %}
 
+{% block title %}감정 캘린더 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'diary/css/calendar.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="calendar-page">
+    <div class="calendar-wrapper">
+        <header class="calendar-header">
+            <button
+                type="button"
+                class="calendar-navigation-button"
+                id="previous-month-button"
+                aria-label="이전 달"
+            >
+                ‹
+            </button>
+
+            <h1 class="calendar-title" id="calendar-title">
+                2026년 8월
+            </h1>
+
+            <button
+                type="button"
+                class="calendar-navigation-button"
+                id="next-month-button"
+                aria-label="다음 달"
+            >
+                ›
+            </button>
+        </header>
+
+        <div class="calendar-weekdays">
+            <span>SUN</span>
+            <span>MON</span>
+            <span>TUE</span>
+            <span>WED</span>
+            <span>THU</span>
+            <span>FRI</span>
+            <span>SAT</span>
+        </div>
+
+        <div
+            class="calendar-grid"
+            id="emotion-calendar-grid"
+            data-year="2026"
+            data-month="8"
+        ></div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'diary/js/calendar.js' %}"></script>
+{% endblock %}
