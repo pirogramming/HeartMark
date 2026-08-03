@@ -1,5 +1,92 @@
 {% extends "base.html" %}
-{% block content %}
-<!-- 담당 C: 기록 상세 및 수정/삭제 진입 -->
+{% load static %}
+
+{% block title %}{{ record.created_at|date:"Y년 n월 j일" }} 기록 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'records/css/records.css' %}">
 {% endblock %}
 
+{% block content %}
+<section class="record-detail-shell">
+    <article class="record-detail-card">
+        <header class="record-detail-header">
+            <div class="record-detail-heading">
+                <p>{{ record.created_at|date:"Y년 n월 j일 l" }}</p>
+                {% if record.place_name %}
+                <span class="record-detail-place">📍 {{ record.place_name }}</span>
+                {% endif %}
+            </div>
+            <div class="record-detail-weather-wrap">
+                <span>오늘의 날씨</span>
+                <img
+                    class="record-detail-weather"
+                    src="{% static 'records/images/weather/' %}{{ record.weather_image_name }}"
+                    alt="{{ record.get_weather_display }}"
+                >
+            </div>
+        </header>
+
+        <div class="record-detail-layout">
+            <div class="record-detail-photo">
+                {% if record.image %}
+                <img src="{{ record.image.url }}" alt="기록 사진">
+                {% else %}
+                <p>등록된 사진이 없어요.</p>
+                {% endif %}
+            </div>
+
+            <div class="record-detail-content">{{ record.content|linebreaksbr }}</div>
+        </div>
+
+        <footer class="record-detail-footer">
+            <section class="record-detail-emotions" aria-labelledby="record-detail-emotions-title">
+                <div class="record-detail-emotions-heading">
+                    <h2 id="record-detail-emotions-title">오늘의 감정</h2>
+                    <span>마음에 남은 감정 스티커</span>
+                </div>
+                <div class="record-detail-emotion-list">
+                    {% for emotion in record.emotion_items %}
+                    <figure class="record-detail-emotion{% if emotion.is_main %} record-detail-emotion--main{% endif %}">
+                        {% if emotion.is_main %}<span>대표</span>{% endif %}
+                        <img
+                            src="{% static 'records/images/emotions/' %}{{ emotion.image_name }}"
+                            alt="{% if emotion.is_main %}대표 감정{% else %}선택한 감정 {{ forloop.counter }}{% endif %}"
+                        >
+                    </figure>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="record-detail-actions">
+                <a class="record-secondary-button" href="{% url 'records:update' record.pk %}">수정</a>
+                <button class="record-danger-button" id="open-record-delete-modal" type="button">삭제</button>
+            </div>
+        </footer>
+    </article>
+</section>
+
+<div class="record-delete-overlay" id="record-delete-overlay" hidden>
+    <section
+        class="record-delete-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="record-delete-title"
+        aria-describedby="record-delete-description"
+    >
+        <h2 id="record-delete-title">이 기록을 삭제할까요?</h2>
+        <p id="record-delete-description">
+            {{ record.created_at|date:"Y년 n월 j일" }}의 기록은 삭제 후 복구할 수 없어요.
+        </p>
+        <form method="post" action="{% url 'records:delete' record.pk %}">
+            {% csrf_token %}
+            <button class="record-cancel-button" id="close-record-delete-modal" type="button">취소</button>
+            <button class="record-danger-button" type="submit">삭제하기</button>
+        </form>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'records/js/record_detail.js' %}"></script>
+{% endblock %}

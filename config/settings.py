@@ -5,12 +5,10 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-<<<<<<< HEAD
 # 프로젝트 루트의 .env 파일을 읽어서 os.environ에 등록한다.
 # .env는 .gitignore에 포함되어 있어 git에 올라가지 않으므로,
 # API 키 같은 민감한 값은 코드에 직접 쓰지 않고 이 방식으로 불러온다.
 load_dotenv(BASE_DIR / ".env")
-=======
 
 def load_local_env():
     env_path = BASE_DIR / ".env"
@@ -26,7 +24,6 @@ def load_local_env():
 
 
 load_local_env()
->>>>>>> develop
 
 SECRET_KEY = "development-only"
 DEBUG = True
@@ -94,9 +91,12 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+LOGIN_URL = "/accounts/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-<<<<<<< HEAD
 # 카카오맵 API 키 (locations 앱: 위치 선택/지도 화면에서 사용)
 # - KAKAO_JS_KEY: 브라우저에서 카카오맵 JS SDK를 로드할 때 쓰는 키.
 #   공개돼도 큰 문제는 없지만(카카오 콘솔에 등록된 도메인에서만 동작),
@@ -107,7 +107,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # 두 값 모두 .env 파일에 정의되어 있어야 하며, .env는 git에 커밋되지 않는다.
 KAKAO_JS_KEY = os.environ.get("KAKAO_JS_KEY")
 KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY")
-=======
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
@@ -127,5 +126,4 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {"access_type": "online"},
     }
 }
->>>>>>> develop
 

@@ -1,4 +1,125 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if mode == "update" %}기록 수정{% else %}기록 작성{% endif %} | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'records/css/records.css' %}">
+{% endblock %}
+
 {% block content %}
-<!-- 담당 C: 생성과 수정에서 함께 사용하는 기록 폼 -->
+{% if mode == "update" %}
+<section class="record-edit-shell">
+    <form class="record-edit-paper" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="record-edit-main">
+            <section class="record-edit-left">
+                <time datetime="{{ record.created_at|date:'Y-m-d' }}">
+                    {{ record.created_at|date:"Y년 n월 j일 l" }}
+                </time>
+
+                <div class="record-edit-photo" id="record-edit-photo">
+                    {% if record.image %}
+                    <img id="record-edit-preview" src="{{ record.image.url }}" alt="현재 기록 사진">
+                    {% else %}
+                    <img id="record-edit-preview" alt="선택한 사진 미리보기" hidden>
+                    {% endif %}
+
+                    <div class="record-edit-photo__empty" id="record-edit-photo-empty"{% if record.image %} hidden{% endif %}>
+                        <p>오늘을 기억할 사진을 불러와 보세요</p>
+                        <img src="{% static 'records/images/photo-actions/gallery.png' %}" alt="" aria-hidden="true">
+                    </div>
+
+                    <label class="record-edit-photo__button">
+                        <span>{% if record.image %}사진 변경{% else %}사진 불러오기{% endif %}</span>
+                        <input id="record-edit-image-input" type="file" name="image" accept="image/*"{% if not record.image %} required{% endif %}>
+                    </label>
+                </div>
+                {% for error in form.image.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
+            </section>
+
+            <section class="record-edit-right">
+                <fieldset class="record-edit-weather">
+                    <legend class="sr-only">날씨 선택</legend>
+                    {% for value, label in weather_choices %}
+                    <label class="weather-option" title="{{ label }}">
+                        <input
+                            type="radio"
+                            name="weather"
+                            value="{{ value }}"
+                            {% if form.weather.value == value %}checked{% endif %}
+                        >
+                        <span class="weather-icon weather-icon--{{ value }}"></span>
+                        <span class="sr-only">{{ label }}</span>
+                    </label>
+                    {% endfor %}
+                </fieldset>
+                {% for error in form.weather.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
+
+                <label class="record-edit-diary">
+                    <span class="sr-only">오늘의 마음 기록</span>
+                    <textarea name="content" maxlength="500" required>{{ form.content.value|default_if_none:"" }}</textarea>
+                </label>
+                {% for error in form.content.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
+            </section>
+        </div>
+
+        <section class="record-edit-emotions" aria-labelledby="record-edit-emotions-title">
+            <div class="emotion-picker__heading">
+                <h2 id="record-edit-emotions-title">오늘의 감정</h2>
+                <span>최대 3개</span>
+                <output id="record-edit-emotion-count" aria-live="polite">{{ selected_emotions|length }} / 3</output>
+            </div>
+            <div class="record-edit-emotion-grid">
+                {% for number in emotion_numbers %}
+                <label class="emotion-option" title="감정 {{ number }}">
+                    <input
+                        type="checkbox"
+                        name="emotions"
+                        value="{{ number }}"
+                        {% if number in selected_emotions %}checked{% endif %}
+                    >
+                    <span class="emotion-icon emotion-icon--{{ number }}"></span>
+                    <span class="emotion-main-badge" aria-hidden="true">대표</span>
+                    <span class="sr-only">감정 {{ number }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            {% for error in form.emotions.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
+            {% for error in form.main_emotion.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
+        </section>
+
+        <input type="hidden" name="place_name" value="{{ form.place_name.value|default_if_none:'' }}">
+        <input type="hidden" name="latitude" value="{{ form.latitude.value|default_if_none:'' }}">
+        <input type="hidden" name="longitude" value="{{ form.longitude.value|default_if_none:'' }}">
+        <input type="hidden" name="main_emotion" id="record-edit-main-emotion" value="{{ form.main_emotion.value|default_if_none:'' }}">
+
+        <footer class="record-edit-actions">
+            <p id="record-edit-message" class="record-form-message" role="status" aria-live="polite"></p>
+            <a href="{% url 'records:detail' record.pk %}">취소</a>
+            <button class="record-submit" type="submit">수정 완료</button>
+        </footer>
+    </form>
+</section>
+{% else %}
+<section class="record-page-shell">
+    <div class="record-page-card">
+        <h1>오늘의 기록 작성</h1>
+        <form method="post" enctype="multipart/form-data" class="record-page-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="record-page-actions">
+                <button class="record-submit" type="submit">저장하기</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if mode == "update" %}
+<script src="{% static 'records/js/record_edit.js' %}"></script>
+{% endif %}
 {% endblock %}
