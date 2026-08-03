@@ -26,7 +26,15 @@ class Record(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(20)],
     )
 
-    # TODO: locations.Place 규격 확정 후 ForeignKey 연결을 검토합니다.
+    place = models.ForeignKey(
+        "locations.Place",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="records",
+    )
+
+    # Legacy snapshot fields are kept so existing records and diary views remain compatible.
     place_name = models.CharField(max_length=100, blank=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)

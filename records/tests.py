@@ -2,6 +2,10 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
+
+from locations.models import Place
+from locations.services import VERIFIED_LOCATION_SESSION_KEY
 
 from .forms import RecordForm
 from .models import Record
@@ -51,6 +55,22 @@ class RecordCreateViewTests(TestCase):
         self.user = get_user_model().objects.create_user(
             username="records-user", password="test-password"
         )
+        self.place = Place.objects.create(
+            name="테스트 장소",
+            address="서울특별시 종로구 테스트로 1",
+            district="종로구",
+            latitude="37.5665000",
+            longitude="126.9780000",
+            kakao_place_id="test-place-id",
+        )
+
+    def verify_location(self):
+        session = self.client.session
+        session[VERIFIED_LOCATION_SESSION_KEY] = {
+            "place_id": self.place.pk,
+            "verified_on": timezone.localdate().isoformat(),
+        }
+        session.save()
 
     def test_login_is_required(self):
         response = self.client.post(reverse("records:create"), {})
@@ -59,6 +79,7 @@ class RecordCreateViewTests(TestCase):
 
     def test_valid_record_is_saved_for_logged_in_user(self):
         self.client.force_login(self.user)
+        self.verify_location()
         response = self.client.post(reverse("records:create"), {
             "weather": "cloudy",
             "content": "기록 생성 테스트",
@@ -75,6 +96,17 @@ class RecordCreateViewTests(TestCase):
         self.assertEqual(record.user, self.user)
         self.assertEqual(record.emotions, [2, 5, 9])
         self.assertEqual(record.main_emotion, 5)
+        self.assertEqual(record.place, self.place)
+        self.assertEqual(record.place_name, self.place.name)
+
+    def test_location_verification_is_required(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("records:create"))
+        self.assertRedirects(
+            response,
+            reverse("locations:place_select"),
+            fetch_redirect_response=False,
+        )
 
 
 class RecordCrudViewTests(TestCase):
@@ -133,5 +165,5 @@ class RecordCrudViewTests(TestCase):
         response = self.client.post(
             reverse("records:delete", args=[self.record.pk])
         )
-        self.assertRedirects(response, reverse("records:modal_preview"))
+        self.assertRedirects(response, reverse("diary:list"))
         self.assertFalse(Record.objects.filter(pk=self.record.pk).exists())

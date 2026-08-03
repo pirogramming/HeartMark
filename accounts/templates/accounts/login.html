@@ -14,6 +14,7 @@
 
         <form class="auth-form" action="{% url 'accounts:login' %}" method="post" autocomplete="off" novalidate>
             {% csrf_token %}
+            {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
             <h1 id="login-title" class="sr-only">로그인</h1>
 
             <label class="auth-field auth-field-id {% if errors.username %}has-error{% endif %}">

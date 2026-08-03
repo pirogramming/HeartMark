@@ -2,8 +2,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import UserProfile
+
+
+LOGIN_NEXT_SESSION_KEY = "login_return_to"
+
+
+def _remember_safe_next(request):
+    next_url = request.POST.get("next") or request.GET.get("next", "")
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        request.session[LOGIN_NEXT_SESSION_KEY] = next_url
 
 
 CHARACTER_CHOICES = [
@@ -16,6 +30,7 @@ CHARACTER_CHOICES = [
 
 
 def login_view(request):
+    _remember_safe_next(request)
     if request.user.is_authenticated:
         return redirect("accounts:post_login_redirect")
 
@@ -57,7 +72,7 @@ def post_login_redirect_view(request):
     if not profile.onboarding_completed:
         return redirect("accounts:character_select")
 
-    return redirect("common:home")
+    return redirect(request.session.pop(LOGIN_NEXT_SESSION_KEY, "common:home"))
 
 
 def signup_view(request):
@@ -129,7 +144,7 @@ def character_select_view(request):
             profile.character_id = character_id
             profile.onboarding_completed = True
             profile.save()
-            return redirect("common:home")
+            return redirect(request.session.pop(LOGIN_NEXT_SESSION_KEY, "common:home"))
 
     selected_character = profile.character_id or 2
     display_name = profile.display_name or request.user.username
