@@ -5,12 +5,10 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-<<<<<<< HEAD
 # 프로젝트 루트의 .env 파일을 읽어서 os.environ에 등록한다.
 # .env는 .gitignore에 포함되어 있어 git에 올라가지 않으므로,
 # API 키 같은 민감한 값은 코드에 직접 쓰지 않고 이 방식으로 불러온다.
 load_dotenv(BASE_DIR / ".env")
-=======
 
 def load_local_env():
     env_path = BASE_DIR / ".env"
@@ -26,7 +24,6 @@ def load_local_env():
 
 
 load_local_env()
->>>>>>> develop
 
 SECRET_KEY = "development-only"
 DEBUG = True
