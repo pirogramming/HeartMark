@@ -1,3 +1,120 @@
 {% extends "base.html" %}
-{% block content %}<!-- 담당 B: 장소 검색 및 선택 -->{% endblock %}
+{% load static %}
 
+{% block title %}위치 선택 - 마음자국{% endblock %}
+
+{% block extra_css %}
+ <!-- 화면 1(위치 선택) 전용 스타일.  -->
+<link rel="stylesheet" href="{% static 'locations/css/locations.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--
+    화면 1. 위치 선택 (기록 작성 진입 시 첫 화면)
+    담당: B(신은아)
+
+    전체 동작 흐름 (실제 동작은 locations.js에서 구현 예정):
+    1) 페이지 진입 시 navigator.geolocation.getCurrentPosition()으로 현재 좌표 획득
+    2) 카카오맵 JS SDK로 #kakao-map 안에 지도를 그리고 현재 위치에 마커 표시
+    3) 서버 프록시 뷰(REST API 키는 서버에서만 사용)에 좌표를 보내 주소로 변환(coord2address),
+       응답으로 받은 주소/구(district)를 #place-address 쪽에 채워 넣음
+    4) "네" 클릭 -> #place-address에 채워진 좌표/주소/구 값을 서버로 보내 Place로 저장,
+       저장 성공 시 화면 2(구 단위 지도, map.html)로 이동
+    5) "직접 입력할게요" 클릭 -> 지도/주소 확인 영역은 그대로 두고 #place-search(주소 검색 UI)를 노출,
+       검색 결과 중 하나를 선택하면 좌표를 다시 계산해서 #place-address 값을 갱신
+-->
+<section class="place-select">
+    <div class="place-select-card">
+
+        <!--
+            지도 표시 영역.
+            (지도가 실제로 그려지면 이 문구는 JS가 지우거나 지도 요소로 덮게 됨).
+        -->
+        <div id="kakao-map" class="place-select-map">
+            <p class="place-select-map-placeholder">지도를 불러오는 중입니다...</p>
+        </div>
+
+        <!--
+            변환된 주소 텍스트 표시 영역.
+            - 화면에 보이는 텍스트(문단 내용)는 사람이 읽는 주소 문자열.
+            - data-* 속성들은 Place 모델(locations/models.py) 필드와 1:1로 대응시켜서,
+              "네" 버튼을 누를 때 locations.js가 이 값들을 그대로 모아 서버로 전송하는 용도.
+            - data-name은 주소만으로 확정된 경우(직접 주소 검색이 아닌 현재 위치 기반)엔
+              비어 있을 수 있음 (Place.name이 blank=True인 이유와 동일).
+        -->
+        <p id="place-address"
+           class="place-select-address"
+           data-latitude=""
+           data-longitude=""
+           data-district=""
+           data-name=""
+           data-kakao-place-id="">
+            위치를 확인하는 중입니다...
+        </p>
+
+        <p class="place-select-question">이 위치가 맞나요?</p>
+
+        <!-- 확인 버튼 영역: [직접 입력할게요] / [네] 두 버튼 -->
+        <div class="place-select-actions">
+            <!--
+                "직접 입력할게요" 버튼.
+                클릭 시 아래 #place-search(주소 검색 UI)를 노출하는 토글 버튼.
+                지금은 마크업만 있고 토글 동작은 locations.js에서 연결 예정이라
+                기본 상태는 CSS class(hidden)로 #place-search를 숨겨둔 상태로 시작.
+            -->
+            <button id="btn-manual-address" type="button" class="btn btn-secondary">
+                직접 입력할게요
+            </button>
+
+            <!--
+                "네" 버튼 (현재 확인된 위치를 확정).
+                클릭 시 locations.js가 #place-address의 data-* 값을 모아 Place 저장 뷰로 전송하고,
+                성공하면 화면 2(map.html)로 리다이렉트 예정.
+                해당 뷰가 만들어지는 다음 단계에서 JS가 활성화하도록 연결할 예정.
+            -->
+            <button id="btn-confirm-location" type="button" class="btn btn-primary" disabled>
+                네
+            </button>
+        </div>
+
+        <!--
+            주소 직접 검색 영역.
+            기본적으로 hidden 클래스를 붙여 숨겨두고, "직접 입력할게요" 클릭 시
+            locations.js가 hidden 클래스를 제거해서 보이도록 만들 예정.
+        -->
+        <div id="place-search" class="place-select-search hidden">
+            <label for="place-search-input" class="sr-only">주소 검색</label>
+            <input
+                id="place-search-input"
+                type="text"
+                name="query"
+                placeholder="주소 또는 장소명을 입력하세요"
+                autocomplete="off"
+            >
+            <button id="btn-search-address" type="button" class="btn btn-secondary">
+                검색
+            </button>
+
+            <!--
+                카카오 주소 검색 API 응답을 locations.js가 <li> 항목으로 렌더링해서 채워 넣는 자리.
+                각 항목 클릭 -> 해당 장소의 좌표/주소로 #place-address 값을 다시 채우고
+                이 검색 영역은 다시 숨김 처리할 예정.
+            -->
+            <ul id="place-search-results" class="place-select-search-results"></ul>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!--
+    카카오맵 JS SDK 로드.
+    kakao_js_key는 뷰(views.py)에서 settings.KAKAO_JS_KEY를 컨텍스트로 내려줘야 채워지는 값 —
+    아직 place_select 뷰가 없어서 지금은 빈 값으로 렌더링됨. 뷰 작성 시 반드시 연결할 것.
+    JS 키는 카카오 콘솔에 등록한 도메인에서만 동작하도록 제한되므로 템플릿에 노출해도 되지만,
+    REST 키(KAKAO_REST_KEY)는 절대 여기 내려보내지 말고 서버(뷰)에서만 사용해야 함.
+    autoload=false로 두고 locations.js 쪽에서 kakao.maps.load(...)로 직접 초기화 시점을 제어할 예정.
+-->
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_js_key }}&autoload=false"></script>
+<script src="{% static 'locations/js/locations.js' %}"></script>
+{% endblock %}

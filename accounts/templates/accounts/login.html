@@ -1,3 +1,57 @@
 {% extends "base.html" %}
-{% block content %}<!-- 담당 A: 로그인 -->{% endblock %}
+{% load static %}
 
+{% block title %}로그인 | HeartMark{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-login" aria-labelledby="login-title">
+    <div class="auth-image-frame">
+        <img class="auth-login-image" src="{% static 'accounts/images/login.png' %}" alt="마음자국 로그인 화면">
+
+        <form class="auth-form" action="{% url 'accounts:login' %}" method="post" autocomplete="off" novalidate>
+            {% csrf_token %}
+            {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+            <h1 id="login-title" class="sr-only">로그인</h1>
+
+            <label class="auth-field auth-field-id {% if errors.username %}has-error{% endif %}">
+                <span class="sr-only">아이디</span>
+                <input type="text" name="username" value="{{ username }}" placeholder="아이디를 입력해주세요" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+                <small class="field-message" aria-live="polite">{{ errors.username }}</small>
+            </label>
+
+            <label class="auth-field auth-field-password {% if errors.password %}has-error{% endif %}">
+                <span class="sr-only">비밀번호</span>
+                <input type="password" name="password" placeholder="비밀번호를 입력해주세요" autocomplete="new-password" required>
+                <button class="password-toggle" type="button" aria-label="비밀번호 보기">
+                    <img src="{% static 'accounts/images/eye-closed.svg' %}" data-eye-open="{% static 'accounts/images/eye.svg' %}" data-eye-closed="{% static 'accounts/images/eye-closed.svg' %}" alt="">
+                </button>
+                <small class="field-message" aria-live="polite">{{ errors.password }}</small>
+            </label>
+
+            <button class="auth-hotspot auth-submit" type="submit">
+                <span class="sr-only">로그인하기</span>
+            </button>
+            <a class="auth-hotspot social-google" href="{% url 'google_login' %}">
+                <span class="sr-only">Google로 시작하기</span>
+            </a>
+            <a class="auth-hotspot social-naver" href="{% url 'naver_login' %}">
+                <span class="sr-only">네이버로 시작하기</span>
+            </a>
+            <a class="auth-hotspot social-kakao" href="{% url 'kakao_login' %}">
+                <span class="sr-only">카카오톡으로 시작하기</span>
+            </a>
+            <a class="auth-hotspot auth-signup" href="{% url 'accounts:signup' %}">
+                <span class="sr-only">회원가입</span>
+            </a>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock %}

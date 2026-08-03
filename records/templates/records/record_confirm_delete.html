@@ -1,5 +1,22 @@
 {% extends "base.html" %}
-{% block content %}
-<!-- 담당 C: 기록 삭제 확인 -->
+{% load static %}
+
+{% block title %}기록 삭제 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'records/css/records.css' %}">
 {% endblock %}
 
+{% block content %}
+<section class="record-page-shell">
+    <div class="record-delete-card">
+        <h1>이 기록을 삭제할까요?</h1>
+        <p>{{ record.created_at|date:"Y년 n월 j일" }}의 기록은 삭제 후 복구할 수 없어요.</p>
+        <form method="post">
+            {% csrf_token %}
+            <a class="record-cancel-button" href="{% url 'records:detail' record.pk %}">취소</a>
+            <button class="record-danger-button" type="submit">삭제하기</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
