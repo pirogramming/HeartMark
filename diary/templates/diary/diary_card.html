@@ -1,0 +1,98 @@
+{# ============================================================
+   다이어리 기록 카드
+
+   필요한 변수:
+   - record: records.models.Record 객체
+
+   실제 Record 모델 필드:
+   - record.pk
+   - record.image
+   - record.content
+   - record.place_name
+   - record.created_at
+   - record.main_emotion
+   ============================================================ #}
+
+<article class="diary-card">
+
+    {# 클릭하면 records 앱의 실제 기록 상세 페이지로 이동합니다. #}
+    <a
+        href="{% url 'records:detail' record.pk %}"
+        class="diary-card-link"
+    >
+        <div class="diary-card-image-wrapper">
+
+            {# Record.image에 이미지가 있으면 실제 업로드 이미지를 표시합니다. #}
+            {% if record.image %}
+                <img
+                    src="{{ record.image.url }}"
+                    alt="{{ record.created_at|date:'Y년 n월 j일' }} 기록 사진"
+                    class="diary-card-image"
+                >
+            {% else %}
+                <div class="diary-card-image-placeholder">
+                    <span>사진 없음</span>
+                </div>
+            {% endif %}
+
+            {# 대표 감정 번호를 카드 오른쪽 위 등에 표시합니다. #}
+            {% if record.main_emotion %}
+                <div
+                    class="diary-card-emotion"
+                    data-main-emotion="{{ record.main_emotion }}"
+                    title="대표 감정 {{ record.main_emotion }}"
+                >
+                    {#
+                    records 앱에서 사용한 emotion-icon 클래스를 재사용합니다.
+
+                    단, emotion-icon CSS가 records.css에 있기 때문에
+                    list.html에서도 records.css를 불러와야 합니다.
+                    #}
+                    <span
+                        class="emotion-icon emotion-icon--{{ record.main_emotion }}"
+                        aria-hidden="true"
+                    ></span>
+
+                    <span class="sr-only">
+                        대표 감정 {{ record.main_emotion }}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="diary-card-content">
+
+            {# 기록 생성일 #}
+            <time
+                class="diary-card-date"
+                datetime="{{ record.created_at|date:'Y-m-d' }}"
+            >
+                {{ record.created_at|date:"Y/m/d" }}
+            </time>
+
+            {#
+            Record 모델에는 title 필드가 없으므로
+            content의 앞부분을 카드 제목처럼 사용합니다.
+
+            truncatechars:28
+            → 내용이 28자를 넘으면 말줄임표로 줄여줍니다.
+            #}
+            <h2 class="diary-card-title">
+                {{ record.content|truncatechars:28 }}
+            </h2>
+
+            {# location.name이 아니라 실제 필드인 place_name을 사용합니다. #}
+            {% if record.place_name %}
+                <p class="diary-card-location">
+                    <span aria-hidden="true">⌖</span>
+                    {{ record.place_name }}
+                </p>
+            {% else %}
+                <p class="diary-card-location diary-card-location--empty">
+                    장소 정보 없음
+                </p>
+            {% endif %}
+
+        </div>
+    </a>
+</article>
