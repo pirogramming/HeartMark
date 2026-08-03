@@ -10,11 +10,6 @@
     border: 0;
 }
 
-body {
-    overflow-x: hidden;
-    background: linear-gradient(115deg, #fff5df 0%, #fffdf9 50%, #fff5df 100%);
-}
-
 .auth-page {
     position: relative;
     display: grid;
@@ -24,7 +19,6 @@ body {
     margin-top: -100px;
     padding: 96px 40px 40px;
     overflow: hidden;
-    background: linear-gradient(115deg, #fff5df 0%, #fffdf9 50%, #fff5df 100%);
 }
 
 .auth-image-frame {
@@ -269,7 +263,6 @@ body {
     min-height: 100vh;
     margin-top: -100px;
     padding: 260px 32px 110px;
-    background: #fff8e8;
 }
 
 .character-form {
