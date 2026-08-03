@@ -13,8 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         passwordToggle.addEventListener("click", () => {
             const isHidden = passwordInput.type === "password";
+            const icon = passwordToggle.querySelector("img");
             passwordInput.type = isHidden ? "text" : "password";
-            passwordToggle.textContent = isHidden ? "숨김" : "보기";
+            if (icon) {
+                icon.src = isHidden ? icon.dataset.eyeOpen : icon.dataset.eyeClosed;
+            }
             passwordToggle.setAttribute("aria-label", isHidden ? "비밀번호 숨기기" : "비밀번호 보기");
         });
     });

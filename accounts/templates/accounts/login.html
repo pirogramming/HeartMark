@@ -25,7 +25,9 @@
             <label class="auth-field auth-field-password {% if errors.password %}has-error{% endif %}">
                 <span class="sr-only">비밀번호</span>
                 <input type="password" name="password" placeholder="비밀번호를 입력해주세요" autocomplete="new-password" required>
-                <button class="password-toggle" type="button" aria-label="비밀번호 보기">보기</button>
+                <button class="password-toggle" type="button" aria-label="비밀번호 보기">
+                    <img src="{% static 'accounts/images/eye-closed.svg' %}" data-eye-open="{% static 'accounts/images/eye.svg' %}" data-eye-closed="{% static 'accounts/images/eye-closed.svg' %}" alt="">
+                </button>
                 <small class="field-message" aria-live="polite">{{ errors.password }}</small>
             </label>
 

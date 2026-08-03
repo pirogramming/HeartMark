@@ -90,7 +90,11 @@ def signup_view(request):
         if not errors:
             user = User.objects.create_user(username=username, password=password)
             UserProfile.objects.create(user=user, display_name=username)
-            login(request, user)
+            login(
+                request,
+                user,
+                backend="django.contrib.auth.backends.ModelBackend",
+            )
             return redirect("accounts:character_select")
 
     return render(request, "accounts/signup.html", {"errors": errors, "username": username})

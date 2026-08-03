@@ -138,7 +138,7 @@
 
 .home-actions {
     position: relative;
-    width: min(1550px, 94vw);
+    width: min(1200px, 82vw);
     margin-top: -30px;
     padding: 0;
 }
@@ -196,21 +196,21 @@
 
 .home-feature-character {
     position: relative;
-    margin-top: -170px;
+    margin-top: -150px;
 }
 
 .home-feature-character img {
     display: block;
-    width: min(620px, 82vw);
+    width: min(450px, 60vw);
     height: auto;
 }
 
 .home-feature-character-guest img {
-    width: min(820px, 88vw);
+    width: min(480px, 68vw);
 }
 
 .home-feature-character-guest {
-    margin-top: -198px;
+    margin-top: -180px;
 }
 
 .tutorial-overlay {
@@ -427,7 +427,7 @@
     }
 
     .home-actions {
-        width: min(96vw, 760px);
+        width: min(88vw, 660px);
         margin-top: 38px;
     }
 
@@ -452,11 +452,11 @@
     }
 
     .home-feature-character img {
-        width: min(600px, 84vw);
+        width: min(460px, 72vw);
     }
 
     .home-feature-character-guest img {
-        width: min(720px, 92vw);
+        width: min(460px, 72vw);
     }
 
     .tutorial-card {

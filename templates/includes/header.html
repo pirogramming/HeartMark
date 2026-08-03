@@ -1,5 +1,8 @@
+{% load static %}
 <header class="site-header">
-    <a class="site-logo" href="/">마음자국</a>
+    <a class="site-logo" href="/" aria-label="마음자국 홈">
+        <img src="{% static 'accounts/images/logo.png' %}" alt="마음자국">
+    </a>
     <nav class="site-nav" aria-label="주요 메뉴">
         <a href="#" data-tutorial-target="record-write">기록작성</a>
         <a href="#" data-tutorial-target="record-list">기록보기</a>
