@@ -324,6 +324,10 @@ def diary_list(request):
     context = {
         "records": records,
         "emotions": emotions,
+
+        # 실제 기록 횟수가 1회 이상인 대표 감정만 전달합니다.
+        "recorded_emotions": recorded_emotions,
+
         "top_emotion": top_emotion,
         "locations": locations,
         "district_map_data": district_map_data,
