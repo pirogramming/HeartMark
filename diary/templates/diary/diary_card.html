@@ -1,68 +1,80 @@
 {# ============================================================
-   다이어리 기록 카드
+   다이어리 목록에서 공통으로 사용하는 기록 카드
 
-   필요한 변수:
-   - record: records.models.Record 객체
-
-   실제 Record 모델 필드:
+   사용되는 실제 Record 필드:
    - record.pk
    - record.image
    - record.content
    - record.place_name
    - record.created_at
    - record.main_emotion
+
+   views.py에서 임시로 추가한 화면용 속성:
+   - record.main_emotion_name
    ============================================================ #}
 
 <article class="diary-card">
 
-    {# 클릭하면 records 앱의 실제 기록 상세 페이지로 이동합니다. #}
+    {#
+    카드를 클릭하면 담당 C의 기록 상세 페이지로 이동합니다.
+
+    예:
+    기록 id가 5이면 /records/5/ 형태의 상세 URL로 이동합니다.
+    실제 주소 구조는 records/urls.py가 결정합니다.
+    #}
     <a
         href="{% url 'records:detail' record.pk %}"
         class="diary-card-link"
     >
         <div class="diary-card-image-wrapper">
 
-            {# Record.image에 이미지가 있으면 실제 업로드 이미지를 표시합니다. #}
+            {# 기록 작성 시 업로드한 이미지 #}
             {% if record.image %}
                 <img
                     src="{{ record.image.url }}"
                     alt="{{ record.created_at|date:'Y년 n월 j일' }} 기록 사진"
                     class="diary-card-image"
                 >
+
             {% else %}
                 <div class="diary-card-image-placeholder">
                     <span>사진 없음</span>
                 </div>
             {% endif %}
 
-            {# 대표 감정 번호를 카드 오른쪽 위 등에 표시합니다. #}
+            {# 대표 감정 아이콘 #}
             {% if record.main_emotion %}
                 <div
                     class="diary-card-emotion"
                     data-main-emotion="{{ record.main_emotion }}"
-                    title="대표 감정 {{ record.main_emotion }}"
+                    title="{{ record.main_emotion_name }}"
                 >
                     {#
-                    records 앱에서 사용한 emotion-icon 클래스를 재사용합니다.
+                    담당 C가 records.css에서 만든 감정 아이콘 클래스를 사용합니다.
 
-                    단, emotion-icon CSS가 records.css에 있기 때문에
-                    list.html에서도 records.css를 불러와야 합니다.
+                    예:
+                    대표 감정이 3이면
+                    emotion-icon--3 클래스가 붙습니다.
                     #}
                     <span
-                        class="emotion-icon emotion-icon--{{ record.main_emotion }}"
+                        class="
+                            emotion-icon
+                            emotion-icon--{{ record.main_emotion }}
+                        "
                         aria-hidden="true"
                     ></span>
 
                     <span class="sr-only">
-                        대표 감정 {{ record.main_emotion }}
+                        대표 감정 {{ record.main_emotion_name }}
                     </span>
                 </div>
             {% endif %}
+
         </div>
 
         <div class="diary-card-content">
 
-            {# 기록 생성일 #}
+            {# 기록 작성 날짜 #}
             <time
                 class="diary-card-date"
                 datetime="{{ record.created_at|date:'Y-m-d' }}"
@@ -71,22 +83,25 @@
             </time>
 
             {#
-            Record 모델에는 title 필드가 없으므로
-            content의 앞부분을 카드 제목처럼 사용합니다.
+            실제 Record 모델에는 title 필드가 없습니다.
 
-            truncatechars:28
-            → 내용이 28자를 넘으면 말줄임표로 줄여줍니다.
+            따라서 content 앞부분을 카드 제목처럼 사용합니다.
+            28자가 넘어가면 뒤에 말줄임표가 붙습니다.
             #}
             <h2 class="diary-card-title">
                 {{ record.content|truncatechars:28 }}
             </h2>
 
-            {# location.name이 아니라 실제 필드인 place_name을 사용합니다. #}
+            {#
+            실제 Record 모델에는 location ForeignKey가 없고
+            place_name 문자열 필드가 있습니다.
+            #}
             {% if record.place_name %}
                 <p class="diary-card-location">
                     <span aria-hidden="true">⌖</span>
                     {{ record.place_name }}
                 </p>
+
             {% else %}
                 <p class="diary-card-location diary-card-location--empty">
                     장소 정보 없음

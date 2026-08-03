@@ -6,7 +6,16 @@
 {% block title %}다이어리 목록 | HeartMark{% endblock %}
 
 {% block extra_css %}
+
+{#
+담당 C의 감정 이미지 스타일인
+emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
+#}
+<link rel="stylesheet" href="{% static 'records/css/records.css' %}">
+
+{# 다이어리 목록 페이지 전용 스타일 #}
 <link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -131,7 +140,10 @@
             <div class="diary-grid">
                 {% for record in records %}
 
-                    {# 위에서 만든 실제 Record 전용 카드 불러오기 #}
+                    {#
+                    실제 Record 모델에 맞춰 작성한 공통 카드를 불러옵니다.
+                    record=record는 현재 반복 중인 기록을 partial에 전달합니다.
+                    #}
                     {% include "diary/partials/diary_card.html" with record=record %}
 
                 {% empty %}
@@ -144,7 +156,7 @@
                             오늘의 마음을 첫 기록으로 남겨보세요.
                         </p>
 
-                        {# records 앱의 실제 기록 생성 URL로 연결합니다. #}
+                        {# 담당 C의 실제 기록 작성 페이지로 이동 #}
                         <a
                             href="{% url 'records:create' %}"
                             class="diary-empty-button"
@@ -173,8 +185,13 @@
                 </div>
 
                 <div class="emotion-month-summary">
-                    <span>이번 달 가장 많이 기록한 감정</span>
-                    <strong>{{ top_emotion.name|default:"감사" }}</strong>
+                    <span>가장 많이 기록한 감정</span>
+
+                    {% if top_emotion %}
+                        <strong>{{ top_emotion.name }}</strong>
+                    {% else %}
+                        <strong>아직 기록 없음</strong>
+                    {% endif %}
                 </div>
             </div>
 
@@ -347,43 +364,22 @@
 
         <div class="emotion-modal-grid">
             {% for record in records %}
-                <article
-                    class="diary-card emotion-modal-record"
-                    data-record-emotion="{{ record.emotion.id }}"
+
+                {#
+                data-record-emotion에는 실제 대표 감정 번호가 들어갑니다.
+
+                예:
+                record.main_emotion이 3이면
+                data-record-emotion="3"
+                #}
+                <div
+                    class="emotion-modal-record"
+                    data-record-emotion="{{ record.main_emotion }}"
                     hidden
                 >
-                    <a href="#" class="diary-card-link">
-                        <div class="diary-card-image-wrapper">
-                            {% if record.image %}
-                                <img
-                                    src="{{ record.image.url }}"
-                                    alt="{{ record.title }} 기록 사진"
-                                    class="diary-card-image"
-                                >
-                            {% else %}
-                                <div class="diary-card-image-placeholder">
-                                    기록 이미지
-                                </div>
-                            {% endif %}
-                        </div>
+                    {% include "diary/partials/diary_card.html" with record=record %}
+                </div>
 
-                        <div class="diary-card-content">
-                            <time class="diary-card-date">
-                                {{ record.created_at|date:"Y/m/d" }}
-                            </time>
-
-                            <h3 class="diary-card-title">
-                                {{ record.title }}
-                            </h3>
-
-                            {% if record.location %}
-                                <p class="diary-card-location">
-                                    {{ record.location.name }}
-                                </p>
-                            {% endif %}
-                        </div>
-                    </a>
-                </article>
             {% endfor %}
         </div>
 
@@ -432,62 +428,19 @@
 
         <div class="location-modal-grid">
             {% for record in records %}
-                <article
-                    class="diary-card location-modal-record"
-                    data-record-location="{{ record.location.name }}"
+
+                {#
+                실제 장소명은 record.location.name이 아니라
+                record.place_name에 저장되어 있습니다.
+                #}
+                <div
+                    class="location-modal-record"
+                    data-record-location="{{ record.place_name }}"
                     hidden
                 >
-                    <a href="#" class="diary-card-link">
-                        <div class="diary-card-image-wrapper">
-                            {% if record.image %}
-                                <img
-                                    src="{{ record.image.url }}"
-                                    alt="{{ record.title }} 기록 사진"
-                                    class="diary-card-image"
-                                >
-                            {% else %}
-                                <div class="diary-card-image-placeholder">
-                                    <span>사진 없음</span>
-                                </div>
-                            {% endif %}
+                    {% include "diary/partials/diary_card.html" with record=record %}
+                </div>
 
-                            {% if record.emotion %}
-                                <div class="diary-card-emotion">
-                                    {% if record.emotion.image %}
-                                        <img
-                                            src="{{ record.emotion.image.url }}"
-                                            alt="{{ record.emotion.name }}"
-                                        >
-                                    {% else %}
-                                        <span>
-                                            {{ record.emotion.name }}
-                                        </span>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="diary-card-content">
-                            <time
-                                class="diary-card-date"
-                                datetime="{{ record.created_at|date:'Y-m-d' }}"
-                            >
-                                {{ record.created_at|date:"Y/m/d" }}
-                            </time>
-
-                            <h3 class="diary-card-title">
-                                {{ record.title }}
-                            </h3>
-
-                            {% if record.location %}
-                                <p class="diary-card-location">
-                                    <span aria-hidden="true">⌖</span>
-                                    {{ record.location.name }}
-                                </p>
-                            {% endif %}
-                        </div>
-                    </a>
-                </article>
             {% endfor %}
         </div>
 
