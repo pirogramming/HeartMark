@@ -3,7 +3,6 @@
     min-height: 100vh;
     margin-top: -100px;
     overflow: hidden;
-    background: #fff;
 }
 
 .home-hero {
@@ -13,7 +12,6 @@
     min-height: 76vh;
     padding: 150px 40px 128px;
     overflow: visible;
-    background: #fff8e8;
 }
 
 .home-hero h1 {
@@ -116,7 +114,6 @@
     gap: 20px;
     min-height: 78vh;
     padding: 104px 64px 150px;
-    background: #fff;
 }
 
 .home-start-copy {

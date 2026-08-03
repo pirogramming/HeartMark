@@ -25,7 +25,8 @@ select {
 
 body {
     margin: 0;
-    background: #f3f3f3;
+    overflow-x: hidden;
+    background: #fff8e8;
     color: #171717;
     font-family: "HeartMarkFont", Arial, "Noto Sans KR", sans-serif;
 }
