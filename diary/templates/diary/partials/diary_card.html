@@ -1,66 +1,29 @@
-{# ============================================================
-    다이어리 목록에서 공통으로 사용하는 기록 카드
-
-    사용되는 실제 Record 필드:
-    - record.pk
-    - record.image
-    - record.content
-    - record.place_name
-    - record.created_at
-    - record.main_emotion
-
-    views.py에서 임시로 추가한 화면용 속성:
-    - record.main_emotion_name
-    ============================================================ #}
-
 <article class="diary-card">
-
-    {#
-    카드를 클릭하면 담당 C의 기록 상세 페이지로 이동합니다.
-
-    예:
-    기록 id가 5이면 /records/5/ 형태의 상세 URL로 이동합니다.
-    실제 주소 구조는 records/urls.py가 결정합니다.
-    #}
     <a
         href="{% url 'records:detail' record.pk %}"
         class="diary-card-link"
     >
         <div class="diary-card-image-wrapper">
-
-            {# 기록 작성 시 업로드한 이미지 #}
             {% if record.image %}
                 <img
                     src="{{ record.image.url }}"
                     alt="{{ record.created_at|date:'Y년 n월 j일' }} 기록 사진"
                     class="diary-card-image"
                 >
-
             {% else %}
                 <div class="diary-card-image-placeholder">
                     <span>사진 없음</span>
                 </div>
             {% endif %}
 
-            {# 대표 감정 아이콘 #}
             {% if record.main_emotion %}
                 <div
                     class="diary-card-emotion"
                     data-main-emotion="{{ record.main_emotion }}"
                     title="{{ record.main_emotion_name }}"
                 >
-                    {#
-                    담당 C가 records.css에서 만든 감정 아이콘 클래스를 사용합니다.
-
-                    예:
-                    대표 감정이 3이면
-                    emotion-icon--3 클래스가 붙습니다.
-                    #}
                     <span
-                        class="
-                            emotion-icon
-                            emotion-icon--{{ record.main_emotion }}
-                        "
+                        class="emotion-icon emotion-icon--{{ record.main_emotion }}"
                         aria-hidden="true"
                     ></span>
 
@@ -69,12 +32,9 @@
                     </span>
                 </div>
             {% endif %}
-
         </div>
 
         <div class="diary-card-content">
-
-            {# 기록 작성 날짜 #}
             <time
                 class="diary-card-date"
                 datetime="{{ record.created_at|date:'Y-m-d' }}"
@@ -82,32 +42,20 @@
                 {{ record.created_at|date:"Y/m/d" }}
             </time>
 
-            {#
-            실제 Record 모델에는 title 필드가 없습니다.
-
-            따라서 content 앞부분을 카드 제목처럼 사용합니다.
-            28자가 넘어가면 뒤에 말줄임표가 붙습니다.
-            #}
             <h2 class="diary-card-title">
                 {{ record.content|truncatechars:28 }}
             </h2>
 
-            {#
-            실제 Record 모델에는 location ForeignKey가 없고
-            place_name 문자열 필드가 있습니다.
-            #}
             {% if record.place_name %}
                 <p class="diary-card-location">
                     <span aria-hidden="true">⌖</span>
                     {{ record.place_name }}
                 </p>
-
             {% else %}
                 <p class="diary-card-location diary-card-location--empty">
                     장소 정보 없음
                 </p>
             {% endif %}
-
         </div>
     </a>
 </article>
