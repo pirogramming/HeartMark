@@ -431,19 +431,13 @@
 
         <div class="location-modal-grid">
             {% for record in records %}
-
-                {% comment %}
-                실제 장소명은 record.location.name이 아니라
-                record.place_name에 저장되어 있습니다.
-                {% endcomment %}
                 <div
                     class="location-modal-record"
-                    data-record-location="{{ record.place_name }}"
+                    data-record-location="{% if record.place %}{{ record.place.district }}{% endif %}"
                     hidden
                 >
                     {% include "diary/partials/diary_card.html" with record=record %}
                 </div>
-
             {% endfor %}
         </div>
 
