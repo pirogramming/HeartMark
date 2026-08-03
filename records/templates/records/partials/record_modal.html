@@ -50,6 +50,12 @@
                 <section class="record-create-layout__left">
                     <div class="record-date">
                         <strong id="record-today">2026년 7월 31일 금요일</strong>
+                        {% if verified_place %}
+                        <span class="record-verified-place" title="{{ verified_place.address }}">
+                            <span aria-hidden="true">📍</span>
+                            {{ verified_place.name|default:verified_place.address }}
+                        </span>
+                        {% endif %}
                     </div>
 
                     <section class="photo-box" id="record-photo-box">
