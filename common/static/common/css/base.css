@@ -21,7 +21,7 @@ input {
 
 .site-header {
     position: absolute;
-    top: 34px;
+    top: -6px;
     left: 0;
     right: 0;
     z-index: 10;
@@ -36,10 +36,15 @@ input {
 }
 
 .site-logo {
-    color: #111;
-    font-size: 30px;
-    font-weight: 800;
+    display: block;
     text-decoration: none;
+}
+
+.site-logo img {
+    display: block;
+    width: auto;
+    height: 76px;
+    object-fit: contain;
 }
 
 .site-nav {
@@ -63,6 +68,7 @@ input {
     .site-main {
         padding-top: 100px;
     }
+
     .site-header {
         top: 12px;
         width: calc(100% - 32px);
@@ -71,6 +77,10 @@ input {
         align-items: flex-start;
         gap: 14px;
         padding: 18px 0;
+    }
+
+    .site-logo img {
+        height: 62px;
     }
 
     .site-nav {
