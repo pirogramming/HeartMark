@@ -6,11 +6,6 @@
 {% endblock %}
 
 {% block extra_css %}
-<!--
-    기록 상세 페이지 전용 CSS 파일을 불러옵니다.
-    base.html의 추가 CSS 영역을 사용하여
-    이 페이지에서만 detail.css가 적용됩니다.
--->
 <link
     rel="stylesheet"
     href="{% static 'diary/css/detail.css' %}"
@@ -20,161 +15,158 @@
 {% block content %}
 <section class="record-detail-page">
 
-    <!--
-        페이지 상단의 장소와 날짜 영역입니다.
-        나중에는 실제 Record 데이터로 교체합니다.
-
-        명동
-        → {{ record.location.name }}
-
-        날짜
-        → {{ record.created_at|date:"Y. m. d (D)" }}
-    -->
+    <!-- ==========================================
+        장소와 작성 날짜
+    =========================================== -->
     <header class="record-detail-header">
 
-        <!-- 기록이 작성된 장소 -->
         <h1 class="record-detail-location">
-            명동
+            {% if record.place %}
+                {{ record.place.name }}
+            {% elif record.place_name %}
+                {{ record.place_name }}
+            {% else %}
+                장소 정보 없음
+            {% endif %}
         </h1>
 
-        <!-- 기록 작성 날짜 -->
         <time
             class="record-detail-date"
-            datetime="2026-08-02"
+            datetime="{{ record.created_at|date:'Y-m-d' }}"
         >
-            2026. 08. 02 (일)
+            {{ record.created_at|date:"Y. m. d" }}
         </time>
 
     </header>
 
 
-    <!--
-        감정 카드 3개가 들어가는 영역입니다.
-
-        왼쪽  : 보조 감정
-        가운데: 대표 감정
-        오른쪽: 보조 감정
-    -->
+    <!-- ==========================================
+        감정 카드 영역
+    =========================================== -->
     <section
         class="emotion-summary"
         aria-label="기록한 감정"
     >
 
-        <!-- ====================================
-            왼쪽 보조 감정 카드
-        ==================================== -->
-        <article class="emotion-card emotion-card--secondary emotion-card--blue">
-
-            <!-- 보조 감정임을 알려주는 작은 라벨 -->
+        <!-- 왼쪽 보조 감정 -->
+        {% if left_emotion %}
+        <article
+            class="
+                emotion-card
+                emotion-card--secondary
+                emotion-card--blue
+                emotion-card--left
+            "
+        >
             <span class="emotion-card-badge">
                 보조 감정
             </span>
 
-            <!-- 감정 이미지 영역 -->
             <div class="emotion-card-image-wrapper">
-
-                <!--
-                    지금은 임시 이미지입니다.
-
-                    실제 데이터 연결 후에는 대략:
-                    emotion-{{ 번호 }}.svg
-
-                    형식으로 바꿀 수 있습니다.
-                -->
                 <img
                     class="emotion-card-image"
-                    src="{% static 'diary/images/emotion-01.svg' %}"
-                    alt="생각중이에요 감정"
+                    src="{% static 'records/images/emotions/' %}{{ left_emotion.image_name }}"
+                    alt="{{ left_emotion.name }} 감정"
                 >
-
             </div>
 
-            <!-- 감정 이름 -->
             <h2 class="emotion-card-name">
-                생각중이에요
+                {{ left_emotion.name }}
             </h2>
-
         </article>
+        {% endif %}
 
 
-        <!-- ====================================
-            가운데 대표 감정 카드
-        ==================================== -->
-        <article class="emotion-card emotion-card--main emotion-card--purple">
-
-            <!-- 대표 감정임을 알려주는 강조 라벨 -->
-            <span class="emotion-card-badge emotion-card-badge--main">
+        <!-- 가운데 대표 감정 -->
+        <article
+            class="
+                emotion-card
+                emotion-card--main
+                emotion-card--purple
+                emotion-card--center
+            "
+        >
+            <span
+                class="
+                    emotion-card-badge
+                    emotion-card-badge--main
+                "
+            >
                 대표 감정
             </span>
 
-            <!-- 대표 감정 이미지 영역 -->
-            <div class="emotion-card-image-wrapper emotion-card-image-wrapper--main">
-
+            <div
+                class="
+                    emotion-card-image-wrapper
+                    emotion-card-image-wrapper--main
+                "
+            >
                 <img
-                    class="emotion-card-image emotion-card-image--main"
-                    src="{% static 'diary/images/emotion-01.svg' %}"
-                    alt="차분해요 대표 감정"
+                    class="
+                        emotion-card-image
+                        emotion-card-image--main
+                    "
+                    src="{% static 'records/images/emotions/' %}{{ main_emotion.image_name }}"
+                    alt="{{ main_emotion.name }} 대표 감정"
                 >
-
             </div>
 
-            <!-- 대표 감정 이름 -->
-            <h2 class="emotion-card-name emotion-card-name--main">
-                차분해요
+            <h2
+                class="
+                    emotion-card-name
+                    emotion-card-name--main
+                "
+            >
+                {{ main_emotion.name }}
             </h2>
-
         </article>
 
 
-        <!-- ====================================
-            오른쪽 보조 감정 카드
-        ==================================== -->
-        <article class="emotion-card emotion-card--secondary emotion-card--green">
-
-            <!-- 보조 감정 라벨 -->
+        <!-- 오른쪽 보조 감정 -->
+        {% if right_emotion %}
+        <article
+            class="
+                emotion-card
+                emotion-card--secondary
+                emotion-card--green
+                emotion-card--right
+            "
+        >
             <span class="emotion-card-badge">
                 보조 감정
             </span>
 
-            <!-- 감정 이미지 영역 -->
             <div class="emotion-card-image-wrapper">
-
                 <img
                     class="emotion-card-image"
-                    src="{% static 'diary/images/emotion-01.svg' %}"
-                    alt="고마워요 감정"
+                    src="{% static 'records/images/emotions/' %}{{ right_emotion.image_name }}"
+                    alt="{{ right_emotion.name }} 감정"
                 >
-
             </div>
 
-            <!-- 감정 이름 -->
             <h2 class="emotion-card-name">
-                고마워요
+                {{ right_emotion.name }}
             </h2>
-
         </article>
+        {% endif %}
 
     </section>
 
 
-    <!--
-        Photo / Read / Listen 기능 버튼 영역입니다.
-
-        지금은 버튼을 눌러도 동작하지 않습니다.
-        나중에 detail.js에서 모달이나 콘텐츠 영역을 열도록 연결합니다.
-    -->
+    <!-- ==========================================
+        Photo / Read / Listen 버튼
+    =========================================== -->
     <nav
         class="record-detail-actions"
         aria-label="기록 상세 기능"
     >
 
-        <!-- 사진 보기 버튼 -->
+        <!-- Photo 모달을 여는 버튼 -->
         <button
             type="button"
             class="record-action-button"
-            data-action="photo"
+            data-modal-open="photo-modal"
         >
-            <!-- 카메라 모양을 글자로 임시 표시 -->
             <span
                 class="record-action-icon"
                 aria-hidden="true"
@@ -188,13 +180,12 @@
         </button>
 
 
-        <!-- 일기 내용 읽기 버튼 -->
+        <!-- Read 모달을 여는 버튼 -->
         <button
             type="button"
             class="record-action-button"
-            data-action="read"
+            data-modal-open="read-modal"
         >
-            <!-- 책 모양 임시 아이콘 -->
             <span
                 class="record-action-icon"
                 aria-hidden="true"
@@ -208,13 +199,12 @@
         </button>
 
 
-        <!-- 음악 듣기 버튼 -->
+        <!-- 추후 음악 기능을 연결할 버튼 -->
         <button
             type="button"
             class="record-action-button"
             data-action="listen"
         >
-            <!-- 헤드폰 느낌의 임시 아이콘 -->
             <span
                 class="record-action-icon"
                 aria-hidden="true"
@@ -230,4 +220,155 @@
     </nav>
 
 </section>
+
+
+<!-- ==================================================
+    Photo 팝업
+
+    record.image에 저장된 실제 업로드 사진을 표시합니다.
+================================================== -->
+<div
+    class="record-content-modal"
+    id="photo-modal"
+    aria-hidden="true"
+    hidden
+>
+    <!-- 어두운 배경을 클릭해도 팝업이 닫힙니다. -->
+    <button
+        type="button"
+        class="record-content-modal__backdrop"
+        data-modal-close
+        aria-label="사진 팝업 닫기"
+    ></button>
+
+    <section
+        class="
+            record-content-modal__dialog
+            record-content-modal__dialog--photo
+        "
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="photo-modal-title"
+    >
+        <header class="record-content-modal__header">
+            <div>
+                <p class="record-content-modal__eyebrow">
+                    그날의 장면
+                </p>
+
+                <h2
+                    class="record-content-modal__title"
+                    id="photo-modal-title"
+                >
+                    Photo
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="record-content-modal__close"
+                data-modal-close
+                aria-label="사진 팝업 닫기"
+            >
+                ×
+            </button>
+        </header>
+
+        <div class="record-content-modal__photo">
+            {% if record.image %}
+                <img
+                    src="{{ record.image.url }}"
+                    alt="{{ record.created_at|date:'Y년 n월 j일' }}에 업로드한 기록 사진"
+                >
+            {% else %}
+                <p class="record-content-modal__empty">
+                    이 기록에 등록된 사진이 없습니다.
+                </p>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+
+<!-- ==================================================
+    Read 팝업
+
+    record.content에 저장된 실제 일기 내용을 표시합니다.
+================================================== -->
+<div
+    class="record-content-modal"
+    id="read-modal"
+    aria-hidden="true"
+    hidden
+>
+    <button
+        type="button"
+        class="record-content-modal__backdrop"
+        data-modal-close
+        aria-label="일기 팝업 닫기"
+    ></button>
+
+    <section
+        class="
+            record-content-modal__dialog
+            record-content-modal__dialog--read
+        "
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="read-modal-title"
+    >
+        <header class="record-content-modal__header">
+            <div>
+                <p class="record-content-modal__eyebrow">
+                    그날의 마음
+                </p>
+
+                <h2
+                    class="record-content-modal__title"
+                    id="read-modal-title"
+                >
+                    Read
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="record-content-modal__close"
+                data-modal-close
+                aria-label="일기 팝업 닫기"
+            >
+                ×
+            </button>
+        </header>
+
+        <div class="record-content-modal__diary">
+            {% if record.content %}
+                <p>{{ record.content|linebreaksbr }}</p>
+            {% else %}
+                <p class="record-content-modal__empty">
+                    이 기록에 작성된 내용이 없습니다.
+                </p>
+            {% endif %}
+        </div>
+
+        <footer class="record-content-modal__footer">
+            <span>
+                {% if record.place %}
+                    {{ record.place.name }}
+                {% elif record.place_name %}
+                    {{ record.place_name }}
+                {% endif %}
+            </span>
+
+            <time datetime="{{ record.created_at|date:'Y-m-d' }}">
+                {{ record.created_at|date:"Y. m. d" }}
+            </time>
+        </footer>
+    </section>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'diary/js/detail.js' %}"></script>
 {% endblock %}

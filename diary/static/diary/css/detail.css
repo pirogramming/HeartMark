@@ -631,7 +631,7 @@
 
 
 /* ==================================================
-   Photo / Read / Listen 버튼 전체 영역
+    Photo / Read / Listen 버튼 전체 영역
    ================================================== */
 
 .record-detail-actions {
@@ -781,10 +781,360 @@
     font-weight: 700;
 }
 
+/* ==================================================
+    감정 카드의 고정 열 위치
+
+    보조 감정 개수가 0개 또는 1개여도
+    대표 감정이 항상 가운데 열에 위치하도록 합니다.
+================================================== */
+
+/* 첫 번째 보조 감정은 왼쪽 첫 번째 열에 배치합니다. */
+.emotion-card--left {
+    grid-column: 1;
+}
+
+/* 대표 감정은 항상 가운데 두 번째 열에 배치합니다. */
+.emotion-card--center {
+    grid-column: 2;
+}
+
+/* 두 번째 보조 감정은 오른쪽 세 번째 열에 배치합니다. */
+.emotion-card--right {
+    grid-column: 3;
+}
 
 /* ==================================================
-   태블릿 화면
-   화면 너비가 850px 이하일 때
+   Photo / Read 공통 팝업
+================================================== */
+
+/*
+    팝업의 전체 화면 영역입니다.
+
+    position: fixed와 inset: 0으로
+    브라우저 화면 전체를 덮습니다.
+*/
+.record-content-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+
+    display: grid;
+    place-items: center;
+
+    padding: 28px;
+    box-sizing: border-box;
+}
+
+
+/*
+    HTML의 hidden 속성이 붙어 있을 때
+    팝업이 확실하게 사라지도록 합니다.
+*/
+.record-content-modal[hidden] {
+    display: none;
+}
+
+
+/*
+    팝업 뒤의 어두운 배경입니다.
+
+    실제 button 요소이기 때문에
+    클릭하면 팝업을 닫을 수 있습니다.
+*/
+.record-content-modal__backdrop {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;
+
+    border: 0;
+    background-color: rgba(35, 34, 32, 0.58);
+    backdrop-filter: blur(4px);
+
+    cursor: default;
+}
+
+
+/* ==================================================
+   팝업 내용 상자
+================================================== */
+
+.record-content-modal__dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(720px, calc(100vw - 56px));
+    max-height: calc(100vh - 56px);
+
+    overflow: auto;
+
+    padding: 30px;
+    box-sizing: border-box;
+
+    border: 2px solid #5d5a54;
+    border-radius: 31px 25px 34px 27px;
+
+    color: #2c2c2c;
+    background-color: #fffaf0;
+    background-image:
+        radial-gradient(
+            rgba(90, 77, 64, 0.055) 0.7px,
+            transparent 0.7px
+        );
+    background-size: 7px 7px;
+
+    box-shadow:
+        0 26px 80px rgba(27, 24, 21, 0.3);
+
+    animation: record-modal-appear 180ms ease-out;
+}
+
+
+/*
+    Photo 팝업은 사진이 넉넉하게 보이도록
+    Read 팝업보다 조금 넓게 설정합니다.
+*/
+.record-content-modal__dialog--photo {
+    width: min(850px, calc(100vw - 56px));
+}
+
+
+/*
+    Read 팝업은 일기장을 읽는 느낌으로
+    최대 너비를 조금 좁게 유지합니다.
+*/
+.record-content-modal__dialog--read {
+    width: min(680px, calc(100vw - 56px));
+}
+
+
+/* 팝업 등장 효과 */
+@keyframes record-modal-appear {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ==================================================
+   팝업 상단 제목과 닫기 버튼
+================================================== */
+
+.record-content-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+
+    border-bottom: 1px dashed rgba(93, 90, 84, 0.35);
+}
+
+
+.record-content-modal__eyebrow {
+    margin: 0 0 5px;
+
+    color: #7f9fc4;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+.record-content-modal__title {
+    margin: 0;
+
+    color: #272727;
+    font-size: 28px;
+    font-weight: 850;
+}
+
+
+.record-content-modal__close {
+    display: grid;
+    flex: 0 0 auto;
+
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    place-items: center;
+
+    border: 1px solid #d7d1c8;
+    border-radius: 50%;
+
+    color: #55504a;
+    background-color: rgba(255, 255, 255, 0.72);
+
+    font: inherit;
+    font-size: 26px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+.record-content-modal__close:hover {
+    background-color: #ffffff;
+    transform: rotate(4deg);
+}
+
+
+/* ==================================================
+   Photo 팝업의 실제 사진
+================================================== */
+
+.record-content-modal__photo {
+    display: grid;
+    min-height: 280px;
+
+    place-items: center;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(93, 90, 84, 0.28);
+    border-radius: 18px 15px 21px 16px;
+
+    background-color: #f4ecdf;
+}
+
+
+.record-content-modal__photo img {
+    display: block;
+
+    width: 100%;
+    max-height: calc(100vh - 220px);
+
+    object-fit: contain;
+}
+
+
+/* ==================================================
+   Read 팝업의 일기 내용
+================================================== */
+
+.record-content-modal__diary {
+    min-height: 260px;
+
+    padding: 9px 14px 18px;
+    box-sizing: border-box;
+
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 35px,
+            rgba(107, 97, 87, 0.25) 36px,
+            transparent 37px
+        );
+}
+
+
+.record-content-modal__diary p {
+    margin: 0;
+
+    color: #35312e;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 37px;
+
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+}
+
+
+/* 내용이 없을 때 안내 문구 */
+.record-content-modal__empty {
+    color: #8c8279;
+    text-align: center;
+}
+
+
+/* ==================================================
+   Read 팝업 하단 장소와 날짜
+================================================== */
+
+.record-content-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding-top: 20px;
+    margin-top: 18px;
+
+    border-top: 1px dashed rgba(93, 90, 84, 0.35);
+
+    color: #81766d;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/*
+    팝업이 열려 있을 때
+    뒤쪽 페이지가 스크롤되지 않게 합니다.
+*/
+body.record-content-modal-open {
+    overflow: hidden;
+}
+
+
+/* ==================================================
+   모바일 팝업
+================================================== */
+
+@media (max-width: 560px) {
+
+    .record-content-modal {
+        padding: 14px;
+    }
+
+    .record-content-modal__dialog,
+    .record-content-modal__dialog--photo,
+    .record-content-modal__dialog--read {
+        width: calc(100vw - 28px);
+        max-height: calc(100vh - 28px);
+        padding: 22px 18px;
+        border-radius: 24px 19px 27px 21px;
+    }
+
+    .record-content-modal__title {
+        font-size: 24px;
+    }
+
+    .record-content-modal__photo {
+        min-height: 220px;
+    }
+
+    .record-content-modal__photo img {
+        max-height: calc(100vh - 180px);
+    }
+
+    .record-content-modal__diary p {
+        font-size: 15px;
+        line-height: 34px;
+    }
+
+    .record-content-modal__footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* ==================================================
+    태블릿 화면
+    화면 너비가 850px 이하일 때
    ================================================== */
 
 @media (max-width: 850px) {
@@ -846,8 +1196,8 @@
 
 
 /* ==================================================
-   모바일 화면
-   화면 너비가 560px 이하일 때
+    모바일 화면
+    화면 너비가 560px 이하일 때
    ================================================== */
 
 @media (max-width: 560px) {
