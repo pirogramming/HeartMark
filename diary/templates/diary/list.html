@@ -6,16 +6,11 @@
 {% block title %}다이어리 목록 | HeartMark{% endblock %}
 
 {% block extra_css %}
-
-{#
-담당 C의 감정 이미지 스타일인
-emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
-#}
+{# 담당 C의 감정 아이콘 스타일을 불러옵니다. #}
 <link rel="stylesheet" href="{% static 'records/css/records.css' %}">
 
-{# 다이어리 목록 페이지 전용 스타일 #}
+{# 다이어리 목록 페이지 전용 스타일을 불러옵니다. #}
 <link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
-
 {% endblock %}
 
 {% block content %}
