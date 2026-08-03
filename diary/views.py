@@ -5,6 +5,7 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.utils import timezone
 
 # 담당 C가 만든 실제 기록 모델을 가져옵니다.
 from records.models import Record
@@ -13,20 +14,7 @@ from records.models import Record
 # ============================================================
 # 감정 번호별 표시 이름
 # ============================================================
-#
-# 현재 records 앱에서는 감정을 실제 이름이 아니라
-# 1~20 사이의 숫자로 저장하고 있습니다.
-#
-# 예:
-# record.main_emotion = 3
-# record.emotions = [3, 7, 11]
-#
-# 그런데 담당 C의 forms.py에도 실제 감정 이름이 없고
-# "감정 1", "감정 2"처럼만 정의되어 있습니다.
-#
-# 따라서 실제 감정 이름과 번호 순서가 확정되면
-# 아래 값만 수정하면 됩니다.
-#
+
 EMOTION_NAME_MAP = {
     1: "슬픔",
     2: "사랑",
@@ -56,10 +44,8 @@ def get_emotion_name(emotion_number):
     감정 번호를 화면에 표시할 감정 이름으로 변환합니다.
 
     예:
-    1 → 감정 1
-    5 → 감정 5
-
-    실제 감정 이름이 정해지면 EMOTION_NAME_MAP만 수정하면 됩니다.
+    1 → "슬픔"
+    7 → "짝사랑"
     """
 
     try:
@@ -88,20 +74,12 @@ def diary_list(request):
     # 1. 현재 선택한 탭과 필터값
     # ========================================================
 
-    # 주소 예:
-    # /diary/?tab=all
-    # /diary/?tab=emotion
-    # /diary/?tab=location
     selected_tab = request.GET.get("tab", "all")
-
-    # 최신순 또는 과거순
     selected_sort = request.GET.get("sort", "latest")
 
-    # 기간 필터
     selected_start_date = request.GET.get("start_date", "")
     selected_end_date = request.GET.get("end_date", "")
 
-    # 허용하지 않은 탭 이름이 들어오면 전체 탭으로 변경합니다.
     if selected_tab not in {"all", "emotion", "location"}:
         selected_tab = "all"
 
@@ -109,7 +87,6 @@ def diary_list(request):
     # 2. 현재 사용자의 실제 기록 조회
     # ========================================================
 
-    # user=request.user가 없으면 다른 사용자의 기록도 함께 나올 수 있습니다.
     records_queryset = Record.objects.filter(
         user=request.user,
     )
@@ -120,19 +97,16 @@ def diary_list(request):
 
     if selected_start_date:
         try:
-            # HTML의 date input 값은 "2026-08-03" 형태로 전달됩니다.
             start_date = datetime.strptime(
                 selected_start_date,
                 "%Y-%m-%d",
             ).date()
 
-            # 시작일 당일을 포함해 그 이후의 기록만 남깁니다.
             records_queryset = records_queryset.filter(
                 created_at__date__gte=start_date,
             )
 
         except ValueError:
-            # 잘못된 날짜 문자열이면 필터값을 비웁니다.
             selected_start_date = ""
 
     # ========================================================
@@ -146,7 +120,6 @@ def diary_list(request):
                 "%Y-%m-%d",
             ).date()
 
-            # 종료일 당일을 포함해 그 이전의 기록만 남깁니다.
             records_queryset = records_queryset.filter(
                 created_at__date__lte=end_date,
             )
@@ -159,34 +132,23 @@ def diary_list(request):
     # ========================================================
 
     if selected_sort == "oldest":
-        # 오래된 기록이 위로 오도록 정렬합니다.
         records_queryset = records_queryset.order_by(
             "created_at",
         )
 
     else:
-        # 이상한 값이 들어오면 최신순으로 처리합니다.
         selected_sort = "latest"
 
-        # 최근 기록이 위로 오도록 정렬합니다.
         records_queryset = records_queryset.order_by(
             "-created_at",
         )
 
-    # QuerySet을 리스트로 변환합니다.
-    #
-    # 아래에서 감정 집계, 장소 집계 등으로 여러 번 반복해서 쓰므로
-    # 한 번 조회한 결과를 재사용합니다.
     records = list(records_queryset)
 
     # ========================================================
     # 6. 각 기록에 화면용 감정 이름 추가
     # ========================================================
-    #
-    # Record 모델에는 main_emotion_name이라는 실제 필드가 없습니다.
-    # 데이터베이스에는 저장하지 않고, 화면 표시용으로만
-    # 파이썬 객체에 임시 속성을 추가합니다.
-    #
+
     for record in records:
         record.main_emotion_name = get_emotion_name(
             record.main_emotion,
@@ -196,16 +158,12 @@ def diary_list(request):
     # 7. 감정별 기록 횟수 계산
     # ========================================================
 
-    # 현재 기록들의 대표 감정 번호를 모읍니다.
     main_emotion_numbers = [
         int(record.main_emotion)
         for record in records
         if record.main_emotion
     ]
 
-    # 예:
-    # [1, 1, 3, 5, 1]
-    # → Counter({1: 3, 3: 1, 5: 1})
     emotion_counts = Counter(
         main_emotion_numbers,
     )
@@ -213,15 +171,11 @@ def diary_list(request):
     emotions = []
 
     for emotion_id, emotion_name in EMOTION_NAME_MAP.items():
-        # 해당 감정이 대표 감정으로 사용된 횟수입니다.
         record_count = emotion_counts.get(
             emotion_id,
             0,
         )
 
-        # 감정 조약돌 크기 결정
-        #
-        # 이 숫자를 변경하면 각 조약돌의 크기 기준이 바뀝니다.
         if record_count >= 5:
             size = "large"
 
@@ -240,14 +194,12 @@ def diary_list(request):
             }
         )
 
-    # 기록 횟수가 1개 이상인 감정만 따로 모읍니다.
     recorded_emotions = [
         emotion
         for emotion in emotions
         if emotion["record_count"] > 0
     ]
 
-    # 가장 많이 기록한 감정을 찾습니다.
     if recorded_emotions:
         top_emotion = max(
             recorded_emotions,
@@ -255,20 +207,12 @@ def diary_list(request):
         )
 
     else:
-        # 작성한 기록이 아직 없으면 None으로 전달합니다.
         top_emotion = None
 
     # ========================================================
     # 8. 서울 지도용 장소 데이터 계산
     # ========================================================
-    #
-    # 현재 Record 모델에는 장소 ForeignKey나 district 필드가 없고
-    # place_name 문자열만 존재합니다.
-    #
-    # 그래서 현재 단계에서는 place_name이 정확히
-    # "성북구", "강남구"처럼 '구'로 끝나는 경우만
-    # 서울 지도 데이터로 사용할 수 있습니다.
-    #
+
     district_records = {}
 
     for record in records:
@@ -278,10 +222,6 @@ def diary_list(request):
             else ""
         )
 
-        # "성북구", "마포구" 같은 값만 지도에 표시합니다.
-        #
-        # "성신여대입구역", "명동 카페" 등은
-        # 어느 자치구인지 알 수 없어 지도에서는 제외됩니다.
         if not place_name.endswith("구"):
             continue
 
@@ -304,20 +244,17 @@ def diary_list(request):
     district_map_data = []
 
     for district_name, district_record_list in district_records.items():
-        # 해당 구에서 기록된 대표 감정 이름 목록
         emotion_names = [
             item["emotion_name"]
             for item in district_record_list
         ]
 
-        # 가장 많이 기록한 감정을 계산합니다.
         emotion_name_counts = Counter(
             emotion_names,
         )
 
         dominant_emotion = emotion_name_counts.most_common(1)[0][0]
 
-        # 해당 구의 가장 최근 기록을 찾습니다.
         latest_record = max(
             district_record_list,
             key=lambda item: item["created_at"],
@@ -325,16 +262,9 @@ def diary_list(request):
 
         district_map_data.append(
             {
-                # 지도 SVG의 구 이름과 비교되는 값
                 "district_name": district_name,
-
-                # 해당 구에서 작성한 기록 개수
                 "visit_count": len(district_record_list),
-
-                # 해당 구에서 가장 많이 기록한 감정
                 "dominant_emotion": dominant_emotion,
-
-                # 해당 구에서 가장 최근에 기록한 감정
                 "latest_emotion": latest_record["emotion_name"],
             }
         )
@@ -357,7 +287,6 @@ def diary_list(request):
         for place_name, count in location_counts.items()
     ]
 
-    # 기록이 많은 장소부터 정렬합니다.
     locations.sort(
         key=lambda location: location["record_count"],
         reverse=True,
@@ -392,5 +321,100 @@ def diary_list(request):
     return render(
         request,
         "diary/list.html",
+        context,
+    )
+
+
+@login_required
+def emotion_calendar(request):
+    """
+    현재 로그인한 사용자의 기록을 날짜별로 정리하여
+    감정 캘린더 페이지에 전달합니다.
+
+    같은 날짜에 기록이 여러 개 있다면
+    가장 최근에 작성한 기록의 대표 감정을 사용합니다.
+    """
+
+    # 오늘 날짜를 기준으로 캘린더의 최초 연도와 월을 설정합니다.
+    today = timezone.localdate()
+
+    # 최신 기록부터 조회합니다.
+    #
+    # 아래에서 날짜별 데이터에 처음 들어간 기록만 사용하므로
+    # 같은 날짜에 여러 기록이 있으면 가장 최신 기록이 남습니다.
+    records = Record.objects.filter(
+        user=request.user,
+    ).order_by(
+        "-created_at",
+    )
+
+    # JavaScript에 전달할 날짜별 감정 데이터입니다.
+    #
+    # 결과 예:
+    # {
+    #     "2026-08-01": {
+    #         "number": 7,
+    #         "name": "짝사랑",
+    #         "image_name": "emotion-07.png"
+    #     }
+    # }
+    calendar_emotions = {}
+
+    for record in records:
+        # created_at이 시간대 정보를 가진 경우
+        # 한국 시간 기준 날짜로 변환합니다.
+        created_date = timezone.localtime(
+            record.created_at,
+        ).date()
+
+        date_key = created_date.strftime(
+            "%Y-%m-%d",
+        )
+
+        # 이미 같은 날짜의 최신 기록이 저장되어 있다면
+        # 그보다 오래된 기록은 건너뜁니다.
+        if date_key in calendar_emotions:
+            continue
+
+        try:
+            emotion_number = int(
+                record.main_emotion,
+            )
+
+        except (TypeError, ValueError):
+            continue
+
+        calendar_emotions[date_key] = {
+            # 감정 이미지 번호
+            "number": emotion_number,
+
+            # 이미지의 대체 텍스트와 툴팁에 사용할 감정 이름
+            "name": get_emotion_name(
+                emotion_number,
+            ),
+
+            # 실제 records 이미지 폴더의 파일명
+            "image_name": (
+                f"emotion-{emotion_number:02d}.png"
+            ),
+
+            # 날짜 칸이나 감정 이미지를 눌렀을 때
+            # 해당 기록 상세 페이지로 이동할 때 사용할 ID
+            "record_id": record.pk,
+        }
+
+    context = {
+        # 최초 화면에 표시할 연도와 월
+        "calendar_year": today.year,
+        "calendar_month": today.month,
+
+        # calendar.html의 json_script를 통해
+        # JavaScript에 안전하게 전달됩니다.
+        "calendar_emotions": calendar_emotions,
+    }
+
+    return render(
+        request,
+        "diary/calendar.html",
         context,
     )
