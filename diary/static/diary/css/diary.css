@@ -189,13 +189,10 @@
     }
 }
 
-/* 점 세 개 메뉴 스타일 */
-
+/* 점 세 개 버튼과 메뉴를 감싸는 영역 */
 .map-display-settings {
-    position: absolute;
-    z-index: 20;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    z-index: 30;
 }
 
 .map-settings-button {
@@ -207,25 +204,55 @@
     height: 42px;
 
     padding: 0;
+
     border: 1px solid #dedede;
     border-radius: 50%;
-    background: #ffffff;
 
+    background: #ffffff;
     color: #444444;
+
     font-size: 24px;
     line-height: 1;
+
     cursor: pointer;
 
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .map-settings-button:hover {
-    background: #f7f7f7;
+    background: #fff8df;
+
+    /*
+        버튼이 아주 조금 위로 올라가는 효과입니다.
+    */
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
 
+/* 키보드로 버튼을 선택했을 때 */
+.map-settings-button:focus-visible {
+    outline: 2px solid #e9c767;
+    outline-offset: 3px;
+}
+
+/* 지도 색상 설정 메뉴 */
 .map-settings-menu {
     position: absolute;
-    top: 50px;
+
+    /*
+        점 세 개 버튼 바로 아래에 메뉴를 배치합니다.
+    */
+    top: calc(100% + 8px);
+
+    /*
+        메뉴의 오른쪽 끝과 버튼의 오른쪽 끝을 맞춥니다.
+    */
     right: 0;
 
     width: 230px;
@@ -233,9 +260,16 @@
 
     border: 1px solid #dedede;
     border-radius: 14px;
+
     background: #ffffff;
 
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+
+    /*
+        지도보다 위에 보이지만,
+        지도 영역 자체를 덮는 위치에는 있지 않습니다.
+    */
+    z-index: 40;
 }
 
 .map-settings-menu[hidden] {
@@ -246,10 +280,12 @@
     margin: 4px 8px 8px;
 
     color: #777777;
+
     font-size: 12px;
     font-weight: 700;
 }
 
+/* 메뉴 안의 각 색상 방식 버튼 */
 .map-settings-menu button {
     display: block;
 
@@ -258,17 +294,24 @@
 
     border: 0;
     border-radius: 9px;
-    background: transparent;
 
+    background: transparent;
     color: #333333;
+
     font: inherit;
     text-align: left;
+
     cursor: pointer;
 }
 
-.map-settings-menu button:hover,
+/* 메뉴 항목 위에 마우스를 올렸을 때 */
+.map-settings-menu button:hover {
+    background: #fff7d7;
+}
+
+/* 현재 선택된 지도 색상 방식 */
 .map-settings-menu button.active {
-    background: #fff4cb;
+    background: #fff1ba;
     font-weight: 700;
 }
 
@@ -681,20 +724,49 @@ body.modal-open {
 }
 
 .location-map-section {
+    /*
+        툴바와 지도를 위아래로 배치합니다.
+    */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+
+    /*
+        설정 버튼 영역과 지도 사이 간격입니다.
+        값을 키우면 버튼과 지도가 더 멀어집니다.
+    */
+    gap: 10px;
+
     width: 100%;
 }
 
+/* =========================
+        지도 위쪽 도구 영역
+========================= */
+
+.map-toolbar {
+    /*
+        점 세 개 버튼을 오른쪽 끝에 배치합니다.
+    */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    width: 100%;
+}
+
+/* =========================
+        실제 지도 영역
+========================= */
+
 .location-map-wrapper {
+    /*
+        지도 내부 SVG 배치의 기준이 됩니다.
+        현재는 설정 메뉴가 지도 바깥에 있으므로
+        반드시 필요하지는 않지만 다른 요소 배치에 유용합니다.
+    */
     position: relative;
 
-    width: min(
-        760px,
-        calc(100vw - 80px),
-        calc(100vh - 250px)
-    );
-
+    width: min(800px, 100%);
     margin: 0 auto;
 }
 

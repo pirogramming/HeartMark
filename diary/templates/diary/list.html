@@ -284,8 +284,26 @@
         -->
 
             <div class="location-map-section">
-                <div class="location-map-wrapper">
+
+                <!--
+                    지도 위쪽 도구 영역입니다.
+
+                    점 세 개 버튼을 지도 내부에 겹치지 않고,
+                    지도 위 오른쪽에 독립적으로 배치합니다.
+                -->
+                <div class="map-toolbar">
+
                     <div class="map-display-settings">
+
+                        <!--
+                            지도 색상 설정 메뉴를 여는 버튼입니다.
+
+                            aria-expanded
+                            → 메뉴가 열렸는지 닫혔는지를 접근성 도구에 알려줍니다.
+
+                            aria-controls
+                            → 이 버튼이 어떤 메뉴를 제어하는지 연결합니다.
+                        -->
                         <button
                             type="button"
                             class="map-settings-button"
@@ -297,38 +315,80 @@
                             ⋯
                         </button>
 
+                        <!--
+                            지도 색상 설정 메뉴입니다.
+
+                            hidden 속성이 있으면 처음에는 보이지 않고,
+                            diary.js에서 버튼 클릭 시 hidden을 제거합니다.
+                        -->
                         <div
                             class="map-settings-menu"
                             id="map-settings-menu"
                             hidden
                         >
-                            <p class="map-settings-title">지도 색상 방식</p>
+                            <p class="map-settings-title">
+                                지도 색상 방식
+                            </p>
 
-                            <button type="button" data-map-mode="uniform">
+                            <button
+                                type="button"
+                                data-map-mode="uniform"
+                            >
                                 같은 색으로 통일
                             </button>
 
-                            <button type="button" data-map-mode="dominant">
+                            <button
+                                type="button"
+                                data-map-mode="dominant"
+                            >
                                 가장 많은 감정 색
                             </button>
 
-                            <button type="button" data-map-mode="latest">
+                            <button
+                                type="button"
+                                data-map-mode="latest"
+                            >
                                 가장 최근 감정 색
                             </button>
 
-                            <button type="button" data-map-mode="intensity">
+                            <button
+                                type="button"
+                                data-map-mode="intensity"
+                            >
                                 방문 횟수에 따른 농도
                             </button>
 
-                            <button type="button" data-map-mode="rainbow">
+                            <button
+                                type="button"
+                                data-map-mode="rainbow"
+                            >
                                 구별로 다른 색
                             </button>
                         </div>
                     </div>
+                </div>
 
-                        {% include "diary/partials/seoul_map.html" %}
-                    
-                        <div id="district-map-data" hidden>
+                <!--
+                    실제 서울 지도 영역입니다.
+
+                    설정 버튼과 메뉴는 위의 map-toolbar로 빠졌기 때문에
+                    이 영역 안에는 지도만 표시됩니다.
+                -->
+                <div class="location-map-wrapper">
+
+                    {% include "diary/partials/seoul_map.html" %}
+
+                    <!--
+                        Django에서 계산한 구별 기록 데이터를
+                        JavaScript가 읽을 수 있도록 숨겨서 출력합니다.
+
+                        화면에는 보이지 않지만 diary.js에서
+                        data-district, data-count 등의 값을 사용합니다.
+                    -->
+                    <div
+                        id="district-map-data"
+                        hidden
+                    >
                         {% for district in district_map_data %}
                             <span
                                 data-district="{{ district.district_name }}"
@@ -338,6 +398,7 @@
                             ></span>
                         {% endfor %}
                     </div>
+
                 </div>
             </div>
 
