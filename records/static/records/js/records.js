@@ -183,7 +183,9 @@
     setToday();
     updateEmotionState();
 
-    if (document.querySelector("[data-record-preview]")) {
+    const shouldOpenFromUrl = new URLSearchParams(window.location.search)
+        .get("open_record") === "1";
+    if (document.querySelector("[data-record-preview]") || shouldOpenFromUrl) {
         openModal();
     }
 })();
