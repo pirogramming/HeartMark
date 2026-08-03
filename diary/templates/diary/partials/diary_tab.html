@@ -1,2 +1,24 @@
 <!-- 담당 D: 메인 화면 캘린더/다이어리 탭 -->
 
+<nav class="diary-tabs" aria-label="기록 목록 분류">
+    <a
+        href="?tab=all"
+        class="diary-tab {% if selected_tab == 'all' or not selected_tab %}active{% endif %}"
+    >
+        전체
+    </a>
+
+    <a
+        href="?tab=emotion"
+        class="diary-tab {% if selected_tab == 'emotion' %}active{% endif %}"
+    >
+        감정별
+    </a>
+
+    <a
+        href="?tab=location"
+        class="diary-tab {% if selected_tab == 'location' %}active{% endif %}"
+    >
+        장소별
+    </a>
+</nav>

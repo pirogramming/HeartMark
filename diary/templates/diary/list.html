@@ -1,3 +1,460 @@
-{% extends "base.html" %}
-{% block content %}<!-- 담당 D: 다이어리 목록 -->{% endblock %}
+<!-- 담당 D: 다이어리 목록 -->
 
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}다이어리 목록 | HeartMark{% endblock %}
+
+{% block extra_css %}
+
+{#
+담당 C의 감정 이미지 스타일인
+emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
+#}
+<link rel="stylesheet" href="{% static 'records/css/records.css' %}">
+
+{# 다이어리 목록 페이지 전용 스타일 #}
+<link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<main class="diary-list-page">
+    <div class="diary-list-container">
+
+        <!-- 전체 / 감정별 / 장소별 탭 -->
+        <div class="diary-tabs-wrapper">
+            {% include "diary/partials/diary_tab.html" %}
+        </div>
+        
+
+        <!-- =========================
+                전체 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'all' or not selected_tab %}active{% endif %}"
+            data-panel="all"
+            {% if selected_tab and selected_tab != "all" %}hidden{% endif %}
+        >
+            <div class="diary-list-header">
+                <div class="diary-list-summary">
+                    <h1 class="diary-list-title">전체 기록</h1>
+                    <span class="diary-list-count">
+                        {{ records|length }}개
+                    </span>
+                </div>
+
+                <!-- 최신순 / 과거순 / 기간 설정 -->
+                <form
+                    method="get"
+                    action=""
+                    class="diary-filter-form"
+                    id="diary-filter-form"
+                >
+                    <input type="hidden" name="tab" value="all">
+
+                    <label class="sr-only" for="diary-sort">
+                        기록 정렬 방식
+                    </label>
+
+                    <select
+                        name="sort"
+                        id="diary-sort"
+                        class="diary-sort-select"
+                    >
+                        <option
+                            value="latest"
+                            {% if selected_sort == "latest" or not selected_sort %}
+                                selected
+                            {% endif %}
+                        >
+                            최신순
+                        </option>
+
+                        <option
+                            value="oldest"
+                            {% if selected_sort == "oldest" %}
+                                selected
+                            {% endif %}
+                        >
+                            과거순
+                        </option>
+                    </select>
+
+                    <button
+                        type="button"
+                        class="period-toggle-button"
+                        id="period-toggle-button"
+                        aria-expanded="false"
+                        aria-controls="period-filter"
+                    >
+                        기간 설정
+                    </button>
+
+                    <div
+                        class="period-filter"
+                        id="period-filter"
+                        hidden
+                    >
+                        <div class="period-input-group">
+                            <label for="start-date">시작일</label>
+                            <input
+                                type="date"
+                                name="start_date"
+                                id="start-date"
+                                value="{{ selected_start_date|default:'' }}"
+                            >
+                        </div>
+
+                        <span class="period-separator" aria-hidden="true">
+                            ~
+                        </span>
+
+                        <div class="period-input-group">
+                            <label for="end-date">종료일</label>
+                            <input
+                                type="date"
+                                name="end_date"
+                                id="end-date"
+                                value="{{ selected_end_date|default:'' }}"
+                            >
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="period-apply-button"
+                        >
+                            적용
+                        </button>
+
+                        <a
+                            href="?tab=all&sort={{ selected_sort|default:'latest' }}"
+                            class="period-reset-button"
+                        >
+                            초기화
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="diary-grid">
+                {% for record in records %}
+
+                    {#
+                    실제 Record 모델에 맞춰 작성한 공통 카드를 불러옵니다.
+                    record=record는 현재 반복 중인 기록을 partial에 전달합니다.
+                    #}
+                    {% include "diary/partials/diary_card.html" with record=record %}
+
+                {% empty %}
+                    <div class="diary-empty">
+                        <p class="diary-empty-title">
+                            아직 작성한 기록이 없어요.
+                        </p>
+
+                        <p class="diary-empty-description">
+                            오늘의 마음을 첫 기록으로 남겨보세요.
+                        </p>
+
+                        {# 담당 C의 실제 기록 작성 페이지로 이동 #}
+                        <a
+                            href="{% url 'records:create' %}"
+                            class="diary-empty-button"
+                        >
+                            기록 작성하기
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- =========================
+                감정별 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'emotion' %}active{% endif %}"
+            data-panel="emotion"
+            {% if selected_tab != "emotion" %}hidden{% endif %}
+        >
+            <div class="emotion-page-header">
+                <div>
+                    <h1 class="diary-list-title">감정별 기록</h1>
+                    <p class="diary-list-description">
+                        감정의 크기는 이번 달 기록 횟수를 나타내요.
+                    </p>
+                </div>
+
+                <div class="emotion-month-summary">
+                    <span>가장 많이 기록한 감정</span>
+
+                    {% if top_emotion %}
+                        <strong>{{ top_emotion.name }}</strong>
+                    {% else %}
+                        <strong>아직 기록 없음</strong>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="emotion-bubble-area">
+                {% for emotion in emotions %}
+                    <button
+                        type="button"
+                        class="
+                            emotion-bubble
+                            emotion-bubble--{{ emotion.size|default:'medium' }}
+
+                            {% if emotion.name == '기쁨' or emotion.name == '행복' or emotion.name == '설렘' or emotion.name == '안정' or emotion.name == '감사' or emotion.name == '평온'%}
+                                emotion-bubble--yellow
+
+                            {% elif emotion.name == '걱정' or emotion.name == '슬픔' or emotion.name == '화남' or emotion.name == '불안' or emotion.name == '긴장' or emotion.name == '우울' or emotion.name == '피로' or emotion.name == '답답' or emotion.name == '지침' %}
+                                emotion-bubble--blue
+
+                            {% elif emotion.name == '뿌듯' or emotion.name == '성취' or emotion.name == '기대' or emotion.name == '자신감' %}
+                                emotion-bubble--pink
+
+                            {% elif emotion.name == '민망함' or emotion.name == '외로움' %}
+                                emotion-bubble--green
+
+                            {% else %}
+                                emotion-bubble--default
+                            {% endif %}
+                        "
+                        data-emotion-id="{{ emotion.id }}"
+                        data-emotion-name="{{ emotion.name }}"
+                        aria-haspopup="dialog"
+                    >
+                        <span class="emotion-bubble-name">
+                            {{ emotion.name }}
+                        </span>
+
+                        <span class="emotion-bubble-count">
+                            {{ emotion.record_count }}회
+                        </span>
+                    </button>
+                {% empty %}
+                    <p>표시할 감정이 없어요.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- =========================
+                장소별 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'location' %}active{% endif %}"
+            data-panel="location"
+            {% if selected_tab != "location" %}hidden{% endif %}
+        >
+        <!--
+            <div class="diary-list-header">
+                
+                <div class="diary-list-summary">
+                    <div>
+                        <h1 class="diary-list-title">장소별 기록</h1>
+                        <p class="diary-list-description">
+                            장소를 선택하면 그곳에서 남긴 기록을 확인할 수 있어요.
+                        </p>
+                    </div>
+
+                    <span class="diary-list-count">
+                        {{ records|length }}개
+                    </span>
+                </div>
+                
+            </div>
+        -->
+
+            <div class="location-map-section">
+                <div class="location-map-wrapper">
+                    <div class="map-display-settings">
+                        <button
+                            type="button"
+                            class="map-settings-button"
+                            id="map-settings-button"
+                            aria-expanded="false"
+                            aria-controls="map-settings-menu"
+                            aria-label="지도 색상 설정"
+                        >
+                            ⋯
+                        </button>
+
+                        <div
+                            class="map-settings-menu"
+                            id="map-settings-menu"
+                            hidden
+                        >
+                            <p class="map-settings-title">지도 색상 방식</p>
+
+                            <button type="button" data-map-mode="uniform">
+                                같은 색으로 통일
+                            </button>
+
+                            <button type="button" data-map-mode="dominant">
+                                가장 많은 감정 색
+                            </button>
+
+                            <button type="button" data-map-mode="latest">
+                                가장 최근 감정 색
+                            </button>
+
+                            <button type="button" data-map-mode="intensity">
+                                방문 횟수에 따른 농도
+                            </button>
+
+                            <button type="button" data-map-mode="rainbow">
+                                구별로 다른 색
+                            </button>
+                        </div>
+                    </div>
+
+                        {% include "diary/partials/seoul_map.html" %}
+                    
+                        <div id="district-map-data" hidden>
+                        {% for district in district_map_data %}
+                            <span
+                                data-district="{{ district.district_name }}"
+                                data-count="{{ district.visit_count }}"
+                                data-dominant-emotion="{{ district.dominant_emotion }}"
+                                data-latest-emotion="{{ district.latest_emotion }}"
+                            ></span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="diary-grid">
+                {% for record in records %}
+                    
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+</main>
+<div
+    class="emotion-modal"
+    id="emotion-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="emotion-modal-title"
+    hidden
+>
+    <div class="emotion-modal-backdrop" data-modal-close></div>
+
+    <div class="emotion-modal-content">
+        <div class="emotion-modal-header">
+            <div>
+                <p class="emotion-modal-label">감정별 기록</p>
+
+                <h2 id="emotion-modal-title">
+                    <span id="emotion-modal-name">감사</span>
+                    기록
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="emotion-modal-close"
+                data-modal-close
+                aria-label="팝업 닫기"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="emotion-modal-grid">
+            {% for record in records %}
+
+                {#
+                data-record-emotion에는 실제 대표 감정 번호가 들어갑니다.
+
+                예:
+                record.main_emotion이 3이면
+                data-record-emotion="3"
+                #}
+                <div
+                    class="emotion-modal-record"
+                    data-record-emotion="{{ record.main_emotion }}"
+                    hidden
+                >
+                    {% include "diary/partials/diary_card.html" with record=record %}
+                </div>
+
+            {% endfor %}
+        </div>
+
+        <div class="emotion-modal-empty" id="emotion-modal-empty" hidden>
+            이 감정으로 작성한 기록이 없어요.
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+        장소별 기록 팝업
+========================== -->
+<div
+    class="location-modal"
+    id="location-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="location-modal-title"
+    hidden
+>
+    <div
+        class="location-modal-backdrop"
+        data-location-modal-close
+    ></div>
+
+    <div class="location-modal-content">
+        <div class="location-modal-header">
+            <div>
+                <p class="location-modal-label">장소별 기록</p>
+
+                <h2 id="location-modal-title">
+                    <span id="location-modal-name"></span>
+                    기록
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="location-modal-close"
+                data-location-modal-close
+                aria-label="팝업 닫기"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="location-modal-grid">
+            {% for record in records %}
+
+                {#
+                실제 장소명은 record.location.name이 아니라
+                record.place_name에 저장되어 있습니다.
+                #}
+                <div
+                    class="location-modal-record"
+                    data-record-location="{{ record.place_name }}"
+                    hidden
+                >
+                    {% include "diary/partials/diary_card.html" with record=record %}
+                </div>
+
+            {% endfor %}
+        </div>
+
+        <div
+            class="location-modal-empty"
+            id="location-modal-empty"
+            hidden
+        >
+            이 장소에 작성한 기록이 없어요.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'diary/js/diary.js' %}"></script>
+{% endblock %}
