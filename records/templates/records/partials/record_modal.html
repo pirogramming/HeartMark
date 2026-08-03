@@ -1,2 +1,181 @@
-<!-- 담당 C: 메인 화면 기록 작성 모달 -->
+{% load static %}
 
+<div
+    class="record-overlay"
+    id="record-modal-overlay"
+    data-record-modal
+    hidden
+>
+    <section
+        class="record-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="record-modal-title"
+    >
+        <div class="record-modal__controls">
+            <button
+                class="record-icon-button"
+                id="record-modal-expand"
+                type="button"
+                aria-label="기록 작성 창 전체 화면으로 보기"
+                aria-pressed="false"
+                title="전체 화면"
+            >
+                <span aria-hidden="true">⛶</span>
+            </button>
+        </div>
+
+        <div class="record-imagination-character">
+            <img
+                src="{% static 'records/images/main-character-writing.png' %}"
+                alt=""
+            >
+            <span class="thought-dot thought-dot--small"></span>
+            <span class="thought-dot thought-dot--medium"></span>
+            <span class="thought-dot thought-dot--large"></span>
+        </div>
+
+        <form
+            class="record-paper"
+            id="record-create-form"
+            method="post"
+            action="{% url 'records:create' %}"
+            enctype="multipart/form-data"
+            novalidate
+        >
+            {% csrf_token %}
+            <h1 class="sr-only" id="record-modal-title">오늘의 기록 작성</h1>
+
+            <div class="record-create-layout">
+                <section class="record-create-layout__left">
+                    <div class="record-date">
+                        <strong id="record-today">2026년 7월 31일 금요일</strong>
+                    </div>
+
+                    <section class="photo-box" id="record-photo-box">
+                        <img id="record-photo-preview" alt="선택한 사진 미리보기" hidden>
+                        <div class="photo-box__empty" id="record-photo-empty">
+                            <p>오늘을 기억할 사진을 불러와 보세요</p>
+                            <div class="photo-actions">
+                                <label class="photo-action">
+                                    <img
+                                        class="photo-action__icon"
+                                        src="{% static 'records/images/photo-actions/gallery.png' %}"
+                                        alt=""
+                                        aria-hidden="true"
+                                    >
+                                    <span>사진 불러오기</span>
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        accept="image/*"
+                                        required
+                                    >
+                                </label>
+                            </div>
+                        </div>
+                        <button
+                            class="photo-box__remove"
+                            id="record-photo-remove"
+                            type="button"
+                            hidden
+                        >
+                            사진 다시 선택
+                        </button>
+                    </section>
+
+                </section>
+
+                <section class="record-create-layout__right">
+                <fieldset class="weather-picker">
+                    <legend class="sr-only">날씨 선택</legend>
+                    <div class="weather-picker__options">
+                        <label class="weather-option" title="해">
+                            <input type="radio" name="weather" value="sunny" required>
+                            <span class="weather-icon weather-icon--sunny"></span>
+                            <span class="sr-only">해</span>
+                        </label>
+                        <label class="weather-option" title="구름">
+                            <input type="radio" name="weather" value="cloudy">
+                            <span class="weather-icon weather-icon--cloudy"></span>
+                            <span class="sr-only">구름</span>
+                        </label>
+                        <label class="weather-option" title="비">
+                            <input type="radio" name="weather" value="rainy">
+                            <span class="weather-icon weather-icon--rainy"></span>
+                            <span class="sr-only">비</span>
+                        </label>
+                        <label class="weather-option" title="천둥">
+                            <input type="radio" name="weather" value="thunder">
+                            <span class="weather-icon weather-icon--thunder"></span>
+                            <span class="sr-only">천둥</span>
+                        </label>
+                        <label class="weather-option" title="황사">
+                            <input type="radio" name="weather" value="dust">
+                            <span class="weather-icon weather-icon--dust"></span>
+                            <span class="sr-only">황사</span>
+                        </label>
+                        <label class="weather-option" title="눈">
+                            <input type="radio" name="weather" value="snowy">
+                            <span class="weather-icon weather-icon--snowy"></span>
+                            <span class="sr-only">눈</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <label class="diary-field">
+                <span class="sr-only">오늘의 마음 기록</span>
+                <textarea
+                    name="content"
+                    rows="4"
+                    maxlength="500"
+                    placeholder="오늘의 마음을 기록해 보세요..."
+                    required
+                ></textarea>
+                </label>
+
+                </section>
+
+                <input type="hidden" name="place_name" id="record-place-name">
+                <input type="hidden" name="latitude" id="record-latitude">
+                <input type="hidden" name="longitude" id="record-longitude">
+                <input type="hidden" name="main_emotion" id="main-emotion">
+
+                <section class="emotion-picker" aria-labelledby="emotion-picker-title">
+                    <div class="emotion-picker__heading">
+                        <h2 id="emotion-picker-title">오늘의 감정</h2>
+                        <span>최대 3개</span>
+                        <output id="emotion-count" aria-live="polite">0 / 3</output>
+                    </div>
+                    <div class="emotion-picker__options">
+                        {% for number in "12345678901234567890" %}
+                        <label class="emotion-option" title="감정 {{ forloop.counter }}">
+                            <input
+                                type="checkbox"
+                                name="emotions"
+                                value="{{ forloop.counter }}"
+                            >
+                            <span
+                                class="emotion-icon emotion-icon--{{ forloop.counter }}"
+                            ></span>
+                            <span class="emotion-main-badge" aria-hidden="true">대표</span>
+                            <span class="sr-only">감정 {{ forloop.counter }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <footer class="record-paper__footer">
+                    <p
+                        class="record-form-message"
+                        id="record-form-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+                    <button class="record-submit" type="submit">기록하기</button>
+                </footer>
+            </div>
+
+        </form>
+    </section>
+</div>

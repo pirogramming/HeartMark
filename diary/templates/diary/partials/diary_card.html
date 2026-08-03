@@ -1,0 +1,61 @@
+<article class="diary-card">
+    <a
+        href="{% url 'records:detail' record.pk %}"
+        class="diary-card-link"
+    >
+        <div class="diary-card-image-wrapper">
+            {% if record.image %}
+                <img
+                    src="{{ record.image.url }}"
+                    alt="{{ record.created_at|date:'Y년 n월 j일' }} 기록 사진"
+                    class="diary-card-image"
+                >
+            {% else %}
+                <div class="diary-card-image-placeholder">
+                    <span>사진 없음</span>
+                </div>
+            {% endif %}
+
+            {% if record.main_emotion %}
+                <div
+                    class="diary-card-emotion"
+                    data-main-emotion="{{ record.main_emotion }}"
+                    title="{{ record.main_emotion_name }}"
+                >
+                    <span
+                        class="emotion-icon emotion-icon--{{ record.main_emotion }}"
+                        aria-hidden="true"
+                    ></span>
+
+                    <span class="sr-only">
+                        대표 감정 {{ record.main_emotion_name }}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="diary-card-content">
+            <time
+                class="diary-card-date"
+                datetime="{{ record.created_at|date:'Y-m-d' }}"
+            >
+                {{ record.created_at|date:"Y/m/d" }}
+            </time>
+
+            <h2 class="diary-card-title">
+                {{ record.content|truncatechars:28 }}
+            </h2>
+
+            {% if record.place_name %}
+                <p class="diary-card-location">
+                    <span aria-hidden="true">⌖</span>
+                    {{ record.place_name }}
+                </p>
+            {% else %}
+                <p class="diary-card-location diary-card-location--empty">
+                    장소 정보 없음
+                </p>
+            {% endif %}
+        </div>
+    </a>
+</article>

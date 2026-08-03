@@ -1,3 +1,81 @@
 {% extends "base.html" %}
-{% block content %}<!-- 담당 B: 지도 -->{% endblock %}
+{% load static %}
 
+{% block title %}지도 - 마음자국{% endblock %}
+
+{% block extra_css %}
+<!-- 화면 2(구 단위 지도) 전용 스타일. -->
+<link rel="stylesheet" href="{% static 'locations/css/locations.css' %}">
+{% endblock %}
+
+{% block content %}
+<!--
+    화면 2. 지도 (위치 확정 후) | 담당: B(신은아) 
+
+    전체 흐름:
+    1) 화면 1(place_select)에서 "네"를 누르면 confirm_place 뷰가
+       "/locations/map/?place=<Place.id>" 로 리다이렉트시켜서 이 화면으로 들어온다.
+    2) map 뷰(views.py의 map_view)가 그 place id로 Place를 조회해서
+       구(district) 값을 #seoul-map-wrap의 data-selected-district에 내려준다.
+    3) locations.js가 페이지 로드 시 그 값을 읽어서, 아래 SVG 안에서
+       id가 같은 <path id="구이름">를 찾아 색칠 클래스를 붙인다.
+    4) "글쓰기" 버튼 클릭 -> C의 기록 작성 화면/모달로 이동 (현재는 임시로 쿼리 파라미터 전달).
+-->
+<section class="seoul-map-page">
+    <h1 class="seoul-map-title">서울</h1>
+
+    <!--
+        data-selected-district: map_view가 조회한 Place.district를 그대로 문자열로 내려받는 자리.
+        - place 쿼리 파라미터 없이 들어왔거나, 없는 id로 들어온 경우 빈 문자열이 되고,
+          이 경우 locations.js는 아무 구도 색칠하지 않는다(정상 동작).
+    -->
+    <div id="seoul-map-wrap" class="seoul-map-wrap" data-selected-district="{{ selected_district }}">
+        {% comment %}
+            TODO(B): 지금은 내가 임시로 만든 SVG(locations/templates/locations/partials/seoul_map.html)를
+            쓰고 있음. diary 쪽에도 구 단위 지도(diary/templates/diary/list.html, 커밋 0b2213d)가
+            이미 있어서 D(한지수)와 로직/디자인 중복 여부 확인 필요 (shineuna.md 4단계 체크리스트 참고).
+            팀 합의로 SVG를 하나로 합치기로 하면, 아래 include 경로만 그 파일 경로로 바꾸면 됨 —
+            두 SVG 모두 <path id="구이름"> 네이밍 규칙이 같아서(예: id="마포구") locations.js의
+            getElementById(selectedDistrict) 로직은 그대로 재사용 가능할 가능성이 높음.
+            다만 viewBox(좌표계)가 서로 다르므로(이 파일 1400x1400 / diary 쪽 800x655),
+            교체 시 지도 크기·비율이 깨지지 않는지 다시 확인할 것.
+        {% endcomment %}
+        {% include "locations/partials/seoul_map.html" %}
+    </div>
+
+    <!--
+        선택된 장소의 주소 표시.
+        와이어프레임(참고/지도.PNG)이 "서울특별시 OO구"까지는 강조색, 나머지 상세 주소는
+        일반 색으로 구분해서 보여주고 있어서, views.py(map_view)에서 미리 그 지점 기준으로
+        문자열을 잘라 selected_address_prefix / selected_address_suffix 두 조각으로 내려준다.
+        place 파라미터 없이 들어온 경우엔 둘 다 빈 문자열이라 아무것도 렌더링되지 않는다.
+    -->
+    {% if selected_address_prefix or selected_address_suffix %}
+    <p class="seoul-map-address">
+        <span class="seoul-map-address-highlight">{{ selected_address_prefix }}</span>{{ selected_address_suffix }}
+    </p>
+    {% endif %}
+
+    <!--
+        "기록하러 가기" 버튼 
+        원래 계획은 C의 "기록 작성" 모달을 여는 것이지만, records 앱 쪽 뷰/모달이 아직
+        스텁 상태(records/views.py, records/templates/records/partials/record_modal.html 모두 비어있음)라
+        지금은 모달을 직접 열 수 없다. shineuna.md 체크리스트대로 "아직 미정이면 우선 URL 쿼리
+        파라미터로 임시 구현"에 따라, 확정된 place id를 쿼리 파라미터로 붙인 링크로 대체해뒀다.
+        TODO(B/C): 실제로 모달을 여는 방식(JS 트리거 vs 페이지 이동, place 전달 방식)은
+        C와 확정되는 대로 이 버튼의 동작을 교체할 것.
+    -->
+    <a
+        id="btn-write-record"
+        class="btn btn-primary seoul-map-write-btn"
+        href="#"
+        data-open-record-modal
+    >
+        기록하러 가기
+    </a>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'locations/js/locations.js' %}"></script>
+{% endblock %}
