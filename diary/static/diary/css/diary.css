@@ -413,9 +413,19 @@
     border-color: #F8B3B4;
 }
 
-.emotion-bubble--green {
-    background: #f3fff1;
-    border-color: #a9ce72;
+.emotion-bubble--purple {
+    background: #f8f1ff;
+    border-color: #9d72ce;
+}
+
+.emotion-bubble--red {
+    background: #fff4f1;
+    border-color: #ce7772;
+}
+
+.emotion-bubble--orange {
+    background: #fff9f1;
+    border-color: #cea972;
 }
 
 .emotion-bubble--default {
