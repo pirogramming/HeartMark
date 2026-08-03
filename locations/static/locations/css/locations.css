@@ -1,2 +1,286 @@
-/* 담당 B 전용 */
+/* 담당 B 전용: 화면 1(위치 선택)·화면 2(지도) 스타일.
 
+   공통 디자인 토큰/레이아웃(templates/base.html, common/css/base.css)은 공통 파일이라
+   여기서는 건드리지 않음. 대신 이 파일에서만 쓰는 색상 값들은 --loc- 접두사를 붙여서
+   나중에 공통 토큰이 생기더라도 이름이 겹치지 않게함. */
+
+:root {
+    --loc-bg: #fbf1e2;            /* 와이어프레임의 크림/베이지 배경 */
+    --loc-card-bg: #fffaf2;       /* 카드/지도 박스 배경 (배경보다 살짝 밝은 톤) */
+    --loc-border: #e7d9c3;        /* 카드·지도·검색창 테두리 */
+    --loc-primary: #d86f12;       /* 헤더의 "로그인" 링크(common/css/base.css .nav-auth-link)와 같은 주황 계열로 통일 */
+    --loc-primary-soft: #f3c48c;  /* 선택된 구를 칠할 때 쓰는 옅은 주황 */
+    --loc-text: #2b2b2b;
+    --loc-text-muted: #837b6c;
+}
+
+/* 이 파일이 담당하는 두 화면 안에서만 box-sizing을 border-box로 맞춰서
+   padding/border를 넣어도 width 계산이 어긋나지 않게 한다. */
+.place-select,
+.place-select *,
+.seoul-map-page,
+.seoul-map-page * {
+    box-sizing: border-box;
+}
+
+/* =====================================================================
+   공통: 버튼
+   ===================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn:not(:disabled):hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--loc-primary);
+    color: #fff;
+}
+
+.btn-secondary {
+    background: #eee6d8;
+    color: var(--loc-text);
+}
+
+/* 스크린리더 전용 텍스트 (place-select-search의 label에서 사용) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* =====================================================================
+   화면 1. 위치 선택 (place_select.html)
+   ===================================================================== */
+.place-select {
+    min-height: calc(100vh - 100px); /* common/css/base.css의 .site-main padding-top(100px)만큼 뺀 나머지를 채움 */
+    padding: 40px 24px 60px;
+    background: var(--loc-bg);
+    display: flex;
+    justify-content: center;
+}
+
+.place-select-card {
+    width: 100%;
+    max-width: 420px;
+    height: fit-content;
+    background: var(--loc-card-bg);
+    border: 1px solid var(--loc-border);
+    border-radius: 28px;
+    padding: 28px 24px 32px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.place-select-map {
+    width: 100%;
+    height: 220px;
+    border-radius: 20px;
+    overflow: hidden; /* 카카오맵 SDK가 그린 지도도 이 모서리에 맞춰 잘리도록 */
+    background: #eef1ea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.place-select-map-placeholder {
+    margin: 0;
+    color: var(--loc-text-muted);
+    font-size: 14px;
+}
+
+.place-select-address {
+    margin: 0;
+    width: 100%;
+    padding: 10px 20px;
+    background: #fff;
+    border: 1px solid var(--loc-border);
+    border-radius: 999px;
+    color: var(--loc-text);
+    font-size: 14px;
+    text-align: center;
+}
+
+.place-select-question {
+    margin: 0;
+    color: var(--loc-text-muted);
+    font-size: 14px;
+}
+
+.place-select-actions {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.place-select-actions .btn {
+    flex: 1; /* [직접 입력할게요] / [네] 두 버튼이 카드 너비를 절반씩 나눠 갖도록 */
+}
+
+.place-select-search {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.place-select-search.hidden {
+    display: none;
+}
+
+.place-select-search input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--loc-border);
+    border-radius: 999px;
+    font-size: 14px;
+}
+
+.place-select-search-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--loc-border);
+    border-radius: 16px;
+}
+
+.place-select-search-item {
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--loc-text);
+    cursor: pointer;
+    border-bottom: 1px solid var(--loc-border);
+}
+
+.place-select-search-item:last-child {
+    border-bottom: none;
+}
+
+.place-select-search-item:hover {
+    background: var(--loc-bg);
+}
+
+.place-select-search-empty {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--loc-text-muted);
+}
+
+/* =====================================================================
+   화면 2. 지도 (map.html)
+   ===================================================================== */
+.seoul-map-page {
+    min-height: calc(100vh - 100px);
+    padding: 40px 24px 60px;
+    background: var(--loc-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.seoul-map-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--loc-text);
+}
+
+.seoul-map-wrap {
+    width: 100%;
+    max-width: 480px;
+}
+
+.seoul-map-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* seoul_map.html의 각 <path>는 fill="#C8C8C8"를 속성으로 갖고 있는데,
+   SVG presentation attribute는 외부 스타일시트보다 우선순위가 낮기 때문에
+   !important 없이 아래 규칙만으로 그대로 덮어쓸 수 있다. */
+.seoul-map-wrap path {
+    fill: #fff;
+    stroke: var(--loc-border);
+    stroke-width: 2;
+    transition: fill 0.2s ease;
+}
+
+/* locations.js가 선택된 구의 <path>에 붙이는 클래스. Place.district가 확정되기 전에는
+   어떤 path에도 이 클래스가 없어서 지도 전체가 기본(흰색) 상태로 보인다. */
+.seoul-map-wrap path.district-selected {
+    fill: var(--loc-primary-soft);
+    stroke: var(--loc-primary);
+}
+
+.seoul-map-wrap .district-labels text {
+    font-size: 20px;
+    fill: var(--loc-text-muted);
+    text-anchor: middle;
+    pointer-events: none; /* 라벨 텍스트가 지도 클릭/hover를 가로채지 않도록 */
+}
+
+.seoul-map-address {
+    margin: 0;
+    font-size: 15px;
+    color: var(--loc-text-muted);
+    text-align: center;
+}
+
+.seoul-map-address-highlight {
+    color: var(--loc-primary);
+    font-weight: 700;
+}
+
+.seoul-map-write-btn {
+    flex: none; /* .seoul-map-page가 flex column이라 기본 .btn 규칙을 안 쓰므로 늘어나지 않게 명시 */
+    min-width: 200px;
+}
+
+/* =====================================================================
+   반응형: 카드/지도 폭을 화면 안에 맞추기 (base.css의 820px 기준과 통일)
+   ===================================================================== */
+@media (max-width: 820px) {
+    .place-select,
+    .seoul-map-page {
+        padding: 24px 16px 40px;
+    }
+
+    .place-select-card {
+        padding: 22px 18px 26px;
+        border-radius: 22px;
+    }
+
+    .seoul-map-title {
+        font-size: 22px;
+    }
+}
