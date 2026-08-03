@@ -287,12 +287,32 @@
 
 .record-date {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
 }
 
 .record-date strong {
     font-size: 1.08rem;
+    flex: 0 0 auto;
+}
+
+.record-verified-place {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    max-width: 220px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    color: var(--record-ink);
+    background: var(--record-accent);
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .weather-picker {
@@ -855,7 +875,7 @@ body.record-modal-open {
 .record-detail-shell {
     min-height: calc(100vh - 90px);
     padding: 48px 24px;
-    background: var(--record-page);
+    background: #fff8e8;
 }
 
 .record-detail-card {
@@ -935,14 +955,16 @@ body.record-delete-modal-open {
 }
 
 .record-detail-header p {
-    margin: 0 0 6px;
+    margin: 0;
     font-size: 1.25rem;
     font-weight: 800;
 }
 
 .record-detail-heading {
-    display: grid;
-    gap: 8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .record-detail-place {

@@ -12,6 +12,7 @@ import json
 
 import requests
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -19,6 +20,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
 
 from .models import Place
+from .services import set_verified_place
 
 # 카카오 로컬 REST API 공통 base url.
 # (좌표->주소 변환은 /geo/coord2address.json, 키워드 검색은 /search/keyword.json 을 이어붙여 사용)
@@ -26,6 +28,7 @@ KAKAO_LOCAL_API_BASE = "https://dapi.kakao.com/v2/local"
 
 
 @ensure_csrf_cookie
+@login_required(login_url="accounts:login")
 def place_select(request):
     """
     화면 1(위치 선택) 렌더링.
@@ -157,6 +160,7 @@ def _extract_district(address_name):
 
 
 @require_POST
+@login_required(login_url="accounts:login")
 def confirm_place(request):
     """
     위치 확정("네" 클릭) 시 Place를 저장하는 뷰. (locations.js: API_ENDPOINTS.confirmPlace)
@@ -194,6 +198,8 @@ def confirm_place(request):
         longitude=longitude,
         kakao_place_id=payload.get("kakao_place_id", ""),
     )
+
+    set_verified_place(request, place)
 
     # reverse("locations:map")으로 URL을 하드코딩하지 않고 urls.py에 등록된 이름으로 구성.
     # urls.py에서 map 뷰의 경로/이름이 바뀌어도 여기는 고칠 필요가 없다.

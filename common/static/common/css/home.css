@@ -172,6 +172,7 @@
     color: inherit;
     font-size: clamp(20px, 1.55vw, 27px);
     line-height: 1.45;
+    text-decoration: none;
 }
 
 .home-actions-locked {

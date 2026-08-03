@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}HeartMark{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'common/css/base.css' %}">
+    {% if can_create_record %}
+    <link rel="stylesheet" href="{% static 'records/css/records.css' %}">
+    {% endif %}
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -13,8 +16,14 @@
     <main class="site-main">
         {% block content %}{% endblock %}
     </main>
+    {% if can_create_record %}
+        {% include "records/partials/record_modal.html" %}
+    {% endif %}
     {% include "includes/bottom_nav.html" %}
     <script src="{% static 'common/js/base.js' %}"></script>
+    {% if can_create_record %}
+    <script src="{% static 'records/js/records.js' %}"></script>
+    {% endif %}
     {% block extra_js %}{% endblock %}
 </body>
 </html>
