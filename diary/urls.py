@@ -23,4 +23,10 @@ urlpatterns = [
         views.emotion_calendar,
         name="calendar",
     ),
+    
+    path(
+        "<int:pk>/",
+        views.diary_detail,
+        name="detail",
+    ),
 ]

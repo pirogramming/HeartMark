@@ -4,7 +4,7 @@ from collections import Counter
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
 # 담당 C가 만든 실제 기록 모델을 가져옵니다.
@@ -416,5 +416,93 @@ def emotion_calendar(request):
     return render(
         request,
         "diary/calendar.html",
+        context,
+    )
+
+@login_required
+def diary_detail(request, pk):
+    """
+    다이어리 상세 페이지입니다.
+
+    주소 예:
+    /diary/5/
+
+    현재 로그인한 사용자의
+    id가 5인 기록만 조회합니다.
+    """
+
+    record = get_object_or_404(
+        Record,
+        pk=pk,
+        user=request.user,
+    )
+
+    # 대표 감정 번호
+    main_emotion_number = int(
+        record.main_emotion,
+    )
+
+    # 대표 감정 정보
+    main_emotion = {
+        "number": main_emotion_number,
+        "name": get_emotion_name(
+            main_emotion_number,
+        ),
+        "image_name": (
+            f"emotion-{main_emotion_number:02d}.png"
+        ),
+    }
+
+    # 대표 감정을 제외한 보조 감정 목록
+    secondary_emotions = []
+
+    for emotion_number in record.emotions:
+        try:
+            emotion_number = int(
+                emotion_number,
+            )
+
+        except (TypeError, ValueError):
+            continue
+
+        if emotion_number == main_emotion_number:
+            continue
+
+        secondary_emotions.append(
+            {
+                "number": emotion_number,
+                "name": get_emotion_name(
+                    emotion_number,
+                ),
+                "image_name": (
+                    f"emotion-{emotion_number:02d}.png"
+                ),
+            }
+        )
+
+    # 첫 번째 보조 감정
+    left_emotion = (
+        secondary_emotions[0]
+        if len(secondary_emotions) >= 1
+        else None
+    )
+
+    # 두 번째 보조 감정
+    right_emotion = (
+        secondary_emotions[1]
+        if len(secondary_emotions) >= 2
+        else None
+    )
+
+    context = {
+        "record": record,
+        "main_emotion": main_emotion,
+        "left_emotion": left_emotion,
+        "right_emotion": right_emotion,
+    }
+
+    return render(
+        request,
+        "diary/detail.html",
         context,
     )

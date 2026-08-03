@@ -206,6 +206,17 @@ document.addEventListener("DOMContentLoaded", () => {
             // 추후 클릭해서 상세 페이지로 이동할 때 사용할 수 있습니다.
             dayCell.dataset.recordId =
                 emotionData.record_id;
+
+            // 기록이 있는 날짜 칸에 클릭 가능한 모양을 적용합니다.
+            dayCell.classList.add(
+                "calendar-day--has-record"
+            );
+
+            // 날짜 칸을 누르면 해당 다이어리 상세 페이지로 이동합니다.
+            dayCell.addEventListener("click", () => {
+                window.location.href =
+                    `/diary/${emotionData.record_id}/`;
+            });
         }
 
         return dayCell;

@@ -387,3 +387,21 @@
         font-size: 10px;
     }
 }
+
+/* 기록이 있는 날짜 칸은 클릭할 수 있음을 표시합니다. */
+.calendar-day--has-record {
+    cursor: pointer;
+}
+
+/* 기록이 있는 날짜 칸에 마우스를 올렸을 때 살짝 올라갑니다. */
+.calendar-day--has-record:hover {
+    z-index: 2;
+
+    transform:
+        translateY(-3px)
+        rotate(0deg);
+
+    box-shadow:
+        0 8px 18px
+        rgba(77, 105, 139, 0.16);
+}
