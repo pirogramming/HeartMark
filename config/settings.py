@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.naver",
     "common",
     "accounts",
+    "mypage",
     "locations",
     "records",
     "diary",
