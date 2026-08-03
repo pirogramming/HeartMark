@@ -138,3 +138,7 @@ HeartMark/
 - [ ] 화면 디자인 및 기능 구현
 - [ ] API 연동
 - [ ] 테스트 및 배포
+
+## 출처
+- 서울 자치구 지도: Kurykh, Wikimedia Commons, CC BY-SA 3.0
+수정하여 사용함
