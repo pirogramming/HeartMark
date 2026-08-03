@@ -1,4 +1,24 @@
 /* 공통 담당자만 수정: 디자인 토큰 및 전체 레이아웃 */
+@font-face {
+    font-family: "HeartMarkFont";
+    src: url("../font/온글잎 박다현체.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+html,
+body {
+    font-family: "HeartMarkFont", sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
 .site-main {
     padding-top: 100px;
 }
@@ -7,7 +27,7 @@ body {
     margin: 0;
     background: #f3f3f3;
     color: #171717;
-    font-family: Arial, "Noto Sans KR", sans-serif;
+    font-family: "HeartMarkFont", Arial, "Noto Sans KR", sans-serif;
 }
 
 a {
