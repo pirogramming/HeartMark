@@ -422,15 +422,18 @@ def emotion_calendar(request):
 @login_required
 def diary_detail(request, pk):
     """
-    다이어리 상세 페이지입니다.
+    현재 로그인한 사용자가 작성한 기록 하나를 조회하여
+    다이어리 상세 페이지에 전달합니다.
 
-    주소 예:
-    /diary/5/
+    pk는 기록의 고유 번호입니다.
 
-    현재 로그인한 사용자의
-    id가 5인 기록만 조회합니다.
+    예:
+    /diary/2/
+    → id가 2인 Record를 조회합니다.
     """
 
+    # 다른 사용자의 기록을 주소로 직접 접근하지 못하도록
+    # user=request.user 조건을 함께 사용합니다.
     record = get_object_or_404(
         Record,
         pk=pk,
@@ -438,22 +441,35 @@ def diary_detail(request, pk):
     )
 
     # 대표 감정 번호
+    # 대표 감정 정보입니다.
+    #
+    # Record.main_emotion에는 1~20 사이 번호가 저장됩니다.
     main_emotion_number = int(
         record.main_emotion,
     )
 
-    # 대표 감정 정보
     main_emotion = {
         "number": main_emotion_number,
+
+        # diary/views.py 위쪽에 이미 있는
+        # get_emotion_name() 함수를 사용합니다.
         "name": get_emotion_name(
             main_emotion_number,
         ),
+
+        # 실제 감정 이미지 파일명입니다.
+        #
+        # 예:
+        # 1  → emotion-01.png
+        # 7  → emotion-07.png
+        # 20 → emotion-20.png
         "image_name": (
             f"emotion-{main_emotion_number:02d}.png"
         ),
     }
 
-    # 대표 감정을 제외한 보조 감정 목록
+    # 대표 감정을 제외한 나머지 감정들을
+    # 보조 감정 목록으로 만듭니다.
     secondary_emotions = []
 
     for emotion_number in record.emotions:
@@ -465,6 +481,8 @@ def diary_detail(request, pk):
         except (TypeError, ValueError):
             continue
 
+        # 대표 감정은 가운데 카드에서 따로 표시하므로
+        # 보조 감정 목록에서는 제외합니다.
         if emotion_number == main_emotion_number:
             continue
 
@@ -480,14 +498,16 @@ def diary_detail(request, pk):
             }
         )
 
-    # 첫 번째 보조 감정
+    # 감정은 최대 3개이므로 보조 감정은 최대 2개입니다.
+    #
+    # 첫 번째 보조 감정은 왼쪽,
+    # 두 번째 보조 감정은 오른쪽에 표시합니다.
     left_emotion = (
         secondary_emotions[0]
         if len(secondary_emotions) >= 1
         else None
     )
 
-    # 두 번째 보조 감정
     right_emotion = (
         secondary_emotions[1]
         if len(secondary_emotions) >= 2
@@ -495,9 +515,16 @@ def diary_detail(request, pk):
     )
 
     context = {
+        # 기록 전체 정보
         "record": record,
+
+        # 가운데 대표 감정
         "main_emotion": main_emotion,
+
+        # 왼쪽 보조 감정
         "left_emotion": left_emotion,
+
+        # 오른쪽 보조 감정
         "right_emotion": right_emotion,
     }
 
