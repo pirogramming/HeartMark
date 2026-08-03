@@ -296,22 +296,22 @@ def diary_list(request):
             key=lambda item: item["created_at"],
         )
 
-    district_map_data.append(
-        {
-            # SVG path의 id와 비교할 구 이름
-            # 예: "성북구"
-            "district_name": district_name,
+        district_map_data.append(
+            {
+                # SVG path의 id와 비교할 구 이름
+                # 예: "성북구"
+                "district_name": district_name,
 
-            # 해당 구에서 작성한 기록 수
-            "visit_count": len(district_record_list),
+                # 해당 구에서 작성한 기록 수
+                "visit_count": len(district_record_list),
 
-            # 해당 구에서 가장 많이 기록된 감정
-            "dominant_emotion": dominant_emotion,
+                # 해당 구에서 가장 많이 기록된 감정
+                "dominant_emotion": dominant_emotion,
 
-            # 해당 구에서 가장 최근에 기록된 감정
-            "latest_emotion": latest_record["emotion_name"],
-        }
-    )
+                # 해당 구에서 가장 최근에 기록된 감정
+                "latest_emotion": latest_record["emotion_name"],
+            }
+        )
 
     # ========================================================
     # 9. 장소별 기록 횟수 계산
