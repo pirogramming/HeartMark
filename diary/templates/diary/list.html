@@ -6,16 +6,16 @@
 {% block title %}다이어리 목록 | HeartMark{% endblock %}
 
 {% block extra_css %}
-
-{#
-담당 C의 감정 이미지 스타일인
-emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
-#}
+{% comment %}
+담당 C의 감정 아이콘 스타일을 불러옵니다.
+{% endcomment %}
 <link rel="stylesheet" href="{% static 'records/css/records.css' %}">
 
-{# 다이어리 목록 페이지 전용 스타일 #}
-<link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
+{% comment %}
+다이어리 목록 페이지 전용 스타일을 불러옵니다.
+{% endcomment %}
 
+<link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -140,10 +140,11 @@ emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
             <div class="diary-grid">
                 {% for record in records %}
 
-                    {#
+                    {% comment %}
                     실제 Record 모델에 맞춰 작성한 공통 카드를 불러옵니다.
                     record=record는 현재 반복 중인 기록을 partial에 전달합니다.
-                    #}
+                    {% endcomment %}
+
                     {% include "diary/partials/diary_card.html" with record=record %}
 
                 {% empty %}
@@ -156,7 +157,9 @@ emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
                             오늘의 마음을 첫 기록으로 남겨보세요.
                         </p>
 
-                        {# 담당 C의 실제 기록 작성 페이지로 이동 #}
+                        {% comment %}
+                        담당 C의 실제 기록 작성 페이지로 이동
+                        {% endcomment %}
                         <a
                             href="{% url 'records:create' %}"
                             class="diary-empty-button"
@@ -365,13 +368,13 @@ emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
         <div class="emotion-modal-grid">
             {% for record in records %}
 
-                {#
+                {% comment %}
                 data-record-emotion에는 실제 대표 감정 번호가 들어갑니다.
 
                 예:
                 record.main_emotion이 3이면
                 data-record-emotion="3"
-                #}
+                {% endcomment %}
                 <div
                     class="emotion-modal-record"
                     data-record-emotion="{{ record.main_emotion }}"
@@ -429,10 +432,10 @@ emotion-icon, emotion-icon--1 등을 사용하기 위해 불러옵니다.
         <div class="location-modal-grid">
             {% for record in records %}
 
-                {#
+                {% comment %}
                 실제 장소명은 record.location.name이 아니라
                 record.place_name에 저장되어 있습니다.
-                #}
+                {% endcomment %}
                 <div
                     class="location-modal-record"
                     data-record-location="{{ record.place_name }}"
