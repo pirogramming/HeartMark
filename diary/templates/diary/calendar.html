@@ -1,15 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}감정 캘린더 | 마음자국{% endblock %}
+{% block title %}
+감정 캘린더 | 마음자국
+{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'diary/css/calendar.css' %}">
+<link
+    rel="stylesheet"
+    href="{% static 'diary/css/calendar.css' %}"
+>
 {% endblock %}
 
 {% block content %}
 <section class="calendar-page">
     <div class="calendar-wrapper">
+
         <header class="calendar-header">
             <button
                 type="button"
@@ -20,8 +26,11 @@
                 ‹
             </button>
 
-            <h1 class="calendar-title" id="calendar-title">
-                2026년 8월
+            <h1
+                class="calendar-title"
+                id="calendar-title"
+            >
+                {{ calendar_year }}년 {{ calendar_month }}월
             </h1>
 
             <button
@@ -47,9 +56,13 @@
         <div
             class="calendar-grid"
             id="emotion-calendar-grid"
-            data-year="2026"
-            data-month="8"
+            data-year="{{ calendar_year }}"
+            data-month="{{ calendar_month }}"
         ></div>
+
+        {# Python 딕셔너리를 JavaScript가 읽을 수 있는 JSON으로 변환합니다. #}
+        {{ calendar_emotions|json_script:"calendar-emotions-data" }}
+
     </div>
 </section>
 {% endblock %}
