@@ -190,8 +190,18 @@
                 <div class="emotion-month-summary">
                     <span>가장 많이 기록한 감정</span>
 
-                    {% if top_emotion %}
-                        <strong>{{ top_emotion.name }}</strong>
+                    {% if top_emotions %}
+                        <strong class="top-emotion-list">
+                            {% for emotion in top_emotions %}
+                                <span class="top-emotion-name">
+                                    {{ emotion.name }}
+                                </span>
+
+                                {% if not forloop.last %}
+                                    <span class="top-emotion-separator">·</span>
+                                {% endif %}
+                            {% endfor %}
+                        </strong>
                     {% else %}
                         <strong>아직 기록 없음</strong>
                     {% endif %}

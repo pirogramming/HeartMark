@@ -276,6 +276,26 @@
         감정별 화면
 ========================= */
 
+/* 가장 많이 기록한 감정들의 전체 영역 */
+.top-emotion-list {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* 각 공동 1위 감정 이름 */
+.top-emotion-name {
+    color: #d98d36;
+    white-space: nowrap;
+}
+
+/* 감정과 감정 사이의 구분점 */
+.top-emotion-separator {
+    color: #b7aa97;
+}
+
 .emotion-page-header {
     display: flex;
     align-items: flex-start;

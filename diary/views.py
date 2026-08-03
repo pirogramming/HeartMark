@@ -202,14 +202,33 @@ def diary_list(request):
         if emotion["record_count"] > 0
     ]
 
+    # 실제 기록된 감정이 있다면
     if recorded_emotions:
-        top_emotion = max(
-            recorded_emotions,
-            key=lambda emotion: emotion["record_count"],
+        # 가장 많은 기록 횟수를 구합니다.
+        #
+        # 예:
+        # 예민 1회, 행운 1회
+        # → maximum_emotion_count = 1
+        maximum_emotion_count = max(
+            emotion["record_count"]
+            for emotion in recorded_emotions
         )
 
+        # 가장 많은 기록 횟수와 같은 감정을
+        # 모두 공동 1위 목록에 넣습니다.
+        #
+        # 예:
+        # 예민 1회, 행운 1회
+        # → [예민, 행운]
+        top_emotions = [
+            emotion
+            for emotion in recorded_emotions
+            if emotion["record_count"] == maximum_emotion_count
+        ]
+
     else:
-        top_emotion = None
+        # 기록된 대표 감정이 없다면 빈 목록을 전달합니다.
+        top_emotions = []
 
     # ========================================================
     # 8. 서울 지도용 장소 데이터 계산
@@ -328,7 +347,7 @@ def diary_list(request):
         # 실제 기록 횟수가 1회 이상인 대표 감정만 전달합니다.
         "recorded_emotions": recorded_emotions,
 
-        "top_emotion": top_emotion,
+        "top_emotions": top_emotions,
         "locations": locations,
         "district_map_data": district_map_data,
 
