@@ -114,6 +114,7 @@
     gap: 20px;
     min-height: 78vh;
     padding: 104px 64px 150px;
+    background: #fff;
 }
 
 .home-start-copy {
@@ -123,7 +124,7 @@
 
 .home-start h2 {
     margin: 0 0 16px;
-    font-size: clamp(42px, 3.6vw, 66px);
+    font-size: clamp(32px, 2.8vw, 50px);
     line-height: 1.15;
 }
 
@@ -135,79 +136,73 @@
 
 .home-actions {
     position: relative;
-    width: min(1200px, 82vw);
-    margin-top: -30px;
-    padding: 0;
-}
-
-.home-actions-user {
-    display: block;
-}
-
-.home-speech-image {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.home-actions-content {
-    position: absolute;
-    left: 50%;
-    top: 44%;
-    width: 72%;
-    transform: translateX(-50%);
-    display: none;
-    grid-template-columns: repeat(3, minmax(150px, 250px));
-    justify-content: center;
-    gap: 36px;
-}
-
-.home-actions-content a {
     display: grid;
     place-items: center;
-    min-height: 66px;
-    padding: 0 20px;
-    background: #fff;
-    border-radius: 8px;
-    color: #111;
+    box-sizing: border-box;
+    width: min(510px, 44vw);
+    min-height: 150px;
+    margin-top: 70px;
+    padding: 32px 48px;
+    border: 3px solid #ffd8bd;
+    border-radius: 24px;
+    background: #fffdf5;
+    color: #2b241f;
     text-align: center;
+    transform: translateX(90px);
+}
+
+.home-actions::before {
+    position: absolute;
+    left: 48%;
+    bottom: -138px;
+    width: 110px;
+    height: 100px;
+    content: "";
+    background:
+        radial-gradient(circle 17px at 82px 18px, #ffe3cc 96%, transparent 100%),
+        radial-gradient(circle 13px at 51px 53px, #ffe3cc 96%, transparent 100%),
+        radial-gradient(circle 9px at 22px 84px, #ffe3cc 96%, transparent 100%);
+    transform: translateX(-50%);
+}
+
+.home-speech-text {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: inherit;
+    font-size: clamp(20px, 1.55vw, 27px);
+    line-height: 1.45;
     text-decoration: none;
-    font-size: 17px;
-    font-weight: 800;
 }
 
 .home-actions-locked {
-    display: block;
-    color: #7a5b3c;
     text-decoration: none;
 }
 
 .home-actions-locked span {
-    position: absolute;
-    left: 50%;
-    top: 46%;
-    transform: translate(-50%, -50%);
-    font-size: clamp(64px, 5.6vw, 96px);
-    line-height: 1;
+    position: relative;
+    z-index: 1;
+    font-size: clamp(20px, 1.7vw, 28px);
 }
 
 .home-feature-character {
     position: relative;
-    margin-top: -150px;
+    margin-top: 96px;
+    transform: translateX(-40px);
 }
 
 .home-feature-character img {
     display: block;
-    width: min(450px, 60vw);
+    width: min(300px, 38vw);
     height: auto;
 }
 
 .home-feature-character-guest img {
-    width: min(480px, 68vw);
+    width: min(320px, 42vw);
 }
 
 .home-feature-character-guest {
-    margin-top: -180px;
+    margin-top: 96px;
 }
 
 .tutorial-overlay {
@@ -416,7 +411,7 @@
     }
 
     .home-start h2 {
-        font-size: 34px;
+        font-size: 28px;
     }
 
     .home-start p {
@@ -424,36 +419,34 @@
     }
 
     .home-actions {
-        width: min(88vw, 660px);
-        margin-top: 38px;
+        width: min(80vw, 440px);
+        min-height: 140px;
+        margin-top: 54px;
+        padding: 28px 24px;
+        border-width: 3px;
+        border-radius: 24px;
+        transform: none;
     }
 
-    .home-actions-content {
+    .home-actions::before {
         left: 50%;
-        right: auto;
-        top: 44%;
-        width: 72%;
-        transform: translateX(-50%);
-        grid-template-columns: repeat(3, minmax(72px, 1fr));
-        gap: 16px;
     }
 
-    .home-actions-content a {
-        min-height: 46px;
-        padding: 0 10px;
-        font-size: 13px;
-    }
-
-    .home-actions-locked span {
-        font-size: clamp(54px, 8.5vw, 76px);
+    .home-speech-text {
+        font-size: clamp(19px, 4.5vw, 27px);
     }
 
     .home-feature-character img {
-        width: min(460px, 72vw);
+        width: min(280px, 58vw);
     }
 
     .home-feature-character-guest img {
-        width: min(460px, 72vw);
+        width: min(300px, 62vw);
+    }
+
+    .home-feature-character {
+        margin-top: 86px;
+        transform: none;
     }
 
     .tutorial-card {
