@@ -4,10 +4,10 @@
         <img src="{% static 'accounts/images/logo.png' %}" alt="마음자국">
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="#" data-tutorial-target="record-write">기록작성</a>
-        <a href="#" data-tutorial-target="record-list">기록보기</a>
-        <a href="#" data-tutorial-target="calendar">달력</a>
-        <a href="#" data-tutorial-target="mypage">마이페이지</a>
+        <a href="{% if user.is_authenticated %}{% url 'locations:place_select' %}{% else %}{% url 'accounts:login' %}{% endif %}" data-tutorial-target="record-write">기록작성</a>
+        <a href="{% if user.is_authenticated %}{% url 'diary:list' %}{% else %}{% url 'accounts:login' %}{% endif %}" data-tutorial-target="record-list">기록보기</a>
+        <a href="{% if user.is_authenticated %}{% url 'diary:list' %}{% else %}{% url 'accounts:login' %}{% endif %}" data-tutorial-target="calendar">달력</a>
+        <a href="{% if user.is_authenticated %}{% url 'mypage:home' %}{% else %}{% url 'accounts:login' %}{% endif %}" data-tutorial-target="mypage">마이페이지</a>
         {% if user.is_authenticated %}
             <a class="nav-auth-link" href="{% url 'accounts:logout' %}" data-tutorial-target="auth">로그아웃</a>
         {% else %}
