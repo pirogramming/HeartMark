@@ -58,6 +58,7 @@
                                     <img
                                         class="attendance-day__emotion"
                                         src="{% static 'records/images/emotions/emotion-' %}{{ day.emotion_number }}.png"
+                                        title="{{ day.emotion_label }}"
                                         alt="{{ day.date|date:'n월 j일' }}의 대표 감정"
                                     >
                                     {% elif day.record %}

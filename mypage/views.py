@@ -187,6 +187,7 @@ def _build_attendance(user):
             "date": day,
             "record": record,
             "emotion_number": emotion_number,
+            "emotion_label": EMOTION_LABELS.get(emotion_number, "감정") if emotion_number else "",
             "is_future": is_future,
             "is_today": day == today,
         })
