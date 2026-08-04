@@ -155,7 +155,8 @@
                     </div>
                     <div class="emotion-picker__options">
                         {% for number in "12345678901234567890" %}
-                        <label class="emotion-option" title="감정 {{ forloop.counter }}">
+                        {% cycle "슬픔" "사랑" "따분" "예민" "만족" "슬픔" "짝사랑" "심술" "당황" "슬픔" "화남" "신남" "아픔" "놀람" "행운" "기쁨" "질투" "맛있어!" "냉철" "졸림" as emotion_name silent %}
+                        <label class="emotion-option" title="{{ emotion_name }}">
                             <input
                                 type="checkbox"
                                 name="emotions"
@@ -165,7 +166,7 @@
                                 class="emotion-icon emotion-icon--{{ forloop.counter }}"
                             ></span>
                             <span class="emotion-main-badge" aria-hidden="true">대표</span>
-                            <span class="sr-only">감정 {{ forloop.counter }}</span>
+                            <span class="sr-only">{{ emotion_name }}</span>
                         </label>
                         {% endfor %}
                     </div>

@@ -73,7 +73,8 @@
             </div>
             <div class="record-edit-emotion-grid">
                 {% for number in emotion_numbers %}
-                <label class="emotion-option" title="감정 {{ number }}">
+                {% cycle "슬픔" "사랑" "따분" "예민" "만족" "슬픔" "짝사랑" "심술" "당황" "슬픔" "화남" "신남" "아픔" "놀람" "행운" "기쁨" "질투" "맛있어!" "냉철" "졸림" as emotion_name silent %}
+                <label class="emotion-option" title="{{ emotion_name }}">
                     <input
                         type="checkbox"
                         name="emotions"
@@ -82,7 +83,7 @@
                     >
                     <span class="emotion-icon emotion-icon--{{ number }}"></span>
                     <span class="emotion-main-badge" aria-hidden="true">대표</span>
-                    <span class="sr-only">감정 {{ number }}</span>
+                    <span class="sr-only">{{ emotion_name }}</span>
                 </label>
                 {% endfor %}
             </div>
