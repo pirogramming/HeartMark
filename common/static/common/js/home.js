@@ -16,6 +16,7 @@
             imageHeight: 46,
             imageOffsetX: 0,
             imageOffsetY: -20,
+            cardOffsetY: 38,
         },
         {
             target: '[data-tutorial-target="record-list"]',
@@ -26,6 +27,7 @@
             imageHeight: 46,
             imageOffsetX: 0,
             imageOffsetY: -20,
+            cardOffsetY: 38,
         },
         {
             target: '[data-tutorial-target="calendar"]',
@@ -36,6 +38,7 @@
             imageHeight: 46,
             imageOffsetX: 0,
             imageOffsetY: -20,
+            cardOffsetY: 38,
         },
         {
             target: '[data-tutorial-target="mypage"]',
@@ -46,6 +49,7 @@
             imageHeight: 46,
             imageOffsetX: 0,
             imageOffsetY: -20,
+            cardOffsetY: 38,
         },
         {
             target: '[data-tutorial-target="auth"]',
@@ -56,45 +60,40 @@
             imageHeight: 46,
             imageOffsetX: 0,
             imageOffsetY: -20,
+            cardOffsetY: 38,
         },
         {
             target: '[data-tutorial-target="quick-start"]',
             title: "빠른 기록",
-            text: "검정 원을 누르면 기록을 빠르게 시작할 수 있게 연결될 예정이에요.",
-            image: "tutorial-quick-start.png",
-            imageWidth: 350,
-            imageHeight: 30,
-            imageOffsetX: 0,
-            imageOffsetY: -80,
-            imageShape: "circle",
+            text: "검정 원을 누르면 기록을 빠르게 시작할 수 있게 연결돼요.",
             cardWidth: 480,
             cardOffsetX: 0,
             cardOffsetY: 60,
             cardLarge: true,
             shape: "circle",
+            highlightPadding: 22,
+            highlightOffsetY: -44,
+            liveTarget: true,
         },
         {
             target: '[data-tutorial-target="speech-actions"]',
             title: "오늘의 질문",
             text: "로그인할 때마다 새로운 질문으로 오늘의 마음을 꺼내볼 수 있어요.",
-            cardWidth: 470,
-            cardOffsetX: 0,
-            cardOffsetY: 30,
+            cardWidth: 430,
+            cardPlacement: "right",
+            cardOffsetX: 34,
+            cardOffsetY: -8,
             cardLarge: true,
+            spotlightClass: "tutorial-spotlight--speech",
         },
         {
             target: '[data-tutorial-target="selected-character"]',
             title: "나의 캐릭터",
             text: "캐릭터 선택에서 고른 친구가 메인 화면에 함께 나타나요.",
-            image: "2.png",
-            imageWidth: 700,
-            imageHeight: 700,
-            imageOffsetX: 0,
-            imageOffsetY: -80,
-            imageBorder: false,
             cardWidth: 360,
-            cardOffsetX: 600,
-            cardOffsetY: 390,
+            cardPlacement: "right",
+            cardOffsetX: 40,
+            cardOffsetY: 20,
             cardLarge: true,
             shape: "circle",
         },
@@ -105,6 +104,8 @@
     const highlight = document.createElement("div");
     const spotlight = document.createElement("div");
     const card = document.createElement("button");
+    let activeLiveTarget = null;
+    let isFinishing = false;
 
     overlay.className = "tutorial-overlay";
     highlight.className = "tutorial-highlight";
@@ -127,6 +128,15 @@
         return Math.min(Math.max(value, min), max);
     }
 
+    function resetLiveTarget() {
+        if (!activeLiveTarget) {
+            return;
+        }
+
+        activeLiveTarget.classList.remove("tutorial-live-target");
+        activeLiveTarget = null;
+    }
+
     function placeCard(rect, step) {
         const margin = 18;
         const cardWidth = Math.min(step.cardWidth || 360, window.innerWidth - 32);
@@ -135,6 +145,16 @@
         const cardOffsetY = step.cardOffsetY || 0;
         let left = rect.left + rect.width / 2 - cardWidth / 2 + cardOffsetX;
         let top = rect.bottom + 18 + cardOffsetY;
+
+        if (step.cardPlacement === "right") {
+            left = rect.right + cardOffsetX;
+            top = rect.top + rect.height / 2 - estimatedHeight / 2 + cardOffsetY;
+
+            if (left + cardWidth > window.innerWidth - margin) {
+                left = rect.left + rect.width / 2 - cardWidth / 2;
+                top = rect.bottom + 26 + cardOffsetY;
+            }
+        }
 
         if (top + estimatedHeight > window.innerHeight - margin) {
             top = rect.top - estimatedHeight - 18 + cardOffsetY;
@@ -150,6 +170,10 @@
 
     function renderSpotlight(step, target, rect) {
         spotlight.innerHTML = "";
+
+        if (step.liveTarget) {
+            return;
+        }
 
         if (step.image) {
             const image = document.createElement("img");
@@ -169,6 +193,9 @@
         clone.style.pointerEvents = "none";
         clone.style.width = rect.width + "px";
         clone.style.height = rect.height + "px";
+        if (step.spotlightClass) {
+            clone.classList.add(step.spotlightClass);
+        }
         spotlight.appendChild(clone);
     }
 
@@ -220,6 +247,7 @@
     }
 
     function showStep() {
+        resetLiveTarget();
         const step = steps[index];
         const target = document.querySelector(step.target);
 
@@ -232,12 +260,17 @@
 
         window.setTimeout(() => {
             const rect = target.getBoundingClientRect();
-            const padding = step.shape === "circle" ? 12 : 10;
+            const padding = step.highlightPadding || (step.shape === "circle" ? 12 : 10);
+
+            if (step.liveTarget) {
+                activeLiveTarget = target;
+                target.classList.add("tutorial-live-target");
+            }
 
             highlight.classList.toggle("is-circle", step.shape === "circle");
             highlight.classList.toggle("is-hidden", Boolean(step.image));
             highlight.style.left = rect.left - padding + "px";
-            highlight.style.top = rect.top - padding + "px";
+            highlight.style.top = rect.top - padding + (step.highlightOffsetY || 0) + "px";
             highlight.style.width = rect.width + padding * 2 + "px";
             highlight.style.height = rect.height + padding * 2 + "px";
 
@@ -257,6 +290,8 @@
             spotlight.classList.toggle("has-image", Boolean(step.image));
             spotlight.classList.toggle("is-circle-image", step.imageShape === "circle");
             spotlight.classList.toggle("no-image-border", step.imageBorder === false);
+            spotlight.classList.toggle("is-speech", step.spotlightClass === "tutorial-spotlight--speech");
+            spotlight.classList.toggle("is-hidden", Boolean(step.liveTarget));
             renderSpotlight(step, target, rect);
 
             card.innerHTML = `
@@ -272,6 +307,12 @@
     }
 
     function finishTutorial() {
+        if (isFinishing) {
+            return;
+        }
+
+        isFinishing = true;
+        resetLiveTarget();
         highlight.remove();
         spotlight.remove();
         card.remove();
@@ -310,6 +351,10 @@
     }
 
     function nextStep() {
+        if (isFinishing) {
+            return;
+        }
+
         index += 1;
         if (index >= steps.length) {
             finishTutorial();
