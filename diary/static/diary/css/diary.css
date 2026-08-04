@@ -1,779 +1,1112 @@
 /* =========================================================
-    다이어리 목록 페이지 전체 콘텐츠 영역
+   1. 다이어리 목록 페이지 전체 영역
    ========================================================= */
 
 .diary-list-container {
     /*
-        다이어리 목록 페이지의 최대 너비를 제한합니다.
+        페이지 콘텐츠의 최대 너비입니다.
 
-        min(1200px, calc(100% - 80px))
-        → 화면이 넓을 때는 최대 1200px
-        → 화면이 좁을 때는 좌우 40px씩 여백을 남긴 너비
-
-        예:
-        브라우저 너비가 1400px이면 → 1200px
-        브라우저 너비가 1000px이면 → 920px
+        화면이 1280px 이상이면 최대 1200px,
+        그보다 좁으면 좌우에 각각 40px 여백을 남깁니다.
     */
     width: min(1200px, calc(100% - 80px));
 
     /*
-        좌우 margin을 auto로 설정해서
-        컨테이너를 화면 가운데에 배치합니다.
-
-        위아래 margin은 0입니다.
+        컨테이너를 화면 가로 중앙에 배치합니다.
     */
     margin: 0 auto;
 
     /*
-        컨테이너 내부의 위아래 여백입니다.
-
-        위쪽: 28px
-        좌우: 0
-        아래쪽: 50px
-
-        첫 번째 값 28px을 키우면
-        상단 탭과 페이지 위쪽 사이가 더 멀어집니다.
-
-        마지막 값 50px을 키우면
-        페이지 맨 아래 여백이 더 넓어집니다.
+        위쪽 28px, 아래쪽 50px의 내부 여백입니다.
     */
     padding: 28px 0 50px;
 }
 
 
 /* =========================================================
-    전체 / 감정별 / 장소별 탭을 감싸는 바깥 영역
+   2. 전체 / 감정별 / 장소별 탭
    ========================================================= */
 
 .diary-tabs-wrapper {
     /*
-        내부의 탭 묶음을 정렬하기 위해
-        flex 컨테이너로 설정합니다.
+        탭 묶음을 가로 중앙에 배치합니다.
     */
     display: flex;
-
-    /*
-        탭 묶음을 가로 방향 중앙에 배치합니다.
-    */
     justify-content: center;
 
-    /*
-        부모 영역의 가로 너비를 전부 사용합니다.
-    */
     width: 100%;
 
     /*
-        탭 영역 아래쪽에 12px 간격을 만듭니다.
-
-        값을 키우면 탭과 아래 콘텐츠 사이가 더 멀어집니다.
+        탭과 아래 콘텐츠 사이의 간격입니다.
     */
     margin-bottom: 12px;
 }
 
 
-/* =========================================================
-    전체 / 감정별 / 장소별 탭 버튼들을 감싸는 흰색 캡슐
-   ========================================================= */
-
 .diary-tabs {
     /*
-        탭들을 한 줄로 배치합니다.
-
-        inline-flex이므로 내부는 flex처럼 동작하지만,
-        바깥에서는 내용 크기만큼만 너비를 차지합니다.
+        각 탭 버튼을 한 줄로 배치합니다.
+        내용만큼만 너비를 차지합니다.
     */
     display: inline-flex;
-
-    /*
-        각 탭 버튼을 세로 방향 가운데에 맞춥니다.
-    */
     align-items: center;
-
-    /*
-        각 탭 버튼 사이 간격입니다.
-
-        값을 키우면 전체, 감정별, 장소별 버튼 사이가 벌어집니다.
-    */
     gap: 4px;
 
-    /*
-        흰색 캡슐 내부와 탭 버튼 사이의 여백입니다.
-
-        값이 커질수록 전체 탭 박스가 더 두꺼워집니다.
-    */
     padding: 4px;
 
-    /*
-        탭 전체 영역의 배경색입니다.
-    */
-    background: #ffffff;
-
-    /*
-        탭 전체 영역의 바깥 테두리입니다.
-
-        1px 굵기
-        실선
-        연한 회색
-    */
     border: 1px solid #dedede;
-
-    /*
-        매우 큰 값을 사용해서
-        탭 전체를 완전히 둥근 캡슐 모양으로 만듭니다.
-    */
     border-radius: 999px;
 
-    /*
-        탭 아래에 아주 연한 그림자를 추가합니다.
+    background: #ffffff;
 
-        0       → 좌우 이동 없음
-        2px     → 아래로 2px 이동
-        5px     → 흐림 정도
-        rgba    → 검정색, 투명도 8%
-    */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
 
-/* =========================================================
-    전체 / 감정별 / 장소별 각각의 탭 버튼
-   ========================================================= */
-
 .diary-tab {
     /*
-        기본 버튼 테두리를 제거합니다.
-    */
-    border: 0;
-
-    /*
-        버튼 내부 여백입니다.
-
-        위아래: 10px
-        좌우: 18px
-
-        좌우 값을 키우면 각 탭 버튼이 더 넓어집니다.
+        a 태그 또는 버튼으로 만들어진 각각의 탭입니다.
     */
     padding: 10px 18px;
 
-    /*
-        선택되지 않은 탭의 배경을 투명하게 만듭니다.
-        바깥 .diary-tabs의 흰색 배경이 그대로 보입니다.
-    */
-    background: transparent;
-
-    /*
-        각 탭 버튼도 완전히 둥근 캡슐 모양으로 만듭니다.
-    */
+    border: 0;
     border-radius: 999px;
 
-    /*
-        탭 글자색입니다.
-    */
+    background: transparent;
     color: #333333;
 
-    /*
-        탭 글자 크기입니다.
-    */
     font-size: 14px;
-
-    /*
-        마우스를 올리면 손가락 모양 커서가 나타납니다.
-    */
-    cursor: pointer;
-
-    /*
-        탭이 a 태그로 만들어졌을 때
-        기본 밑줄을 제거합니다.
-    */
     text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+.diary-tab.active {
+    /*
+        현재 선택된 탭입니다.
+    */
+    background: #fff4cb;
+    color: #222222;
+
+    font-weight: 700;
 }
 
 
 /* =========================================================
-    현재 선택된 탭
+   3. 전체 기록 제목 · 개수 · 필터 헤더
    ========================================================= */
 
-.diary-tab.active {
-    /*
-        선택된 탭의 테두리 색상입니다.
-
-        다만 .diary-tab에서 border: 0으로 설정했기 때문에
-        현재 상태에서는 실제 테두리가 보이지 않습니다.
-
-        테두리를 보이게 하려면 아래처럼 별도로 설정해야 합니다.
-
-        border: 1px solid #FBEED1;
-    */
-    border-color: #FBEED1;
-
-    /*
-        현재 선택된 탭의 연한 노란색 배경입니다.
-    */
-    background: #fff4cb;
-
-    /*
-        선택된 탭의 글자색입니다.
-    */
-    color: #222222;
-
-    /*
-        선택된 탭 글자를 굵게 표시합니다.
-    */
-    font-weight: 700;
-}
-
-/*
-
 .diary-list-header {
-    
-        자식 요소가 absolute로 배치될 경우
-        이 요소를 기준점으로 사용하게 합니다.
-    
-    position: relative;
+    /*
+        전체 기록 제목, 기록 개수, 필터를
+        왼쪽부터 가로 한 줄로 배치합니다.
 
-    
-        제목 영역과 필터 영역을 가로로 배치합니다.
-    
+        화면:
+        전체 기록  7개  최신순  기간 설정
+    */
     display: flex;
-
-    
-        세로 방향 가운데 정렬합니다.
-    
     align-items: center;
+    justify-content: flex-start;
 
-    
-        첫 번째 요소는 왼쪽,
-        마지막 요소는 오른쪽에 배치합니다.
-    
-    justify-content: space-between;
+    /*
+        제목·개수 묶음과 필터 사이의 간격입니다.
 
-    
-        제목과 필터 사이의 최소 간격입니다.
-    
-    gap: 24px;
+        값을 키우면 필터가 제목에서 더 멀어집니다.
+    */
+    gap: 18px;
 
-    
-        헤더와 아래 콘텐츠 사이 간격입니다.
-    
+    /*
+        헤더와 카드 목록 사이의 간격입니다.
+    */
     margin-bottom: 24px;
 }
 
 
-.diary-list-summary {
-    
-        제목과 기록 개수 배지를 한 줄에 배치합니다.
-    
+.diary-list-heading {
+    /*
+        '전체 기록'과 '7개'를 같은 줄에 배치합니다.
+    */
     display: flex;
-
-    
-        제목과 개수 배지를 세로 중앙에 맞춥니다.
-    
     align-items: center;
-
-    
-        제목과 개수 배지 사이 간격입니다.
-    
     gap: 10px;
+
+    /*
+        남는 공간을 불필요하게 차지하지 않습니다.
+    */
+    flex: 0 0 auto;
 }
 
 
 .diary-list-title {
-    
-        h1 등의 기본 margin을 제거합니다.
-    
+    /*
+        h1 태그의 브라우저 기본 여백을 제거합니다.
+    */
     margin: 0;
 
-    
-        목록 제목의 글자 크기입니다.
-    
+    color: #222222;
+
     font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 
 .diary-list-count {
-    
-        기록 개수 배지 내부 여백입니다.
-
-        위아래: 5px
-        좌우: 10px
-    
+    /*
+        기록 개수를 작은 캡슐 모양으로 표시합니다.
+    */
     padding: 5px 10px;
 
-    
-        기록 개수 배지를 캡슐 모양으로 만듭니다.
-    
     border-radius: 999px;
 
-    
-        기록 개수 배지의 배경색입니다.
-    
     background: #fff1ba;
+    color: #333333;
 
-    
-        기록 개수 글자 크기입니다.
-    
     font-size: 13px;
-
-    
-        기록 개수를 굵게 표시합니다.
-    
     font-weight: 700;
-}
+    line-height: 1;
 
-*/
+    /*
+        '7'과 '개'가 서로 다른 줄로 나뉘지 않게 합니다.
+    */
+    white-space: nowrap;
+}
 
 
 /* =========================================================
-    최신순 / 과거순 / 기간 설정 필터 폼
+   4. 최신순 / 과거순 / 기간 설정 필터
    ========================================================= */
 
-.diary-filter-form {
+.diary-filter-form,
+.diary-list-controls {
     /*
-        기간 설정 팝업의 absolute 위치 기준이 됩니다.
+        최신순 선택창과 기간 설정 버튼을
+        같은 줄에 배치합니다.
+    */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    /*
+        기간 설정 팝업의 위치 기준이 됩니다.
     */
     position: relative;
 
     /*
-        정렬 선택창과 기간 설정 버튼을 가로로 배치합니다.
+        필터 영역이 남은 가로 공간 전체를 차지하지 않습니다.
     */
-    display: flex;
-
-    /*
-        정렬 선택창과 버튼을 세로 중앙에 맞춥니다.
-    */
-    align-items: center;
-
-    /*
-        정렬 선택창과 기간 설정 버튼 사이 간격입니다.
-    */
-    gap: 8px;
+    flex: 0 0 auto;
 }
 
-
-/* =========================================================
-    최신순 선택창과 기간 설정 버튼의 공통 스타일
-   ========================================================= */
 
 .diary-sort-select,
 .period-toggle-button {
     /*
-        선택창과 버튼의 최소 높이입니다.
-
-        내부 글자 크기가 달라져도
-        최소 42px 높이를 유지합니다.
+        최신순 선택창과 기간 설정 버튼의 공통 스타일입니다.
     */
     min-height: 42px;
-
-    /*
-        위아래 여백은 0,
-        좌우 여백은 16px입니다.
-    */
     padding: 0 16px;
 
-    /*
-        연한 베이지색 테두리입니다.
-    */
     border: 1px solid #e6ded0;
-
-    /*
-        모서리를 12px만큼 둥글게 합니다.
-    */
     border-radius: 12px;
 
-    /*
-        선택창과 버튼 배경색입니다.
-    */
     background: #ffffff;
-
-    /*
-        글자색입니다.
-    */
     color: #333333;
 
     /*
-        부모 요소에서 사용 중인 글꼴 설정을 그대로 상속합니다.
-
-        브라우저 기본 select, button 글꼴이
-        페이지 글꼴과 다르게 보이는 것을 방지합니다.
+        페이지에서 사용하는 글꼴을 그대로 상속합니다.
     */
     font: inherit;
 
-    /*
-        클릭 가능한 요소임을 보여주는 손가락 커서입니다.
-    */
     cursor: pointer;
 }
 
-
-/* =========================================================
-    정렬 선택창, 기간 버튼, 날짜 입력창에 포커스가 갔을 때
-   ========================================================= */
 
 .diary-sort-select:focus,
 .period-toggle-button:focus,
 .period-filter input:focus {
     /*
-        키보드 탭 이동이나 클릭으로 선택됐을 때
+        키보드나 마우스로 요소를 선택했을 때
         노란색 외곽선을 표시합니다.
     */
     outline: 2px solid #e9c767;
-
-    /*
-        외곽선과 요소 사이에 2px 간격을 둡니다.
-    */
     outline-offset: 2px;
 }
 
 
-/* =========================================================
-    기간 설정 버튼이 활성화된 상태
-   ========================================================= */
-
 .period-toggle-button.active {
     /*
-        활성화된 버튼의 테두리를 조금 더 진한 노란색으로 바꿉니다.
+        기간 설정 창이 열려 있을 때의 버튼입니다.
     */
     border-color: #e1bd55;
 
-    /*
-        활성화된 버튼의 배경을 연한 노란색으로 바꿉니다.
-    */
     background: #fff7d9;
 
-    /*
-        활성화된 버튼 글자를 굵게 표시합니다.
-    */
     font-weight: 700;
 }
 
 
 /* =========================================================
-    기간 설정 팝업 전체 영역
+   5. 기간 설정 팝업
    ========================================================= */
 
 .period-filter {
     /*
-        부모인 .diary-filter-form을 기준으로
-        팝업처럼 띄워서 배치합니다.
+        필터 폼 아래에 팝업처럼 표시합니다.
     */
     position: absolute;
+    z-index: 50;
 
-    /*
-        다른 일반 요소보다 위에 표시되게 합니다.
-    */
-    z-index: 10;
-
-    /*
-        필터 폼의 아래쪽에서 10px 떨어진 위치에 배치합니다.
-
-        100%
-        → 부모 높이만큼 아래
-
-        + 10px
-        → 추가 간격
-    */
     top: calc(100% + 10px);
-
-    /*
-        팝업의 오른쪽 끝을
-        필터 폼의 오른쪽 끝에 맞춥니다.
-    */
     right: 0;
 
-    /*
-        날짜 입력창과 버튼들을 가로로 배치합니다.
-    */
     display: flex;
-
-    /*
-        입력창들의 아래쪽 기준을 맞춥니다.
-
-        label이 있는 날짜 입력 묶음과
-        버튼의 아래쪽이 맞춰집니다.
-    */
     align-items: flex-end;
-
-    /*
-        팝업 내부 요소 사이 간격입니다.
-    */
     gap: 10px;
 
-    /*
-        팝업의 최소 너비입니다.
-
-        화면이 좁아도 기본적으로 500px을 유지합니다.
-        모바일에서는 가로 스크롤이나 잘림이 생길 수 있습니다.
-    */
     min-width: 500px;
-
-    /*
-        팝업 내부 전체 여백입니다.
-    */
     padding: 18px;
 
-    /*
-        팝업 바깥 테두리입니다.
-    */
     border: 1px solid #e6ded0;
-
-    /*
-        팝업 모서리를 둥글게 합니다.
-    */
     border-radius: 16px;
 
-    /*
-        팝업 배경색입니다.
-    */
     background: #ffffff;
 
-    /*
-        팝업 아래에 부드러운 그림자를 추가합니다.
-
-        0       → 좌우 이동 없음
-        10px    → 아래로 10px
-        30px    → 흐림 정도
-        12%     → 투명도
-    */
     box-shadow: 0 10px 30px rgb(0 0 0 / 12%);
 }
 
 
-/* =========================================================
-    hidden 속성이 있는 기간 설정 팝업
-   ========================================================= */
-
 .period-filter[hidden] {
     /*
-        HTML에 hidden 속성이 있을 때
-        화면에서 완전히 제거합니다.
+        hidden 속성이 있을 때 완전히 숨깁니다.
     */
     display: none;
 }
 
 
-/* =========================================================
-    시작일 또는 종료일의 label + input 묶음
-   ========================================================= */
-
 .period-input-group {
     /*
-        label과 input을 위아래로 배치합니다.
+        시작일 또는 종료일의 label과 input을
+        위아래로 배치합니다.
     */
     display: flex;
-
-    /*
-        가로가 아닌 세로 방향으로 정렬합니다.
-    */
     flex-direction: column;
-
-    /*
-        label과 input 사이 간격입니다.
-    */
     gap: 7px;
 }
 
 
-/* =========================================================
-    시작일 / 종료일 글자
-   ========================================================= */
-
 .period-input-group label {
-    /*
-        label 글자색을 연한 회색으로 설정합니다.
-    */
     color: #666666;
 
-    /*
-        label 글자 크기입니다.
-    */
     font-size: 12px;
 }
 
 
-/* =========================================================
-    날짜 선택 입력창
-   ========================================================= */
-
 .period-input-group input {
-    /*
-        날짜 입력창의 최소 높이입니다.
-    */
     min-height: 40px;
-
-    /*
-        위아래 여백은 0,
-        좌우 여백은 10px입니다.
-    */
     padding: 0 10px;
 
-    /*
-        날짜 입력창 테두리입니다.
-    */
     border: 1px solid #ded7cb;
-
-    /*
-        날짜 입력창 모서리를 둥글게 합니다.
-    */
     border-radius: 9px;
 
-    /*
-        페이지의 글꼴 설정을 그대로 사용합니다.
-    */
+    background: #ffffff;
+
     font: inherit;
 }
 
 
-/* =========================================================
-    시작일과 종료일 사이의 물결표(~)
-   ========================================================= */
-
 .period-separator {
     /*
-        아래쪽 여백을 넣어
-        날짜 입력창의 가운데 높이에 가깝게 맞춥니다.
+        시작일과 종료일 사이의 물결표입니다.
     */
     padding-bottom: 10px;
 
-    /*
-        구분 기호의 글자색입니다.
-    */
     color: #999999;
 }
 
 
-/* =========================================================
-    적용 버튼과 초기화 버튼의 공통 스타일
-   ========================================================= */
-
 .period-apply-button,
 .period-reset-button {
     /*
-        flex처럼 내부 정렬이 가능하면서
-        요소 자체는 내용 크기만큼만 차지합니다.
+        적용 버튼과 초기화 버튼의 공통 스타일입니다.
     */
     display: inline-flex;
-
-    /*
-        버튼의 최소 높이입니다.
-    */
-    min-height: 40px;
-
-    /*
-        버튼 내부 글자를 세로 가운데에 맞춥니다.
-    */
     align-items: center;
-
-    /*
-        버튼 내부 글자를 가로 가운데에 맞춥니다.
-    */
     justify-content: center;
 
-    /*
-        위아래 여백은 0,
-        좌우 여백은 14px입니다.
-    */
+    min-height: 40px;
     padding: 0 14px;
 
-    /*
-        버튼 모서리를 둥글게 합니다.
-    */
     border-radius: 9px;
 
-    /*
-        부모 글꼴 설정을 그대로 사용합니다.
-    */
     font: inherit;
-
-    /*
-        초기화 버튼이 a 태그여도
-        기본 밑줄이 생기지 않게 합니다.
-    */
     text-decoration: none;
 
-    /*
-        마우스를 올렸을 때 손가락 커서를 표시합니다.
-    */
     cursor: pointer;
 }
 
 
-/* =========================================================
-    기간 적용 버튼
-   ========================================================= */
-
 .period-apply-button {
-    /*
-        적용 버튼의 노란색 테두리입니다.
-    */
     border: 1px solid #e0bd59;
 
-    /*
-        적용 버튼의 연한 노란색 배경입니다.
-    */
     background: #ffe99c;
-
-    /*
-        적용 버튼 글자색입니다.
-    */
     color: #222222;
 }
 
 
-/* =========================================================
-    기간 초기화 버튼
-   ========================================================= */
-
 .period-reset-button {
-    /*
-        초기화 버튼의 연한 회색 테두리입니다.
-    */
     border: 1px solid #ded7cb;
 
-    /*
-        초기화 버튼 배경을 흰색으로 설정합니다.
-    */
     background: #ffffff;
-
-    /*
-        초기화 버튼 글자색입니다.
-    */
     color: #555555;
 }
 
 
 /* =========================================================
-    화면 너비가 760px 이하일 때 적용되는 반응형 스타일
+   6. 기록 카드 목록
    ========================================================= */
 
-@media (max-width: 760px) {
+.diary-grid {
+    /*
+        기본 화면에서 한 줄에 카드 5개를 배치합니다.
+    */
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 22px;
 
-    .diary-list-header {
-        /*
-            기존 가로 정렬에서
-            요소들을 왼쪽 기준으로 정렬합니다.
-        */
-        align-items: flex-start;
-
-        /*
-            제목과 필터 영역을 위아래로 배치합니다.
-        */
-        flex-direction: column;
-    }
-
-    .diary-filter-form {
-        /*
-            모바일 화면에서 필터 폼이
-            부모 너비를 전부 차지하게 합니다.
-        */
-        width: 100%;
-    }
+    width: 100%;
 }
 
-/* 점 세 개 버튼과 메뉴를 감싸는 영역 */
+
+.diary-card {
+    /*
+        카드가 grid 칸보다 커지는 것을 방지합니다.
+    */
+    min-width: 0;
+
+    overflow: hidden;
+
+    border: 1px solid #ebe5da;
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.08),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.diary-card:hover {
+    /*
+        마우스를 올리면 카드가 살짝 위로 이동합니다.
+    */
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.12),
+        0 3px 6px rgba(0, 0, 0, 0.06);
+}
+
+
+.diary-card-link {
+    /*
+        카드 전체 영역을 클릭할 수 있게 합니다.
+    */
+    display: block;
+
+    height: 100%;
+
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   7. 기록 카드 이미지
+   ========================================================= */
+
+.diary-card-image-wrapper {
+    /*
+        카드 이미지 영역입니다.
+    */
+    position: relative;
+
+    width: 100%;
+
+    /*
+        이미지 영역의 가로:세로 비율을 4:3으로 유지합니다.
+    */
+    aspect-ratio: 4 / 3;
+
+    overflow: hidden;
+
+    background-color: #f3efe8;
+}
+
+
+.diary-card-image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    /*
+        사진이 이미지 영역을 빈틈없이 채우도록 합니다.
+        넘치는 부분은 잘립니다.
+    */
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+
+.diary-card:hover .diary-card-image {
+    /*
+        카드에 마우스를 올리면 사진이 살짝 확대됩니다.
+    */
+    transform: scale(1.04);
+}
+
+
+.diary-card-image-placeholder {
+    /*
+        사진이 없을 때 보이는 대체 영역입니다.
+    */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #f4f0e8;
+    color: #aaa397;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   8. 기록 카드 내용
+   ========================================================= */
+
+.diary-card-content {
+    /*
+        날짜, 기록 내용, 장소 줄을 위아래로 배치합니다.
+    */
+    display: flex;
+    flex-direction: column;
+
+    min-height: 130px;
+    padding: 15px 14px 8px;
+}
+
+
+.diary-card-date {
+    margin-bottom: 8px;
+
+    color: #7f7a72;
+
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+
+.diary-card-title {
+    /*
+        기록 내용을 최대 두 줄까지만 보여줍니다.
+    */
+    display: -webkit-box;
+
+    min-height: 44px;
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #222222;
+
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    word-break: keep-all;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+
+/* =========================================================
+   9. 장소와 대표 감정 아이콘
+   ========================================================= */
+
+.diary-card-bottom-row {
+    /*
+        장소는 왼쪽,
+        감정 아이콘은 오른쪽에 배치합니다.
+    */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    /*
+        장소 이름과 감정 아이콘 사이의 최소 간격입니다.
+    */
+    gap: 12px;
+
+    /*
+        제목과 장소 줄 사이의 간격입니다.
+    */
+    margin-top: 12px;
+}
+
+
+.diary-card-location {
+    /*
+        장소 영역이 남은 공간을 사용합니다.
+    */
+    flex: 1;
+
+    /*
+        flex 자식의 글자가 정상적으로 줄어들 수 있게 합니다.
+    */
+    min-width: 0;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color: #7c776f;
+
+    font-size: 12px;
+    line-height: 1.4;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.diary-card-location--empty {
+    /*
+        장소 정보가 없을 때 문구를 더 연하게 표시합니다.
+    */
+    color: #aaa397;
+}
+
+
+.diary-card-emotion {
+    /*
+        기존의 absolute 배치를 해제하고,
+        장소 오른쪽에서 일반적인 요소로 배치합니다.
+    */
+    position: static;
+
+    /*
+        장소 이름이 길어져도 아이콘이 작아지지 않게 합니다.
+    */
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.diary-card-emotion img {
+    display: block;
+
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   10. 기록이 없을 때
+   ========================================================= */
+
+.diary-empty {
+    /*
+        빈 화면 안내가 grid 전체 열을 차지하게 합니다.
+    */
+    grid-column: 1 / -1;
+
+    padding: 80px 20px;
+
+    text-align: center;
+}
+
+
+.diary-empty-title {
+    margin: 0 0 10px;
+
+    color: #333333;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.diary-empty-description {
+    margin: 0 0 24px;
+
+    color: #777777;
+
+    font-size: 14px;
+}
+
+
+.diary-empty-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 0 20px;
+
+    border: 1px solid #e3c566;
+    border-radius: 12px;
+
+    background-color: #fff1b8;
+    color: #2e2a20;
+
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.diary-empty-button:hover {
+    transform: translateY(-2px);
+
+    background-color: #ffe894;
+}
+
+
+/* =========================================================
+   11. 감정별 기록 화면
+   ========================================================= */
+
+.emotion-page-header {
+    /*
+        왼쪽의 제목과 오른쪽의 이번 달 감정 요약을
+        양쪽에 나누어 배치합니다.
+    */
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+
+    margin-bottom: 30px;
+}
+
+
+.emotion-month-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 18px;
+
+    border: 1px solid #eadfce;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    font-size: 13px;
+}
+
+
+.emotion-month-summary strong {
+    color: #d98d36;
+
+    font-size: 18px;
+}
+
+
+.top-emotion-list {
+    /*
+        공동 1위 감정이 여러 개일 경우
+        한 줄 또는 여러 줄로 자연스럽게 표시합니다.
+    */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+
+.top-emotion-name {
+    color: #d98d36;
+
+    white-space: nowrap;
+}
+
+
+.top-emotion-separator {
+    color: #b7aa97;
+}
+
+
+.emotion-bubble-area {
+    /*
+        감정 조약돌들의 absolute 배치 기준입니다.
+    */
+    position: relative;
+
+    width: 100%;
+    min-height: 560px;
+
+    border-radius: 24px;
+
+    background: #ffffff;
+}
+
+
+.emotion-bubble {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    border: 2px solid #e8c578;
+
+    /*
+        꼭짓점마다 다른 둥근 정도를 줘서
+        완전한 원이 아닌 조약돌 모양으로 만듭니다.
+    */
+    border-radius: 42% 58% 53% 47% / 45% 41% 59% 49%;
+
+    background: rgba(255, 250, 231, 0.95);
+    color: #333333;
+
+    font: inherit;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.emotion-bubble:hover {
+    z-index: 5;
+
+    transform: scale(1.08);
+
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+.emotion-bubble-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.emotion-bubble-count {
+    color: #8e877c;
+
+    font-size: 11px;
+}
+
+
+/* 감정별 색상 */
+
+.emotion-bubble--yellow {
+    border-color: #f9d472;
+
+    background: #fff7e3;
+}
+
+
+.emotion-bubble--blue {
+    border-color: #dae6f3;
+
+    background: #eff7ff;
+}
+
+
+.emotion-bubble--pink {
+    border-color: #f8b3b4;
+
+    background: #fff2f2;
+}
+
+
+.emotion-bubble--purple {
+    border-color: #9d72ce;
+
+    background: #f8f1ff;
+}
+
+
+.emotion-bubble--red {
+    border-color: #ce7772;
+
+    background: #fff4f1;
+}
+
+
+.emotion-bubble--orange {
+    border-color: #cea972;
+
+    background: #fff9f1;
+}
+
+
+.emotion-bubble--default {
+    border-color: #c5c5c5;
+
+    background: #dedede;
+}
+
+
+/* 기록 개수에 따른 감정 조약돌 크기 */
+
+.emotion-bubble--large {
+    width: 130px;
+    height: 130px;
+}
+
+
+.emotion-bubble--medium {
+    width: 92px;
+    height: 92px;
+}
+
+
+.emotion-bubble--small {
+    width: 64px;
+    height: 64px;
+}
+
+
+/* 감정 조약돌의 임시 배치 위치 */
+
+.emotion-bubble:nth-child(1) {
+    top: 30px;
+    left: 9%;
+}
+
+
+.emotion-bubble:nth-child(2) {
+    top: 70px;
+    left: 25%;
+}
+
+
+.emotion-bubble:nth-child(3) {
+    top: 160px;
+    left: 15%;
+}
+
+
+.emotion-bubble:nth-child(4) {
+    top: 110px;
+    left: 44%;
+}
+
+
+.emotion-bubble:nth-child(5) {
+    top: 260px;
+    left: 34%;
+}
+
+
+.emotion-bubble:nth-child(6) {
+    top: 80px;
+    left: 68%;
+}
+
+
+.emotion-bubble:nth-child(7) {
+    top: 210px;
+    left: 75%;
+}
+
+
+.emotion-bubble:nth-child(8) {
+    top: 340px;
+    left: 60%;
+}
+
+
+.emotion-bubble:nth-child(9) {
+    top: 390px;
+    left: 20%;
+}
+
+
+.emotion-bubble:nth-child(10) {
+    top: 370px;
+    left: 80%;
+}
+
+
+/* =========================================================
+   12. 감정별 기록 팝업
+   ========================================================= */
+
+body.modal-open {
+    /*
+        팝업이 열렸을 때 뒤쪽 페이지가 스크롤되지 않게 합니다.
+    */
+    overflow: hidden;
+}
+
+
+.emotion-modal {
+    position: fixed;
+    z-index: 1000;
+
+    inset: 0;
+}
+
+
+.emotion-modal[hidden] {
+    display: none;
+}
+
+
+.emotion-modal-backdrop {
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(35, 30, 25, 0.45);
+
+    backdrop-filter: blur(3px);
+}
+
+
+.emotion-modal-content {
+    position: relative;
+    z-index: 1;
+
+    width: min(1040px, calc(100% - 60px));
+    max-height: calc(100vh - 80px);
+
+    margin: 40px auto;
+    padding: 30px;
+
+    overflow-y: auto;
+
+    border: 1px solid #eadfce;
+    border-radius: 24px;
+
+    background: #fffdf7;
+
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+
+.emotion-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+
+.emotion-modal-label {
+    margin: 0 0 6px;
+
+    color: #8d857b;
+
+    font-size: 13px;
+}
+
+
+.emotion-modal-header h2 {
+    margin: 0;
+
+    font-size: 28px;
+}
+
+
+.emotion-modal-close {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid #e5ddd1;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    font-size: 26px;
+
+    cursor: pointer;
+}
+
+
+.emotion-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+.emotion-modal-empty {
+    padding: 80px 20px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   13. 장소별 기록 화면 및 지도 설정
+   ========================================================= */
+
+.location-map-section {
+    /*
+        지도 설정 툴바와 지도를 위아래로 배치합니다.
+    */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+.map-toolbar {
+    /*
+        점 세 개 버튼을 오른쪽 끝에 배치합니다.
+    */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    width: 100%;
+}
+
+
 .map-display-settings {
+    /*
+        설정 메뉴가 점 세 개 버튼을 기준으로 표시되게 합니다.
+    */
     position: relative;
     z-index: 30;
 }
+
 
 .map-settings-button {
     display: flex;
@@ -782,7 +1115,6 @@
 
     width: 42px;
     height: 42px;
-
     padding: 0;
 
     border: 1px solid #dedede;
@@ -804,35 +1136,30 @@
         box-shadow 0.2s ease;
 }
 
-.map-settings-button:hover {
-    background: #fff8df;
 
-    /*
-        버튼이 아주 조금 위로 올라가는 효과입니다.
-    */
+.map-settings-button:hover {
     transform: translateY(-1px);
+
+    background: #fff8df;
 
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
 
-/* 키보드로 버튼을 선택했을 때 */
+
 .map-settings-button:focus-visible {
     outline: 2px solid #e9c767;
     outline-offset: 3px;
 }
 
-/* 지도 색상 설정 메뉴 */
+
 .map-settings-menu {
+    /*
+        점 세 개 버튼 바로 아래에 표시되는 설정 메뉴입니다.
+    */
     position: absolute;
+    z-index: 40;
 
-    /*
-        점 세 개 버튼 바로 아래에 메뉴를 배치합니다.
-    */
     top: calc(100% + 8px);
-
-    /*
-        메뉴의 오른쪽 끝과 버튼의 오른쪽 끝을 맞춥니다.
-    */
     right: 0;
 
     width: 230px;
@@ -844,17 +1171,13 @@
     background: #ffffff;
 
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
-
-    /*
-        지도보다 위에 보이지만,
-        지도 영역 자체를 덮는 위치에는 있지 않습니다.
-    */
-    z-index: 40;
 }
+
 
 .map-settings-menu[hidden] {
     display: none;
 }
+
 
 .map-settings-title {
     margin: 4px 8px 8px;
@@ -865,7 +1188,7 @@
     font-weight: 700;
 }
 
-/* 메뉴 안의 각 색상 방식 버튼 */
+
 .map-settings-menu button {
     display: block;
 
@@ -884,356 +1207,144 @@
     cursor: pointer;
 }
 
-/* 메뉴 항목 위에 마우스를 올렸을 때 */
+
 .map-settings-menu button:hover {
     background: #fff7d7;
 }
 
-/* 현재 선택된 지도 색상 방식 */
+
 .map-settings-menu button.active {
     background: #fff1ba;
+
     font-weight: 700;
 }
 
-/* =========================
-        감정별 화면
-========================= */
 
-/* 가장 많이 기록한 감정들의 전체 영역 */
-.top-emotion-list {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 4px;
-}
+/* =========================================================
+   14. 서울 지도
+   ========================================================= */
 
-/* 각 공동 1위 감정 이름 */
-.top-emotion-name {
-    color: #d98d36;
-    white-space: nowrap;
-}
-
-/* 감정과 감정 사이의 구분점 */
-.top-emotion-separator {
-    color: #b7aa97;
-}
-
-.emotion-page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.emotion-month-summary {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    padding: 12px 18px;
-    border: 1px solid #eadfce;
-    border-radius: 14px;
-    background: #ffffff;
-
-    font-size: 13px;
-}
-
-.emotion-month-summary strong {
-    color: #d98d36;
-    font-size: 18px;
-}
-
-.emotion-bubble-area {
+.location-map-wrapper {
+    /*
+        서울 지도 SVG의 크기와 가운데 정렬을 담당합니다.
+    */
     position: relative;
+
+    width: min(800px, 100%);
+
+    margin: 0 auto;
+}
+
+
+.seoul-map {
+    display: block;
 
     width: 100%;
-    min-height: 560px;
-
-    border-radius: 24px;
-    background: #fff;
+    height: auto;
 }
 
-.emotion-bubble {
-    position: absolute;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+.seoul-map path {
+    /*
+        모든 서울 구역 path의 기본 스타일입니다.
+    */
+    fill: #ffffff;
+    stroke: #777777;
+    stroke-width: 1;
 
-    border: 2px solid #e8c578;
-    background: rgba(255, 250, 231, 0.95);
-    color: #333333;
-    font: inherit;
-    cursor: pointer;
-
-    /* emotion-bubble의 각 꼭짓점의 둥근 정도 다르게 */
-    border-radius: 42% 58% 53% 47% / 45% 41% 59% 49%;
+    pointer-events: all;
 
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        fill 0.25s ease,
+        stroke 0.25s ease;
 }
 
-.emotion-bubble--yellow {
-    background: #fff7e3;
-    border-color: #F9D472;
+
+.seoul-map path:focus {
+    /*
+        SVG 구역을 클릭했을 때
+        기본 브라우저 외곽선을 제거합니다.
+    */
+    outline: none;
 }
 
-.emotion-bubble--blue {
-    background: #eff7ff;
-    border-color: #DAE6F3;
-}
 
-.emotion-bubble--pink {
-    background: #fff2f2;
-    border-color: #F8B3B4;
-}
+.seoul-map path.has-record {
+    /*
+        기록이 있는 구역에 적용됩니다.
+    */
+    stroke-width: 2;
 
-.emotion-bubble--purple {
-    background: #f8f1ff;
-    border-color: #9d72ce;
-}
-
-.emotion-bubble--red {
-    background: #fff4f1;
-    border-color: #ce7772;
-}
-
-.emotion-bubble--orange {
-    background: #fff9f1;
-    border-color: #cea972;
-}
-
-.emotion-bubble--default {
-    background: #dedede;
-    border-color: #c5c5c5;
-}
-
-.emotion-bubble:hover {
-    z-index: 5;
-
-    transform: scale(1.08);
-
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-}
-
-.emotion-bubble-name {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.emotion-bubble-count {
-    color: #8e877c;
-    font-size: 11px;
-}
-
-/* 기록 개수에 따른 크기 */
-
-.emotion-bubble--large {
-    width: 130px;
-    height: 130px;
-}
-
-.emotion-bubble--medium {
-    width: 92px;
-    height: 92px;
-}
-
-.emotion-bubble--small {
-    width: 64px;
-    height: 64px;
-}
-
-/* 임시 위치 배치 */
-
-.emotion-bubble:nth-child(1) {
-    top: 30px;
-    left: 9%;
-}
-
-.emotion-bubble:nth-child(2) {
-    top: 70px;
-    left: 25%;
-}
-
-.emotion-bubble:nth-child(3) {
-    top: 160px;
-    left: 15%;
-}
-
-.emotion-bubble:nth-child(4) {
-    top: 110px;
-    left: 44%;
-}
-
-.emotion-bubble:nth-child(5) {
-    top: 260px;
-    left: 34%;
-}
-
-.emotion-bubble:nth-child(6) {
-    top: 80px;
-    left: 68%;
-}
-
-.emotion-bubble:nth-child(7) {
-    top: 210px;
-    left: 75%;
-}
-
-.emotion-bubble:nth-child(8) {
-    top: 340px;
-    left: 60%;
-}
-
-.emotion-bubble:nth-child(9) {
-    top: 390px;
-    left: 20%;
-}
-
-.emotion-bubble:nth-child(10) {
-    top: 370px;
-    left: 80%;
-}
-
-/* =========================
-        감정 팝업
-========================= */
-
-body.modal-open {
-    overflow: hidden;
-}
-
-.emotion-modal {
-    position: fixed;
-    z-index: 1000;
-    inset: 0;
-}
-
-.emotion-modal[hidden] {
-    display: none;
-}
-
-.emotion-modal-backdrop {
-    position: absolute;
-    inset: 0;
-
-    background: rgba(35, 30, 25, 0.45);
-    backdrop-filter: blur(3px);
-}
-
-.emotion-modal-content {
-    position: relative;
-    z-index: 1;
-
-    width: min(1040px, calc(100% - 60px));
-    max-height: calc(100vh - 80px);
-    margin: 40px auto;
-    padding: 30px;
-
-    overflow-y: auto;
-
-    border: 1px solid #eadfce;
-    border-radius: 24px;
-    background: #fffdf7;
-
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
-}
-
-.emotion-modal-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    margin-bottom: 24px;
-}
-
-.emotion-modal-label {
-    margin: 0 0 6px;
-
-    color: #8d857b;
-    font-size: 13px;
-}
-
-.emotion-modal-header h2 {
-    margin: 0;
-
-    font-size: 28px;
-}
-
-.emotion-modal-close {
-    width: 42px;
-    height: 42px;
-
-    border: 1px solid #e5ddd1;
-    border-radius: 50%;
-    background: #ffffff;
-
-    font-size: 26px;
     cursor: pointer;
 }
 
-.emotion-modal-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+
+.seoul-map path.has-record:hover {
+    /*
+        기록이 있는 구역에 마우스를 올렸을 때
+        살짝 어두워지고 테두리가 굵어집니다.
+    */
+    stroke-width: 3;
+
+    filter: brightness(0.94);
 }
 
-.emotion-modal-empty {
-    padding: 80px 20px;
-    text-align: center;
+
+.district-labels {
+    /*
+        구 이름 텍스트가 지도 클릭을 방해하지 않게 합니다.
+    */
+    pointer-events: none;
 }
 
-@media (max-width: 900px) {
-    .emotion-modal-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+
+.district-labels text {
+    fill: #444444;
+    stroke: #ffffff;
+    stroke-width: 5px;
+    stroke-linejoin: round;
+
+    font-size: 25px;
+    font-weight: 700;
+
+    text-anchor: middle;
+    dominant-baseline: middle;
+
+    /*
+        흰색 외곽선을 먼저 그리고
+        그 위에 글자를 표시합니다.
+    */
+    paint-order: stroke;
 }
 
-@media (max-width: 650px) {
-    .emotion-page-header {
-        flex-direction: column;
-    }
 
-    .emotion-bubble-area {
-        min-height: 720px;
-    }
-
-    .emotion-modal-content {
-        width: calc(100% - 28px);
-        padding: 20px;
-    }
-
-    .emotion-modal-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-/* =========================
-        장소별 기록 팝업
-========================= */
+/* =========================================================
+   15. 장소별 기록 팝업
+   ========================================================= */
 
 .location-modal {
     position: fixed;
     z-index: 1000;
+
     inset: 0;
 }
+
 
 .location-modal[hidden] {
     display: none;
 }
 
+
 .location-modal-backdrop {
     position: absolute;
+
     inset: 0;
 
     background: rgba(35, 30, 25, 0.45);
+
     backdrop-filter: blur(3px);
 }
+
 
 .location-modal-content {
     position: relative;
@@ -1241,6 +1352,7 @@ body.modal-open {
 
     width: min(1040px, calc(100% - 60px));
     max-height: calc(100vh - 80px);
+
     margin: 40px auto;
     padding: 30px;
 
@@ -1248,10 +1360,12 @@ body.modal-open {
 
     border: 1px solid #eadfce;
     border-radius: 24px;
+
     background: #fffdf7;
 
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
 }
+
 
 .location-modal-header {
     display: flex;
@@ -1261,17 +1375,22 @@ body.modal-open {
     margin-bottom: 24px;
 }
 
+
 .location-modal-label {
     margin: 0 0 6px;
 
     color: #8d857b;
+
     font-size: 13px;
 }
 
+
 .location-modal-header h2 {
     margin: 0;
+
     font-size: 28px;
 }
+
 
 .location-modal-close {
     width: 42px;
@@ -1279,11 +1398,14 @@ body.modal-open {
 
     border: 1px solid #e5ddd1;
     border-radius: 50%;
+
     background: #ffffff;
 
     font-size: 26px;
+
     cursor: pointer;
 }
+
 
 .location-modal-grid {
     display: grid;
@@ -1291,393 +1413,88 @@ body.modal-open {
     gap: 20px;
 }
 
+
 .location-modal-empty {
     padding: 80px 20px;
-    text-align: center;
-}
-
-@media (max-width: 900px) {
-    .location-modal-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 650px) {
-    .location-modal-content {
-        width: calc(100% - 28px);
-        padding: 20px;
-    }
-
-    .location-modal-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-.location-map-section {
-    /*
-        툴바와 지도를 위아래로 배치합니다.
-    */
-    display: flex;
-    flex-direction: column;
-
-    /*
-        설정 버튼 영역과 지도 사이 간격입니다.
-        값을 키우면 버튼과 지도가 더 멀어집니다.
-    */
-    gap: 10px;
-
-    width: 100%;
-}
-
-/* =========================
-        지도 위쪽 도구 영역
-========================= */
-
-.map-toolbar {
-    /*
-        점 세 개 버튼을 오른쪽 끝에 배치합니다.
-    */
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    width: 100%;
-}
-
-/* =========================
-        실제 지도 영역
-========================= */
-
-.location-map-wrapper {
-    /*
-        지도 내부 SVG 배치의 기준이 됩니다.
-        현재는 설정 메뉴가 지도 바깥에 있으므로
-        반드시 필요하지는 않지만 다른 요소 배치에 유용합니다.
-    */
-    position: relative;
-
-    width: min(800px, 100%);
-    margin: 0 auto;
-}
-
-.seoul-map {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.seoul-map path {
-    fill: #fff;
-    stroke: #777;
-    stroke-width: 1;
-
-    transition:
-        fill 0.25s ease,
-        stroke 0.25s ease;
-}
-
-/* 방문한 장소 채우기 */
-.seoul-map path.has-record {
-    /*stroke: #789447;*/
-    stroke-width: 2;
-    cursor: pointer;
-}
-
-.seoul-map path.has-record:hover {
-    filter: brightness(0.94);
-    stroke-width: 3;
-}
-
-/* 지도 위 구 이름 */
-.district-labels {
-    pointer-events: none;
-}
-
-.district-labels text {
-    fill: #444;
-    font-size: 25px;
-    font-weight: 700;
-    text-anchor: middle;
-    dominant-baseline: middle;
-
-    paint-order: stroke;
-    stroke: #fff;
-    stroke-width: 5px;
-    stroke-linejoin: round;
-}
-
-.seoul-map path {
-    pointer-events: all;
-}
-
-.seoul-map path:focus {
-    outline: none;
-}
-
-.seoul-map path.has-record {
-    cursor: pointer;
-}
-
-.seoul-map path.has-record:hover {
-    filter: brightness(0.94);
-    stroke-width: 3;
-}
-
-/* =========================
-        기록 카드 목록
-========================= */
-
-.diary-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 22px;
-    width: 100%;
-}
-
-.diary-card {
-    min-width: 0;
-    overflow: hidden;
-
-    border: 1px solid #ebe5da;
-    border-radius: 14px;
-    background-color: #ffffff;
-
-    box-shadow:
-        0 3px 8px rgba(0, 0, 0, 0.08),
-        0 1px 2px rgba(0, 0, 0, 0.04);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.diary-card:hover {
-    transform: translateY(-5px);
-
-    box-shadow:
-        0 10px 20px rgba(0, 0, 0, 0.12),
-        0 3px 6px rgba(0, 0, 0, 0.06);
-}
-
-.diary-card-link {
-    display: block;
-    height: 100%;
-
-    color: inherit;
-    text-decoration: none;
-}
-
-
-/* =========================
-        카드 이미지
-========================= */
-
-.diary-card-image-wrapper {
-    position: relative;
-
-    width: 100%;
-    aspect-ratio: 4 / 3;
-
-    overflow: hidden;
-    background-color: #f3efe8;
-}
-
-.diary-card-image {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    transition: transform 0.3s ease;
-}
-
-.diary-card:hover .diary-card-image {
-    transform: scale(1.04);
-}
-
-.diary-card-image-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    height: 100%;
-
-    background-color: #f4f0e8;
-    color: #aaa397;
-
-    font-size: 13px;
-}
-
-
-/* =========================
-        감정 표시
-========================= */
-
-
-
-.diary-card-emotion img {
-    display: block;
-
-    width: 28px;
-    height: 28px;
-
-    object-fit: contain;
-}
-
-
-/* =========================
-        카드 내용
-========================= */
-
-.diary-card-content {
-    display: flex;
-    flex-direction: column;
-
-    min-height: 130px;
-    padding: 15px 14px 8px;
-}
-
-.diary-card-emotion {
-    position: static;
-    /*장소 이름이 길어져도 이모지가 작아지지 않게*/
-    flex-shrink: 0;
-
-
-    display: flex;
-    /*아이콘 세로 방향 가운데 정렬*/
-    align-items: center;
-    /*아이콘 가로 방향 가운데 정렬*/
-    justify-content: center;
-}
-
-.diary-card-date {
-    margin-bottom: 8px;
-
-    color: #7f7a72;
-    font-size: 12px;
-    line-height: 1.3;
-}
-
-.diary-card-title {
-    display: -webkit-box;
-    overflow: hidden;
-
-    min-height: 44px;
-    margin: 0;
-
-    color: #222222;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.4;
-
-    word-break: keep-all;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-}
-
-.diary-card-bottom-row {
-    display: flex;
-    /*장소는 왼쪽 끝, 이모지는 오른쪽 끝*/
-    justify-content: space-between;
-    /*장소와 이모지의 세로 중심 맞춤*/
-    align-items: center;
-    /*장소와 이모지 사이의 최소 간격*/
-    gap: 12px;
-    /*제목과 장소 줄 사이의 간격*/
-    margin-top: 12px;
-}
-
-.diary-card-location {
-    overflow: hidden;
-
-    margin: 0;
-    padding-top: 13px;
-
-    color: #7c776f;
-    font-size: 12px;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-/* =========================
-        기록 없음
-========================= */
-
-.diary-empty {
-    grid-column: 1 / -1;
-
-    padding: 80px 20px;
 
     text-align: center;
 }
 
-.diary-empty-title {
-    margin: 0 0 10px;
 
-    color: #333333;
-    font-size: 20px;
-    font-weight: 700;
-}
+/* =========================================================
+   16. 반응형 스타일
+   ========================================================= */
 
-.diary-empty-description {
-    margin: 0 0 24px;
-
-    color: #777777;
-    font-size: 14px;
-}
-
-.diary-empty-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 44px;
-    padding: 0 20px;
-
-    border: 1px solid #e3c566;
-    border-radius: 12px;
-    background-color: #fff1b8;
-
-    color: #2e2a20;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-
-    transition:
-        transform 0.2s ease,
-        background-color 0.2s ease;
-}
-
-.diary-empty-button:hover {
-    transform: translateY(-2px);
-    background-color: #ffe894;
-}
-
-
-/* =========================
-        반응형
-========================= */
-
+/*
+    화면 너비가 1200px 이하일 때
+    카드 개수를 한 줄에 4개로 줄입니다.
+*/
 @media (max-width: 1200px) {
     .diary-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
+
+/*
+    화면 너비가 900px 이하일 때
+    카드와 팝업 목록을 한 줄에 3개로 줄입니다.
+*/
 @media (max-width: 900px) {
-    .diary-grid {
+    .diary-grid,
+    .emotion-modal-grid,
+    .location-modal-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
+
+/*
+    화면 너비가 760px 이하일 때
+    전체 기록 제목과 필터를 위아래로 배치합니다.
+*/
+@media (max-width: 760px) {
+    .diary-list-container {
+        /*
+            작은 화면에서는 좌우 여백을 각각 20px로 줄입니다.
+        */
+        width: calc(100% - 40px);
+    }
+
+    .diary-list-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .diary-filter-form,
+    .diary-list-controls {
+        width: 100%;
+    }
+
+    .period-filter {
+        /*
+            모바일에서는 500px 고정 너비를 해제하고
+            화면 너비에 맞게 표시합니다.
+        */
+        right: auto;
+        left: 0;
+
+        flex-wrap: wrap;
+
+        min-width: min(500px, calc(100vw - 40px));
+    }
+}
+
+
+/*
+    화면 너비가 650px 이하일 때
+    카드 및 팝업 목록을 한 줄에 2개로 줄입니다.
+*/
 @media (max-width: 650px) {
-    .diary-grid {
+    .diary-grid,
+    .emotion-modal-grid,
+    .location-modal-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
     }
@@ -1689,5 +1506,19 @@ body.modal-open {
 
     .diary-card-title {
         font-size: 14px;
+    }
+
+    .emotion-page-header {
+        flex-direction: column;
+    }
+
+    .emotion-bubble-area {
+        min-height: 720px;
+    }
+
+    .emotion-modal-content,
+    .location-modal-content {
+        width: calc(100% - 28px);
+        padding: 20px;
     }
 }
