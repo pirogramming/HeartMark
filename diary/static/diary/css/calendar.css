@@ -11,9 +11,9 @@
     /* 좌우 여백을 자동으로 줘서 캘린더를 화면 가운데에 배치합니다. */
     margin: 0 auto;
 
-    /* 위쪽 150px, 좌우 0px, 아래쪽 80px의 안쪽 여백입니다.
+    /* 위쪽 0px, 좌우 0px, 아래쪽 80px의 안쪽 여백입니다.
        위쪽 값을 줄이면 캘린더가 헤더 쪽으로 올라갑니다. */
-    padding: 60px 0 80px;
+    padding: 0 0 80px;
 }
 
 
@@ -23,8 +23,8 @@
 
 .calendar-wrapper {
     /* 캘린더 상자 안쪽 여백입니다.
-       위 26px, 좌우 28px, 아래 30px입니다. */
-    padding: 26px 28px 30px;
+       위 20px, 좌우 28px, 아래 30px입니다. */
+    padding: 20px 28px 30px;
 
     /* 캘린더 상자의 바깥 모서리를 둥글게 만듭니다.
        값이 클수록 더 둥글어집니다. */
@@ -386,4 +386,22 @@
         /* 모바일에서 날짜 숫자를 10px로 줄입니다. */
         font-size: 10px;
     }
+}
+
+/* 기록이 있는 날짜 칸은 클릭할 수 있음을 표시합니다. */
+.calendar-day--has-record {
+    cursor: pointer;
+}
+
+/* 기록이 있는 날짜 칸에 마우스를 올렸을 때 살짝 올라갑니다. */
+.calendar-day--has-record:hover {
+    z-index: 2;
+
+    transform:
+        translateY(-3px)
+        rotate(0deg);
+
+    box-shadow:
+        0 8px 18px
+        rgba(77, 105, 139, 0.16);
 }

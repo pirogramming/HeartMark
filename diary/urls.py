@@ -20,6 +20,7 @@ urlpatterns = [
         views.emotion_calendar,
         name="calendar",
     ),
+    
 
     # 다이어리 기록 상세
     #

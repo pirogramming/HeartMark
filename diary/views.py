@@ -440,6 +440,7 @@ def diary_detail(request, pk):
         user=request.user,
     )
 
+    # 대표 감정 번호
     # 대표 감정 정보입니다.
     #
     # Record.main_emotion에는 1~20 사이 번호가 저장됩니다.
