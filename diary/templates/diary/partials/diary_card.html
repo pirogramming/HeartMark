@@ -1,9 +1,14 @@
+<!-- 일기 기록 카드 1개 감싸는 태그 -->
 <article class="diary-card">
+    <!-- 카드 전체를 클릭할 수 있도록 하는 링크 -->
     <a
         href="{% url 'records:detail' record.pk %}"
         class="diary-card-link"
     >
+    <!-- 카드 상단의 이미지 전체를 감싸는 요소
+        기록 사진, 대표 감정 아이콘 포함 -->
         <div class="diary-card-image-wrapper">
+            <!--현재 기록에 이미지가 있다면?-->
             {% if record.image %}
                 <img
                     src="{{ record.image.url }}"
@@ -16,22 +21,7 @@
                 </div>
             {% endif %}
 
-            {% if record.main_emotion %}
-                <div
-                    class="diary-card-emotion"
-                    data-main-emotion="{{ record.main_emotion }}"
-                    title="{{ record.main_emotion_name }}"
-                >
-                    <span
-                        class="emotion-icon emotion-icon--{{ record.main_emotion }}"
-                        aria-hidden="true"
-                    ></span>
-
-                    <span class="sr-only">
-                        대표 감정 {{ record.main_emotion_name }}
-                    </span>
-                </div>
-            {% endif %}
+            
         </div>
 
         <div class="diary-card-content">
@@ -41,21 +31,42 @@
             >
                 {{ record.created_at|date:"Y/m/d" }}
             </time>
-
+            <!--카드 제목처럼 출력-->
             <h2 class="diary-card-title">
                 {{ record.content|truncatechars:28 }}
             </h2>
 
-            {% if record.place_name %}
-                <p class="diary-card-location">
-                    <span aria-hidden="true">⌖</span>
-                    {{ record.place_name }}
-                </p>
-            {% else %}
-                <p class="diary-card-location diary-card-location--empty">
-                    장소 정보 없음
-                </p>
-            {% endif %}
+            <div class="diary-card-bottom-row">
+                {% if record.place_name %}
+                    <p class="diary-card-location">
+                        <span aria-hidden="true">⌖</span>
+                        {{ record.place_name }}
+                    </p>
+                {% else %}
+                    <p class="diary-card-location diary-card-location--empty">
+                        장소 정보 없음
+                    </p>
+                {% endif %}
+
+                <!--대표 감정이 있다면?-->
+                {% if record.main_emotion %}
+                    <div
+                        class="diary-card-emotion"
+                        data-main-emotion="{{ record.main_emotion }}"
+                        title="{{ record.main_emotion_name }}"
+                    >
+                    <!--화면에 실제 감정 아이콘을 표시하는 요소-->
+                        <span
+                            class="emotion-icon emotion-icon--{{ record.main_emotion }}"
+                            aria-hidden="true"
+                        ></span>
+
+                        <span class="sr-only">
+                            대표 감정 {{ record.main_emotion_name }}
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </a>
 </article>

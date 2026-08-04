@@ -1516,29 +1516,7 @@ body.modal-open {
         감정 표시
 ========================= */
 
-.diary-card-emotion {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 34px;
-    height: 34px;
-    padding: 0 9px;
-
-    border: 2px solid #ffffff;
-    border-radius: 999px;
-    background-color: #fff3f3;
-
-    color: #d65d69;
-    font-size: 12px;
-    font-weight: 700;
-
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12);
-}
 
 .diary-card-emotion img {
     display: block;
@@ -1559,7 +1537,20 @@ body.modal-open {
     flex-direction: column;
 
     min-height: 130px;
-    padding: 15px 14px 16px;
+    padding: 15px 14px 8px;
+}
+
+.diary-card-emotion {
+    position: static;
+    /*장소 이름이 길어져도 이모지가 작아지지 않게*/
+    flex-shrink: 0;
+
+
+    display: flex;
+    /*아이콘 세로 방향 가운데 정렬*/
+    align-items: center;
+    /*아이콘 가로 방향 가운데 정렬*/
+    justify-content: center;
 }
 
 .diary-card-date {
@@ -1588,14 +1579,22 @@ body.modal-open {
     -webkit-line-clamp: 2;
 }
 
-.diary-card-location {
+.diary-card-bottom-row {
     display: flex;
+    /*장소는 왼쪽 끝, 이모지는 오른쪽 끝*/
+    justify-content: space-between;
+    /*장소와 이모지의 세로 중심 맞춤*/
     align-items: center;
-    gap: 5px;
+    /*장소와 이모지 사이의 최소 간격*/
+    gap: 12px;
+    /*제목과 장소 줄 사이의 간격*/
+    margin-top: 12px;
+}
 
+.diary-card-location {
     overflow: hidden;
 
-    margin: auto 0 0;
+    margin: 0;
     padding-top: 13px;
 
     color: #7c776f;
