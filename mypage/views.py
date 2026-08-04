@@ -1,9 +1,11 @@
 from collections import Counter
-from datetime import timedelta
+from calendar import monthrange
+from datetime import date, timedelta
 
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 from django.utils import timezone
 
 
@@ -15,6 +17,15 @@ EMOTION_LABELS = {
     "17": "지루함", "18": "신남", "19": "추움", "20": "졸림",
 }
 
+# Keep the labels aligned with the emotion assets used by records.
+EMOTION_LABELS.update({
+    "01": "슬픔", "02": "사랑", "03": "따분", "04": "예민",
+    "05": "만족", "06": "슬픔", "07": "짝사랑", "08": "심술",
+    "09": "당황", "10": "슬픔", "11": "화남", "12": "신남",
+    "13": "아픔", "14": "놀람", "15": "행운", "16": "기쁨",
+    "17": "질투", "18": "맛있어!", "19": "냉철", "20": "졸림",
+})
+
 
 def _get_record_model():
     """기록 브랜치가 합쳐진 뒤 Record 모델을 자동으로 연결합니다."""
@@ -24,8 +35,31 @@ def _get_record_model():
         return None
 
 
+def _sync_profile_display_name(user, display_name):
+    """Keep the accounts profile name in sync without editing the accounts app."""
+    try:
+        profile_model = apps.get_model("accounts", "UserProfile")
+    except LookupError:
+        return
+
+    profile, _ = profile_model.objects.get_or_create(
+        user=user,
+        defaults={"display_name": display_name},
+    )
+    if profile.display_name != display_name:
+        profile.display_name = display_name
+        profile.save(update_fields=["display_name", "updated_at"])
+
+
 def _get_character_url(user):
     """accounts의 캐릭터 규격이 확정되면 이 함수만 맞춰 수정합니다."""
+    try:
+        character_id = user.profile.character_id
+    except Exception:
+        character_id = None
+    if character_id in range(1, 6):
+        return static(f"accounts/images/{character_id}.png")
+
     for relation_name in ("character", "selected_character"):
         try:
             character = getattr(user, relation_name, None)
@@ -138,12 +172,17 @@ def _build_insights(records):
     }
 
 
-def _build_attendance(user):
+def _build_attendance(user, start_date=None, end_date=None):
     today = timezone.localdate()
     joined_at = user.date_joined
     if timezone.is_aware(joined_at):
         joined_at = timezone.localtime(joined_at)
-    first_day = min(joined_at.date(), today)
+    joined_day = min(joined_at.date(), today)
+    is_period_filtered = start_date is not None or end_date is not None
+    first_day = max(start_date, joined_day) if start_date else joined_day
+    last_day = end_date or today
+    if last_day < first_day:
+        last_day = first_day
     record_by_date = {}
     record_model = _get_record_model()
 
@@ -152,7 +191,7 @@ def _build_attendance(user):
             records = record_model.objects.filter(
                 user=user,
                 created_at__date__gte=first_day,
-                created_at__date__lte=today,
+                created_at__date__lte=min(last_day, today),
             ).order_by("-created_at")
             for record in records:
                 record_day = _record_day(record)
@@ -164,9 +203,13 @@ def _build_attendance(user):
             record_by_date = {}
 
     attendance_days = []
-    elapsed_day_count = (today - first_day).days + 1
+    elapsed_day_count = (last_day - first_day).days + 1
     # 오늘이 포함된 기간 다음의 미래 14일까지 탐색할 수 있게 한 페이지를 더 둡니다.
-    slot_count = (((elapsed_day_count + 13) // 14) + 1) * 14
+    slot_count = (
+        elapsed_day_count
+        if is_period_filtered
+        else (((elapsed_day_count + 13) // 14) + 1) * 14
+    )
     for offset in range(slot_count):
         day = first_day + timedelta(days=offset)
         is_future = day > today
@@ -178,6 +221,7 @@ def _build_attendance(user):
             "date": day,
             "record": record,
             "emotion_number": emotion_number,
+            "emotion_label": EMOTION_LABELS.get(emotion_number, "감정") if emotion_number else "",
             "is_future": is_future,
             "is_today": day == today,
         })
@@ -191,11 +235,53 @@ def mypage(request):
         if display_name and len(display_name) <= 30:
             request.user.first_name = display_name
             request.user.save(update_fields=["first_name"])
+            _sync_profile_display_name(request.user, display_name)
         return redirect("mypage:home")
+
+    # Repair profiles saved before both name fields were kept in sync.
+    if request.user.first_name:
+        _sync_profile_display_name(request.user, request.user.first_name)
+
+    selected_year = request.GET.get("attendance_year", "")
+    selected_month = request.GET.get("attendance_month", "")
+    selected_day = request.GET.get("attendance_day", "")
+    try:
+        year = int(selected_year) if selected_year else None
+        month = int(selected_month) if selected_month else None
+        day = int(selected_day) if selected_day else None
+        if year is not None and not 1 <= year <= 9999:
+            raise ValueError
+        if month is not None and not 1 <= month <= 12:
+            raise ValueError
+        if day is not None and month is None:
+            raise ValueError
+
+        start_date = None
+        end_date = None
+        if year is not None:
+            if month is None:
+                start_date = date(year, 1, 1)
+                end_date = date(year, 12, 31)
+            elif day is None:
+                start_date = date(year, month, 1)
+                end_date = date(year, month, monthrange(year, month)[1])
+            else:
+                start_date = date(year, month, day)
+                end_date = start_date
+    except (TypeError, ValueError):
+        selected_year = ""
+        selected_month = ""
+        selected_day = ""
+        year = month = day = None
+        start_date = end_date = None
 
     user_records = _get_user_records(request.user)
     insights = _build_insights(user_records)
-    attendance_days, attendance_count = _build_attendance(request.user)
+    attendance_days, attendance_count = _build_attendance(
+        request.user,
+        start_date=start_date,
+        end_date=end_date,
+    )
     attendance_pages = []
     current_page_index = 0
     for start in range(0, len(attendance_days), 14):
@@ -208,10 +294,20 @@ def mypage(request):
                 f"{page_days[0]['date']:%m/%d} - {page_days[-1]['date']:%m/%d}"
             ),
         })
+    joined_at = request.user.date_joined
+    if timezone.is_aware(joined_at):
+        joined_at = timezone.localtime(joined_at)
     context = {
         "attendance_pages": attendance_pages,
         "attendance_count": attendance_count,
         "current_page_index": current_page_index,
+        "attendance_years": range(joined_at.year, timezone.localdate().year + 2),
+        "attendance_months": range(1, 13),
+        "attendance_days": range(1, 32),
+        "selected_attendance_year": year,
+        "selected_attendance_month": month,
+        "selected_attendance_day": day,
+        "attendance_joined_date": joined_at.date().isoformat(),
         "character_url": _get_character_url(request.user),
         **insights,
     }

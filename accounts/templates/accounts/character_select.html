@@ -9,7 +9,7 @@
 
 {% block content %}
 <section class="character-page" aria-labelledby="character-title">
-    <form class="character-form" action="{% url 'accounts:character_select' %}" method="post">
+    <form class="character-form" action="{% url 'accounts:character_select' %}{% if is_editing %}?edit=1{% endif %}" method="post">
         {% csrf_token %}
         <div class="character-heading">
             <h1 id="character-title">내 프로필 이미지를 골라주세요</h1>
