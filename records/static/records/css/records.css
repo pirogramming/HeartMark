@@ -301,6 +301,7 @@
 
 .record-verified-place {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
     gap: 4px;
     min-width: 0;
@@ -709,7 +710,7 @@
 .record-create-layout {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(260px, 0.78fr) minmax(430px, 1.55fr);
+    grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.55fr);
     grid-template-rows: minmax(0, 1fr) auto auto;
     gap: clamp(34px, 4vw, 68px);
     row-gap: 12px;
@@ -873,6 +874,13 @@ body.record-modal-open {
     gap: 16px;
 }
 
+.record-detail-shell,
+.record-detail-shell *,
+.record-page-shell,
+.record-page-shell * {
+    box-sizing: border-box;
+}
+
 .record-detail-shell {
     min-height: calc(100vh - 90px);
     padding: 48px 24px;
@@ -880,7 +888,8 @@ body.record-modal-open {
 }
 
 .record-detail-card {
-    width: min(1180px, 100%);
+    width: min(1180px, calc(100vw - 48px));
+    max-width: 100%;
     padding: clamp(28px, 4vw, 56px);
     margin: 0 auto;
     border: 1.5px solid var(--record-ink);
@@ -1424,5 +1433,620 @@ body.record-edit-open .site-main {
 
     .record-edit-emotion-grid {
         grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* Tablet: 768px - 1023px */
+@media (max-width: 1023px) {
+    .record-overlay {
+        padding: 24px 38px;
+    }
+
+    .record-modal {
+        width: min(920px, calc(100vw - 76px));
+        height: min(760px, calc(100vh - 48px));
+        max-height: calc(100vh - 48px);
+    }
+
+    .record-modal.record-modal--fullscreen {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+    }
+
+    .record-paper,
+    .record-modal--fullscreen .record-paper {
+        max-height: 100%;
+        padding: 34px 38px 26px;
+        border-radius: 28px;
+        overflow-x: hidden;
+    }
+
+    .record-modal--fullscreen .record-paper {
+        width: 100vw;
+        height: 100dvh;
+        min-height: 100dvh;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .record-modal--fullscreen .record-modal__controls {
+        position: fixed;
+        top: 14px;
+        right: 16px;
+    }
+
+    .record-imagination-character {
+        display: none;
+    }
+
+    .record-create-layout,
+    .record-modal--fullscreen .record-create-layout {
+        grid-template-columns: minmax(230px, 0.8fr) minmax(340px, 1.2fr);
+        gap: 30px;
+        row-gap: 14px;
+    }
+
+    .record-modal--fullscreen .record-create-layout__left {
+        width: min(100%, 340px);
+    }
+
+    .record-create-layout__left,
+    .record-create-layout__right {
+        gap: 16px;
+        padding-top: 16px;
+    }
+
+    .record-create-layout .record-date {
+        min-height: 54px;
+        flex-basis: 54px;
+        justify-content: flex-start;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .record-date {
+        gap: 8px;
+    }
+
+    .record-date strong {
+        font-size: 0.96rem;
+    }
+
+    .record-verified-place {
+        max-width: none;
+        font-size: 0.76rem;
+    }
+
+    .record-create-layout .photo-box {
+        width: min(100%, 300px);
+    }
+
+    .record-create-layout .weather-picker {
+        justify-content: flex-end;
+    }
+
+    .record-create-layout .weather-icon,
+    .record-edit-weather .weather-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .record-create-layout .diary-field {
+        min-height: 260px;
+    }
+
+    .record-create-layout .emotion-picker__options,
+    .record-edit-emotion-grid {
+        grid-template-columns: repeat(5, minmax(36px, 1fr));
+        gap: 4px;
+    }
+
+    .record-create-layout .emotion-icon,
+    .record-edit-emotion-grid .emotion-icon {
+        width: clamp(40px, 5vw, 52px);
+        height: clamp(36px, 4.5vw, 46px);
+    }
+
+    .record-detail-shell {
+        padding: 38px 28px;
+    }
+
+    .record-detail-card {
+        width: 100%;
+        padding: 34px;
+    }
+
+    .record-detail-layout {
+        grid-template-columns: minmax(240px, 0.85fr) minmax(300px, 1.15fr);
+        gap: 34px;
+    }
+
+    .record-detail-footer {
+        gap: 20px;
+    }
+
+    .record-detail-emotions {
+        gap: 16px;
+    }
+
+    .record-edit-shell {
+        padding: 42px 34px 46px;
+    }
+
+    .record-edit-paper {
+        display: grid;
+    }
+
+    .record-edit-main {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .record-edit-left {
+        width: min(100%, 380px);
+    }
+
+    .record-edit-photo {
+        width: min(100%, 360px);
+        max-height: none;
+    }
+
+    .record-edit-weather {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .record-edit-diary {
+        min-height: 300px;
+    }
+}
+
+/* Mobile: 767px and below */
+@media (max-width: 767px) {
+    .record-overlay {
+        align-items: stretch;
+        padding: 0;
+        place-items: stretch;
+    }
+
+    .record-modal,
+    .record-modal--fullscreen {
+        position: relative;
+        inset: auto;
+        width: 100vw;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+    }
+
+    .record-modal__controls,
+    .record-modal--fullscreen .record-modal__controls {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+    }
+
+    .record-icon-button {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 249, 235, 0.96);
+    }
+
+    .record-paper,
+    .record-modal--fullscreen .record-paper {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        max-height: none;
+        padding: 58px 16px 24px;
+        overflow-y: auto;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .record-create-layout,
+    .record-modal--fullscreen .record-create-layout {
+        display: flex;
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .record-create-layout__left,
+    .record-create-layout__right,
+    .record-modal--fullscreen .record-create-layout__left {
+        width: 100%;
+        gap: 18px;
+        padding: 0;
+    }
+
+    .record-create-layout .record-date {
+        min-height: auto;
+        flex: none;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .record-date strong {
+        font-size: 0.92rem;
+    }
+
+    .record-verified-place {
+        max-width: none;
+        overflow: visible;
+        font-size: 0.72rem;
+        text-overflow: clip;
+    }
+
+    .record-create-layout .photo-box,
+    .record-modal--fullscreen .record-create-layout .photo-box {
+        width: min(100%, 300px);
+        max-height: none;
+        margin-inline: auto;
+    }
+
+    .photo-box__empty > p {
+        padding-inline: 14px;
+        font-size: 0.8rem;
+    }
+
+    .record-create-layout .weather-picker {
+        justify-content: center;
+    }
+
+    .record-create-layout .weather-picker__options {
+        justify-content: center;
+        gap: 2px;
+    }
+
+    .record-create-layout .weather-icon,
+    .record-edit-weather .weather-icon {
+        width: clamp(44px, 14vw, 52px);
+        height: clamp(44px, 14vw, 52px);
+    }
+
+    .record-create-layout .diary-field,
+    .record-edit-diary {
+        min-height: 260px;
+    }
+
+    .record-create-layout .emotion-picker__options,
+    .record-edit-emotion-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px 4px;
+    }
+
+    .record-create-layout .emotion-icon,
+    .record-edit-emotion-grid .emotion-icon {
+        width: clamp(44px, 13vw, 54px);
+        height: clamp(39px, 11vw, 48px);
+    }
+
+    .emotion-main-badge {
+        top: -5px;
+        right: -2px;
+        padding: 2px 5px;
+        font-size: 0.55rem;
+    }
+
+    .record-paper__footer {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        padding-top: 4px;
+    }
+
+    .record-form-message {
+        width: 100%;
+        text-align: center;
+    }
+
+    .record-submit {
+        width: min(100%, 240px);
+        min-width: 0;
+    }
+
+    .record-detail-shell,
+    .record-page-shell {
+        min-height: calc(100vh - 72px);
+        padding: 24px 14px 40px;
+    }
+
+    .record-detail-card,
+    .record-page-card {
+        width: 100%;
+        max-width: 100%;
+        padding: 24px 18px;
+        border-radius: 22px;
+    }
+
+    .record-detail-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-bottom: 22px;
+    }
+
+    .record-detail-header p {
+        font-size: 1rem;
+    }
+
+    .record-detail-weather {
+        width: 56px;
+        height: 56px;
+    }
+
+    .record-detail-layout {
+        grid-template-columns: 1fr;
+        gap: 26px;
+    }
+
+    .record-detail-photo {
+        width: min(100%, 330px);
+        margin-inline: auto;
+    }
+
+    .record-detail-content {
+        min-height: 260px;
+    }
+
+    .record-detail-footer,
+    .record-detail-emotions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .record-detail-footer {
+        min-height: 0;
+        gap: 24px;
+    }
+
+    .record-detail-emotion-list {
+        flex-wrap: wrap;
+    }
+
+    .record-detail-emotion {
+        width: 58px;
+        height: 58px;
+    }
+
+    .record-detail-emotion img {
+        width: 49px;
+        height: 44px;
+    }
+
+    .record-detail-emotion--main {
+        width: 70px;
+        height: 70px;
+    }
+
+    .record-detail-emotion--main img {
+        width: 58px;
+        height: 52px;
+    }
+
+    .record-detail-actions {
+        width: 100%;
+        align-self: stretch;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .record-secondary-button,
+    .record-danger-button,
+    .record-cancel-button {
+        padding: 9px 13px;
+        font-size: 0.86rem;
+    }
+
+    .record-delete-overlay {
+        padding: 16px;
+    }
+
+    .record-delete-modal {
+        width: 100%;
+        padding: 38px 20px;
+        border-radius: 24px;
+    }
+
+    .record-delete-modal h2 {
+        font-size: 1.55rem;
+    }
+
+    .record-delete-modal p {
+        margin-top: 20px;
+        font-size: 0.92rem;
+        line-height: 1.6;
+    }
+
+    .record-delete-modal form {
+        gap: 10px;
+        margin-top: 28px;
+    }
+
+    .record-delete-modal button {
+        min-width: 100px;
+    }
+
+    .record-edit-shell {
+        padding: 28px 14px 38px;
+    }
+
+    .record-edit-paper {
+        display: block;
+        min-height: 0;
+    }
+
+    .record-edit-main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .record-edit-left {
+        width: 100%;
+        gap: 16px;
+    }
+
+    .record-edit-left > time {
+        min-height: 46px;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .record-edit-photo {
+        width: min(100%, 330px);
+        max-height: none;
+    }
+
+    .record-edit-weather {
+        min-height: auto;
+        padding-top: 10px;
+    }
+
+    .record-edit-emotions {
+        margin-top: 28px;
+    }
+
+    .record-edit-actions {
+        min-height: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .record-edit-actions .record-form-message {
+        flex-basis: 100%;
+    }
+
+    .record-edit-actions .record-submit {
+        width: auto;
+        min-width: 132px;
+    }
+
+    .record-delete-card {
+        padding: 32px 20px;
+        margin-top: 4vh;
+    }
+}
+
+/* Compact PC: keep the desktop layout usable around 1024px. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .record-overlay {
+        padding: 22px 40px;
+    }
+
+    .record-modal {
+        width: min(1120px, calc(100vw - 80px));
+        height: min(760px, calc(100vh - 44px));
+        max-height: calc(100vh - 44px);
+    }
+
+    .record-modal.record-modal--fullscreen {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+    }
+
+    .record-paper {
+        padding: 34px 38px 26px;
+        overflow-x: hidden;
+    }
+
+    .record-modal--fullscreen .record-paper {
+        width: 100vw;
+        height: 100dvh;
+        min-height: 100dvh;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .record-modal--fullscreen .record-modal__controls {
+        position: fixed;
+        top: 14px;
+        right: 16px;
+    }
+
+    .record-imagination-character {
+        display: none;
+    }
+
+    .record-create-layout {
+        grid-template-columns: minmax(250px, 0.82fr) minmax(0, 1.18fr);
+        gap: 34px;
+        row-gap: 12px;
+    }
+
+    .record-create-layout__left,
+    .record-create-layout__right {
+        gap: 16px;
+        padding-top: 16px;
+    }
+
+    .record-create-layout .record-date {
+        min-height: 56px;
+        flex-basis: 56px;
+        justify-content: flex-start;
+    }
+
+    .record-date {
+        flex-wrap: nowrap;
+        gap: 7px;
+        overflow-x: auto;
+    }
+
+    .record-verified-place {
+        width: fit-content;
+        max-width: none;
+        overflow: visible;
+        white-space: nowrap;
+    }
+
+    .record-create-layout .photo-box {
+        width: min(100%, 310px);
+    }
+
+    .record-create-layout .weather-picker__options {
+        flex-wrap: nowrap;
+        gap: 1px;
+    }
+
+    .record-create-layout .weather-icon {
+        width: clamp(48px, 5vw, 58px);
+        height: clamp(48px, 5vw, 58px);
+    }
+
+    .record-create-layout .diary-field {
+        min-height: 270px;
+    }
+
+    .record-create-layout .emotion-picker__options {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+        gap: 5px 2px;
+    }
+
+    .record-create-layout .emotion-icon {
+        width: clamp(40px, 4.4vw, 50px);
+        height: clamp(36px, 4vw, 45px);
+    }
+
+    .record-create-layout .record-paper__footer {
+        padding-top: 4px;
     }
 }
