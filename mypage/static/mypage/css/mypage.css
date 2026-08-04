@@ -109,6 +109,117 @@
     margin: 0;
 }
 
+.attendance-filter-form {
+    position: relative;
+    margin-left: auto;
+}
+
+.attendance-period-summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+}
+
+.attendance-period-summary::-webkit-details-marker {
+    display: none;
+}
+
+.attendance-filter-form[open] .attendance-period-summary {
+    border-color: #e1bd55;
+    background: #fff7d9;
+}
+
+.attendance-calendar-filter .period-input-group select {
+    min-height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ded7cb;
+    border-radius: 9px;
+    color: #333;
+    background: #fff;
+    font: inherit;
+}
+
+.attendance-period-toggle {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    padding: 0 16px;
+    border: 1px solid #e6ded0;
+    border-radius: 12px;
+    color: #333;
+    background: #fff;
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    list-style: none;
+    cursor: pointer;
+}
+
+.attendance-period-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.attendance-filter-form[open] .attendance-period-toggle {
+    border-color: #e1bd55;
+    background: #fff7d9;
+}
+
+.attendance-period-filter {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 20;
+    display: flex;
+    min-width: 500px;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 18px;
+    border: 1px solid #e6ded0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 12%);
+}
+
+.attendance-period-filter label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    color: var(--mypage-muted);
+    font-size: 0.76rem;
+}
+
+.attendance-period-filter select {
+    min-height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ded7cb;
+    border-radius: 9px;
+    color: #333;
+    background: #fff;
+    font: inherit;
+}
+
+.attendance-period-apply,
+.attendance-period-reset {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    border: 1px solid #e0bd59;
+    border-radius: 9px;
+    color: var(--mypage-ink);
+    background: #ffe99c;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.attendance-period-reset {
+    border-color: #ded7cb;
+    background: #fff;
+}
+
 .attendance-heading h2 {
     position: absolute;
     top: -35px;
@@ -291,6 +402,7 @@
 
 .attendance-pagination {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
     margin-top: 22px;
@@ -795,6 +907,12 @@
     .attendance-heading {
         right: 22px;
         left: 22px;
+    }
+
+    .attendance-period-filter {
+        right: -8px;
+        min-width: min(500px, calc(100vw - 28px));
+        flex-wrap: wrap;
     }
 
     .attendance-heading p,

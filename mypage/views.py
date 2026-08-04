@@ -1,5 +1,6 @@
 from collections import Counter
-from datetime import timedelta
+from calendar import monthrange
+from datetime import date, timedelta
 
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
@@ -147,12 +148,17 @@ def _build_insights(records):
     }
 
 
-def _build_attendance(user):
+def _build_attendance(user, start_date=None, end_date=None):
     today = timezone.localdate()
     joined_at = user.date_joined
     if timezone.is_aware(joined_at):
         joined_at = timezone.localtime(joined_at)
-    first_day = min(joined_at.date(), today)
+    joined_day = min(joined_at.date(), today)
+    is_period_filtered = start_date is not None or end_date is not None
+    first_day = max(start_date, joined_day) if start_date else joined_day
+    last_day = end_date or today
+    if last_day < first_day:
+        last_day = first_day
     record_by_date = {}
     record_model = _get_record_model()
 
@@ -161,7 +167,7 @@ def _build_attendance(user):
             records = record_model.objects.filter(
                 user=user,
                 created_at__date__gte=first_day,
-                created_at__date__lte=today,
+                created_at__date__lte=min(last_day, today),
             ).order_by("-created_at")
             for record in records:
                 record_day = _record_day(record)
@@ -173,9 +179,13 @@ def _build_attendance(user):
             record_by_date = {}
 
     attendance_days = []
-    elapsed_day_count = (today - first_day).days + 1
+    elapsed_day_count = (last_day - first_day).days + 1
     # 오늘이 포함된 기간 다음의 미래 14일까지 탐색할 수 있게 한 페이지를 더 둡니다.
-    slot_count = (((elapsed_day_count + 13) // 14) + 1) * 14
+    slot_count = (
+        elapsed_day_count
+        if is_period_filtered
+        else (((elapsed_day_count + 13) // 14) + 1) * 14
+    )
     for offset in range(slot_count):
         day = first_day + timedelta(days=offset)
         is_future = day > today
@@ -203,9 +213,46 @@ def mypage(request):
             request.user.save(update_fields=["first_name"])
         return redirect("mypage:home")
 
+    selected_year = request.GET.get("attendance_year", "")
+    selected_month = request.GET.get("attendance_month", "")
+    selected_day = request.GET.get("attendance_day", "")
+    try:
+        year = int(selected_year) if selected_year else None
+        month = int(selected_month) if selected_month else None
+        day = int(selected_day) if selected_day else None
+        if year is not None and not 1 <= year <= 9999:
+            raise ValueError
+        if month is not None and not 1 <= month <= 12:
+            raise ValueError
+        if day is not None and month is None:
+            raise ValueError
+
+        start_date = None
+        end_date = None
+        if year is not None:
+            if month is None:
+                start_date = date(year, 1, 1)
+                end_date = date(year, 12, 31)
+            elif day is None:
+                start_date = date(year, month, 1)
+                end_date = date(year, month, monthrange(year, month)[1])
+            else:
+                start_date = date(year, month, day)
+                end_date = start_date
+    except (TypeError, ValueError):
+        selected_year = ""
+        selected_month = ""
+        selected_day = ""
+        year = month = day = None
+        start_date = end_date = None
+
     user_records = _get_user_records(request.user)
     insights = _build_insights(user_records)
-    attendance_days, attendance_count = _build_attendance(request.user)
+    attendance_days, attendance_count = _build_attendance(
+        request.user,
+        start_date=start_date,
+        end_date=end_date,
+    )
     attendance_pages = []
     current_page_index = 0
     for start in range(0, len(attendance_days), 14):
@@ -218,10 +265,20 @@ def mypage(request):
                 f"{page_days[0]['date']:%m/%d} - {page_days[-1]['date']:%m/%d}"
             ),
         })
+    joined_at = request.user.date_joined
+    if timezone.is_aware(joined_at):
+        joined_at = timezone.localtime(joined_at)
     context = {
         "attendance_pages": attendance_pages,
         "attendance_count": attendance_count,
         "current_page_index": current_page_index,
+        "attendance_years": range(joined_at.year, timezone.localdate().year + 2),
+        "attendance_months": range(1, 13),
+        "attendance_days": range(1, 32),
+        "selected_attendance_year": year,
+        "selected_attendance_month": month,
+        "selected_attendance_day": day,
+        "attendance_joined_date": joined_at.date().isoformat(),
         "character_url": _get_character_url(request.user),
         **insights,
     }

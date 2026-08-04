@@ -4,6 +4,7 @@
 {% block title %}마이페이지 | 마음자국{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'diary/css/diary.css' %}">
 <link rel="stylesheet" href="{% static 'mypage/css/mypage.css' %}">
 {% endblock %}
 
@@ -40,7 +41,40 @@
             <div>
                 <h2 id="attendance-title">출석체크</h2>
             </div>
-            <strong>{{ attendance_count }}일 기록</strong>
+            <details class="diary-filter-form attendance-filter-form">
+                <summary class="period-toggle-button attendance-period-summary">기간 설정</summary>
+                <form class="period-filter attendance-calendar-filter" method="get">
+                    <div class="period-input-group">
+                        <label for="attendance-year-select">연도</label>
+                        <select name="attendance_year" id="attendance-year-select" required>
+                            <option value="">연도 선택</option>
+                            {% for year_option in attendance_years %}
+                            <option value="{{ year_option }}"{% if year_option == selected_attendance_year %} selected{% endif %}>{{ year_option }}년</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="period-input-group">
+                        <label for="attendance-month-select">월</label>
+                        <select name="attendance_month" id="attendance-month-select">
+                            <option value="">전체</option>
+                            {% for month_option in attendance_months %}
+                            <option value="{{ month_option }}"{% if month_option == selected_attendance_month %} selected{% endif %}>{{ month_option }}월</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="period-input-group">
+                        <label for="attendance-day-select">일</label>
+                        <select name="attendance_day" id="attendance-day-select">
+                            <option value="">전체</option>
+                            {% for day_option in attendance_days %}
+                            <option value="{{ day_option }}"{% if day_option == selected_attendance_day %} selected{% endif %}>{{ day_option }}일</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button class="period-apply-button" type="submit">적용</button>
+                    <a class="period-reset-button" href="{% url 'mypage:home' %}">초기화</a>
+                </form>
+            </details>
         </div>
 
         <div class="attendance-slider" id="attendance-slider" data-current-page="{{ current_page_index }}">

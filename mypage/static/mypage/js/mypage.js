@@ -1,4 +1,31 @@
 (() => {
+    const yearSelect = document.querySelector('[name="attendance_year"]');
+    const monthSelect = document.querySelector("#attendance-month-select");
+    const daySelect = document.querySelector("#attendance-day-select");
+    const updatePeriodSelects = () => {
+        if (!yearSelect || !monthSelect || !daySelect) return;
+        monthSelect.disabled = !yearSelect.value;
+        daySelect.disabled = !yearSelect.value || !monthSelect.value;
+
+        if (daySelect.disabled) {
+            daySelect.value = "";
+            return;
+        }
+
+        const lastDay = new Date(
+            Number(yearSelect.value),
+            Number(monthSelect.value),
+            0,
+        ).getDate();
+        [...daySelect.options].forEach((option) => {
+            option.hidden = Boolean(option.value) && Number(option.value) > lastDay;
+        });
+        if (Number(daySelect.value) > lastDay) daySelect.value = "";
+    };
+    yearSelect?.addEventListener("change", updatePeriodSelects);
+    monthSelect?.addEventListener("change", updatePeriodSelects);
+    updatePeriodSelects();
+
     const editor = document.querySelector("#profile-editor");
     const openButton = document.querySelector("#open-profile-editor");
     const closeButton = editor?.querySelector(".profile-editor__close");
