@@ -59,6 +59,7 @@
             </section>
 
             <div class="record-detail-actions">
+                <a class="record-secondary-button" href="{% url 'diary:list' %}">목록으로</a>
                 <a class="record-secondary-button" href="{% url 'records:update' record.pk %}">수정</a>
                 <button class="record-danger-button" id="open-record-delete-modal" type="button">삭제</button>
             </div>
