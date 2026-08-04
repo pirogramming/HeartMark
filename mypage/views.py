@@ -5,6 +5,7 @@ from datetime import date, timedelta
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 from django.utils import timezone
 
 
@@ -34,8 +35,31 @@ def _get_record_model():
         return None
 
 
+def _sync_profile_display_name(user, display_name):
+    """Keep the accounts profile name in sync without editing the accounts app."""
+    try:
+        profile_model = apps.get_model("accounts", "UserProfile")
+    except LookupError:
+        return
+
+    profile, _ = profile_model.objects.get_or_create(
+        user=user,
+        defaults={"display_name": display_name},
+    )
+    if profile.display_name != display_name:
+        profile.display_name = display_name
+        profile.save(update_fields=["display_name", "updated_at"])
+
+
 def _get_character_url(user):
     """accounts의 캐릭터 규격이 확정되면 이 함수만 맞춰 수정합니다."""
+    try:
+        character_id = user.profile.character_id
+    except Exception:
+        character_id = None
+    if character_id in range(1, 6):
+        return static(f"accounts/images/{character_id}.png")
+
     for relation_name in ("character", "selected_character"):
         try:
             character = getattr(user, relation_name, None)
@@ -211,7 +235,12 @@ def mypage(request):
         if display_name and len(display_name) <= 30:
             request.user.first_name = display_name
             request.user.save(update_fields=["first_name"])
+            _sync_profile_display_name(request.user, display_name)
         return redirect("mypage:home")
+
+    # Repair profiles saved before both name fields were kept in sync.
+    if request.user.first_name:
+        _sync_profile_display_name(request.user, request.user.first_name)
 
     selected_year = request.GET.get("attendance_year", "")
     selected_month = request.GET.get("attendance_month", "")

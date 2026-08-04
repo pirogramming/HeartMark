@@ -36,3 +36,25 @@ class LoginRedirectTests(TestCase):
 
         response = self.client.get(reverse("accounts:post_login_redirect"))
         self.assertRedirects(response, record_entry, fetch_redirect_response=False)
+
+    def test_character_can_be_changed_from_mypage(self):
+        self.client.force_login(self.user)
+        response = self.client.post(
+            f"{reverse('accounts:character_select')}?edit=1",
+            {
+                "display_name": "새 이름",
+                "character_id": "4",
+            },
+        )
+
+        self.assertRedirects(response, reverse("mypage:home"))
+        self.user.refresh_from_db()
+        self.user.profile.refresh_from_db()
+        self.assertEqual(self.user.profile.character_id, 4)
+        self.assertEqual(self.user.first_name, "새 이름")
+
+        response = self.client.get(reverse("mypage:home"))
+        self.assertEqual(
+            response.context["character_url"],
+            "/static/accounts/images/4.png",
+        )

@@ -883,6 +883,7 @@
 }
 
 .profile-character-pending {
+    display: block;
     width: 100%;
     padding: 11px;
     margin-top: 12px;
@@ -890,6 +891,9 @@
     border-radius: 10px;
     color: var(--mypage-muted);
     background: transparent;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @media (max-width: 720px) {

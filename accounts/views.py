@@ -144,6 +144,10 @@ def character_select_view(request):
             profile.character_id = character_id
             profile.onboarding_completed = True
             profile.save()
+            request.user.first_name = display_name
+            request.user.save(update_fields=["first_name"])
+            if is_editing:
+                return redirect("mypage:home")
             return redirect(request.session.pop(LOGIN_NEXT_SESSION_KEY, "common:home"))
 
     selected_character = profile.character_id or 2
@@ -156,6 +160,7 @@ def character_select_view(request):
             "characters": CHARACTER_CHOICES,
             "display_name": display_name,
             "selected_character": selected_character,
+            "is_editing": is_editing,
             "errors": errors,
         },
     )

@@ -225,9 +225,9 @@
                 >
                 <button class="mypage-save-button" type="submit">이름 저장</button>
             </form>
-            <button class="profile-character-pending" type="button" disabled>
-                캐릭터 바꾸기 · 연결 예정
-            </button>
+            <a class="profile-character-pending" href="{% url 'accounts:character_select' %}?edit=1">
+                메인 캐릭터 바꾸기
+            </a>
         </div>
     </div>
 </section>
