@@ -190,8 +190,18 @@
                 <div class="emotion-month-summary">
                     <span>가장 많이 기록한 감정</span>
 
-                    {% if top_emotion %}
-                        <strong>{{ top_emotion.name }}</strong>
+                    {% if top_emotions %}
+                        <strong class="top-emotion-list">
+                            {% for emotion in top_emotions %}
+                                <span class="top-emotion-name">
+                                    {{ emotion.name }}
+                                </span>
+
+                                {% if not forloop.last %}
+                                    <span class="top-emotion-separator">·</span>
+                                {% endif %}
+                            {% endfor %}
+                        </strong>
                     {% else %}
                         <strong>아직 기록 없음</strong>
                     {% endif %}
@@ -199,24 +209,30 @@
             </div>
 
             <div class="emotion-bubble-area">
-                {% for emotion in emotions %}
+                {% for emotion in recorded_emotions %}
                     <button
                         type="button"
                         class="
                             emotion-bubble
                             emotion-bubble--{{ emotion.size|default:'medium' }}
 
-                            {% if emotion.name == '기쁨' or emotion.name == '행복' or emotion.name == '설렘' or emotion.name == '안정' or emotion.name == '감사' or emotion.name == '평온'%}
-                                emotion-bubble--yellow
-
-                            {% elif emotion.name == '걱정' or emotion.name == '슬픔' or emotion.name == '화남' or emotion.name == '불안' or emotion.name == '긴장' or emotion.name == '우울' or emotion.name == '피로' or emotion.name == '답답' or emotion.name == '지침' %}
-                                emotion-bubble--blue
-
-                            {% elif emotion.name == '뿌듯' or emotion.name == '성취' or emotion.name == '기대' or emotion.name == '자신감' %}
+                            {% if emotion.name == '사랑' or emotion.name == '짝사랑'%}
                                 emotion-bubble--pink
 
-                            {% elif emotion.name == '민망함' or emotion.name == '외로움' %}
-                                emotion-bubble--green
+                            {% elif emotion.name == '슬픔' or emotion.name == '아픔'%}
+                                emotion-bubble--blue
+
+                            {% elif emotion.name == '기쁨' or emotion.name == '만족' or emotion.name == '신남' or emotion.name == '행운' or emotion.name == '맛있어!' %}
+                                emotion-bubble--yellow
+
+                            {% elif emotion.name == '따분' or emotion.name == '졸림' or emotion.name == '예민' or emotion.name == '냉철' %}
+                                emotion-bubble--purple
+
+                            {% elif emotion.name == '심술' or emotion.name == '화남' or emotion.name == '질투' %}
+                                emotion-bubble--red
+
+                            {% elif emotion.name == '당황' or emotion.name == '놀람' %}
+                                emotion-bubble--orange
 
                             {% else %}
                                 emotion-bubble--default
@@ -268,8 +284,26 @@
         -->
 
             <div class="location-map-section">
-                <div class="location-map-wrapper">
+
+                <!--
+                    지도 위쪽 도구 영역입니다.
+
+                    점 세 개 버튼을 지도 내부에 겹치지 않고,
+                    지도 위 오른쪽에 독립적으로 배치합니다.
+                -->
+                <div class="map-toolbar">
+
                     <div class="map-display-settings">
+
+                        <!--
+                            지도 색상 설정 메뉴를 여는 버튼입니다.
+
+                            aria-expanded
+                            → 메뉴가 열렸는지 닫혔는지를 접근성 도구에 알려줍니다.
+
+                            aria-controls
+                            → 이 버튼이 어떤 메뉴를 제어하는지 연결합니다.
+                        -->
                         <button
                             type="button"
                             class="map-settings-button"
@@ -281,38 +315,80 @@
                             ⋯
                         </button>
 
+                        <!--
+                            지도 색상 설정 메뉴입니다.
+
+                            hidden 속성이 있으면 처음에는 보이지 않고,
+                            diary.js에서 버튼 클릭 시 hidden을 제거합니다.
+                        -->
                         <div
                             class="map-settings-menu"
                             id="map-settings-menu"
                             hidden
                         >
-                            <p class="map-settings-title">지도 색상 방식</p>
+                            <p class="map-settings-title">
+                                지도 색상 방식
+                            </p>
 
-                            <button type="button" data-map-mode="uniform">
+                            <button
+                                type="button"
+                                data-map-mode="uniform"
+                            >
                                 같은 색으로 통일
                             </button>
 
-                            <button type="button" data-map-mode="dominant">
+                            <button
+                                type="button"
+                                data-map-mode="dominant"
+                            >
                                 가장 많은 감정 색
                             </button>
 
-                            <button type="button" data-map-mode="latest">
+                            <button
+                                type="button"
+                                data-map-mode="latest"
+                            >
                                 가장 최근 감정 색
                             </button>
 
-                            <button type="button" data-map-mode="intensity">
+                            <button
+                                type="button"
+                                data-map-mode="intensity"
+                            >
                                 방문 횟수에 따른 농도
                             </button>
 
-                            <button type="button" data-map-mode="rainbow">
+                            <button
+                                type="button"
+                                data-map-mode="rainbow"
+                            >
                                 구별로 다른 색
                             </button>
                         </div>
                     </div>
+                </div>
 
-                        {% include "diary/partials/seoul_map.html" %}
-                    
-                        <div id="district-map-data" hidden>
+                <!--
+                    실제 서울 지도 영역입니다.
+
+                    설정 버튼과 메뉴는 위의 map-toolbar로 빠졌기 때문에
+                    이 영역 안에는 지도만 표시됩니다.
+                -->
+                <div class="location-map-wrapper">
+
+                    {% include "diary/partials/seoul_map.html" %}
+
+                    <!--
+                        Django에서 계산한 구별 기록 데이터를
+                        JavaScript가 읽을 수 있도록 숨겨서 출력합니다.
+
+                        화면에는 보이지 않지만 diary.js에서
+                        data-district, data-count 등의 값을 사용합니다.
+                    -->
+                    <div
+                        id="district-map-data"
+                        hidden
+                    >
                         {% for district in district_map_data %}
                             <span
                                 data-district="{{ district.district_name }}"
@@ -322,6 +398,7 @@
                             ></span>
                         {% endfor %}
                     </div>
+
                 </div>
             </div>
 
@@ -431,19 +508,13 @@
 
         <div class="location-modal-grid">
             {% for record in records %}
-
-                {% comment %}
-                실제 장소명은 record.location.name이 아니라
-                record.place_name에 저장되어 있습니다.
-                {% endcomment %}
                 <div
                     class="location-modal-record"
-                    data-record-location="{{ record.place_name }}"
+                    data-record-location="{% if record.place %}{{ record.place.district }}{% endif %}"
                     hidden
                 >
                     {% include "diary/partials/diary_card.html" with record=record %}
                 </div>
-
             {% endfor %}
         </div>
 

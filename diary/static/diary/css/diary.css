@@ -1,201 +1,778 @@
-/* 담당 D 전용 */
+/* =========================================================
+    다이어리 목록 페이지 전체 콘텐츠 영역
+   ========================================================= */
 
 .diary-list-container {
+    /*
+        다이어리 목록 페이지의 최대 너비를 제한합니다.
+
+        min(1200px, calc(100% - 80px))
+        → 화면이 넓을 때는 최대 1200px
+        → 화면이 좁을 때는 좌우 40px씩 여백을 남긴 너비
+
+        예:
+        브라우저 너비가 1400px이면 → 1200px
+        브라우저 너비가 1000px이면 → 920px
+    */
     width: min(1200px, calc(100% - 80px));
+
+    /*
+        좌우 margin을 auto로 설정해서
+        컨테이너를 화면 가운데에 배치합니다.
+
+        위아래 margin은 0입니다.
+    */
     margin: 0 auto;
+
+    /*
+        컨테이너 내부의 위아래 여백입니다.
+
+        위쪽: 28px
+        좌우: 0
+        아래쪽: 50px
+
+        첫 번째 값 28px을 키우면
+        상단 탭과 페이지 위쪽 사이가 더 멀어집니다.
+
+        마지막 값 50px을 키우면
+        페이지 맨 아래 여백이 더 넓어집니다.
+    */
     padding: 28px 0 50px;
 }
 
+
+/* =========================================================
+    전체 / 감정별 / 장소별 탭을 감싸는 바깥 영역
+   ========================================================= */
+
 .diary-tabs-wrapper {
+    /*
+        내부의 탭 묶음을 정렬하기 위해
+        flex 컨테이너로 설정합니다.
+    */
     display: flex;
+
+    /*
+        탭 묶음을 가로 방향 중앙에 배치합니다.
+    */
     justify-content: center;
+
+    /*
+        부모 영역의 가로 너비를 전부 사용합니다.
+    */
     width: 100%;
+
+    /*
+        탭 영역 아래쪽에 12px 간격을 만듭니다.
+
+        값을 키우면 탭과 아래 콘텐츠 사이가 더 멀어집니다.
+    */
     margin-bottom: 12px;
 }
 
+
+/* =========================================================
+    전체 / 감정별 / 장소별 탭 버튼들을 감싸는 흰색 캡슐
+   ========================================================= */
+
 .diary-tabs {
+    /*
+        탭들을 한 줄로 배치합니다.
+
+        inline-flex이므로 내부는 flex처럼 동작하지만,
+        바깥에서는 내용 크기만큼만 너비를 차지합니다.
+    */
     display: inline-flex;
+
+    /*
+        각 탭 버튼을 세로 방향 가운데에 맞춥니다.
+    */
     align-items: center;
+
+    /*
+        각 탭 버튼 사이 간격입니다.
+
+        값을 키우면 전체, 감정별, 장소별 버튼 사이가 벌어집니다.
+    */
     gap: 4px;
 
+    /*
+        흰색 캡슐 내부와 탭 버튼 사이의 여백입니다.
+
+        값이 커질수록 전체 탭 박스가 더 두꺼워집니다.
+    */
     padding: 4px;
+
+    /*
+        탭 전체 영역의 배경색입니다.
+    */
     background: #ffffff;
+
+    /*
+        탭 전체 영역의 바깥 테두리입니다.
+
+        1px 굵기
+        실선
+        연한 회색
+    */
     border: 1px solid #dedede;
+
+    /*
+        매우 큰 값을 사용해서
+        탭 전체를 완전히 둥근 캡슐 모양으로 만듭니다.
+    */
     border-radius: 999px;
 
+    /*
+        탭 아래에 아주 연한 그림자를 추가합니다.
+
+        0       → 좌우 이동 없음
+        2px     → 아래로 2px 이동
+        5px     → 흐림 정도
+        rgba    → 검정색, 투명도 8%
+    */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
+
+/* =========================================================
+    전체 / 감정별 / 장소별 각각의 탭 버튼
+   ========================================================= */
+
 .diary-tab {
+    /*
+        기본 버튼 테두리를 제거합니다.
+    */
     border: 0;
+
+    /*
+        버튼 내부 여백입니다.
+
+        위아래: 10px
+        좌우: 18px
+
+        좌우 값을 키우면 각 탭 버튼이 더 넓어집니다.
+    */
     padding: 10px 18px;
+
+    /*
+        선택되지 않은 탭의 배경을 투명하게 만듭니다.
+        바깥 .diary-tabs의 흰색 배경이 그대로 보입니다.
+    */
     background: transparent;
+
+    /*
+        각 탭 버튼도 완전히 둥근 캡슐 모양으로 만듭니다.
+    */
     border-radius: 999px;
 
+    /*
+        탭 글자색입니다.
+    */
     color: #333333;
+
+    /*
+        탭 글자 크기입니다.
+    */
     font-size: 14px;
+
+    /*
+        마우스를 올리면 손가락 모양 커서가 나타납니다.
+    */
     cursor: pointer;
 
+    /*
+        탭이 a 태그로 만들어졌을 때
+        기본 밑줄을 제거합니다.
+    */
     text-decoration: none;
 }
 
+
+/* =========================================================
+    현재 선택된 탭
+   ========================================================= */
+
 .diary-tab.active {
+    /*
+        선택된 탭의 테두리 색상입니다.
+
+        다만 .diary-tab에서 border: 0으로 설정했기 때문에
+        현재 상태에서는 실제 테두리가 보이지 않습니다.
+
+        테두리를 보이게 하려면 아래처럼 별도로 설정해야 합니다.
+
+        border: 1px solid #FBEED1;
+    */
     border-color: #FBEED1;
+
+    /*
+        현재 선택된 탭의 연한 노란색 배경입니다.
+    */
     background: #fff4cb;
+
+    /*
+        선택된 탭의 글자색입니다.
+    */
     color: #222222;
+
+    /*
+        선택된 탭 글자를 굵게 표시합니다.
+    */
     font-weight: 700;
 }
+
 /*
+
 .diary-list-header {
+    
+        자식 요소가 absolute로 배치될 경우
+        이 요소를 기준점으로 사용하게 합니다.
+    
     position: relative;
+
+    
+        제목 영역과 필터 영역을 가로로 배치합니다.
+    
     display: flex;
+
+    
+        세로 방향 가운데 정렬합니다.
+    
     align-items: center;
+
+    
+        첫 번째 요소는 왼쪽,
+        마지막 요소는 오른쪽에 배치합니다.
+    
     justify-content: space-between;
+
+    
+        제목과 필터 사이의 최소 간격입니다.
+    
     gap: 24px;
+
+    
+        헤더와 아래 콘텐츠 사이 간격입니다.
+    
     margin-bottom: 24px;
 }
 
+
 .diary-list-summary {
+    
+        제목과 기록 개수 배지를 한 줄에 배치합니다.
+    
     display: flex;
+
+    
+        제목과 개수 배지를 세로 중앙에 맞춥니다.
+    
     align-items: center;
+
+    
+        제목과 개수 배지 사이 간격입니다.
+    
     gap: 10px;
 }
 
+
 .diary-list-title {
+    
+        h1 등의 기본 margin을 제거합니다.
+    
     margin: 0;
+
+    
+        목록 제목의 글자 크기입니다.
+    
     font-size: 26px;
 }
 
+
 .diary-list-count {
+    
+        기록 개수 배지 내부 여백입니다.
+
+        위아래: 5px
+        좌우: 10px
+    
     padding: 5px 10px;
+
+    
+        기록 개수 배지를 캡슐 모양으로 만듭니다.
+    
     border-radius: 999px;
+
+    
+        기록 개수 배지의 배경색입니다.
+    
     background: #fff1ba;
+
+    
+        기록 개수 글자 크기입니다.
+    
     font-size: 13px;
+
+    
+        기록 개수를 굵게 표시합니다.
+    
     font-weight: 700;
 }
+
 */
+
+
+/* =========================================================
+    최신순 / 과거순 / 기간 설정 필터 폼
+   ========================================================= */
+
 .diary-filter-form {
+    /*
+        기간 설정 팝업의 absolute 위치 기준이 됩니다.
+    */
     position: relative;
+
+    /*
+        정렬 선택창과 기간 설정 버튼을 가로로 배치합니다.
+    */
     display: flex;
+
+    /*
+        정렬 선택창과 버튼을 세로 중앙에 맞춥니다.
+    */
     align-items: center;
+
+    /*
+        정렬 선택창과 기간 설정 버튼 사이 간격입니다.
+    */
     gap: 8px;
 }
 
+
+/* =========================================================
+    최신순 선택창과 기간 설정 버튼의 공통 스타일
+   ========================================================= */
+
 .diary-sort-select,
 .period-toggle-button {
+    /*
+        선택창과 버튼의 최소 높이입니다.
+
+        내부 글자 크기가 달라져도
+        최소 42px 높이를 유지합니다.
+    */
     min-height: 42px;
+
+    /*
+        위아래 여백은 0,
+        좌우 여백은 16px입니다.
+    */
     padding: 0 16px;
+
+    /*
+        연한 베이지색 테두리입니다.
+    */
     border: 1px solid #e6ded0;
+
+    /*
+        모서리를 12px만큼 둥글게 합니다.
+    */
     border-radius: 12px;
+
+    /*
+        선택창과 버튼 배경색입니다.
+    */
     background: #ffffff;
+
+    /*
+        글자색입니다.
+    */
     color: #333333;
+
+    /*
+        부모 요소에서 사용 중인 글꼴 설정을 그대로 상속합니다.
+
+        브라우저 기본 select, button 글꼴이
+        페이지 글꼴과 다르게 보이는 것을 방지합니다.
+    */
     font: inherit;
+
+    /*
+        클릭 가능한 요소임을 보여주는 손가락 커서입니다.
+    */
     cursor: pointer;
 }
+
+
+/* =========================================================
+    정렬 선택창, 기간 버튼, 날짜 입력창에 포커스가 갔을 때
+   ========================================================= */
 
 .diary-sort-select:focus,
 .period-toggle-button:focus,
 .period-filter input:focus {
+    /*
+        키보드 탭 이동이나 클릭으로 선택됐을 때
+        노란색 외곽선을 표시합니다.
+    */
     outline: 2px solid #e9c767;
+
+    /*
+        외곽선과 요소 사이에 2px 간격을 둡니다.
+    */
     outline-offset: 2px;
 }
 
+
+/* =========================================================
+    기간 설정 버튼이 활성화된 상태
+   ========================================================= */
+
 .period-toggle-button.active {
+    /*
+        활성화된 버튼의 테두리를 조금 더 진한 노란색으로 바꿉니다.
+    */
     border-color: #e1bd55;
+
+    /*
+        활성화된 버튼의 배경을 연한 노란색으로 바꿉니다.
+    */
     background: #fff7d9;
+
+    /*
+        활성화된 버튼 글자를 굵게 표시합니다.
+    */
     font-weight: 700;
 }
 
+
+/* =========================================================
+    기간 설정 팝업 전체 영역
+   ========================================================= */
+
 .period-filter {
+    /*
+        부모인 .diary-filter-form을 기준으로
+        팝업처럼 띄워서 배치합니다.
+    */
     position: absolute;
+
+    /*
+        다른 일반 요소보다 위에 표시되게 합니다.
+    */
     z-index: 10;
+
+    /*
+        필터 폼의 아래쪽에서 10px 떨어진 위치에 배치합니다.
+
+        100%
+        → 부모 높이만큼 아래
+
+        + 10px
+        → 추가 간격
+    */
     top: calc(100% + 10px);
+
+    /*
+        팝업의 오른쪽 끝을
+        필터 폼의 오른쪽 끝에 맞춥니다.
+    */
     right: 0;
 
+    /*
+        날짜 입력창과 버튼들을 가로로 배치합니다.
+    */
     display: flex;
+
+    /*
+        입력창들의 아래쪽 기준을 맞춥니다.
+
+        label이 있는 날짜 입력 묶음과
+        버튼의 아래쪽이 맞춰집니다.
+    */
     align-items: flex-end;
+
+    /*
+        팝업 내부 요소 사이 간격입니다.
+    */
     gap: 10px;
 
+    /*
+        팝업의 최소 너비입니다.
+
+        화면이 좁아도 기본적으로 500px을 유지합니다.
+        모바일에서는 가로 스크롤이나 잘림이 생길 수 있습니다.
+    */
     min-width: 500px;
+
+    /*
+        팝업 내부 전체 여백입니다.
+    */
     padding: 18px;
 
+    /*
+        팝업 바깥 테두리입니다.
+    */
     border: 1px solid #e6ded0;
+
+    /*
+        팝업 모서리를 둥글게 합니다.
+    */
     border-radius: 16px;
+
+    /*
+        팝업 배경색입니다.
+    */
     background: #ffffff;
+
+    /*
+        팝업 아래에 부드러운 그림자를 추가합니다.
+
+        0       → 좌우 이동 없음
+        10px    → 아래로 10px
+        30px    → 흐림 정도
+        12%     → 투명도
+    */
     box-shadow: 0 10px 30px rgb(0 0 0 / 12%);
 }
 
+
+/* =========================================================
+    hidden 속성이 있는 기간 설정 팝업
+   ========================================================= */
+
 .period-filter[hidden] {
+    /*
+        HTML에 hidden 속성이 있을 때
+        화면에서 완전히 제거합니다.
+    */
     display: none;
 }
 
+
+/* =========================================================
+    시작일 또는 종료일의 label + input 묶음
+   ========================================================= */
+
 .period-input-group {
+    /*
+        label과 input을 위아래로 배치합니다.
+    */
     display: flex;
+
+    /*
+        가로가 아닌 세로 방향으로 정렬합니다.
+    */
     flex-direction: column;
+
+    /*
+        label과 input 사이 간격입니다.
+    */
     gap: 7px;
 }
 
+
+/* =========================================================
+    시작일 / 종료일 글자
+   ========================================================= */
+
 .period-input-group label {
+    /*
+        label 글자색을 연한 회색으로 설정합니다.
+    */
     color: #666666;
+
+    /*
+        label 글자 크기입니다.
+    */
     font-size: 12px;
 }
 
+
+/* =========================================================
+    날짜 선택 입력창
+   ========================================================= */
+
 .period-input-group input {
+    /*
+        날짜 입력창의 최소 높이입니다.
+    */
     min-height: 40px;
+
+    /*
+        위아래 여백은 0,
+        좌우 여백은 10px입니다.
+    */
     padding: 0 10px;
+
+    /*
+        날짜 입력창 테두리입니다.
+    */
     border: 1px solid #ded7cb;
+
+    /*
+        날짜 입력창 모서리를 둥글게 합니다.
+    */
     border-radius: 9px;
+
+    /*
+        페이지의 글꼴 설정을 그대로 사용합니다.
+    */
     font: inherit;
 }
 
+
+/* =========================================================
+    시작일과 종료일 사이의 물결표(~)
+   ========================================================= */
+
 .period-separator {
+    /*
+        아래쪽 여백을 넣어
+        날짜 입력창의 가운데 높이에 가깝게 맞춥니다.
+    */
     padding-bottom: 10px;
+
+    /*
+        구분 기호의 글자색입니다.
+    */
     color: #999999;
 }
 
+
+/* =========================================================
+    적용 버튼과 초기화 버튼의 공통 스타일
+   ========================================================= */
+
 .period-apply-button,
 .period-reset-button {
+    /*
+        flex처럼 내부 정렬이 가능하면서
+        요소 자체는 내용 크기만큼만 차지합니다.
+    */
     display: inline-flex;
+
+    /*
+        버튼의 최소 높이입니다.
+    */
     min-height: 40px;
+
+    /*
+        버튼 내부 글자를 세로 가운데에 맞춥니다.
+    */
     align-items: center;
+
+    /*
+        버튼 내부 글자를 가로 가운데에 맞춥니다.
+    */
     justify-content: center;
+
+    /*
+        위아래 여백은 0,
+        좌우 여백은 14px입니다.
+    */
     padding: 0 14px;
+
+    /*
+        버튼 모서리를 둥글게 합니다.
+    */
     border-radius: 9px;
+
+    /*
+        부모 글꼴 설정을 그대로 사용합니다.
+    */
     font: inherit;
+
+    /*
+        초기화 버튼이 a 태그여도
+        기본 밑줄이 생기지 않게 합니다.
+    */
     text-decoration: none;
+
+    /*
+        마우스를 올렸을 때 손가락 커서를 표시합니다.
+    */
     cursor: pointer;
 }
 
+
+/* =========================================================
+    기간 적용 버튼
+   ========================================================= */
+
 .period-apply-button {
+    /*
+        적용 버튼의 노란색 테두리입니다.
+    */
     border: 1px solid #e0bd59;
+
+    /*
+        적용 버튼의 연한 노란색 배경입니다.
+    */
     background: #ffe99c;
+
+    /*
+        적용 버튼 글자색입니다.
+    */
     color: #222222;
 }
 
+
+/* =========================================================
+    기간 초기화 버튼
+   ========================================================= */
+
 .period-reset-button {
+    /*
+        초기화 버튼의 연한 회색 테두리입니다.
+    */
     border: 1px solid #ded7cb;
+
+    /*
+        초기화 버튼 배경을 흰색으로 설정합니다.
+    */
     background: #ffffff;
+
+    /*
+        초기화 버튼 글자색입니다.
+    */
     color: #555555;
 }
 
+
+/* =========================================================
+    화면 너비가 760px 이하일 때 적용되는 반응형 스타일
+   ========================================================= */
+
 @media (max-width: 760px) {
+
     .diary-list-header {
+        /*
+            기존 가로 정렬에서
+            요소들을 왼쪽 기준으로 정렬합니다.
+        */
         align-items: flex-start;
+
+        /*
+            제목과 필터 영역을 위아래로 배치합니다.
+        */
         flex-direction: column;
     }
 
     .diary-filter-form {
+        /*
+            모바일 화면에서 필터 폼이
+            부모 너비를 전부 차지하게 합니다.
+        */
         width: 100%;
     }
 }
 
-/* 점 세 개 메뉴 스타일 */
-
+/* 점 세 개 버튼과 메뉴를 감싸는 영역 */
 .map-display-settings {
-    position: absolute;
-    z-index: 20;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    z-index: 30;
 }
 
 .map-settings-button {
@@ -207,25 +784,55 @@
     height: 42px;
 
     padding: 0;
+
     border: 1px solid #dedede;
     border-radius: 50%;
-    background: #ffffff;
 
+    background: #ffffff;
     color: #444444;
+
     font-size: 24px;
     line-height: 1;
+
     cursor: pointer;
 
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .map-settings-button:hover {
-    background: #f7f7f7;
+    background: #fff8df;
+
+    /*
+        버튼이 아주 조금 위로 올라가는 효과입니다.
+    */
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
 
+/* 키보드로 버튼을 선택했을 때 */
+.map-settings-button:focus-visible {
+    outline: 2px solid #e9c767;
+    outline-offset: 3px;
+}
+
+/* 지도 색상 설정 메뉴 */
 .map-settings-menu {
     position: absolute;
-    top: 50px;
+
+    /*
+        점 세 개 버튼 바로 아래에 메뉴를 배치합니다.
+    */
+    top: calc(100% + 8px);
+
+    /*
+        메뉴의 오른쪽 끝과 버튼의 오른쪽 끝을 맞춥니다.
+    */
     right: 0;
 
     width: 230px;
@@ -233,9 +840,16 @@
 
     border: 1px solid #dedede;
     border-radius: 14px;
+
     background: #ffffff;
 
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+
+    /*
+        지도보다 위에 보이지만,
+        지도 영역 자체를 덮는 위치에는 있지 않습니다.
+    */
+    z-index: 40;
 }
 
 .map-settings-menu[hidden] {
@@ -246,10 +860,12 @@
     margin: 4px 8px 8px;
 
     color: #777777;
+
     font-size: 12px;
     font-weight: 700;
 }
 
+/* 메뉴 안의 각 색상 방식 버튼 */
 .map-settings-menu button {
     display: block;
 
@@ -258,23 +874,50 @@
 
     border: 0;
     border-radius: 9px;
-    background: transparent;
 
+    background: transparent;
     color: #333333;
+
     font: inherit;
     text-align: left;
+
     cursor: pointer;
 }
 
-.map-settings-menu button:hover,
+/* 메뉴 항목 위에 마우스를 올렸을 때 */
+.map-settings-menu button:hover {
+    background: #fff7d7;
+}
+
+/* 현재 선택된 지도 색상 방식 */
 .map-settings-menu button.active {
-    background: #fff4cb;
+    background: #fff1ba;
     font-weight: 700;
 }
 
 /* =========================
         감정별 화면
 ========================= */
+
+/* 가장 많이 기록한 감정들의 전체 영역 */
+.top-emotion-list {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* 각 공동 1위 감정 이름 */
+.top-emotion-name {
+    color: #d98d36;
+    white-space: nowrap;
+}
+
+/* 감정과 감정 사이의 구분점 */
+.top-emotion-separator {
+    color: #b7aa97;
+}
 
 .emotion-page-header {
     display: flex;
@@ -309,7 +952,7 @@
     min-height: 560px;
 
     border-radius: 24px;
-    background: rgba(255, 251, 238, 0.5);
+    background: #fff;
 }
 
 .emotion-bubble {
@@ -350,9 +993,19 @@
     border-color: #F8B3B4;
 }
 
-.emotion-bubble--green {
-    background: #f3fff1;
-    border-color: #a9ce72;
+.emotion-bubble--purple {
+    background: #f8f1ff;
+    border-color: #9d72ce;
+}
+
+.emotion-bubble--red {
+    background: #fff4f1;
+    border-color: #ce7772;
+}
+
+.emotion-bubble--orange {
+    background: #fff9f1;
+    border-color: #cea972;
 }
 
 .emotion-bubble--default {
@@ -661,20 +1314,49 @@ body.modal-open {
 }
 
 .location-map-section {
+    /*
+        툴바와 지도를 위아래로 배치합니다.
+    */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+
+    /*
+        설정 버튼 영역과 지도 사이 간격입니다.
+        값을 키우면 버튼과 지도가 더 멀어집니다.
+    */
+    gap: 10px;
+
     width: 100%;
 }
 
+/* =========================
+        지도 위쪽 도구 영역
+========================= */
+
+.map-toolbar {
+    /*
+        점 세 개 버튼을 오른쪽 끝에 배치합니다.
+    */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    width: 100%;
+}
+
+/* =========================
+        실제 지도 영역
+========================= */
+
 .location-map-wrapper {
+    /*
+        지도 내부 SVG 배치의 기준이 됩니다.
+        현재는 설정 메뉴가 지도 바깥에 있으므로
+        반드시 필요하지는 않지만 다른 요소 배치에 유용합니다.
+    */
     position: relative;
 
-    width: min(
-        760px,
-        calc(100vw - 80px),
-        calc(100vh - 250px)
-    );
-
+    width: min(800px, 100%);
     margin: 0 auto;
 }
 
@@ -696,7 +1378,7 @@ body.modal-open {
 
 /* 방문한 장소 채우기 */
 .seoul-map path.has-record {
-    stroke: #789447;
+    /*stroke: #789447;*/
     stroke-width: 2;
     cursor: pointer;
 }

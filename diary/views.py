@@ -89,6 +89,8 @@ def diary_list(request):
 
     records_queryset = Record.objects.filter(
         user=request.user,
+    ).select_related(
+        "place",
     )
 
     # ========================================================
@@ -200,14 +202,33 @@ def diary_list(request):
         if emotion["record_count"] > 0
     ]
 
+    # 실제 기록된 감정이 있다면
     if recorded_emotions:
-        top_emotion = max(
-            recorded_emotions,
-            key=lambda emotion: emotion["record_count"],
+        # 가장 많은 기록 횟수를 구합니다.
+        #
+        # 예:
+        # 예민 1회, 행운 1회
+        # → maximum_emotion_count = 1
+        maximum_emotion_count = max(
+            emotion["record_count"]
+            for emotion in recorded_emotions
         )
 
+        # 가장 많은 기록 횟수와 같은 감정을
+        # 모두 공동 1위 목록에 넣습니다.
+        #
+        # 예:
+        # 예민 1회, 행운 1회
+        # → [예민, 행운]
+        top_emotions = [
+            emotion
+            for emotion in recorded_emotions
+            if emotion["record_count"] == maximum_emotion_count
+        ]
+
     else:
-        top_emotion = None
+        # 기록된 대표 감정이 없다면 빈 목록을 전달합니다.
+        top_emotions = []
 
     # ========================================================
     # 8. 서울 지도용 장소 데이터 계산
@@ -216,21 +237,32 @@ def diary_list(request):
     district_records = {}
 
     for record in records:
-        place_name = (
-            record.place_name.strip()
-            if record.place_name
+        # Record에 연결된 Place가 없으면
+        # 지도에 표시할 구 정보를 알 수 없으므로 제외합니다.
+        if not record.place:
+            continue
+
+        # Place 모델의 district에는
+        # "성북구", "강남구"처럼 서울 자치구 이름이 저장됩니다.
+        district_name = (
+            record.place.district.strip()
+            if record.place.district
             else ""
         )
 
-        if not place_name.endswith("구"):
+        # district 값이 비어 있다면 제외합니다.
+        if not district_name:
             continue
 
-        district_name = place_name
         emotion_name = record.main_emotion_name
 
+        # 대표 감정 정보가 없다면
+        # 감정 색상을 계산할 수 없으므로 제외합니다.
         if not emotion_name:
             continue
 
+        # 해당 구가 처음 등장했다면
+        # 기록을 담을 빈 배열을 만듭니다.
         if district_name not in district_records:
             district_records[district_name] = []
 
@@ -241,20 +273,24 @@ def diary_list(request):
             }
         )
 
+
     district_map_data = []
 
     for district_name, district_record_list in district_records.items():
+        # 해당 구에서 기록된 대표 감정들의 이름
         emotion_names = [
             item["emotion_name"]
             for item in district_record_list
         ]
 
+        # 해당 구에서 가장 많이 기록된 감정
         emotion_name_counts = Counter(
             emotion_names,
         )
 
         dominant_emotion = emotion_name_counts.most_common(1)[0][0]
 
+        # 해당 구의 가장 최근 기록
         latest_record = max(
             district_record_list,
             key=lambda item: item["created_at"],
@@ -262,9 +298,17 @@ def diary_list(request):
 
         district_map_data.append(
             {
+                # SVG path의 id와 비교할 구 이름
+                # 예: "성북구"
                 "district_name": district_name,
+
+                # 해당 구에서 작성한 기록 수
                 "visit_count": len(district_record_list),
+
+                # 해당 구에서 가장 많이 기록된 감정
                 "dominant_emotion": dominant_emotion,
+
+                # 해당 구에서 가장 최근에 기록된 감정
                 "latest_emotion": latest_record["emotion_name"],
             }
         )
@@ -274,9 +318,9 @@ def diary_list(request):
     # ========================================================
 
     location_counts = Counter(
-        record.place_name
+        record.place.district
         for record in records
-        if record.place_name
+        if record.place and record.place.district
     )
 
     locations = [
@@ -299,7 +343,11 @@ def diary_list(request):
     context = {
         "records": records,
         "emotions": emotions,
-        "top_emotion": top_emotion,
+
+        # 실제 기록 횟수가 1회 이상인 대표 감정만 전달합니다.
+        "recorded_emotions": recorded_emotions,
+
+        "top_emotions": top_emotions,
         "locations": locations,
         "district_map_data": district_map_data,
 
