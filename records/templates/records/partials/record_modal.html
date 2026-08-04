@@ -26,10 +26,17 @@
         </div>
 
         <div class="record-imagination-character">
+            {% if user.is_authenticated and user.profile.character_id %}
+            <img
+                src="{% static 'accounts/images/' %}{{ user.profile.character_id }}.png"
+                alt="내가 선택한 메인 캐릭터"
+            >
+            {% else %}
             <img
                 src="{% static 'records/images/main-character-writing.png' %}"
-                alt=""
+                alt="기록하는 메인 캐릭터"
             >
+            {% endif %}
             <span class="thought-dot thought-dot--small"></span>
             <span class="thought-dot thought-dot--medium"></span>
             <span class="thought-dot thought-dot--large"></span>
