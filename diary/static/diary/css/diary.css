@@ -738,7 +738,7 @@
 .top-emotion-list {
     /*
         공동 1위 감정이 여러 개일 경우
-        한 줄 또는 여러 줄로 자연스럽게 표시합니다.
+        한 줄 또는 여러 줄로 자연스럽게 표시
     */
     display: flex;
     align-items: center;
@@ -771,7 +771,7 @@
 
     border-radius: 24px;
 
-    background: #ffffff;
+    /*background: #ffffff;*/
 }
 
 
@@ -784,19 +784,30 @@
     justify-content: center;
     gap: 4px;
 
-    border: 2px solid #e8c578;
+    /*
+        기존 테두리를 제거
+    */
+    border: none;
 
     /*
-        꼭짓점마다 다른 둥근 정도를 줘서
-        완전한 원이 아닌 조약돌 모양으로 만듭니다.
+        조약돌 모양은 그대로 유지
     */
-    border-radius: 42% 58% 53% 47% / 45% 41% 59% 49%;
+    border-radius: 42% 58% 53% 47% / 50% 50% 50% 50%;
 
     background: rgba(255, 250, 231, 0.95);
     color: #333333;
 
-    font: inherit;
+    /*
+        테두리 대신 기본 상태에서도 그림자를 표시합니다.
 
+        0      → 좌우 이동 없음
+        5px    → 아래로 5px 이동
+        14px   → 그림자 흐림 정도
+        rgba   → 검정색, 투명도 12%
+    */
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+
+    font: inherit;
     cursor: pointer;
 
     transition:
@@ -815,7 +826,7 @@
 
 
 .emotion-bubble-name {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 700;
 }
 
@@ -823,56 +834,56 @@
 .emotion-bubble-count {
     color: #8e877c;
 
-    font-size: 11px;
+    font-size: 15px;
 }
 
 
 /* 감정별 색상 */
 
 .emotion-bubble--yellow {
-    border-color: #f9d472;
+    /*border-color: #f9d472;*/
 
     background: #fff7e3;
 }
 
 
 .emotion-bubble--blue {
-    border-color: #dae6f3;
+    /*border-color: #dae6f3;*/
 
     background: #eff7ff;
 }
 
 
 .emotion-bubble--pink {
-    border-color: #f8b3b4;
+    /*border-color: #f8b3b4;*/
 
     background: #fff2f2;
 }
 
 
 .emotion-bubble--purple {
-    border-color: #9d72ce;
+    /*border-color: #9d72ce;*/
 
     background: #f8f1ff;
 }
 
 
 .emotion-bubble--red {
-    border-color: #ce7772;
+    /*border-color: #ce7772;*/
 
     background: #fff4f1;
 }
 
 
 .emotion-bubble--orange {
-    border-color: #cea972;
+    /*border-color: #cea972;*/
 
     background: #fff9f1;
 }
 
 
 .emotion-bubble--default {
-    border-color: #c5c5c5;
+    /*border-color: #c5c5c5;*/
 
     background: #dedede;
 }
