@@ -38,7 +38,10 @@ def home(request):
         profile = getattr(request.user, "profile", None)
         if profile and profile.character_id:
             selected_character_image = f"{profile.character_id}.png"
-            show_onboarding_tutorial = True
+            show_onboarding_tutorial = not profile.tutorial_completed
+            if show_onboarding_tutorial:
+                profile.tutorial_completed = True
+                profile.save(update_fields=["tutorial_completed", "updated_at"])
 
     return render(
         request,
