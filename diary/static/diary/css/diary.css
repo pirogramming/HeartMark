@@ -1295,7 +1295,7 @@ body.modal-open {
         기록이 있는 구역에 마우스를 올렸을 때
         살짝 어두워지고 테두리가 굵어집니다.
     */
-    stroke-width: 3;
+    /*stroke-width: 3;*/
 
     filter: brightness(0.94);
 }
