@@ -817,6 +817,22 @@
     justify-self: center;
 }
 
+.record-modal--fullscreen .record-create-layout .emotion-picker {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.75fr) minmax(520px, 1.6fr);
+    column-gap: clamp(34px, 4vw, 68px);
+}
+
+.record-modal--fullscreen .record-create-layout .emotion-picker__heading {
+    grid-column: 1;
+    width: min(100%, 390px);
+    justify-self: center;
+}
+
+.record-modal--fullscreen .record-create-layout .emotion-picker__options {
+    grid-column: 1 / -1;
+}
+
 .record-modal--fullscreen .record-create-layout .photo-box {
     width: 100%;
     max-height: calc(100vh - 260px);
@@ -1495,6 +1511,15 @@ body.record-edit-open .site-main {
         width: min(100%, 340px);
     }
 
+    .record-modal--fullscreen .record-create-layout .emotion-picker {
+        grid-template-columns: minmax(230px, 0.8fr) minmax(340px, 1.2fr);
+        column-gap: 30px;
+    }
+
+    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
+        width: min(100%, 300px);
+    }
+
     .record-create-layout__left,
     .record-create-layout__right {
         gap: 16px;
@@ -1665,6 +1690,15 @@ body.record-edit-open .site-main {
         width: 100%;
         gap: 18px;
         padding: 0;
+    }
+
+    .record-modal--fullscreen .record-create-layout .emotion-picker {
+        display: block;
+    }
+
+    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
+        width: min(100%, 300px);
+        margin-inline: auto;
     }
 
     .record-create-layout .record-date {
@@ -1991,6 +2025,15 @@ body.record-edit-open .site-main {
         grid-template-columns: minmax(250px, 0.82fr) minmax(0, 1.18fr);
         gap: 34px;
         row-gap: 12px;
+    }
+
+    .record-modal--fullscreen .record-create-layout .emotion-picker {
+        grid-template-columns: minmax(250px, 0.82fr) minmax(0, 1.18fr);
+        column-gap: 34px;
+    }
+
+    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
+        width: min(100%, 310px);
     }
 
     .record-create-layout__left,
