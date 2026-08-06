@@ -4,6 +4,30 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
+EMOTION_NAMES = {
+    1: "슬픔",
+    2: "사랑",
+    3: "따분",
+    4: "예민",
+    5: "만족",
+    6: "슬픔",
+    7: "짝사랑",
+    8: "심술",
+    9: "당황",
+    10: "슬픔",
+    11: "화남",
+    12: "신남",
+    13: "아픔",
+    14: "놀람",
+    15: "행운",
+    16: "기쁨",
+    17: "질투",
+    18: "맛있어!",
+    19: "냉철",
+    20: "졸림",
+}
+
+
 class Record(models.Model):
     class Weather(models.TextChoices):
         SUNNY = "sunny", "해"
@@ -64,6 +88,7 @@ class Record(models.Model):
             {
                 "number": number,
                 "image_name": f"emotion-{number:02d}.png",
+                "name": EMOTION_NAMES.get(number, f"감정 {number}"),
                 "is_main": number == self.main_emotion,
             }
             for number in numbers

@@ -47,11 +47,14 @@
                 </div>
                 <div class="record-detail-emotion-list">
                     {% for emotion in record.emotion_items %}
-                    <figure class="record-detail-emotion{% if emotion.is_main %} record-detail-emotion--main{% endif %}">
+                    <figure
+                        class="record-detail-emotion{% if emotion.is_main %} record-detail-emotion--main{% endif %}"
+                        title="{{ emotion.name }}"
+                    >
                         {% if emotion.is_main %}<span>대표</span>{% endif %}
                         <img
                             src="{% static 'records/images/emotions/' %}{{ emotion.image_name }}"
-                            alt="{% if emotion.is_main %}대표 감정{% else %}선택한 감정 {{ forloop.counter }}{% endif %}"
+                            alt="{% if emotion.is_main %}대표 감정: {% endif %}{{ emotion.name }}"
                         >
                     </figure>
                     {% endfor %}
