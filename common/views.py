@@ -38,7 +38,7 @@ def home(request):
         profile = getattr(request.user, "profile", None)
         if profile and profile.character_id:
             selected_character_image = f"{profile.character_id}.png"
-            show_onboarding_tutorial = not profile.tutorial_completed
+            show_onboarding_tutorial = True
 
     return render(
         request,

@@ -68,11 +68,13 @@
             text: "검정 원을 누르면 기록을 빠르게 시작할 수 있게 연결돼요.",
             cardWidth: 480,
             cardOffsetX: 0,
-            cardOffsetY: 60,
+            cardOffsetY: 18,
             cardLarge: true,
             shape: "circle",
-            highlightPadding: 22,
-            highlightOffsetY: -44,
+            highlightPadding: 0,
+            highlightOffsetY: -34,
+            hideHighlight: true,
+            liveRing: true,
             liveTarget: true,
         },
         {
@@ -82,9 +84,10 @@
             cardWidth: 430,
             cardPlacement: "right",
             cardOffsetX: 34,
-            cardOffsetY: -8,
+            cardOffsetY: 18,
             cardLarge: true,
             spotlightClass: "tutorial-spotlight--speech",
+            hideHighlight: true,
         },
         {
             target: '[data-tutorial-target="selected-character"]',
@@ -133,7 +136,7 @@
             return;
         }
 
-        activeLiveTarget.classList.remove("tutorial-live-target");
+        activeLiveTarget.classList.remove("tutorial-live-target", "tutorial-live-target--ring");
         activeLiveTarget = null;
     }
 
@@ -200,10 +203,26 @@
     }
 
     function getImagePlacement(step, rect) {
-        const imageWidth = step.imageWidth || 120;
-        const imageHeight = step.imageHeight || 46;
+        let imageWidth = step.imageWidth || 120;
+        let imageHeight = step.imageHeight || 46;
         const imageOffsetX = step.imageOffsetX || 0;
-        const imageOffsetY = step.imageOffsetY || 0;
+        let imageOffsetY = step.imageOffsetY || 0;
+
+        const shouldShrinkNavImage = Boolean(step.image);
+
+        if (shouldShrinkNavImage && window.innerWidth <= 430) {
+            imageWidth = Math.min(imageWidth, 46);
+            imageHeight = Math.min(imageHeight, 20);
+            imageOffsetY = -8;
+        } else if (shouldShrinkNavImage && window.innerWidth <= 767) {
+            imageWidth = Math.min(imageWidth, 58);
+            imageHeight = Math.min(imageHeight, 24);
+            imageOffsetY = -10;
+        } else if (shouldShrinkNavImage && window.innerWidth <= 1023) {
+            imageWidth = Math.min(imageWidth, 70);
+            imageHeight = Math.min(imageHeight, 28);
+            imageOffsetY = -10;
+        }
 
         return {
             left: rect.left + rect.width / 2 - imageWidth / 2 + imageOffsetX,
@@ -265,10 +284,11 @@
             if (step.liveTarget) {
                 activeLiveTarget = target;
                 target.classList.add("tutorial-live-target");
+                target.classList.toggle("tutorial-live-target--ring", Boolean(step.liveRing));
             }
 
             highlight.classList.toggle("is-circle", step.shape === "circle");
-            highlight.classList.toggle("is-hidden", Boolean(step.image));
+            highlight.classList.toggle("is-hidden", Boolean(step.image) || Boolean(step.hideHighlight));
             highlight.style.left = rect.left - padding + "px";
             highlight.style.top = rect.top - padding + (step.highlightOffsetY || 0) + "px";
             highlight.style.width = rect.width + padding * 2 + "px";
