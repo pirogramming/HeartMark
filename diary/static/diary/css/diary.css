@@ -1151,7 +1151,7 @@ body.modal-open {
 .map-settings-button:hover {
     transform: translateY(-1px);
 
-    background: #fff8df;
+    /*background: #fff8df;*/
 
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
