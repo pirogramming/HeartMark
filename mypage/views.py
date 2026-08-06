@@ -179,10 +179,13 @@ def _build_attendance(user, start_date=None, end_date=None):
         joined_at = timezone.localtime(joined_at)
     joined_day = min(joined_at.date(), today)
     is_period_filtered = start_date is not None or end_date is not None
+
+    # 가입 전에 끝나는 기간은 가입일로 억지로 보정하지 않고 빈 결과로 처리한다.
+    if is_period_filtered and end_date is not None and end_date < joined_day:
+        return [], 0
+
     first_day = max(start_date, joined_day) if start_date else joined_day
     last_day = end_date or today
-    if last_day < first_day:
-        last_day = first_day
     record_by_date = {}
     record_model = _get_record_model()
 
@@ -208,7 +211,7 @@ def _build_attendance(user, start_date=None, end_date=None):
     slot_count = (
         elapsed_day_count
         if is_period_filtered
-        else (((elapsed_day_count + 13) // 14) + 1) * 14
+        else max(14, ((elapsed_day_count + 13) // 14) * 14)
     )
     for offset in range(slot_count):
         day = first_day + timedelta(days=offset)
@@ -297,9 +300,19 @@ def mypage(request):
     joined_at = request.user.date_joined
     if timezone.is_aware(joined_at):
         joined_at = timezone.localtime(joined_at)
+    if year is None:
+        attendance_period_label = ""
+    elif month is None:
+        attendance_period_label = f"{year}년 전체"
+    elif day is None:
+        attendance_period_label = f"{year}년 {month}월"
+    else:
+        attendance_period_label = f"{year}년 {month}월 {day}일"
+
     context = {
         "attendance_pages": attendance_pages,
         "attendance_count": attendance_count,
+        "attendance_has_days": bool(attendance_days),
         "current_page_index": current_page_index,
         "attendance_years": range(joined_at.year, timezone.localdate().year + 2),
         "attendance_months": range(1, 13),
@@ -307,6 +320,8 @@ def mypage(request):
         "selected_attendance_year": year,
         "selected_attendance_month": month,
         "selected_attendance_day": day,
+        "attendance_period_label": attendance_period_label,
+        "is_attendance_filtered": year is not None,
         "attendance_joined_date": joined_at.date().isoformat(),
         "character_url": _get_character_url(request.user),
         **insights,
