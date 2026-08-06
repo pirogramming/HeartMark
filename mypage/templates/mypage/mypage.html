@@ -41,7 +41,7 @@
             <div>
                 <h2 id="attendance-title">출석체크</h2>
             </div>
-            <details class="diary-filter-form attendance-filter-form">
+            <details class="diary-filter-form attendance-filter-form"{% if is_attendance_filtered %} open{% endif %}>
                 <summary class="period-toggle-button attendance-period-summary">기간 설정</summary>
                 <form class="period-filter attendance-calendar-filter" method="get">
                     <div class="period-input-group">
@@ -77,6 +77,13 @@
             </details>
         </div>
 
+        {% if attendance_period_label %}
+        <p class="attendance-period-label" aria-live="polite">
+            {{ attendance_period_label }} 출석 기록
+        </p>
+        {% endif %}
+
+        {% if attendance_has_days %}
         <div class="attendance-slider" id="attendance-slider" data-current-page="{{ current_page_index }}">
             <button class="attendance-arrow attendance-arrow--prev" type="button" aria-label="이전 출석 기간">‹</button>
             <div class="attendance-viewport">
@@ -119,6 +126,12 @@
             ></button>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="attendance-empty" role="status">
+            <strong>검색 기록이 없습니다.</strong>
+            <span>가입일 이후의 기간을 선택해 주세요.</span>
+        </div>
+        {% endif %}
         <p class="attendance-guide">기록을 작성하면 대표 감정으로 자동 출석돼요.</p>
     </section>
 

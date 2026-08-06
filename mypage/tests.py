@@ -118,3 +118,61 @@ class MypageViewTests(TestCase):
         self.assertEqual(days[0]["date"], selected_date)
         self.assertEqual(days[-1]["date"].month, selected_date.month)
         self.assertEqual(days[-1]["date"].day, monthrange(selected_date.year, selected_date.month)[1])
+
+    def test_attendance_year_selection_shows_the_whole_year(self):
+        selected_year = timezone.localdate().year - 1
+        self.user.date_joined = timezone.make_aware(
+            timezone.datetime(selected_year - 1, 1, 1)
+        )
+        self.user.save(update_fields=["date_joined"])
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse("mypage:home"),
+            {"attendance_year": selected_year},
+        )
+
+        days = [
+            day
+            for page in response.context["attendance_pages"]
+            for day in page["days"]
+        ]
+        self.assertEqual(days[0]["date"], date(selected_year, 1, 1))
+        self.assertEqual(days[-1]["date"], date(selected_year, 12, 31))
+        self.assertEqual(response.context["attendance_period_label"], f"{selected_year}년 전체")
+
+    def test_period_before_join_date_returns_no_attendance_days(self):
+        self.user.date_joined = timezone.now().replace(month=7, day=31)
+        self.user.save(update_fields=["date_joined"])
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse("mypage:home"),
+            {
+                "attendance_year": self.user.date_joined.year,
+                "attendance_month": 1,
+            },
+        )
+
+        self.assertEqual(response.context["attendance_pages"], [])
+        self.assertFalse(response.context["attendance_has_days"])
+        self.assertContains(response, "검색 기록이 없습니다.")
+
+    def test_future_month_shows_empty_footprint_days(self):
+        today = timezone.localdate()
+        future_year = today.year + 1
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse("mypage:home"),
+            {"attendance_year": future_year, "attendance_month": 1},
+        )
+
+        days = [
+            day
+            for page in response.context["attendance_pages"]
+            for day in page["days"]
+        ]
+        self.assertEqual(len(days), 31)
+        self.assertTrue(all(day["is_future"] for day in days))
+        self.assertTrue(all(day["emotion_number"] is None for day in days))

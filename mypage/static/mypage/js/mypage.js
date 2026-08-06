@@ -2,6 +2,7 @@
     const yearSelect = document.querySelector('[name="attendance_year"]');
     const monthSelect = document.querySelector("#attendance-month-select");
     const daySelect = document.querySelector("#attendance-day-select");
+    const periodForm = document.querySelector(".attendance-calendar-filter");
     const updatePeriodSelects = () => {
         if (!yearSelect || !monthSelect || !daySelect) return;
         monthSelect.disabled = !yearSelect.value;
@@ -25,6 +26,13 @@
     yearSelect?.addEventListener("change", updatePeriodSelects);
     monthSelect?.addEventListener("change", updatePeriodSelects);
     updatePeriodSelects();
+
+    periodForm?.addEventListener("submit", (event) => {
+        if (!yearSelect?.value) {
+            event.preventDefault();
+            yearSelect?.focus();
+        }
+    });
 
     const editor = document.querySelector("#profile-editor");
     const openButton = document.querySelector("#open-profile-editor");
