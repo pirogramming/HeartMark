@@ -223,11 +223,11 @@
 .tutorial-highlight {
     position: fixed;
     z-index: 1001;
-    border: 3px solid rgba(255, 177, 103, 0.98);
+    border: 3px solid #ffd15c;
     border-radius: 18px;
     box-shadow:
         0 0 0 9999px rgba(0, 0, 0, 0.68),
-        0 0 26px rgba(255, 194, 128, 0.95);
+        0 0 28px rgba(255, 209, 92, 0.95);
     pointer-events: none;
     transition: left 0.24s ease, top 0.24s ease, width 0.24s ease, height 0.24s ease, border-radius 0.24s ease;
 }
@@ -283,11 +283,43 @@
     text-decoration: none;
 }
 
+.tutorial-spotlight.is-speech {
+    filter: none;
+}
+
+.tutorial-spotlight--speech {
+    border-color: #ffd15c;
+    background: #fffdf5;
+    box-shadow: 0 0 16px rgba(255, 209, 92, 0.48);
+}
+
+.tutorial-spotlight--speech::before {
+    content: none;
+}
+
+.tutorial-live-target {
+    z-index: 1002;
+    pointer-events: none;
+    filter: drop-shadow(0 0 18px rgba(255, 209, 92, 0.76));
+}
+
+.tutorial-spotlight:not(.has-image):not(.is-hidden):not(.is-speech) {
+    border-radius: 999px;
+    box-shadow: 0 0 16px rgba(255, 209, 92, 0.48);
+}
+
+.tutorial-live-target--ring {
+    box-shadow:
+        0 0 0 3px #ffd15c,
+        0 0 16px rgba(255, 209, 92, 0.55) !important;
+}
+
 .tutorial-highlight.is-circle {
     border-radius: 999px;
 }
 
-.tutorial-highlight.is-hidden {
+.tutorial-highlight.is-hidden,
+.tutorial-spotlight.is-hidden {
     opacity: 0;
 }
 
@@ -380,34 +412,214 @@
     line-height: 1.72;
 }
 
-@media (max-width: 820px) {
-    .home-hero {
-        min-height: 76vh;
-        padding: 132px 18px 104px;
-    }
-
-    .home-hero h1 {
-        max-width: 320px;
-        font-size: 28px;
-    }
-
+@media (min-width: 1024px) and (max-width: 1200px) {
     .home-cta {
-        right: 24px;
-        bottom: -62px;
-        width: 154px;
-        height: 154px;
-        font-size: 18px;
-        gap: 6px;
+        right: clamp(130px, 12vw, 170px);
+        bottom: -84px;
+        width: 220px;
+        height: 220px;
+        font-size: 27px;
     }
 
     .home-cta-subtext {
-        font-size: 14px;
+        font-size: 19px;
+    }
+
+    .home-character-four {
+        right: 30%;
+        bottom: 12%;
+        width: clamp(180px, 12vw, 210px);
+    }
+}
+
+@media (max-height: 700px) {
+    .home-hero .home-character {
+        display: none;
+    }
+}
+
+@media (max-width: 1023px) {
+    .home-page {
+        margin-top: -116px;
+    }
+
+    .home-hero {
+        min-height: 70vh;
+        padding: 150px 32px 112px;
+    }
+
+    .home-hero h1 {
+        max-width: 620px;
+        font-size: 42px;
+    }
+
+    .home-cta {
+        right: clamp(56px, 8vw, 96px);
+        bottom: -58px;
+        width: 174px;
+        height: 174px;
+        font-size: 22px;
+    }
+
+    .home-cta-subtext {
+        font-size: 16px;
+    }
+
+    .home-character-one {
+        left: 5%;
+        top: 32%;
+        width: 150px;
+    }
+
+    .home-character-two {
+        left: 11%;
+        bottom: 11%;
+        width: 136px;
+    }
+
+    .home-character-three {
+        left: 46%;
+        top: 10%;
+        width: 128px;
+    }
+
+    .home-character-four {
+        right: 27%;
+        bottom: 12%;
+        width: 128px;
+    }
+
+    .home-character-five {
+        right: 5%;
+        top: 31%;
+        width: 165px;
     }
 
     .home-start {
         min-height: 72vh;
-        gap: 20px;
-        padding: 76px 18px 84px;
+        padding: 92px 36px 120px;
+    }
+
+    .home-start-copy {
+        width: min(680px, 100%);
+        transform: translate(-24px, 24px);
+    }
+
+    .home-start h2 {
+        font-size: 38px;
+    }
+
+    .home-start p {
+        font-size: 22px;
+    }
+
+    .home-actions {
+        width: min(470px, 62vw);
+        min-height: 146px;
+        margin-top: 62px;
+        transform: translateX(44px);
+    }
+
+    .home-feature-character {
+        margin-top: 118px;
+        transform: translateX(-20px);
+    }
+
+    .home-feature-character img {
+        width: min(280px, 34vw);
+    }
+
+    .tutorial-card {
+        padding: 20px 24px 18px;
+    }
+
+    .tutorial-card strong {
+        font-size: 22px;
+    }
+
+    .tutorial-card p {
+        font-size: 16px;
+    }
+
+    .tutorial-finale {
+        width: min(720px, calc(100vw - 48px));
+        padding: 58px 56px 54px;
+        border-radius: 34px;
+    }
+
+    .tutorial-finale strong {
+        font-size: 42px;
+    }
+
+    .tutorial-finale p {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .home-page {
+        margin-top: -150px;
+    }
+
+    .home-hero {
+        min-height: 68vh;
+        padding: 164px 16px 94px;
+    }
+
+    .home-hero h1 {
+        max-width: 330px;
+        font-size: 30px;
+    }
+
+    .home-cta {
+        right: 18px;
+        bottom: -56px;
+        width: 118px;
+        height: 118px;
+        font-size: 15px;
+    }
+
+    .home-cta-subtext {
+        font-size: 11px;
+    }
+
+    .home-character-one {
+        left: 8px;
+        top: 30%;
+        width: 92px;
+    }
+
+    .home-character-two {
+        left: 12%;
+        bottom: 13%;
+        width: 82px;
+    }
+
+    .home-character-three {
+        left: 44%;
+        top: 18%;
+        width: 72px;
+    }
+
+    .home-character-four {
+        right: 12%;
+        bottom: 14%;
+        width: 86px;
+    }
+
+    .home-character-five {
+        right: 8px;
+        top: 30%;
+        width: 106px;
+    }
+
+    .home-start {
+        min-height: 70vh;
+        padding: 74px 16px 78px;
+    }
+
+    .home-start-copy {
+        transform: none;
     }
 
     .home-start h2 {
@@ -419,45 +631,111 @@
     }
 
     .home-actions {
-        width: min(80vw, 440px);
-        min-height: 140px;
-        margin-top: 54px;
-        padding: 28px 24px;
-        border-width: 3px;
-        border-radius: 24px;
+        width: min(86vw, 420px);
+        min-height: 132px;
+        margin-top: 50px;
+        padding: 24px 20px;
         transform: none;
     }
 
     .home-actions::before {
-        left: 50%;
-    }
-
-    .home-speech-text {
-        font-size: clamp(19px, 4.5vw, 27px);
-    }
-
-    .home-feature-character img {
-        width: min(280px, 58vw);
-    }
-
-    .home-feature-character-guest img {
-        width: min(300px, 62vw);
+        width: 72px;
+        height: 118px;
+        bottom: -120px;
+        background:
+            radial-gradient(circle 17px at 36px 18px, #ffe3cc 96%, transparent 100%),
+            radial-gradient(circle 13px at 36px 58px, #ffe3cc 96%, transparent 100%),
+            radial-gradient(circle 9px at 36px 94px, #ffe3cc 96%, transparent 100%);
+        transform: translateX(-50%) scale(0.82);
     }
 
     .home-feature-character {
-        margin-top: 86px;
+        margin-top: 80px;
         transform: none;
     }
 
-    .tutorial-card {
-        padding: 16px 18px 14px;
+    .home-feature-character img {
+        width: min(255px, 60vw);
     }
 
-    .tutorial-card strong {
+    .tutorial-highlight {
+        border-width: 2px;
+    }
+
+    .tutorial-spotlight-image {
+        border-width: 3px;
+    }
+
+    .tutorial-card {
+        width: min(var(--tutorial-card-width, 340px), calc(100vw - 24px));
+        padding: 15px 16px 14px;
+        border-radius: 14px;
+    }
+
+    .tutorial-card strong,
+    .tutorial-card.is-large strong {
+        margin-bottom: 8px;
         font-size: 18px;
     }
 
-    .tutorial-card p {
+    .tutorial-card p,
+    .tutorial-card.is-large p {
         font-size: 14px;
+        line-height: 1.55;
+    }
+
+    .tutorial-card span,
+    .tutorial-card.is-large span {
+        margin-top: 10px;
+        font-size: 13px;
+    }
+
+    .tutorial-finale {
+        width: calc(100vw - 28px);
+        padding: 42px 24px 38px;
+        border-radius: 24px;
+    }
+
+    .tutorial-finale strong {
+        margin-bottom: 16px;
+        font-size: 30px;
+    }
+
+    .tutorial-finale p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 430px) {
+    .home-feature-character {
+        margin-top: 72px;
+    }
+
+    .home-feature-character img {
+        width: min(205px, 52vw);
+    }
+
+    .tutorial-card {
+        width: min(var(--tutorial-card-width, 300px), calc(100vw - 28px));
+        padding: 12px 13px 11px;
+        border-radius: 12px;
+    }
+
+    .tutorial-card strong,
+    .tutorial-card.is-large strong {
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+
+    .tutorial-card p,
+    .tutorial-card.is-large p {
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .tutorial-card span,
+    .tutorial-card.is-large span {
+        margin-top: 7px;
+        font-size: 11px;
     }
 }
