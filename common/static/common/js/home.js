@@ -94,9 +94,9 @@
             title: "나의 캐릭터",
             text: "캐릭터 선택에서 고른 친구가 메인 화면에 함께 나타나요.",
             cardWidth: 360,
-            cardPlacement: "right",
-            cardOffsetX: 40,
-            cardOffsetY: 20,
+            cardPlacement: "top",
+            cardOffsetX: 0,
+            cardOffsetY: -72,
             cardLarge: true,
             shape: "circle",
         },
@@ -157,6 +157,8 @@
                 left = rect.left + rect.width / 2 - cardWidth / 2;
                 top = rect.bottom + 26 + cardOffsetY;
             }
+        } else if (step.cardPlacement === "top") {
+            top = rect.top - estimatedHeight - 18 + cardOffsetY;
         }
 
         if (top + estimatedHeight > window.innerHeight - margin) {
