@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}친구 관리 | 마음자국{% endblock %}
+
+{% block content %}
+<section>
+    <h1>친구 관리</h1>
+
+    <section>
+        <h2>받은 요청</h2>
+        {% for invitation in received_requests %}
+        <article>
+            <span>{{ invitation.inviter.username }}</span>
+            <form method="post" action="{% url 'friendships:respond_request' invitation.pk 'accept' %}">
+                {% csrf_token %}
+                <button type="submit">수락</button>
+            </form>
+            <form method="post" action="{% url 'friendships:respond_request' invitation.pk 'reject' %}">
+                {% csrf_token %}
+                <button type="submit">거절</button>
+            </form>
+        </article>
+        {% empty %}
+        <p>받은 친구 요청이 없어요.</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>보낸 요청</h2>
+        {% for invitation in sent_requests %}
+        <article>
+            <span>{% if invitation.invitee %}{{ invitation.invitee.username }}{% else %}초대 링크{% endif %}</span>
+        </article>
+        {% empty %}
+        <p>보낸 친구 요청이 없어요.</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>친구 목록</h2>
+        {% for friend in friends %}
+        <article>
+            <span>{{ friend.username }}</span>
+            <form method="post" action="{% url 'friendships:friend_delete' friend.pk %}">
+                {% csrf_token %}
+                <button type="submit">삭제</button>
+            </form>
+        </article>
+        {% empty %}
+        <p>아직 친구가 없어요.</p>
+        {% endfor %}
+    </section>
+</section>
+{% endblock %}

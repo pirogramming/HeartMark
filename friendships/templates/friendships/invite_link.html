@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}친구 초대 | 마음자국{% endblock %}
+
+{% block content %}
+<section>
+    <h1>친구 초대</h1>
+    <p>친구에게 아래 링크를 보내보세요.</p>
+    <label for="invite-url">초대 링크</label>
+    <input id="invite-url" type="text" value="{{ invite_url }}" readonly>
+    <button type="button" id="copy-invite-link">복사하기</button>
+    <p id="copy-invite-status" aria-live="polite"></p>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(() => {
+    const input = document.getElementById("invite-url");
+    const button = document.getElementById("copy-invite-link");
+    const status = document.getElementById("copy-invite-status");
+
+    if (!input || !button || !status) return;
+
+    button.addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(input.value);
+            status.textContent = "초대 링크를 복사했어요.";
+        } catch (error) {
+            input.select();
+            document.execCommand("copy");
+            status.textContent = "초대 링크를 복사했어요.";
+        }
+    });
+})();
+</script>
+{% endblock %}
