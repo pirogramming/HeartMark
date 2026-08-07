@@ -18,15 +18,35 @@
    2. 전체 / 감정별 / 장소별 탭
    ========================================================= */
 
-.diary-tabs-wrapper {
-    /* 탭 중앙 배치 */
+.diary-tabs-row {
+    /*
+        탭과 점 세 개 버튼을 같은 줄에 배치
+        탭은 화면 중앙 유지
+        점 세 개 버튼의 위치 기준 역할
+    */
+    position: relative;
+
     display: flex;
+    align-items: center;
     justify-content: center;
 
     width: 100%;
 
     /* 탭과 콘텐츠 사이 간격 */
     margin-bottom: 12px;
+}
+
+
+.diary-tabs-wrapper {
+    /*
+        탭 자체만 중앙 배치
+        width: 100% 제거하여 오른쪽 버튼이 탭 위치에 영향 주지 않도록 함
+    */
+    display: flex;
+    justify-content: center;
+
+    width: auto;
+    margin-bottom: 0;
 }
 
 
@@ -1231,22 +1251,20 @@ body.modal-open {
    ========================================================= */
 
 .location-map-section {
-    /* 툴바와 지도 세로 배치 */
+    /* 지도만 세로 배치 */
     display: flex;
     flex-direction: column;
-    gap: 10px;
 
     width: 100%;
 }
 
 
+/*
+    기존 지도 위 별도 툴바는 사용하지 않음
+    list.html에서 .map-toolbar 영역을 제거한 상태 기준
+*/
 .map-toolbar {
-    /* 설정 버튼 오른쪽 배치 */
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    width: 100%;
+    display: none;
 }
 
 
@@ -1254,6 +1272,20 @@ body.modal-open {
     /* 설정 메뉴 위치 기준 */
     position: relative;
     z-index: 30;
+}
+
+
+/*
+    탭 행 안에 있는 지도 설정 버튼 영역
+    탭은 가운데 유지하고 설정 버튼만 오른쪽 끝에 고정
+*/
+.diary-tabs-row > .map-display-settings {
+    position: absolute;
+
+    top: 50%;
+    right: 0;
+
+    transform: translateY(-50%);
 }
 
 
@@ -1586,6 +1618,19 @@ body.modal-open {
         width: calc(100% - 40px);
     }
 
+
+
+    .diary-tabs-row > .map-display-settings {
+        right: 0;
+    }
+
+
+    .diary-tabs-row .map-settings-button {
+        width: 38px;
+        height: 38px;
+
+        font-size: 22px;
+    }
 
     .diary-list-header {
         /* 제목과 필터 세로 배치 */

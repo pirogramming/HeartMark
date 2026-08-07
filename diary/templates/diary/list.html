@@ -35,8 +35,86 @@
         <!-- =========================
                 전체 / 감정별 / 장소별 탭
         ========================== -->
-        <div class="diary-tabs-wrapper">
-            {% include "diary/partials/diary_tab.html" %}
+        <!-- =========================
+        전체 / 감정별 / 장소별 탭 + 지도 설정 버튼
+        ========================== -->
+        <div class="diary-tabs-row">
+
+            <!-- 중앙 탭 영역 -->
+            <div class="diary-tabs-wrapper">
+                {% include "diary/partials/diary_tab.html" %}
+            </div>
+
+
+            <!--
+                장소별 탭에서만 지도 설정 버튼 표시
+                탭과 같은 줄의 오른쪽 끝에 배치
+            -->
+            {% if selected_tab == "location" %}
+                <div class="map-display-settings">
+
+                    <!-- 지도 색상 설정 메뉴 열기 -->
+                    <button
+                        type="button"
+                        class="map-settings-button"
+                        id="map-settings-button"
+                        aria-expanded="false"
+                        aria-controls="map-settings-menu"
+                        aria-label="지도 색상 설정"
+                    >
+                        ⋯
+                    </button>
+
+
+                    <!-- 지도 색상 설정 메뉴 -->
+                    <div
+                        class="map-settings-menu"
+                        id="map-settings-menu"
+                        hidden
+                    >
+                        <p class="map-settings-title">
+                            지도 색상 방식
+                        </p>
+
+                        <button
+                            type="button"
+                            data-map-mode="uniform"
+                        >
+                            같은 색으로 통일
+                        </button>
+
+                        <button
+                            type="button"
+                            data-map-mode="dominant"
+                        >
+                            가장 많은 감정 색
+                        </button>
+
+                        <button
+                            type="button"
+                            data-map-mode="latest"
+                        >
+                            가장 최근 감정 색
+                        </button>
+
+                        <button
+                            type="button"
+                            data-map-mode="intensity"
+                        >
+                            방문 횟수에 따른 농도
+                        </button>
+
+                        <button
+                            type="button"
+                            data-map-mode="rainbow"
+                        >
+                            구별로 다른 색
+                        </button>
+                    </div>
+
+                </div>
+            {% endif %}
+
         </div>
 
 
@@ -319,78 +397,6 @@
 
 
             <div class="location-map-section">
-
-                <!-- 지도 위쪽 설정 버튼 영역 -->
-                <div class="map-toolbar">
-
-                    <div class="map-display-settings">
-
-                        <!-- 지도 색상 설정 메뉴를 여는 버튼 -->
-                        <button
-                            type="button"
-                            class="map-settings-button"
-                            id="map-settings-button"
-                            aria-expanded="false"
-                            aria-controls="map-settings-menu"
-                            aria-label="지도 색상 설정"
-                        >
-                            ⋯
-                        </button>
-
-
-                        <!--
-                            지도 색상 설정 메뉴
-
-                            처음에는 hidden 상태이며
-                            diary.js에서 열고 닫음
-                        -->
-                        <div
-                            class="map-settings-menu"
-                            id="map-settings-menu"
-                            hidden
-                        >
-                            <p class="map-settings-title">
-                                지도 색상 방식
-                            </p>
-
-                            <button
-                                type="button"
-                                data-map-mode="uniform"
-                            >
-                                같은 색으로 통일
-                            </button>
-
-                            <button
-                                type="button"
-                                data-map-mode="dominant"
-                            >
-                                가장 많은 감정 색
-                            </button>
-
-                            <button
-                                type="button"
-                                data-map-mode="latest"
-                            >
-                                가장 최근 감정 색
-                            </button>
-
-                            <button
-                                type="button"
-                                data-map-mode="intensity"
-                            >
-                                방문 횟수에 따른 농도
-                            </button>
-
-                            <button
-                                type="button"
-                                data-map-mode="rainbow"
-                            >
-                                구별로 다른 색
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
 
                 <!-- 실제 서울 지도 영역 -->
                 <div class="location-map-wrapper">
