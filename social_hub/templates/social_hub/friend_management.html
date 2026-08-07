@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}친구 관리 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'social_hub/css/friend_management.css' %}">
+<link rel="stylesheet" href="{% static 'social_hub/css/share_modal.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="friend-book">
+    <header class="friend-book__intro">
+        <span class="friend-book__eyebrow">HeartMark Friends</span>
+        <h1>나의 친구 수첩</h1>
+        <p>친구와 마음자국을 조심스럽게 나눠 보세요.</p>
+    </header>
+
+    {% include "social_hub/partials/invite_panel.html" %}
+
+    <section class="friend-board" aria-labelledby="friend-board-title">
+        <h2 id="friend-board-title" class="friend-board__label">친구 관리</h2>
+
+        <div class="friend-tabs" role="tablist" aria-label="친구 목록 구분">
+            <button class="friend-tab is-active" id="friends-tab" type="button" role="tab" aria-selected="true" aria-controls="friends-panel" data-friend-tab="friends">
+                내 친구 <span>{{ friends|length }}</span>
+            </button>
+            <button class="friend-tab" id="received-tab" type="button" role="tab" aria-selected="false" aria-controls="received-panel" data-friend-tab="received">
+                받은 요청 <span>{{ received_requests|length }}</span>
+            </button>
+            <button class="friend-tab" id="sent-tab" type="button" role="tab" aria-selected="false" aria-controls="sent-panel" data-friend-tab="sent">
+                보낸 요청 <span>{{ sent_requests|length }}</span>
+            </button>
+        </div>
+
+        <div class="friend-search-wrap">
+            <span aria-hidden="true">⌕</span>
+            <label class="sr-only" for="friend-search">친구 이름 검색</label>
+            <input id="friend-search" type="search" placeholder="친구 이름을 검색해 보세요" autocomplete="off">
+        </div>
+
+        <div class="friend-panels">
+            <section class="friend-panel is-active" id="friends-panel" role="tabpanel" aria-labelledby="friends-tab" data-friend-panel="friends">
+                {% for friend in friends %}
+                    {% include "social_hub/partials/friend_card.html" with person=friend card_type="friend" %}
+                {% empty %}
+                    {% include "social_hub/partials/empty_state.html" with empty_type="friends" %}
+                {% endfor %}
+            </section>
+
+            <section class="friend-panel" id="received-panel" role="tabpanel" aria-labelledby="received-tab" data-friend-panel="received" hidden>
+                {% for request_item in received_requests %}
+                    {% include "social_hub/partials/request_card.html" with person=request_item request_type="received" %}
+                {% empty %}
+                    {% include "social_hub/partials/empty_state.html" with empty_type="received" %}
+                {% endfor %}
+            </section>
+
+            <section class="friend-panel" id="sent-panel" role="tabpanel" aria-labelledby="sent-tab" data-friend-panel="sent" hidden>
+                {% for request_item in sent_requests %}
+                    {% include "social_hub/partials/request_card.html" with person=request_item request_type="sent" %}
+                {% empty %}
+                    {% include "social_hub/partials/empty_state.html" with empty_type="sent" %}
+                {% endfor %}
+            </section>
+        </div>
+    </section>
+
+    {% include "social_hub/partials/share_modal.html" %}
+
+    <div class="friend-confirm" id="friend-confirm" hidden>
+        <section class="friend-confirm__panel" role="dialog" aria-modal="true" aria-labelledby="friend-confirm-title">
+            <span class="friend-confirm__sticker" aria-hidden="true">✦</span>
+            <h2 id="friend-confirm-title">친구를 삭제할까요?</h2>
+            <p id="friend-confirm-message">삭제한 친구에게는 더 이상 기록을 공유할 수 없어요.</p>
+            <div class="friend-confirm__actions">
+                <button class="soft-button" type="button" data-confirm-cancel>취소</button>
+                <button class="soft-button soft-button--danger" type="button" data-confirm-delete>친구 삭제</button>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'social_hub/js/invite.js' %}"></script>
+<script src="{% static 'social_hub/js/friend_management.js' %}"></script>
+<script src="{% static 'social_hub/js/share_modal.js' %}"></script>
+{% endblock %}
