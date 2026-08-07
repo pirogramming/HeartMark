@@ -1,0 +1,97 @@
+<!-- =========================
+                감정별 기록
+        ========================== -->
+        <section
+            class="diary-panel {% if selected_tab == 'emotion' %}active{% endif %}"
+            data-panel="emotion"
+            {% if selected_tab != "emotion" %}hidden{% endif %}
+        >
+            <div class="emotion-page-header">
+                <div>
+                    <h1 class="diary-list-title">
+                        감정별 기록
+                    </h1>
+
+                    <p class="diary-list-description">
+                        감정의 크기는 이번 달 기록 횟수를 나타내요.
+                    </p>
+                </div>
+
+                <div class="emotion-month-summary">
+                    <span>
+                        가장 많이 기록한 감정
+                    </span>
+
+                    {% if top_emotions %}
+                        <strong class="top-emotion-list">
+                            {% for emotion in top_emotions %}
+                                <span class="top-emotion-name">
+                                    {{ emotion.name }}
+                                </span>
+
+                                {% if not forloop.last %}
+                                    <span class="top-emotion-separator">
+                                        ·
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                        </strong>
+                    {% else %}
+                        <strong>
+                            아직 기록 없음
+                        </strong>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div class="emotion-bubble-area">
+                {% for emotion in recorded_emotions %}
+                    <button
+                        type="button"
+                        class="
+                            emotion-bubble
+                            emotion-bubble--{{ emotion.size|default:'medium' }}
+
+                            {% if emotion.name == '사랑' or emotion.name == '짝사랑' %}
+                                emotion-bubble--pink
+
+                            {% elif emotion.name == '슬픔' or emotion.name == '아픔' %}
+                                emotion-bubble--blue
+
+                            {% elif emotion.name == '기쁨' or emotion.name == '만족' or emotion.name == '신남' or emotion.name == '행운' or emotion.name == '맛있어!' %}
+                                emotion-bubble--yellow
+
+                            {% elif emotion.name == '따분' or emotion.name == '졸림' or emotion.name == '예민' or emotion.name == '냉철' %}
+                                emotion-bubble--purple
+
+                            {% elif emotion.name == '심술' or emotion.name == '화남' or emotion.name == '질투' %}
+                                emotion-bubble--red
+
+                            {% elif emotion.name == '당황' or emotion.name == '놀람' %}
+                                emotion-bubble--orange
+
+                            {% else %}
+                                emotion-bubble--default
+                            {% endif %}
+                        "
+                        data-emotion-id="{{ emotion.id }}"
+                        data-emotion-name="{{ emotion.name }}"
+                        aria-haspopup="dialog"
+                    >
+                        <span class="emotion-bubble-name">
+                            {{ emotion.name }}
+                        </span>
+
+                        <span class="emotion-bubble-count">
+                            {{ emotion.record_count }}회
+                        </span>
+                    </button>
+
+                {% empty %}
+                    <p>
+                        표시할 감정이 없어요.
+                    </p>
+                {% endfor %}
+            </div>
+        </section>
