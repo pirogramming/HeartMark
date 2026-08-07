@@ -1,6 +1,9 @@
 <div class="friend-empty" data-empty-state>
     <div class="friend-empty__illustration" aria-hidden="true">✉</div>
-    {% if empty_type == "received" %}
+    {% if empty_type == "shared_records" %}
+    <strong>아직 도착한 마음 편지가 없어요.</strong>
+    <p>친구가 기록을 공유하면 이곳에 나타나요.</p>
+    {% elif empty_type == "received" %}
     <strong>아직 도착한 친구 요청이 없어요.</strong>
     <p>새 요청이 오면 이곳에서 확인할 수 있어요.</p>
     {% elif empty_type == "sent" %}

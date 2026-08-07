@@ -1,0 +1,441 @@
+:root {
+    --shared-bg: #fff8e8;
+    --shared-paper: #fff9eb;
+    --shared-panel: #fffff4;
+    --shared-accent: #ffe7d0;
+    --shared-ink: #46372d;
+    --shared-muted: #8d796a;
+    --shared-line: #efd0b6;
+}
+
+.shared-mailbox,
+.shared-mailbox * {
+    box-sizing: border-box;
+}
+
+.shared-mailbox {
+    position: relative;
+    min-height: calc(100vh - 100px);
+    padding: 80px max(24px, 7vw) 100px;
+    color: var(--shared-ink);
+    background: var(--shared-bg);
+}
+
+.shared-mailbox__header,
+.shared-mailbox__toolbar,
+.shared-record-grid,
+.shared-mailbox > .friend-empty {
+    width: min(1120px, 100%);
+    margin-inline: auto;
+}
+
+.shared-mailbox__header {
+    display: grid;
+    justify-items: center;
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.shared-mailbox__eyebrow {
+    color: #d37d61;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+}
+
+.shared-mailbox__header h1 {
+    padding: 12px 26px;
+    margin: 8px 0 10px;
+    border-radius: 14px;
+    background: var(--shared-accent);
+    box-shadow: 0 8px 18px rgba(107, 74, 50, 0.08);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.shared-mailbox__header p {
+    margin: 0;
+    color: var(--shared-muted);
+}
+
+.shared-mailbox__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.shared-mailbox__count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--shared-muted);
+    font-size: 0.9rem;
+}
+
+.shared-mailbox__count > span {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    margin-right: 3px;
+    place-items: center;
+    border-radius: 50%;
+    color: #c87359;
+    background: #ffe3d5;
+}
+
+.shared-mailbox__toolbar > a {
+    padding: 10px 16px;
+    border: 1px solid #d7c2af;
+    border-radius: 11px;
+    background: #fffdf7;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.shared-record-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.shared-record-card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    overflow: hidden;
+    border: 1.5px solid var(--shared-line);
+    border-radius: 25px;
+    background: var(--shared-panel);
+    box-shadow: 0 12px 28px rgba(99, 69, 49, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shared-record-card:hover {
+    box-shadow: 0 16px 34px rgba(99, 69, 49, 0.11);
+    transform: translateY(-3px);
+}
+
+.shared-record-card__sender {
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px dashed #e3c5ad;
+    background: #fff5e8;
+}
+
+.shared-record-card__avatar {
+    display: grid;
+    width: 50px;
+    height: 50px;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid #ddc6b4;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.shared-record-card__avatar img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.shared-record-card__sender > div {
+    display: grid;
+    gap: 3px;
+}
+
+.shared-record-card__sender time {
+    color: var(--shared-muted);
+    font-size: 0.72rem;
+}
+
+.shared-record-card__stamp {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 2px double #d79178;
+    border-radius: 50%;
+    color: #c67559;
+    font-size: 0.58rem;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+    transform: rotate(7deg);
+}
+
+.shared-record-card__body {
+    display: grid;
+    grid-template-columns: minmax(145px, 0.78fr) minmax(0, 1.22fr);
+    gap: 18px;
+    padding: 20px;
+}
+
+.shared-record-card__photo {
+    min-height: 230px;
+    overflow: hidden;
+    border: 1.5px solid #59483d;
+    border-radius: 15px;
+    background: #fff;
+}
+
+.shared-record-card__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.shared-record-card__content {
+    display: grid;
+    align-content: start;
+    gap: 15px;
+    min-width: 0;
+}
+
+.shared-record-card__emotion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shared-record-card__emotion img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(77, 53, 42, 0.08));
+}
+
+.shared-record-card__emotion span,
+.shared-place > span:last-child {
+    display: grid;
+    gap: 3px;
+}
+
+.shared-record-card__emotion small,
+.shared-place small {
+    color: var(--shared-muted);
+    font-size: 0.68rem;
+}
+
+.shared-record-card__content > p {
+    display: -webkit-box;
+    min-height: 4.8em;
+    margin: 0;
+    overflow: hidden;
+    color: #6f5b4d;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.shared-place {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 11px 12px;
+    border-radius: 13px;
+}
+
+.shared-place--public {
+    color: #765747;
+    background: #ffe8df;
+}
+
+.shared-place--private {
+    color: #7a726b;
+    background: #f0ece7;
+}
+
+.shared-place__icon,
+.shared-place__lock {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.shared-place__icon svg {
+    width: 23px;
+    height: 23px;
+    color: #d97460;
+}
+
+.shared-place strong {
+    overflow: hidden;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shared-place--private strong {
+    white-space: normal;
+}
+
+.shared-record-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 20px 18px;
+    margin-top: auto;
+}
+
+.shared-record-card__footer > span {
+    color: var(--shared-muted);
+    font-size: 0.7rem;
+}
+
+.shared-record-card__footer button {
+    min-height: 41px;
+    padding: 0 17px;
+    border: 1px solid #58463a;
+    border-radius: 11px;
+    color: var(--shared-ink);
+    background: var(--shared-accent);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.shared-mailbox > .friend-empty {
+    display: grid;
+    min-height: 380px;
+    place-items: center;
+    align-content: center;
+    gap: 9px;
+    border: 1.5px dashed #ddbea5;
+    border-radius: 28px;
+    background: rgba(255, 255, 244, 0.7);
+    text-align: center;
+}
+
+.shared-mailbox > .friend-empty .friend-empty__illustration {
+    display: grid;
+    width: 82px;
+    height: 82px;
+    margin-bottom: 8px;
+    place-items: center;
+    border-radius: 50%;
+    color: #c77358;
+    background: #ffe4d6;
+    font-size: 2.2rem;
+}
+
+.shared-mailbox > .friend-empty p {
+    margin: 0;
+    color: var(--shared-muted);
+}
+
+.shared-record-notice[hidden] {
+    display: none;
+}
+
+.shared-record-notice {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 100;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 14px 18px;
+    border: 1px solid #dbb99f;
+    border-radius: 13px;
+    color: var(--shared-ink);
+    background: #fff1e1;
+    box-shadow: 0 10px 26px rgba(70, 49, 37, 0.14);
+}
+
+@media (max-width: 1023px) {
+    .shared-mailbox {
+        padding: 64px 32px 80px;
+    }
+
+    .shared-record-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .shared-record-card__body {
+        grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .shared-mailbox {
+        padding: 42px 14px 60px;
+    }
+
+    .shared-mailbox__header {
+        margin-bottom: 36px;
+    }
+
+    .shared-mailbox__header p {
+        font-size: 0.84rem;
+    }
+
+    .shared-mailbox__toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .shared-mailbox__toolbar > a {
+        align-self: flex-end;
+    }
+
+    .shared-record-card__sender {
+        grid-template-columns: 46px 1fr 42px;
+        padding: 14px;
+    }
+
+    .shared-record-card__avatar {
+        width: 44px;
+        height: 44px;
+    }
+
+    .shared-record-card__avatar img {
+        width: 37px;
+        height: 37px;
+    }
+
+    .shared-record-card__sender strong {
+        font-size: 0.84rem;
+    }
+
+    .shared-record-card__stamp {
+        width: 40px;
+        height: 40px;
+        font-size: 0.5rem;
+    }
+
+    .shared-record-card__body {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .shared-record-card__photo {
+        aspect-ratio: 4 / 3;
+        min-height: 0;
+    }
+
+    .shared-record-card__footer {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 10px 16px 18px;
+    }
+
+    .shared-record-card__footer button {
+        width: 100%;
+    }
+
+    .shared-record-notice {
+        right: 16px;
+        bottom: 16px;
+        left: 16px;
+    }
+}

@@ -49,3 +49,51 @@ def friend_management(request):
         ],
     }
     return render(request, "social_hub/friend_management.html", context)
+
+
+def shared_records(request):
+    """공유 백엔드 연결 전 목록 UI 확인을 위한 임시 화면."""
+    context = {
+        "shared_records": [
+            {
+                "share_id": 1,
+                "sender_name": "홍연우",
+                "sender_character_static": "accounts/images/1.png",
+                "record_id": 15,
+                "record_date": "2026년 8월 7일",
+                "main_emotion": "16",
+                "main_emotion_name": "기쁨",
+                "image_static": "records/images/main-character-writing.png",
+                "content_preview": "오늘은 천천히 걸으며 좋아하는 풍경을 오래 바라봤어요.",
+                "share_location": True,
+                "place_name": "서울숲",
+            },
+            {
+                "share_id": 2,
+                "sender_name": "신은아",
+                "sender_character_static": "accounts/images/3.png",
+                "record_id": 16,
+                "record_date": "2026년 8월 6일",
+                "main_emotion": "15",
+                "main_emotion_name": "행운",
+                "image_static": "accounts/images/tutorial-record-write.png",
+                "content_preview": "우연히 예쁜 골목을 발견해서 마음자국을 남겼어요.",
+                "share_location": False,
+                "place_name": "",
+            },
+            {
+                "share_id": 3,
+                "sender_name": "한지수",
+                "sender_character_static": "accounts/images/5.png",
+                "record_id": 17,
+                "record_date": "2026년 8월 3일",
+                "main_emotion": "05",
+                "main_emotion_name": "만족",
+                "image_static": "accounts/images/tutorial-calendar.png",
+                "content_preview": "기다리던 일을 마무리해서 뿌듯했던 하루였어요.",
+                "share_location": True,
+                "place_name": "북서울꿈의숲",
+            },
+        ]
+    }
+    return render(request, "social_hub/shared_records.html", context)
