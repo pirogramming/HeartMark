@@ -1407,7 +1407,7 @@ body.modal-open {
 
     width: min(800px, 100%);
 
-    margin: -50px auto -100px;
+    margin: 0 auto;
 
     overflow: hidden;
 }
