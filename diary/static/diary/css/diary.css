@@ -610,15 +610,13 @@
    ========================================================= */
 
 .emotion-chart-section {
-    /* 그래프 중앙 배치 */
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 
     width: 100%;
 
-    min-height: 500px;
+    min-height: 360px;
 }
 
 
@@ -627,16 +625,15 @@
    ========================================================= */
 
 .emotion-chart-wrapper {
-    /*
-        SVG / 중앙 기록 수 / 툴팁
-        위치 기준
-    */
     position: relative;
 
-    width: min(460px, 100%);
+    /* 참고 이미지에 가까운 크기 */
+    width: 360px;
+    max-width: 100%;
 
     aspect-ratio: 1 / 1;
 }
+
 
 
 /* =========================================================
@@ -654,66 +651,126 @@
 
 
 /* =========================================================
-   15. 도넛 그래프 배경 원
+   15. 도넛 그래프 배경
    ========================================================= */
 
 .emotion-chart-background {
-    /*
-        기록이 없거나
-        색상 조각 뒤쪽에 보이는 기본 원
-    */
+    /* 도넛 뒤 기본 원 */
     fill: none;
 
-    stroke: #ebe8e2;
-    stroke-width: 46;
+    stroke: #f2eee7;
+    stroke-width: 52;
 
     pointer-events: none;
 }
 
 
+/* 그래프 안쪽 원 */
+
+.emotion-chart-inner-circle {
+    fill: #fffdfa;
+
+    stroke: #eee5da;
+    stroke-width: 2;
+
+    pointer-events: none;
+
+    filter:
+        drop-shadow(
+            0 2px 4px rgba(80, 65, 50, 0.08)
+        );
+}
+
+
 /* =========================================================
-   16. 도넛 그래프 색상 조각
+   16. 도넛 그래프 조각
    ========================================================= */
 
 .emotion-chart-segment {
-    /*
-        원 내부 채움 제거
-        stroke만 사용해 도넛 생성
-    */
     fill: none;
 
-    /*
-        배경 원과 동일한 두께 적용
-    */
-    stroke-width: 46;
+    /* 참고 이미지와 비슷한 두꺼운 띠 */
+    stroke-width: 52;
 
     /*
-        각 조각 끝을 둥글게 처리
+        끝을 완전한 반원으로 만들지 않음
+
+        butt
+        → 참고 이미지처럼 조각 경계가 깔끔함
     */
-    stroke-linecap: round;
+    stroke-linecap: butt;
 
     /*
-        원 둘레 stroke 영역에서만
-        마우스 이벤트 발생
+        그래프 시작 위치를
+        12시 방향으로 이동
     */
+    transform: rotate(-90deg);
+
+    transform-origin: 160px 160px;
+
     pointer-events: stroke;
 
     cursor: pointer;
 
+    filter:
+        drop-shadow(
+            0 2px 3px rgba(74, 58, 45, 0.06)
+        );
+
     transition:
-        stroke-width 0.2s ease,
-        opacity 0.2s ease,
-        filter 0.2s ease;
+        stroke-width 0.18s ease,
+        filter 0.18s ease,
+        opacity 0.18s ease;
 }
 
 
-.emotion-chart-segment:hover {
-    /*
-        hover 조각 강조
-    */
-    stroke-width: 51;
+/* 감정 색상 */
 
-    filter: brightness(0.97);
+.emotion-chart-segment--yellow {
+    stroke: #f9dda0;
+}
+
+
+.emotion-chart-segment--blue {
+    stroke: #bcdcf7;
+}
+
+
+.emotion-chart-segment--pink {
+    stroke: #f6c9cf;
+}
+
+
+.emotion-chart-segment--purple {
+    stroke: #cfc2f2;
+}
+
+
+.emotion-chart-segment--red {
+    stroke: #f2b6b2;
+}
+
+
+.emotion-chart-segment--orange {
+    stroke: #f7c995;
+}
+
+
+.emotion-chart-segment--default {
+    stroke: #dedede;
+}
+
+
+/* hover 강조 */
+
+.emotion-chart-segment:hover {
+    stroke-width: 57;
+
+    filter:
+        brightness(1.02)
+        drop-shadow(
+            0 4px 5px rgba(65, 50, 40, 0.11)
+        );
 }
 
 
@@ -722,9 +779,6 @@
    ========================================================= */
 
 .emotion-chart-center {
-    /*
-        SVG 중앙 위에 텍스트 배치
-    */
     position: absolute;
 
     top: 50%;
@@ -734,31 +788,29 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+
+    gap: 9px;
 
     transform: translate(-50%, -50%);
 
-    /*
-        SVG hover 이벤트 방해 제거
-    */
     pointer-events: none;
 }
 
 
 .emotion-chart-center-label {
-    color: #817b72;
+    color: #776f69;
 
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
+    font-size: 15px;
+    font-weight: 600;
 }
 
 
 .emotion-chart-center-count {
-    color: #24211d;
+    color: #8b71d1;
 
-    font-size: 36px;
-    font-weight: 700;
+    font-size: 34px;
+    font-weight: 800;
+
     line-height: 1;
 }
 
@@ -843,6 +895,227 @@
     font-size: 13px;
 }
 
+.emotion-summary-board {
+    width: 100%;
+
+    padding:
+        30px
+        28px
+        26px;
+
+    border: 1px solid #eee7dd;
+    border-radius: 28px;
+
+    background:
+        rgba(255, 253, 248, 0.82);
+
+    box-shadow:
+        0 8px 24px rgba(69, 52, 38, 0.06);
+}
+
+.emotion-card-guide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin:
+        -2px
+        0
+        20px;
+
+    color: #9a9188;
+
+    font-size: 12px;
+}
+
+
+.emotion-card-guide-line {
+    width: 45px;
+
+    border-top:
+        2px dotted #ddd1ee;
+}
+
+
+.emotion-card-guide-heart {
+    color: #bda8e1;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   감정별 기록 카드 목록
+   ========================================================= */
+
+.emotion-record-card-list {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    width: 100%;
+}
+
+
+/* 감정 카드 */
+
+.emotion-record-card {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 150px;
+
+    padding:
+        10px
+        14px;
+
+    border: 1px solid #eee7dd;
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    font: inherit;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(70, 55, 40, 0.06);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.emotion-record-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 16px rgba(70, 55, 40, 0.1);
+}
+
+
+/* 감정 이미지 */
+
+.emotion-record-card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+}
+
+
+.emotion-record-card-image img {
+    display: block;
+
+    width: 44px;
+    height: 44px;
+
+    object-fit: contain;
+}
+
+
+/* 감정 정보 */
+
+.emotion-record-card-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 4px;
+}
+
+
+.emotion-record-card-name {
+    color: #403b36;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.emotion-record-card-count {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* 카드별 포인트 색상 */
+
+.emotion-record-card--blue {
+    background: #f5faff;
+}
+
+
+.emotion-record-card--blue
+.emotion-record-card-count {
+    color: #67a7df;
+}
+
+
+.emotion-record-card--pink {
+    background: #fff7f8;
+}
+
+
+.emotion-record-card--pink
+.emotion-record-card-count {
+    color: #e58ea0;
+}
+
+
+.emotion-record-card--yellow {
+    background: #fffdf5;
+}
+
+
+.emotion-record-card--yellow
+.emotion-record-card-count {
+    color: #d6aa36;
+}
+
+
+.emotion-record-card--purple {
+    background: #faf7ff;
+}
+
+
+.emotion-record-card--purple
+.emotion-record-card-count {
+    color: #9276cf;
+}
+
+
+.emotion-record-card--red {
+    background: #fff7f5;
+}
+
+
+.emotion-record-card--red
+.emotion-record-card-count {
+    color: #db827b;
+}
+
+
+.emotion-record-card--orange {
+    background: #fff9f3;
+}
+
+
+.emotion-record-card--orange
+.emotion-record-card-count {
+    color: #d99c59;
+}
 
 /* =========================================================
    20. 감정별 기록 팝업

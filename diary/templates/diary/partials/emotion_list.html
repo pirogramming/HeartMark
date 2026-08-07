@@ -1,27 +1,23 @@
+{% load static %}
+
 {% comment %}
 감정별 기록 탭
 
-구성:
-1. 감정별 기록 제목
-2. SVG 도넛 그래프
-3. 가운데 전체 기록 수
-4. 그래프 영역 hover 시 감정 이름 툴팁
-5. JavaScript가 읽을 대표 감정 데이터
+구성
+- 대표 감정 도넛 그래프
+- 전체 기록 수
+- 색상 그룹 hover 툴팁
+- 기록된 대표 감정 카드
 {% endcomment %}
-
 
 <section
     class="diary-panel {% if selected_tab == 'emotion' %}active{% endif %}"
     data-panel="emotion"
     {% if selected_tab != "emotion" %}hidden{% endif %}
 >
-    <!-- =========================
-            감정별 기록 상단 제목
-    ========================== -->
+    <!-- 감정별 기록 제목 -->
     <div class="emotion-page-header">
-
         <div class="emotion-page-heading">
-
             <h1 class="diary-list-title">
                 감정별 기록
             </h1>
@@ -29,127 +25,150 @@
             <p class="diary-list-description">
                 기록한 대표 감정을 한눈에 확인해보세요.
             </p>
-
         </div>
-
     </div>
 
 
-    <!-- =========================
-            감정 도넛 그래프 전체 영역
-    ========================== -->
-    <div class="emotion-chart-section">
+    <!-- 감정별 화면 메인 카드 -->
+    <div class="emotion-summary-board">
 
-        <!--
-            그래프와 가운데 글자를 겹쳐놓기 위한 wrapper
+        <!-- =========================
+                도넛 그래프
+        ========================== -->
+        <div class="emotion-chart-section">
 
-            position: relative를 적용하고,
-            SVG / 가운데 글자 / 툴팁을
-            이 영역을 기준으로 배치할 예정
-        -->
-        <div
-            class="emotion-chart-wrapper"
-            id="emotion-chart-wrapper"
-        >
-
-            <!-- =========================
-                    SVG 도넛 그래프
-            ========================== -->
-            <svg
-                class="emotion-chart"
-                id="emotion-chart"
-                viewBox="0 0 320 320"
-                role="img"
-                aria-label="대표 감정 기록 분포"
-            >
-
-                <!--
-                    그래프가 비어 있을 때 보이는
-                    기본 배경 원
-
-                    실제 감정별 색상 조각은
-                    diary.js에서 이 원 위에 추가
-                -->
-                <circle
-                    class="emotion-chart-background"
-                    cx="160"
-                    cy="160"
-                    r="110"
-                ></circle>
-
-                <!--
-                    JavaScript가 생성한 감정 색상별 circle이
-                    이 그룹 안으로 들어감
-                -->
-                <g
-                    class="emotion-chart-segments"
-                    id="emotion-chart-segments"
-                ></g>
-
-            </svg>
-
-
-            <!-- =========================
-                    그래프 가운데 기록 수
-            ========================== -->
-            <div class="emotion-chart-center">
-
-                <span class="emotion-chart-center-label">
-                    전체 기록
-                </span>
-
-                <strong class="emotion-chart-center-count">
-                    {{ total_record_count }}개
-                </strong>
-
-            </div>
-
-
-            <!-- =========================
-                    감정 이름 툴팁
-            ========================== -->
-
-            <!--
-                그래프의 특정 색상 영역에
-                마우스를 올렸을 때 표시됨
-
-                예:
-                행복 · 설렘
-
-                횟수는 표시 X
-
-                위치와 내용은 diary.js에서 변경함
-            -->
             <div
-                class="emotion-chart-tooltip"
-                id="emotion-chart-tooltip"
-                role="tooltip"
-                hidden
-            ></div>
+                class="emotion-chart-wrapper"
+                id="emotion-chart-wrapper"
+            >
+                <svg
+                    class="emotion-chart"
+                    id="emotion-chart"
+                    viewBox="0 0 320 320"
+                    role="img"
+                    aria-label="대표 감정 기록 분포"
+                >
+                    <!-- 그래프 기본 배경 -->
+                    <circle
+                        class="emotion-chart-background"
+                        cx="160"
+                        cy="160"
+                        r="112"
+                    ></circle>
+
+                    <!-- JS에서 색상별 조각 추가 -->
+                    <g
+                        class="emotion-chart-segments"
+                        id="emotion-chart-segments"
+                    ></g>
+
+                    <!-- 가운데 원 테두리 -->
+                    <circle
+                        class="emotion-chart-inner-circle"
+                        cx="160"
+                        cy="160"
+                        r="78"
+                    ></circle>
+                </svg>
+
+
+                <!-- 그래프 중앙 기록 수 -->
+                <div class="emotion-chart-center">
+                    <span class="emotion-chart-center-label">
+                        전체 기록
+                    </span>
+
+                    <strong class="emotion-chart-center-count">
+                        {{ total_record_count }}개
+                    </strong>
+                </div>
+
+
+                <!-- hover 툴팁 -->
+                <div
+                    class="emotion-chart-tooltip"
+                    id="emotion-chart-tooltip"
+                    role="tooltip"
+                    hidden
+                ></div>
+            </div>
 
         </div>
 
 
         <!-- =========================
-                대표 감정 데이터
+                안내 문구
         ========================== -->
+        {% if recorded_emotions %}
+            <div class="emotion-card-guide">
+                <span class="emotion-card-guide-line"></span>
 
-        <!--
-            화면에는 보이지 X
+                <span class="emotion-card-guide-heart">
+                    ♥
+                </span>
 
-            Django에서 전달받은 recorded_emotions를
-            JavaScript가 읽기 위한 데이터 영역
+                <span>
+                    다른 감정들도 살펴볼까요?
+                </span>
 
-            diary.js에서는 이 data-* 값을 읽어서
+                <span class="emotion-card-guide-heart">
+                    ♥
+                </span>
 
-            1. 어떤 대표 감정이 기록되었는지
-            2. 해당 감정이 몇 번 기록되었는지
-            3. 어떤 색상 그룹에 속하는지
+                <span class="emotion-card-guide-line"></span>
+            </div>
+        {% endif %}
 
-            판단한 뒤 SVG 도넛 그래프를 생성
-        -->
+
+        <!-- =========================
+                기록된 감정 카드
+        ========================== -->
+        {% if recorded_emotions %}
+            <div class="emotion-record-card-list">
+
+                {% for emotion in recorded_emotions %}
+
+                    <button
+                        type="button"
+                        class="
+                            emotion-record-card
+                            emotion-record-card--{{ emotion.color_group }}
+                        "
+                        data-emotion-card
+                        data-emotion-id="{{ emotion.id }}"
+                        data-emotion-name="{{ emotion.name }}"
+                    >
+                        <!-- 감정 이미지 -->
+                        <span class="emotion-record-card-image">
+                            <img
+                                src="{% static 'records/static/records/images/emotion-' %}{{ emotion.id|stringformat:'02d' }}.png"
+                                alt="{{ emotion.name }}"
+                            >
+                        </span>
+
+
+                        <!-- 감정 이름 및 횟수 -->
+                        <span class="emotion-record-card-info">
+                            <strong class="emotion-record-card-name">
+                                {{ emotion.name }}
+                            </strong>
+
+                            <span class="emotion-record-card-count">
+                                {{ emotion.record_count }}회
+                            </span>
+                        </span>
+                    </button>
+
+                {% endfor %}
+
+            </div>
+        {% endif %}
+
+
+        <!-- =========================
+                그래프용 데이터
+        ========================== -->
         <div
-            class="emotion-chart-data"
             id="emotion-chart-data"
             hidden
         >
@@ -157,49 +176,19 @@
 
                 <span
                     class="emotion-chart-data-item"
-
                     data-emotion-id="{{ emotion.id }}"
-
                     data-emotion-name="{{ emotion.name }}"
-
                     data-emotion-count="{{ emotion.record_count }}"
-
-                    data-emotion-color-group="
-                        {% if emotion.name == '사랑' or emotion.name == '짝사랑' %}
-                            pink
-
-                        {% elif emotion.name == '슬픔' or emotion.name == '아픔' %}
-                            blue
-
-                        {% elif emotion.name == '기쁨' or emotion.name == '만족' or emotion.name == '신남' or emotion.name == '행운' or emotion.name == '맛있어!' %}
-                            yellow
-
-                        {% elif emotion.name == '따분' or emotion.name == '졸림' or emotion.name == '예민' or emotion.name == '냉철' %}
-                            purple
-
-                        {% elif emotion.name == '심술' or emotion.name == '화남' or emotion.name == '질투' %}
-                            red
-
-                        {% elif emotion.name == '당황' or emotion.name == '놀람' %}
-                            orange
-
-                        {% else %}
-                            default
-                        {% endif %}
-                    "
+                    data-emotion-color-group="{{ emotion.color_group }}"
                 ></span>
 
             {% endfor %}
         </div>
 
 
-        <!-- =========================
-                기록이 없을 때
-        ========================== -->
+        <!-- 기록 없음 -->
         {% if not recorded_emotions %}
-
             <div class="emotion-chart-empty">
-
                 <p class="emotion-chart-empty-title">
                     아직 기록된 감정이 없어요.
                 </p>
@@ -207,9 +196,7 @@
                 <p class="emotion-chart-empty-description">
                     오늘의 대표 감정을 기록해보세요.
                 </p>
-
             </div>
-
         {% endif %}
 
     </div>

@@ -692,484 +692,36 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
-    /* =========================================================
-       20. 감정 도넛 그래프 요소
+            /* =========================================================
+       20. 감정별 기록 팝업 요소
        ========================================================= */
-
-    const emotionChart =
-        document.querySelector(
-            "#emotion-chart"
-        );
-
-    const emotionChartSegments =
-        document.querySelector(
-            "#emotion-chart-segments"
-        );
-
-    const emotionChartWrapper =
-        document.querySelector(
-            "#emotion-chart-wrapper"
-        );
-
-    const emotionChartTooltip =
-        document.querySelector(
-            "#emotion-chart-tooltip"
-        );
-
-    const emotionChartDataItems =
-        document.querySelectorAll(
-            "#emotion-chart-data .emotion-chart-data-item"
-        );
-
-
-    /* =========================================================
-       21. 감정 데이터를 색상 그룹별로 합치기
-       ========================================================= */
-
-    function getEmotionChartGroups() {
-
-        // 색상 그룹별 임시 저장 객체
-        const groupedData = {};
-
-
-        emotionChartDataItems.forEach(
-            (element) => {
-
-                // 감정 이름
-                const emotionName =
-                    element.dataset.emotionName.trim();
-
-
-                // 대표 감정 기록 횟수
-                const emotionCount =
-                    Number(
-                        element.dataset.emotionCount
-                    );
-
-
-                // 색상 그룹 이름
-                const colorGroup =
-                    element.dataset.emotionColorGroup.trim();
-
-
-                // 잘못된 데이터 제외
-                if (
-                    !emotionName
-                    || emotionCount <= 0
-                ) {
-                    return;
-                }
-
-
-                // 최초 색상 그룹 생성
-                if (!groupedData[colorGroup]) {
-
-                    groupedData[colorGroup] = {
-                        colorGroup: colorGroup,
-                        count: 0,
-                        emotionNames: [],
-                    };
-                }
-
-
-                // 기록 횟수 합산
-                groupedData[colorGroup].count +=
-                    emotionCount;
-
-
-                // 감정 이름 중복 제거 후 추가
-                if (
-                    !groupedData[
-                        colorGroup
-                    ].emotionNames.includes(
-                        emotionName
-                    )
-                ) {
-                    groupedData[
-                        colorGroup
-                    ].emotionNames.push(
-                        emotionName
-                    );
-                }
-            }
-        );
-
-
-        // 객체를 배열로 변환
-        return Object.values(
-            groupedData
-        );
-    }
-
-
-    /* =========================================================
-       22. 감정 그래프 툴팁 표시
-       ========================================================= */
-
-    function showEmotionChartTooltip(
-        emotionNames,
-        event
-    ) {
-
-        // 필수 요소 없는 경우 종료
-        if (
-            !emotionChartTooltip
-            || !emotionChartWrapper
-        ) {
-            return;
-        }
-
-
-        // 감정 이름만 표시
-        emotionChartTooltip.textContent =
-            emotionNames.join(" · ");
-
-
-        // 툴팁 표시
-        emotionChartTooltip.hidden = false;
-
-
-        // wrapper 위치 계산
-        const wrapperRect =
-            emotionChartWrapper.getBoundingClientRect();
-
-
-        // 마우스 기준 툴팁 위치
-        const tooltipX =
-            event.clientX
-            - wrapperRect.left;
-
-        const tooltipY =
-            event.clientY
-            - wrapperRect.top;
-
-
-        // 마우스보다 약간 위쪽에 배치
-        emotionChartTooltip.style.left =
-            `${tooltipX}px`;
-
-        emotionChartTooltip.style.top =
-            `${tooltipY - 16}px`;
-    }
-
-
-    /* =========================================================
-       23. 감정 그래프 툴팁 숨기기
-       ========================================================= */
-
-    function hideEmotionChartTooltip() {
-
-        // 툴팁 없는 경우 종료
-        if (!emotionChartTooltip) {
-            return;
-        }
-
-
-        // 툴팁 숨김
-        emotionChartTooltip.hidden = true;
-    }
-
-
-    /* =========================================================
-       24. 감정 SVG 도넛 그래프 생성
-       ========================================================= */
-
-    function renderEmotionChart() {
-
-        // 그래프 요소 없는 경우 종료
-        if (
-            !emotionChart
-            || !emotionChartSegments
-        ) {
-            return;
-        }
-
-
-        // 기존 그래프 조각 제거
-        emotionChartSegments.innerHTML = "";
-
-
-        // 색상 그룹별 데이터 생성
-        const chartGroups =
-            getEmotionChartGroups();
-
-
-        // 기록 없는 경우 종료
-        if (chartGroups.length === 0) {
-            return;
-        }
-
-
-        // 전체 대표 감정 기록 수 계산
-        const totalCount =
-            chartGroups.reduce(
-                (sum, group) =>
-                    sum + group.count,
-                0
-            );
-
-
-        // 전체 기록 없는 경우 종료
-        if (totalCount <= 0) {
-            return;
-        }
-
-
-        /*
-            SVG 원 정보
-
-            emotion_list.html:
-            cx = 160
-            cy = 160
-            r  = 110
-        */
-        const centerX = 160;
-        const centerY = 160;
-        const radius = 110;
-
-
-        // 원 둘레 계산
-        const circumference =
-            2 * Math.PI * radius;
-
-
-        /*
-            조각 사이 간격
-
-            값 증가
-            → 조각 사이 간격 증가
-
-            값 감소
-            → 조각 사이 간격 감소
-        */
-        const segmentGap = 7;
-
-
-        /*
-            시작 위치
-
-            SVG 원은 기본적으로 오른쪽에서 시작함.
-
-            -circumference / 4 적용
-            → 그래프 시작점을 12시 방향으로 이동
-        */
-        let currentOffset =
-            -circumference / 4;
-
-
-        chartGroups.forEach((group) => {
-
-            // 그룹 비율 계산
-            const ratio =
-                group.count / totalCount;
-
-
-            // 그룹이 차지하는 원 둘레 길이
-            const segmentLength =
-                circumference * ratio;
-
-
-            /*
-                실제 표시 길이에서 간격 제거
-
-                너무 작은 조각이 사라지는 문제 방지용
-                최소 길이 1 적용
-            */
-            const visibleLength =
-                Math.max(
-                    segmentLength
-                    - segmentGap,
-                    1
-                );
-
-
-            // SVG circle 생성
-            const segment =
-                document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "circle"
-                );
-
-
-            // 기본 원 위치 설정
-            segment.setAttribute(
-                "cx",
-                centerX
-            );
-
-            segment.setAttribute(
-                "cy",
-                centerY
-            );
-
-            segment.setAttribute(
-                "r",
-                radius
-            );
-
-
-            // CSS 클래스 추가
-            segment.classList.add(
-                "emotion-chart-segment"
-            );
-
-
-            // 색상 그룹 클래스 추가
-            segment.classList.add(
-                `emotion-chart-segment--${group.colorGroup}`
-            );
-
-
-            // 실제 stroke 색상 적용
-            segment.style.stroke =
-                emotionChartColors[
-                    group.colorGroup
-                ]
-                || emotionChartColors.default;
-
-
-            /*
-                현재 조각 길이 설정
-
-                첫 번째 값
-                → 실제 표시되는 선 길이
-
-                두 번째 값
-                → 나머지 비어 있는 선 길이
-            */
-            segment.style.strokeDasharray =
-                `${visibleLength} ${
-                    circumference
-                    - visibleLength
-                }`;
-
-
-            // 현재 조각 시작 위치 설정
-            segment.style.strokeDashoffset =
-                `${-currentOffset}`;
-
-
-            /*
-                hover에서 사용할 감정 이름 저장
-
-                예:
-                "기쁨|만족|신남"
-            */
-            segment.dataset.emotionNames =
-                group.emotionNames.join("|");
-
-
-            /*
-                마우스 진입 시 툴팁 표시
-            */
-            segment.addEventListener(
-                "mouseenter",
-                (event) => {
-
-                    showEmotionChartTooltip(
-                        group.emotionNames,
-                        event
-                    );
-                }
-            );
-
-
-            /*
-                조각 위에서 마우스 이동 시
-                툴팁 위치도 함께 이동
-            */
-            segment.addEventListener(
-                "mousemove",
-                (event) => {
-
-                    showEmotionChartTooltip(
-                        group.emotionNames,
-                        event
-                    );
-                }
-            );
-
-
-            /*
-                마우스 이탈 시 툴팁 제거
-            */
-            segment.addEventListener(
-                "mouseleave",
-                hideEmotionChartTooltip
-            );
-
-
-            // SVG에 조각 추가
-            emotionChartSegments.appendChild(
-                segment
-            );
-
-
-            // 다음 조각 시작 위치 계산
-            currentOffset +=
-                segmentLength;
-        });
-    }
-
-
-    /* =========================================================
-       25. 감정 도넛 그래프 초기 생성
-       ========================================================= */
-
-    renderEmotionChart();
-
-
-    /* =========================================================
-       26. 감정별 기록 팝업 요소
-       ========================================================= */
-
-    /*
-        기존 emotion_modal.html 기능 유지.
-
-        현재 도넛 그래프에서는
-        감정 클릭 기능을 연결하지 않음.
-
-        추후 그래프 클릭 또는 별도 감정 버튼 추가 시
-        openEmotionModal() 재사용 가능.
-    */
 
     const modal =
-        document.querySelector(
-            "#emotion-modal"
-        );
+        document.querySelector("#emotion-modal");
 
     const modalName =
-        document.querySelector(
-            "#emotion-modal-name"
-        );
+        document.querySelector("#emotion-modal-name");
 
     const modalRecords =
-        document.querySelectorAll(
-            ".emotion-modal-record"
-        );
+        document.querySelectorAll(".emotion-modal-record");
 
     const modalEmpty =
-        document.querySelector(
-            "#emotion-modal-empty"
-        );
+        document.querySelector("#emotion-modal-empty");
 
     const closeButtons =
-        document.querySelectorAll(
-            "[data-modal-close]"
-        );
+        document.querySelectorAll("[data-modal-close]");
 
 
     /* =========================================================
-       27. 감정별 기록 팝업 열기
+       21. 감정별 기록 팝업 열기
        ========================================================= */
 
     function openEmotionModal(
-        emotionId,
-        emotionName
+        emotionIds,
+        emotionNames
     ) {
 
-        // 팝업 요소 없는 경우 종료
+        // 필수 요소 없는 경우 종료
         if (
             !modal
             || !modalName
@@ -1179,20 +731,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
+        // 단일 ID도 배열로 변환
+        const normalizedIds =
+            Array.isArray(emotionIds)
+                ? emotionIds.map(String)
+                : [String(emotionIds)];
+
+
+        // 감정명도 배열로 변환
+        const normalizedNames =
+            Array.isArray(emotionNames)
+                ? emotionNames
+                : [emotionNames];
+
+
         let visibleRecordCount = 0;
 
 
-        // 팝업 감정 이름 설정
+        // 팝업 제목 설정
         modalName.textContent =
-            emotionName;
+            normalizedNames.join(" · ");
 
 
-        // 선택 감정 기록만 표시
+        // 선택 감정 그룹 기록 표시
         modalRecords.forEach((record) => {
 
+            const recordEmotion =
+                String(
+                    record.dataset.recordEmotion
+                );
+
+
             const isMatched =
-                record.dataset.recordEmotion
-                === emotionId;
+                normalizedIds.includes(
+                    recordEmotion
+                );
 
 
             record.hidden =
@@ -1222,7 +795,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       28. 감정별 기록 팝업 닫기
+       22. 감정별 기록 팝업 닫기
        ========================================================= */
 
     function closeEmotionModal() {
@@ -1245,7 +818,450 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       29. 감정 팝업 닫기
+       23. 감정 도넛 그래프 요소
+       ========================================================= */
+
+    const emotionChart =
+        document.querySelector(
+            "#emotion-chart"
+        );
+
+    const emotionChartSegments =
+        document.querySelector(
+            "#emotion-chart-segments"
+        );
+
+    const emotionChartWrapper =
+        document.querySelector(
+            "#emotion-chart-wrapper"
+        );
+
+    const emotionChartTooltip =
+        document.querySelector(
+            "#emotion-chart-tooltip"
+        );
+
+    const emotionChartDataItems =
+        document.querySelectorAll(
+            "#emotion-chart-data .emotion-chart-data-item"
+        );
+
+
+    /* =========================================================
+       24. 색상 그룹별 감정 데이터 생성
+       ========================================================= */
+
+    function getEmotionChartGroups() {
+
+        const groupedData = {};
+
+
+        emotionChartDataItems.forEach(
+            (element) => {
+
+                const emotionId =
+                    element.dataset.emotionId.trim();
+
+                const emotionName =
+                    element.dataset.emotionName.trim();
+
+                const emotionCount =
+                    Number(
+                        element.dataset.emotionCount
+                    );
+
+                const colorGroup =
+                    element.dataset.emotionColorGroup.trim();
+
+
+                // 잘못된 데이터 제외
+                if (
+                    !emotionId
+                    || !emotionName
+                    || emotionCount <= 0
+                ) {
+                    return;
+                }
+
+
+                // 색상 그룹 최초 생성
+                if (!groupedData[colorGroup]) {
+
+                    groupedData[colorGroup] = {
+                        colorGroup,
+                        count: 0,
+                        emotionIds: [],
+                        emotionNames: [],
+                    };
+                }
+
+
+                // 기록 횟수 합산
+                groupedData[colorGroup].count +=
+                    emotionCount;
+
+
+                // 감정 ID 추가
+                if (
+                    !groupedData[
+                        colorGroup
+                    ].emotionIds.includes(
+                        emotionId
+                    )
+                ) {
+                    groupedData[
+                        colorGroup
+                    ].emotionIds.push(
+                        emotionId
+                    );
+                }
+
+
+                // 감정 이름 추가
+                if (
+                    !groupedData[
+                        colorGroup
+                    ].emotionNames.includes(
+                        emotionName
+                    )
+                ) {
+                    groupedData[
+                        colorGroup
+                    ].emotionNames.push(
+                        emotionName
+                    );
+                }
+            }
+        );
+
+
+        return Object.values(
+            groupedData
+        );
+    }
+
+
+    /* =========================================================
+       25. 도넛 그래프 툴팁 표시
+       ========================================================= */
+
+    function showEmotionChartTooltip(
+        emotionNames,
+        event
+    ) {
+
+        // 필수 요소 없는 경우 종료
+        if (
+            !emotionChartTooltip
+            || !emotionChartWrapper
+        ) {
+            return;
+        }
+
+
+        // 감정 이름 표시
+        emotionChartTooltip.textContent =
+            emotionNames.join(" · ");
+
+
+        // 툴팁 표시
+        emotionChartTooltip.hidden = false;
+
+
+        const wrapperRect =
+            emotionChartWrapper.getBoundingClientRect();
+
+
+        const tooltipX =
+            event.clientX
+            - wrapperRect.left;
+
+        const tooltipY =
+            event.clientY
+            - wrapperRect.top;
+
+
+        // 마우스 위쪽 배치
+        emotionChartTooltip.style.left =
+            `${tooltipX}px`;
+
+        emotionChartTooltip.style.top =
+            `${tooltipY - 18}px`;
+    }
+
+
+    /* =========================================================
+       26. 도넛 그래프 툴팁 제거
+       ========================================================= */
+
+    function hideEmotionChartTooltip() {
+
+        if (!emotionChartTooltip) {
+            return;
+        }
+
+
+        emotionChartTooltip.hidden = true;
+    }
+
+
+    /* =========================================================
+       27. SVG 도넛 그래프 생성
+       ========================================================= */
+
+    function renderEmotionChart() {
+
+        // 그래프 없는 경우 종료
+        if (
+            !emotionChart
+            || !emotionChartSegments
+        ) {
+            return;
+        }
+
+
+        // 기존 조각 제거
+        emotionChartSegments.innerHTML = "";
+
+
+        const chartGroups =
+            getEmotionChartGroups();
+
+
+        // 데이터 없는 경우 종료
+        if (chartGroups.length === 0) {
+            return;
+        }
+
+
+        // 전체 기록 수 계산
+        const totalCount =
+            chartGroups.reduce(
+                (sum, group) =>
+                    sum + group.count,
+                0
+            );
+
+
+        if (totalCount <= 0) {
+            return;
+        }
+
+
+        // SVG 원 정보
+        const centerX = 160;
+        const centerY = 160;
+        const radius = 112;
+
+
+        // 전체 원 둘레
+        const circumference =
+            2 * Math.PI * radius;
+
+
+        /*
+            조각 사이 간격
+
+            값 증가
+            → 조각 사이 흰색 간격 증가
+        */
+        const segmentGap = 5;
+
+
+        /*
+            12시 방향 시작
+
+            기본 circle 시작점은 오른쪽이므로
+            rotate(-90deg) 적용
+        */
+        let currentLength = 0;
+
+
+        chartGroups.forEach((group) => {
+
+            const ratio =
+                group.count
+                / totalCount;
+
+
+            // 실제 그룹 길이
+            const segmentLength =
+                circumference * ratio;
+
+
+            // 흰색 간격 제외
+            const visibleLength =
+                Math.max(
+                    segmentLength
+                    - segmentGap,
+                    1
+                );
+
+
+            const segment =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "circle"
+                );
+
+
+            segment.setAttribute(
+                "cx",
+                centerX
+            );
+
+            segment.setAttribute(
+                "cy",
+                centerY
+            );
+
+            segment.setAttribute(
+                "r",
+                radius
+            );
+
+
+            segment.classList.add(
+                "emotion-chart-segment"
+            );
+
+
+            segment.classList.add(
+                `emotion-chart-segment--${group.colorGroup}`
+            );
+
+
+            /*
+                현재 조각만 표시
+
+                visibleLength
+                → 보이는 부분
+
+                나머지
+                → 숨겨지는 부분
+            */
+            segment.style.strokeDasharray =
+                `${visibleLength} ${
+                    circumference - visibleLength
+                }`;
+
+
+            /*
+                조각 시작 위치 이동
+            */
+            segment.style.strokeDashoffset =
+                `${-currentLength}`;
+
+
+            // hover 데이터 저장
+            segment.dataset.emotionIds =
+                group.emotionIds.join(",");
+
+            segment.dataset.emotionNames =
+                group.emotionNames.join("|");
+
+
+            // hover 툴팁 표시
+            segment.addEventListener(
+                "mouseenter",
+                (event) => {
+
+                    showEmotionChartTooltip(
+                        group.emotionNames,
+                        event
+                    );
+                }
+            );
+
+
+            // 툴팁 위치 이동
+            segment.addEventListener(
+                "mousemove",
+                (event) => {
+
+                    showEmotionChartTooltip(
+                        group.emotionNames,
+                        event
+                    );
+                }
+            );
+
+
+            // 툴팁 제거
+            segment.addEventListener(
+                "mouseleave",
+                hideEmotionChartTooltip
+            );
+
+
+            /*
+                색상 조각 클릭
+
+                해당 그룹에 포함된 모든 대표 감정 기록 표시
+            */
+            segment.addEventListener(
+                "click",
+                () => {
+
+                    hideEmotionChartTooltip();
+
+
+                    openEmotionModal(
+                        group.emotionIds,
+                        group.emotionNames
+                    );
+                }
+            );
+
+
+            emotionChartSegments.appendChild(
+                segment
+            );
+
+
+            // 다음 조각 시작 위치 계산
+            currentLength +=
+                segmentLength;
+        });
+    }
+
+
+    /* =========================================================
+       28. 도넛 그래프 생성
+       ========================================================= */
+
+    renderEmotionChart();
+
+
+    /* =========================================================
+       29. 감정 카드 클릭
+       ========================================================= */
+
+    const emotionRecordCards =
+        document.querySelectorAll(
+            "[data-emotion-card]"
+        );
+
+
+    emotionRecordCards.forEach(
+        (card) => {
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    openEmotionModal(
+                        card.dataset.emotionId,
+                        card.dataset.emotionName
+                    );
+                }
+            );
+        }
+    );
+
+
+    /* =========================================================
+       30. 감정 팝업 닫기
        ========================================================= */
 
     closeButtons.forEach((button) => {
@@ -1256,68 +1272,4 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     });
 
-
-    /* =========================================================
-       30. Escape 키 처리
-       ========================================================= */
-
-    document.addEventListener(
-        "keydown",
-        (event) => {
-
-            // Escape 아닌 경우 종료
-            if (event.key !== "Escape") {
-                return;
-            }
-
-
-            // 감정 팝업 닫기
-            if (
-                modal
-                && !modal.hidden
-            ) {
-                closeEmotionModal();
-            }
-
-
-            // 장소 팝업 닫기
-            if (
-                locationModal
-                && !locationModal.hidden
-            ) {
-                closeLocationModal();
-            }
-
-
-            // 지도 설정 메뉴 닫기
-            if (
-                mapSettingsMenu
-                && !mapSettingsMenu.hidden
-            ) {
-                mapSettingsMenu.hidden = true;
-
-
-                if (mapSettingsButton) {
-
-                    mapSettingsButton.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-                }
-            }
-
-
-            // 기간 설정창 닫기
-            if (
-                periodFilter
-                && !periodFilter.hidden
-            ) {
-                closePeriodFilter();
-            }
-
-
-            // 감정 툴팁 제거
-            hideEmotionChartTooltip();
-        }
-    );
-});
+});    
