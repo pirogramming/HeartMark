@@ -1,4 +1,3 @@
-{% load static %}
 <div class="share-letter-modal" id="share-letter-modal" hidden>
     <section class="share-letter" role="dialog" aria-modal="true" aria-labelledby="share-letter-title">
         <span class="share-letter__tape" aria-hidden="true"></span>
@@ -23,7 +22,7 @@
                 {% for friend in friends %}
                 <label class="share-friend" data-share-friend data-friend-name="{{ friend.name|lower }}">
                     <input type="checkbox" name="friend_ids" value="{{ friend.id }}">
-                    <span class="share-friend__character"><img src="{% static friend.character_static %}" alt=""></span>
+                    <span class="share-friend__character"><img src="{{ friend.character_url }}" alt=""></span>
                     <span class="share-friend__copy">
                         <strong>{{ friend.name }}</strong>
                         <small>{{ friend.message }}</small>

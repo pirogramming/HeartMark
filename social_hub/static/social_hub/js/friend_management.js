@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.querySelector("#friend-search");
     const confirmLayer = document.querySelector("#friend-confirm");
     const confirmMessage = document.querySelector("#friend-confirm-message");
-    let pendingDeleteCard = null;
+    const deleteForm = document.querySelector("#friend-delete-form");
 
     function selectTab(tabName) {
         tabs.forEach((tab) => {
@@ -35,38 +35,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("click", (event) => {
         const deleteButton = event.target.closest("[data-delete-friend]");
-        const mockButton = event.target.closest("[data-mock-action]");
-
         if (deleteButton && confirmLayer) {
-            pendingDeleteCard = deleteButton.closest("[data-person-card]");
+            const pendingDeleteCard = deleteButton.closest("[data-person-card]");
             const name = pendingDeleteCard?.querySelector(".person-card__copy strong")?.textContent.trim();
             if (confirmMessage) confirmMessage.textContent = `${name}님을 삭제하면 더 이상 기록을 공유할 수 없어요.`;
+            if (deleteForm) deleteForm.action = deleteButton.dataset.deleteUrl;
             confirmLayer.hidden = false;
             document.body.classList.add("friend-dialog-open");
-        }
-
-        if (mockButton) {
-            const card = mockButton.closest("[data-person-card]");
-            const action = mockButton.dataset.mockAction;
-            if (action !== "share") {
-                card?.classList.add("is-leaving");
-                window.setTimeout(() => card?.remove(), 260);
-            }
         }
     });
 
     confirmLayer?.querySelector("[data-confirm-cancel]")?.addEventListener("click", closeConfirm);
-    confirmLayer?.querySelector("[data-confirm-delete]")?.addEventListener("click", () => {
-        pendingDeleteCard?.remove();
-        closeConfirm();
-    });
     confirmLayer?.addEventListener("click", (event) => {
         if (event.target === confirmLayer) closeConfirm();
     });
 
     function closeConfirm() {
         if (confirmLayer) confirmLayer.hidden = true;
-        pendingDeleteCard = null;
+        if (deleteForm) deleteForm.removeAttribute("action");
         document.body.classList.remove("friend-dialog-open");
     }
 });

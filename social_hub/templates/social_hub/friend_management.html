@@ -69,15 +69,16 @@
     {% include "social_hub/partials/share_modal.html" %}
 
     <div class="friend-confirm" id="friend-confirm" hidden>
-        <section class="friend-confirm__panel" role="dialog" aria-modal="true" aria-labelledby="friend-confirm-title">
+        <form class="friend-confirm__panel" method="post" id="friend-delete-form" role="dialog" aria-modal="true" aria-labelledby="friend-confirm-title">
+            {% csrf_token %}
             <span class="friend-confirm__sticker" aria-hidden="true">✦</span>
             <h2 id="friend-confirm-title">친구를 삭제할까요?</h2>
             <p id="friend-confirm-message">삭제한 친구에게는 더 이상 기록을 공유할 수 없어요.</p>
             <div class="friend-confirm__actions">
                 <button class="soft-button" type="button" data-confirm-cancel>취소</button>
-                <button class="soft-button soft-button--danger" type="button" data-confirm-delete>친구 삭제</button>
+                <button class="soft-button soft-button--danger" type="submit">친구 삭제</button>
             </div>
-        </section>
+        </form>
     </div>
 </section>
 {% endblock %}

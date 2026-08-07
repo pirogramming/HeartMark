@@ -1,52 +1,74 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.templatetags.static import static
+from django.urls import reverse
+
+from friendships.services import (
+    get_friends,
+    get_or_create_invite_link,
+    get_received_requests,
+    get_sent_requests,
+)
 
 
+def _display_name(user):
+    profile = getattr(user, "profile", None)
+    return getattr(profile, "display_name", "") or user.first_name or user.username
+
+
+def _character_url(user):
+    profile = getattr(user, "profile", None)
+    character_id = getattr(profile, "character_id", None)
+    if character_id not in range(1, 6):
+        character_id = 2
+    return static(f"accounts/images/{character_id}.png")
+
+
+def _friend_item(user):
+    return {
+        "id": user.pk,
+        "name": _display_name(user),
+        "character_url": _character_url(user),
+        "message": "함께 마음자국을 나누는 친구예요.",
+        "delete_url": reverse("friendships:friend_delete", args=[user.pk]),
+    }
+
+
+def _request_item(invitation, counterpart, received=False):
+    return {
+        "id": invitation.pk,
+        "name": _display_name(counterpart),
+        "character_url": _character_url(counterpart),
+        "message": invitation.message or (
+            "마음자국 친구가 되고 싶대요."
+            if received
+            else "친구의 답장을 기다리고 있어요."
+        ),
+        "accept_url": reverse("friendships:respond_request", args=[invitation.pk, "accept"]),
+        "reject_url": reverse("friendships:respond_request", args=[invitation.pk, "reject"]),
+    }
+
+
+@login_required(login_url="accounts:login")
 def friend_management(request):
-    """친구 백엔드 연결 전 UI 확인을 위한 임시 화면."""
+    friends = [_friend_item(user) for user in get_friends(request.user)]
+    received_requests = [
+        _request_item(invitation, invitation.inviter, received=True)
+        for invitation in get_received_requests(request.user)
+    ]
+    sent_requests = [
+        _request_item(invitation, invitation.invitee)
+        for invitation in get_sent_requests(request.user)
+        if invitation.invitee_id
+    ]
+    invitation, _ = get_or_create_invite_link(request.user)
     context = {
-        "invite_url": request.build_absolute_uri("/accounts/invite/HEART24/"),
-        "friends": [
-            {
-                "id": 1,
-                "name": "홍연우",
-                "character_static": "accounts/images/1.png",
-                "message": "12일째 함께 마음자국을 나누는 중",
-            },
-            {
-                "id": 2,
-                "name": "신은아",
-                "character_static": "accounts/images/3.png",
-                "message": "오늘 친구가 되었어요",
-            },
-            {
-                "id": 3,
-                "name": "한지수",
-                "character_static": "accounts/images/5.png",
-                "message": "5일째 함께 마음자국을 나누는 중",
-            },
-        ],
-        "received_requests": [
-            {
-                "id": 11,
-                "name": "마음이",
-                "character_static": "accounts/images/2.png",
-                "message": "마음자국 친구가 되고 싶대요!",
-            },
-            {
-                "id": 12,
-                "name": "구름이",
-                "character_static": "accounts/images/4.png",
-                "message": "새로운 친구 요청이 도착했어요.",
-            },
-        ],
-        "sent_requests": [
-            {
-                "id": 21,
-                "name": "별이",
-                "character_static": "accounts/images/2.png",
-                "message": "친구의 답장을 기다리고 있어요.",
-            },
-        ],
+        "invite_url": request.build_absolute_uri(
+            reverse("friendships:invite_detail", args=[invitation.code])
+        ),
+        "friends": friends,
+        "received_requests": received_requests,
+        "sent_requests": sent_requests,
     }
     return render(request, "social_hub/friend_management.html", context)
 
