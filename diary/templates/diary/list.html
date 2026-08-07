@@ -1,13 +1,300 @@
-ㅊ====================== -->
+<!-- 담당 D: 다이어리 목록 -->
+
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+다이어리 목록 | HeartMark
+{% endblock %}
+
+
+{% block extra_css %}
+{% comment %}
+담당 C의 감정 아이콘 스타일을 불러옴
+{% endcomment %}
+<link
+    rel="stylesheet"
+    href="{% static 'records/css/records.css' %}"
+>
+
+{% comment %}
+다이어리 목록 페이지 전용 스타일을 불러옴
+{% endcomment %}
+<link
+    rel="stylesheet"
+    href="{% static 'diary/css/diary.css' %}"
+>
+{% endblock %}
+
+
+{% block content %}
+<main class="diary-list-page">
+    <div class="diary-list-container">
+
+        <!-- =========================
+                전체 / 감정별 / 장소별 탭
+        ========================== -->
+        <div class="diary-tabs-wrapper">
+            {% include "diary/partials/diary_tab.html" %}
+        </div>
+
+
+        <!-- =========================
+                전체 기록 탭
+        ========================== -->
         <section
-            class="diary-panel {% if selected_tab == 'location' %}active{% endif %}"
+            class="
+                diary-panel
+                {% if selected_tab == 'all' or not selected_tab %}
+                    active
+                {% endif %}
+            "
+            data-panel="all"
+            {% if selected_tab and selected_tab != "all" %}
+                hidden
+            {% endif %}
+        >
+            <!--
+                전체 기록 제목, 기록 개수,
+                정렬 및 기간 필터를 한 줄에 배치
+
+                화면 배치 예시:
+                전체 기록  7개          [최신순] [기간 설정]
+            -->
+            <div class="diary-list-header">
+
+                <!-- 전체 기록 제목과 기록 개수 -->
+                <div class="diary-list-heading">
+                    <h1 class="diary-list-title">
+                        전체 기록
+                    </h1>
+
+                    <span class="diary-list-count">
+                        {{ records|length }}개
+                    </span>
+                </div>
+
+
+                <!--
+                    최신순·과거순 정렬과
+                    기간 설정을 처리하는 폼
+                -->
+                <form
+                    method="get"
+                    action=""
+                    class="diary-filter-form diary-list-controls"
+                    id="diary-filter-form"
+                >
+                    <!--
+                        필터를 적용한 이후에도
+                        전체 기록 탭이 유지되도록 함
+                    -->
+                    <input
+                        type="hidden"
+                        name="tab"
+                        value="all"
+                    >
+
+
+                    <!--
+                        화면에는 보이지 않지만
+                        스크린 리더가 정렬 선택창의 용도를 읽음
+                    -->
+                    <label
+                        class="sr-only"
+                        for="diary-sort"
+                    >
+                        기록 정렬 방식
+                    </label>
+
+
+                    <!-- 기록 정렬 선택 상자 -->
+                    <select
+                        name="sort"
+                        id="diary-sort"
+                        class="diary-sort-select"
+                    >
+                        <option
+                            value="latest"
+                            {% if selected_sort == "latest" or not selected_sort %}
+                                selected
+                            {% endif %}
+                        >
+                            최신순
+                        </option>
+
+                        <option
+                            value="oldest"
+                            {% if selected_sort == "oldest" %}
+                                selected
+                            {% endif %}
+                        >
+                            과거순
+                        </option>
+                    </select>
+
+
+                    <!-- 기간 설정 영역을 열고 닫는 버튼 -->
+                    <button
+                        type="button"
+                        class="period-toggle-button"
+                        id="period-toggle-button"
+                        aria-expanded="false"
+                        aria-controls="period-filter"
+                    >
+                        기간 설정
+                    </button>
+
+
+                    <!--
+                        기간 설정 버튼을 눌렀을 때 표시되는 영역
+
+                        처음에는 hidden 상태이며,
+                        diary.js에서 열고 닫음
+                    -->
+                    <div
+                        class="period-filter"
+                        id="period-filter"
+                        hidden
+                    >
+                        <!-- 시작 날짜 -->
+                        <div class="period-input-group">
+                            <label for="start-date">
+                                시작일
+                            </label>
+
+                            <input
+                                type="date"
+                                name="start_date"
+                                id="start-date"
+                                value="{{ selected_start_date|default:'' }}"
+                            >
+                        </div>
+
+
+                        <span
+                            class="period-separator"
+                            aria-hidden="true"
+                        >
+                            ~
+                        </span>
+
+
+                        <!-- 종료 날짜 -->
+                        <div class="period-input-group">
+                            <label for="end-date">
+                                종료일
+                            </label>
+
+                            <input
+                                type="date"
+                                name="end_date"
+                                id="end-date"
+                                value="{{ selected_end_date|default:'' }}"
+                            >
+                        </div>
+
+
+                        <!-- 선택한 기간 적용 -->
+                        <button
+                            type="submit"
+                            class="period-apply-button"
+                        >
+                            적용
+                        </button>
+
+
+                        <!-- 적용된 기간 초기화 -->
+                        <a
+                            href="?tab=all&sort={{ selected_sort|default:'latest' }}"
+                            class="period-reset-button"
+                        >
+                            초기화
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+
+            <!-- 전체 기록 카드 목록 -->
+            <div class="diary-grid">
+                {% for record in records %}
+
+                    {% comment %}
+                    공통 기록 카드 파일을 불러옴
+
+                    record=record
+                    → 현재 반복 중인 기록 하나를
+                    diary_card.html에 전달
+                    {% endcomment %}
+
+                    {% include "diary/partials/diary_card.html" with record=record %}
+
+                {% empty %}
+
+                    <!-- 작성한 기록이 하나도 없을 때 -->
+                    <div class="diary-empty">
+                        <p class="diary-empty-title">
+                            아직 작성한 기록이 없어요.
+                        </p>
+
+                        <p class="diary-empty-description">
+                            오늘의 마음을 첫 기록으로 남겨보세요.
+                        </p>
+
+                        <a
+                            href="{% url 'records:create' %}"
+                            class="diary-empty-button"
+                        >
+                            기록 작성하기
+                        </a>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </section>
+
+
+        <!-- =========================
+                감정별 기록 탭
+        ========================== -->
+
+        {% comment %}
+        감정별 기록 탭의 전체 HTML은
+        emotion_list.html에서 관리
+
+        emotion_list.html 내부에서 다음 변수를 그대로 사용 가능
+
+        - selected_tab
+        - records
+        - recorded_emotions
+        - top_emotions
+        {% endcomment %}
+
+        {% include "diary/partials/emotion_list.html" %}
+
+
+        <!-- =========================
+                장소별 기록 탭
+        ========================== -->
+        <section
+            class="
+                diary-panel
+                {% if selected_tab == 'location' %}
+                    active
+                {% endif %}
+            "
             data-panel="location"
-            {% if selected_tab != "location" %}hidden{% endif %}
+            {% if selected_tab != "location" %}
+                hidden
+            {% endif %}
         >
             <!--
                 장소별 기록 제목 영역은 현재 사용하지 않으므로
-                기존 코드 그대로 주석 처리해두었습니다.
+                기존 코드 그대로 주석 처리
             -->
+
             <!--
             <div class="diary-list-header">
 
@@ -33,25 +320,12 @@
 
             <div class="location-map-section">
 
-                <!--
-                    지도 위쪽 도구 영역입니다.
-
-                    점 세 개 버튼을 지도 내부에 겹치지 않고,
-                    지도 위 오른쪽에 독립적으로 배치합니다.
-                -->
+                <!-- 지도 위쪽 설정 버튼 영역 -->
                 <div class="map-toolbar">
 
                     <div class="map-display-settings">
 
-                        <!--
-                            지도 색상 설정 메뉴를 여는 버튼입니다.
-
-                            aria-expanded
-                            → 메뉴가 열렸는지 닫혔는지를 접근성 도구에 알려줍니다.
-
-                            aria-controls
-                            → 이 버튼이 어떤 메뉴를 제어하는지 연결합니다.
-                        -->
+                        <!-- 지도 색상 설정 메뉴를 여는 버튼 -->
                         <button
                             type="button"
                             class="map-settings-button"
@@ -63,11 +337,12 @@
                             ⋯
                         </button>
 
-                        <!--
-                            지도 색상 설정 메뉴입니다.
 
-                            hidden 속성이 있으면 처음에는 보이지 않고,
-                            diary.js에서 버튼 클릭 시 hidden을 제거합니다.
+                        <!--
+                            지도 색상 설정 메뉴
+
+                            처음에는 hidden 상태이며
+                            diary.js에서 열고 닫음
                         -->
                         <div
                             class="map-settings-menu"
@@ -117,22 +392,18 @@
                 </div>
 
 
-                <!--
-                    실제 서울 지도 영역입니다.
-
-                    설정 버튼과 메뉴는 위의 map-toolbar로 빠졌기 때문에
-                    이 영역 안에는 지도만 표시됩니다.
-                -->
+                <!-- 실제 서울 지도 영역 -->
                 <div class="location-map-wrapper">
 
                     {% include "diary/partials/seoul_map.html" %}
 
+
                     <!--
                         Django에서 계산한 구별 기록 데이터를
-                        JavaScript가 읽을 수 있도록 숨겨서 출력합니다.
+                        JavaScript가 읽을 수 있도록 숨겨서 출력
 
                         화면에는 보이지 않지만 diary.js에서
-                        data-district, data-count 등의 값을 사용합니다.
+                        아래 data-* 값을 사용
                     -->
                     <div
                         id="district-map-data"
@@ -152,6 +423,13 @@
             </div>
 
 
+            <!--
+                장소별 기록 카드를 추가로 표시할 필요가 생기면
+                아래 영역에 작성할 수 있음
+
+                현재는 지도 클릭 시 팝업으로 기록을 보여주므로
+                반복문 내부를 비워둔 상태
+            -->
             <div class="diary-grid">
                 {% for record in records %}
 
@@ -162,6 +440,15 @@
     </div>
 </main>
 
+
+<!-- =========================
+        감정별 기록 팝업
+========================== -->
+
+{% comment %}
+감정별 기록 팝업의 HTML은
+emotion_modal.html에서 관리
+{% endcomment %}
 
 {% include "diary/partials/emotion_modal.html" %}
 
@@ -177,12 +464,17 @@
     aria-labelledby="location-modal-title"
     hidden
 >
+    <!-- 팝업 바깥의 어두운 배경 -->
     <div
         class="location-modal-backdrop"
         data-location-modal-close
     ></div>
 
+
+    <!-- 실제 팝업 내용 -->
     <div class="location-modal-content">
+
+        <!-- 팝업 상단 -->
         <div class="location-modal-header">
             <div>
                 <p class="location-modal-label">
@@ -195,6 +487,8 @@
                 </h2>
             </div>
 
+
+            <!-- 팝업 닫기 버튼 -->
             <button
                 type="button"
                 class="location-modal-close"
@@ -206,8 +500,10 @@
         </div>
 
 
+        <!-- 선택한 장소의 기록 카드 목록 -->
         <div class="location-modal-grid">
             {% for record in records %}
+
                 <div
                     class="location-modal-record"
                     data-record-location="{% if record.place %}{{ record.place.district }}{% endif %}"
@@ -215,10 +511,12 @@
                 >
                     {% include "diary/partials/diary_card.html" with record=record %}
                 </div>
+
             {% endfor %}
         </div>
 
 
+        <!-- 선택한 장소에 기록이 없을 때 -->
         <div
             class="location-modal-empty"
             id="location-modal-empty"
@@ -233,3 +531,4 @@
 
 {% block extra_js %}
 <script src="{% static 'diary/js/diary.js' %}"></script>
+{% endblock %}
