@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "locations",
     "records",
     "diary",
+    "friendships",
 ]
 
 MIDDLEWARE = [
