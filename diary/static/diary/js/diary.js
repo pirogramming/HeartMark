@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
-       1. 지도 감정 색상 정보
+       1. 감정 색상 정보
        ========================================================= */
 
     const emotionColors = {
@@ -34,8 +34,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /*
-        지도에서 '구별로 다른 색' 모드를 선택했을 때
-        각 구에 순서대로 적용할 색상 목록입니다.
+        감정별 도넛 그래프 색상
+    */
+    const emotionChartColors = {
+        red: "#ef9a9a",
+        blue: "#9fc5e8",
+        yellow: "#f8dc7d",
+        pink: "#efb2c7",
+        orange: "#f9c25c",
+        purple: "#b3b2db",
+        default: "#d4d4d4",
+    };
+
+
+    /*
+        구별 색상 모드용 색상 목록
     */
     const districtColors = [
         "#f3b7b7",
@@ -60,38 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
        2. 지도 설정 요소
        ========================================================= */
 
-    /*
-        지도 오른쪽 위의 점 세 개 버튼입니다.
-    */
     const mapSettingsButton =
         document.querySelector("#map-settings-button");
 
-
-    /*
-        점 세 개 버튼을 눌렀을 때 열리는
-        지도 색상 설정 메뉴입니다.
-    */
     const mapSettingsMenu =
         document.querySelector("#map-settings-menu");
 
-
-    /*
-        지도 색상 방식을 선택하는 버튼들입니다.
-
-        예:
-        - 같은 색으로 통일
-        - 가장 많은 감정 색
-        - 가장 최근 감정 색
-        - 방문 횟수에 따른 농도
-        - 구별로 다른 색
-    */
     const mapModeButtons =
         document.querySelectorAll("[data-map-mode]");
 
-
-    /*
-        Django가 HTML에 넣어둔 구별 기록 데이터입니다.
-    */
     const districtDataElements =
         document.querySelectorAll(
             "#district-map-data [data-district]"
@@ -127,7 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function getDistrictMapData() {
         return Array.from(districtDataElements).map((element) => ({
             district: element.dataset.district.trim(),
-            count: Number(element.dataset.count),
+
+            count: Number(
+                element.dataset.count
+            ),
 
             dominantEmotion:
                 element.dataset.dominantEmotion.trim(),
@@ -147,15 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .querySelectorAll(".seoul-map path")
             .forEach((path) => {
 
-                /*
-                    JavaScript로 직접 넣었던 fill 색상을 제거합니다.
-                */
+                // JavaScript fill 제거
                 path.style.fill = "";
 
-
-                /*
-                    기록이 있는 구에 붙었던 클래스를 제거합니다.
-                */
+                // 기록 표시 클래스 제거
                 path.classList.remove("has-record");
             });
     }
@@ -167,46 +155,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function applyMapMode(mode) {
 
-        /*
-            새로운 색상을 적용하기 전에
-            이전 지도 색상을 먼저 초기화합니다.
-        */
+        // 기존 지도 색상 초기화
         clearDistrictStyles();
 
 
-        /*
-            HTML에 담긴 구별 데이터를 배열로 가져옵니다.
-        */
-        const mapData = getDistrictMapData();
+        // 구별 기록 데이터 가져오기
+        const mapData =
+            getDistrictMapData();
 
 
-        /*
-            방문 횟수 농도를 계산하기 위해
-            가장 방문 횟수가 많은 구의 기록 수를 구합니다.
-
-            기록이 없을 때 0으로 나누는 문제를 막기 위해
-            최소값을 1로 설정합니다.
-        */
+        // 최대 방문 횟수 계산
         const maximumCount = Math.max(
-            ...mapData.map((district) => district.count),
+            ...mapData.map(
+                (district) => district.count
+            ),
             1
         );
 
 
         mapData.forEach((district, index) => {
 
-            /*
-                district.district와 같은 id를 가진
-                서울 지도 SVG path를 찾습니다.
-
-                예:
-                district.district가 "성북구"라면
-                id="성북구"인 path를 찾습니다.
-            */
+            // 구 이름과 같은 SVG path 탐색
             const path =
-                document.getElementById(district.district);
+                document.getElementById(
+                    district.district
+                );
 
 
+            // SVG path가 없는 경우 제외
             if (!path) {
                 console.warn(
                     `SVG에서 구를 찾지 못했습니다: ${district.district}`
@@ -216,74 +192,67 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            /*
-                기록이 있는 구라는 표시를 추가합니다.
-            */
+            // 기록 있는 구 표시
             path.classList.add("has-record");
 
 
-            /*
-                모든 기록된 구를 같은 색으로 표시합니다.
-            */
+            // 동일 색상 모드
             if (mode === "uniform") {
                 path.style.fill = "#dce9b7";
             }
 
 
-            /*
-                해당 구에서 가장 많이 기록된 감정의 색상을 사용합니다.
-            */
+            // 최다 감정 색상 모드
             if (mode === "dominant") {
                 path.style.fill =
-                    emotionColors[district.dominantEmotion]
+                    emotionColors[
+                        district.dominantEmotion
+                    ]
                     || "#d4d4d4";
             }
 
 
-            /*
-                해당 구에서 가장 최근에 기록한 감정의 색상을 사용합니다.
-            */
+            // 최근 감정 색상 모드
             if (mode === "latest") {
                 path.style.fill =
-                    emotionColors[district.latestEmotion]
+                    emotionColors[
+                        district.latestEmotion
+                    ]
                     || "#d4d4d4";
             }
 
 
-            /*
-                방문 횟수가 많을수록 색을 진하게 표시합니다.
-            */
+            // 방문 횟수 농도 모드
             if (mode === "intensity") {
+
                 const minimumOpacity = 0.05;
 
                 const ratio =
-                    district.count / maximumCount;
+                    district.count
+                    / maximumCount;
 
                 const opacity =
                     minimumOpacity
-                    + ratio * (1 - minimumOpacity);
+                    + ratio
+                    * (1 - minimumOpacity);
 
                 path.style.fill =
                     `rgba(245, 196, 80, ${opacity})`;
             }
 
 
-            /*
-                각 구에 서로 다른 색상을 순서대로 적용합니다.
-            */
+            // 구별 다른 색상 모드
             if (mode === "rainbow") {
                 path.style.fill =
                     districtColors[
-                        index % districtColors.length
+                        index
+                        % districtColors.length
                     ];
             }
         });
 
 
-        /*
-            현재 선택한 지도 색상 방식 버튼에만
-            active 클래스를 추가합니다.
-        */
+        // 선택 버튼 active 처리
         mapModeButtons.forEach((button) => {
             button.classList.toggle(
                 "active",
@@ -292,11 +261,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        /*
-            새로고침한 뒤에도 선택한 지도 색상 방식이
-            유지되도록 브라우저 저장소에 저장합니다.
-        */
-        localStorage.setItem("diaryMapMode", mode);
+        // 선택 모드 저장
+        localStorage.setItem(
+            "diaryMapMode",
+            mode
+        );
     }
 
 
@@ -306,31 +275,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openLocationModal(locationName) {
 
-        /*
-            장소 팝업 요소가 없는 페이지에서는
-            아래 코드를 실행하지 않습니다.
-        */
-        if (!locationModal || !locationModalName) {
+        // 팝업 요소 없는 경우 종료
+        if (
+            !locationModal
+            || !locationModalName
+        ) {
             return;
         }
 
 
-        /*
-            선택한 장소와 일치하는 기록의 개수입니다.
-        */
         let visibleRecordCount = 0;
 
 
-        /*
-            팝업 제목에 선택한 구 이름을 넣습니다.
-        */
-        locationModalName.textContent = locationName;
+        // 팝업 장소명 설정
+        locationModalName.textContent =
+            locationName;
 
 
-        /*
-            해당 구에 작성된 기록만 표시합니다.
-        */
+        // 선택한 장소 기록만 표시
         locationModalRecords.forEach((record) => {
+
             const recordLocation =
                 record.dataset.recordLocation.trim();
 
@@ -345,26 +309,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        /*
-            일치하는 기록이 없다면
-            빈 기록 안내 문구를 표시합니다.
-        */
+        // 기록 없음 문구 처리
         if (locationModalEmpty) {
             locationModalEmpty.hidden =
                 visibleRecordCount !== 0;
         }
 
 
-        /*
-            장소별 기록 팝업을 엽니다.
-        */
+        // 팝업 표시
         locationModal.hidden = false;
 
 
-        /*
-            팝업이 열린 동안 뒤쪽 페이지 스크롤을 막습니다.
-        */
-        document.body.classList.add("modal-open");
+        // 배경 스크롤 차단
+        document.body.classList.add(
+            "modal-open"
+        );
     }
 
 
@@ -373,28 +332,40 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================= */
 
     function closeLocationModal() {
+
+        // 팝업 없는 경우 종료
         if (!locationModal) {
             return;
         }
 
+
+        // 팝업 숨김
         locationModal.hidden = true;
 
-        document.body.classList.remove("modal-open");
+
+        // 배경 스크롤 복구
+        document.body.classList.remove(
+            "modal-open"
+        );
     }
 
 
     /* =========================================================
-       9. 기록이 있는 서울 구역 클릭 이벤트
+       9. 기록 있는 서울 구역 클릭
        ========================================================= */
 
     districtDataElements.forEach((element) => {
+
         const districtName =
             element.dataset.district.trim();
 
         const districtPath =
-            document.getElementById(districtName);
+            document.getElementById(
+                districtName
+            );
 
 
+        // SVG path 없는 경우 제외
         if (!districtPath) {
             console.warn(
                 `클릭 이벤트를 연결할 구를 찾지 못했습니다: ${districtName}`
@@ -404,97 +375,92 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /*
-            tabindex는 넣지 않습니다.
-
-            SVG를 클릭했을 때 직사각형 포커스 테두리가
-            나타나는 문제를 방지합니다.
-        */
-        districtPath.addEventListener("click", () => {
-            openLocationModal(districtName);
-        });
-    });
-
-
-    /* =========================================================
-       10. 장소별 기록 팝업 닫기 버튼
-       ========================================================= */
-
-    locationModalCloseButtons.forEach((button) => {
-        button.addEventListener(
+        // 장소 팝업 열기
+        districtPath.addEventListener(
             "click",
-            closeLocationModal
+            () => {
+                openLocationModal(
+                    districtName
+                );
+            }
         );
     });
 
 
     /* =========================================================
-       11. 지도 점 세 개 설정 메뉴
+       10. 장소 팝업 닫기
        ========================================================= */
 
-    if (mapSettingsButton && mapSettingsMenu) {
+    locationModalCloseButtons.forEach(
+        (button) => {
 
-        /*
-            점 세 개 버튼을 누르면
-            지도 설정 메뉴를 열거나 닫습니다.
-        */
-        mapSettingsButton.addEventListener("click", (event) => {
-
-            /*
-                버튼 클릭이 document 클릭 이벤트까지
-                전달되는 것을 막습니다.
-
-                이 코드가 없으면 메뉴를 열자마자
-                아래 document 클릭 이벤트가 실행되어
-                다시 닫힐 수 있습니다.
-            */
-            event.stopPropagation();
-
-
-            /*
-                현재 메뉴가 숨겨져 있다면 true입니다.
-            */
-            const willOpen = mapSettingsMenu.hidden;
-
-
-            /*
-                숨겨져 있었다면 열고,
-                열려 있었다면 닫습니다.
-            */
-            mapSettingsMenu.hidden = !willOpen;
-
-
-            /*
-                접근성 상태도 메뉴 상태와 맞춰 변경합니다.
-            */
-            mapSettingsButton.setAttribute(
-                "aria-expanded",
-                String(willOpen)
+            button.addEventListener(
+                "click",
+                closeLocationModal
             );
-        });
+        }
+    );
 
 
-        /*
-            설정 메뉴 내부를 클릭했을 때는
-            document 클릭 이벤트로 전달되지 않게 합니다.
-        */
-        mapSettingsMenu.addEventListener("click", (event) => {
-            event.stopPropagation();
-        });
+    /* =========================================================
+       11. 지도 설정 메뉴
+       ========================================================= */
+
+    if (
+        mapSettingsButton
+        && mapSettingsMenu
+    ) {
+
+        // 점 세 개 버튼 클릭
+        mapSettingsButton.addEventListener(
+            "click",
+            (event) => {
+
+                // document 클릭 이벤트 전달 차단
+                event.stopPropagation();
 
 
-        /*
-            지도 설정 메뉴 바깥을 클릭하면
-            설정 메뉴를 닫습니다.
-        */
-        document.addEventListener("click", () => {
-            mapSettingsMenu.hidden = true;
+                // 변경 후 열림 상태 계산
+                const willOpen =
+                    mapSettingsMenu.hidden;
 
-            mapSettingsButton.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-        });
+
+                // 메뉴 열기/닫기
+                mapSettingsMenu.hidden =
+                    !willOpen;
+
+
+                // 접근성 상태 변경
+                mapSettingsButton.setAttribute(
+                    "aria-expanded",
+                    String(willOpen)
+                );
+            }
+        );
+
+
+        // 메뉴 내부 클릭 전파 차단
+        mapSettingsMenu.addEventListener(
+            "click",
+            (event) => {
+                event.stopPropagation();
+            }
+        );
+
+
+        // 메뉴 바깥 클릭 시 닫기
+        document.addEventListener(
+            "click",
+            () => {
+
+                mapSettingsMenu.hidden = true;
+
+                mapSettingsButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
+        );
     }
 
 
@@ -503,92 +469,97 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================================= */
 
     mapModeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
 
-            /*
-                클릭한 버튼의 data-map-mode 값을 가져옵니다.
-            */
-            const selectedMode =
-                button.dataset.mapMode;
+        button.addEventListener(
+            "click",
+            () => {
 
-
-            /*
-                선택한 방식으로 지도 색상을 변경합니다.
-            */
-            applyMapMode(selectedMode);
+                // 선택 모드 가져오기
+                const selectedMode =
+                    button.dataset.mapMode;
 
 
-            /*
-                색상 방식 선택 후 설정 메뉴를 닫습니다.
-            */
-            if (mapSettingsMenu) {
-                mapSettingsMenu.hidden = true;
-            }
-
-            if (mapSettingsButton) {
-                mapSettingsButton.setAttribute(
-                    "aria-expanded",
-                    "false"
+                // 지도 색상 변경
+                applyMapMode(
+                    selectedMode
                 );
+
+
+                // 설정 메뉴 닫기
+                if (mapSettingsMenu) {
+                    mapSettingsMenu.hidden = true;
+                }
+
+
+                // 접근성 상태 변경
+                if (mapSettingsButton) {
+                    mapSettingsButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
             }
-        });
+        );
     });
 
 
     /* =========================================================
-       13. 페이지 진입 시 저장된 지도 색상 방식 적용
+       13. 저장된 지도 색상 적용
        ========================================================= */
 
     if (districtDataElements.length > 0) {
+
         const savedMapMode =
-            localStorage.getItem("diaryMapMode")
+            localStorage.getItem(
+                "diaryMapMode"
+            )
             || "dominant";
 
-        applyMapMode(savedMapMode);
+
+        applyMapMode(
+            savedMapMode
+        );
     }
 
 
     /* =========================================================
-       14. 전체 기록 정렬 및 기간 설정 요소
+       14. 전체 기록 필터 요소
        ========================================================= */
 
-    /*
-        최신순·과거순 선택창입니다.
-    */
     const sortSelect =
         document.querySelector("#diary-sort");
 
-
-    /*
-        최신순과 기간 설정을 포함하는 전체 폼입니다.
-    */
     const filterForm =
-        document.querySelector("#diary-filter-form");
+        document.querySelector(
+            "#diary-filter-form"
+        );
 
-
-    /*
-        기간 설정창을 여는 버튼입니다.
-    */
     const periodToggleButton =
-        document.querySelector("#period-toggle-button");
+        document.querySelector(
+            "#period-toggle-button"
+        );
 
-
-    /*
-        시작일·종료일·적용·초기화가 들어 있는
-        실제 기간 설정창입니다.
-    */
     const periodFilter =
-        document.querySelector("#period-filter");
+        document.querySelector(
+            "#period-filter"
+        );
 
 
     /* =========================================================
-       15. 최신순·과거순 선택 시 자동 제출
+       15. 최신순·과거순 변경
        ========================================================= */
 
-    if (sortSelect && filterForm) {
-        sortSelect.addEventListener("change", () => {
-            filterForm.submit();
-        });
+    if (
+        sortSelect
+        && filterForm
+    ) {
+
+        sortSelect.addEventListener(
+            "change",
+            () => {
+                filterForm.submit();
+            }
+        );
     }
 
 
@@ -598,34 +569,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openPeriodFilter() {
 
-        /*
-            현재 페이지에 기간 설정 요소가 없다면
-            함수를 종료합니다.
-        */
-        if (!periodToggleButton || !periodFilter) {
+        // 필수 요소 없는 경우 종료
+        if (
+            !periodToggleButton
+            || !periodFilter
+        ) {
             return;
         }
 
 
-        /*
-            hidden 속성을 제거해 기간 설정창을 표시합니다.
-        */
+        // 기간 설정창 표시
         periodFilter.hidden = false;
 
 
-        /*
-            기간 설정 버튼에 active 클래스를 추가합니다.
-
-            CSS의
-            .period-toggle-button.active
-            스타일이 적용됩니다.
-        */
-        periodToggleButton.classList.add("active");
+        // 버튼 활성화
+        periodToggleButton.classList.add(
+            "active"
+        );
 
 
-        /*
-            스크린 리더에 설정창이 열렸다는 것을 전달합니다.
-        */
+        // 접근성 상태 변경
         periodToggleButton.setAttribute(
             "aria-expanded",
             "true"
@@ -639,30 +602,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function closePeriodFilter() {
 
-        /*
-            현재 페이지에 기간 설정 요소가 없다면
-            함수를 종료합니다.
-        */
-        if (!periodToggleButton || !periodFilter) {
+        // 필수 요소 없는 경우 종료
+        if (
+            !periodToggleButton
+            || !periodFilter
+        ) {
             return;
         }
 
 
-        /*
-            hidden 속성을 추가해 기간 설정창을 숨깁니다.
-        */
+        // 기간 설정창 숨김
         periodFilter.hidden = true;
 
 
-        /*
-            버튼의 활성화 스타일을 제거합니다.
-        */
-        periodToggleButton.classList.remove("active");
+        // 버튼 활성화 제거
+        periodToggleButton.classList.remove(
+            "active"
+        );
 
 
-        /*
-            스크린 리더에 설정창이 닫혔다는 것을 전달합니다.
-        */
+        // 접근성 상태 변경
         periodToggleButton.setAttribute(
             "aria-expanded",
             "false"
@@ -674,115 +633,548 @@ document.addEventListener("DOMContentLoaded", () => {
        18. 기간 설정 버튼 클릭
        ========================================================= */
 
-    if (periodToggleButton && periodFilter) {
-        periodToggleButton.addEventListener("click", () => {
+    if (
+        periodToggleButton
+        && periodFilter
+    ) {
 
-            /*
-                버튼을 누르기 전에 기간 설정창이
-                숨겨져 있었는지 확인합니다.
+        periodToggleButton.addEventListener(
+            "click",
+            () => {
 
-                true
-                → 현재 닫혀 있으므로 열어야 합니다.
-
-                false
-                → 현재 열려 있으므로 닫아야 합니다.
-            */
-            const shouldOpen = periodFilter.hidden;
+                const shouldOpen =
+                    periodFilter.hidden;
 
 
-            if (shouldOpen) {
-                openPeriodFilter();
-            } else {
-                closePeriodFilter();
+                if (shouldOpen) {
+                    openPeriodFilter();
+                } else {
+                    closePeriodFilter();
+                }
             }
-        });
+        );
 
 
         /* =====================================================
-           19. 기간 설정창 바깥 클릭 시 닫기
+           19. 기간 설정창 바깥 클릭
            ===================================================== */
 
-        document.addEventListener("click", (event) => {
+        document.addEventListener(
+            "click",
+            (event) => {
 
-            /*
-                실제로 클릭된 HTML 요소입니다.
-            */
-            const clickedElement = event.target;
-
-
-            /*
-                클릭한 위치가 기간 설정 버튼 내부인지 확인합니다.
-
-                버튼의 글자 부분을 클릭해도 true가 됩니다.
-            */
-            const clickedToggleButton =
-                periodToggleButton.contains(clickedElement);
+                const clickedElement =
+                    event.target;
 
 
-            /*
-                클릭한 위치가 기간 설정창 내부인지 확인합니다.
-
-                다음 요소를 클릭했을 때 true가 됩니다.
-
-                - 시작 날짜 입력창
-                - 종료 날짜 입력창
-                - 적용 버튼
-                - 초기화 버튼
-                - 기간 설정창의 빈 공간
-            */
-            const clickedInsidePeriodFilter =
-                periodFilter.contains(clickedElement);
+                // 기간 설정 버튼 클릭 여부
+                const clickedToggleButton =
+                    periodToggleButton.contains(
+                        clickedElement
+                    );
 
 
-            /*
-                기간 설정 버튼도 아니고,
-                기간 설정창 내부도 아니라면
-                팝업 바깥을 클릭한 것입니다.
-            */
-            if (
-                !clickedToggleButton
-                && !clickedInsidePeriodFilter
-            ) {
-                closePeriodFilter();
+                // 기간 설정창 내부 클릭 여부
+                const clickedInsidePeriodFilter =
+                    periodFilter.contains(
+                        clickedElement
+                    );
+
+
+                // 외부 클릭 시 닫기
+                if (
+                    !clickedToggleButton
+                    && !clickedInsidePeriodFilter
+                ) {
+                    closePeriodFilter();
+                }
             }
+        );
+    }
+
+
+    /* =========================================================
+       20. 감정 도넛 그래프 요소
+       ========================================================= */
+
+    const emotionChart =
+        document.querySelector(
+            "#emotion-chart"
+        );
+
+    const emotionChartSegments =
+        document.querySelector(
+            "#emotion-chart-segments"
+        );
+
+    const emotionChartWrapper =
+        document.querySelector(
+            "#emotion-chart-wrapper"
+        );
+
+    const emotionChartTooltip =
+        document.querySelector(
+            "#emotion-chart-tooltip"
+        );
+
+    const emotionChartDataItems =
+        document.querySelectorAll(
+            "#emotion-chart-data .emotion-chart-data-item"
+        );
+
+
+    /* =========================================================
+       21. 감정 데이터를 색상 그룹별로 합치기
+       ========================================================= */
+
+    function getEmotionChartGroups() {
+
+        // 색상 그룹별 임시 저장 객체
+        const groupedData = {};
+
+
+        emotionChartDataItems.forEach(
+            (element) => {
+
+                // 감정 이름
+                const emotionName =
+                    element.dataset.emotionName.trim();
+
+
+                // 대표 감정 기록 횟수
+                const emotionCount =
+                    Number(
+                        element.dataset.emotionCount
+                    );
+
+
+                // 색상 그룹 이름
+                const colorGroup =
+                    element.dataset.emotionColorGroup.trim();
+
+
+                // 잘못된 데이터 제외
+                if (
+                    !emotionName
+                    || emotionCount <= 0
+                ) {
+                    return;
+                }
+
+
+                // 최초 색상 그룹 생성
+                if (!groupedData[colorGroup]) {
+
+                    groupedData[colorGroup] = {
+                        colorGroup: colorGroup,
+                        count: 0,
+                        emotionNames: [],
+                    };
+                }
+
+
+                // 기록 횟수 합산
+                groupedData[colorGroup].count +=
+                    emotionCount;
+
+
+                // 감정 이름 중복 제거 후 추가
+                if (
+                    !groupedData[
+                        colorGroup
+                    ].emotionNames.includes(
+                        emotionName
+                    )
+                ) {
+                    groupedData[
+                        colorGroup
+                    ].emotionNames.push(
+                        emotionName
+                    );
+                }
+            }
+        );
+
+
+        // 객체를 배열로 변환
+        return Object.values(
+            groupedData
+        );
+    }
+
+
+    /* =========================================================
+       22. 감정 그래프 툴팁 표시
+       ========================================================= */
+
+    function showEmotionChartTooltip(
+        emotionNames,
+        event
+    ) {
+
+        // 필수 요소 없는 경우 종료
+        if (
+            !emotionChartTooltip
+            || !emotionChartWrapper
+        ) {
+            return;
+        }
+
+
+        // 감정 이름만 표시
+        emotionChartTooltip.textContent =
+            emotionNames.join(" · ");
+
+
+        // 툴팁 표시
+        emotionChartTooltip.hidden = false;
+
+
+        // wrapper 위치 계산
+        const wrapperRect =
+            emotionChartWrapper.getBoundingClientRect();
+
+
+        // 마우스 기준 툴팁 위치
+        const tooltipX =
+            event.clientX
+            - wrapperRect.left;
+
+        const tooltipY =
+            event.clientY
+            - wrapperRect.top;
+
+
+        // 마우스보다 약간 위쪽에 배치
+        emotionChartTooltip.style.left =
+            `${tooltipX}px`;
+
+        emotionChartTooltip.style.top =
+            `${tooltipY - 16}px`;
+    }
+
+
+    /* =========================================================
+       23. 감정 그래프 툴팁 숨기기
+       ========================================================= */
+
+    function hideEmotionChartTooltip() {
+
+        // 툴팁 없는 경우 종료
+        if (!emotionChartTooltip) {
+            return;
+        }
+
+
+        // 툴팁 숨김
+        emotionChartTooltip.hidden = true;
+    }
+
+
+    /* =========================================================
+       24. 감정 SVG 도넛 그래프 생성
+       ========================================================= */
+
+    function renderEmotionChart() {
+
+        // 그래프 요소 없는 경우 종료
+        if (
+            !emotionChart
+            || !emotionChartSegments
+        ) {
+            return;
+        }
+
+
+        // 기존 그래프 조각 제거
+        emotionChartSegments.innerHTML = "";
+
+
+        // 색상 그룹별 데이터 생성
+        const chartGroups =
+            getEmotionChartGroups();
+
+
+        // 기록 없는 경우 종료
+        if (chartGroups.length === 0) {
+            return;
+        }
+
+
+        // 전체 대표 감정 기록 수 계산
+        const totalCount =
+            chartGroups.reduce(
+                (sum, group) =>
+                    sum + group.count,
+                0
+            );
+
+
+        // 전체 기록 없는 경우 종료
+        if (totalCount <= 0) {
+            return;
+        }
+
+
+        /*
+            SVG 원 정보
+
+            emotion_list.html:
+            cx = 160
+            cy = 160
+            r  = 110
+        */
+        const centerX = 160;
+        const centerY = 160;
+        const radius = 110;
+
+
+        // 원 둘레 계산
+        const circumference =
+            2 * Math.PI * radius;
+
+
+        /*
+            조각 사이 간격
+
+            값 증가
+            → 조각 사이 간격 증가
+
+            값 감소
+            → 조각 사이 간격 감소
+        */
+        const segmentGap = 7;
+
+
+        /*
+            시작 위치
+
+            SVG 원은 기본적으로 오른쪽에서 시작함.
+
+            -circumference / 4 적용
+            → 그래프 시작점을 12시 방향으로 이동
+        */
+        let currentOffset =
+            -circumference / 4;
+
+
+        chartGroups.forEach((group) => {
+
+            // 그룹 비율 계산
+            const ratio =
+                group.count / totalCount;
+
+
+            // 그룹이 차지하는 원 둘레 길이
+            const segmentLength =
+                circumference * ratio;
+
+
+            /*
+                실제 표시 길이에서 간격 제거
+
+                너무 작은 조각이 사라지는 문제 방지용
+                최소 길이 1 적용
+            */
+            const visibleLength =
+                Math.max(
+                    segmentLength
+                    - segmentGap,
+                    1
+                );
+
+
+            // SVG circle 생성
+            const segment =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "circle"
+                );
+
+
+            // 기본 원 위치 설정
+            segment.setAttribute(
+                "cx",
+                centerX
+            );
+
+            segment.setAttribute(
+                "cy",
+                centerY
+            );
+
+            segment.setAttribute(
+                "r",
+                radius
+            );
+
+
+            // CSS 클래스 추가
+            segment.classList.add(
+                "emotion-chart-segment"
+            );
+
+
+            // 색상 그룹 클래스 추가
+            segment.classList.add(
+                `emotion-chart-segment--${group.colorGroup}`
+            );
+
+
+            // 실제 stroke 색상 적용
+            segment.style.stroke =
+                emotionChartColors[
+                    group.colorGroup
+                ]
+                || emotionChartColors.default;
+
+
+            /*
+                현재 조각 길이 설정
+
+                첫 번째 값
+                → 실제 표시되는 선 길이
+
+                두 번째 값
+                → 나머지 비어 있는 선 길이
+            */
+            segment.style.strokeDasharray =
+                `${visibleLength} ${
+                    circumference
+                    - visibleLength
+                }`;
+
+
+            // 현재 조각 시작 위치 설정
+            segment.style.strokeDashoffset =
+                `${-currentOffset}`;
+
+
+            /*
+                hover에서 사용할 감정 이름 저장
+
+                예:
+                "기쁨|만족|신남"
+            */
+            segment.dataset.emotionNames =
+                group.emotionNames.join("|");
+
+
+            /*
+                마우스 진입 시 툴팁 표시
+            */
+            segment.addEventListener(
+                "mouseenter",
+                (event) => {
+
+                    showEmotionChartTooltip(
+                        group.emotionNames,
+                        event
+                    );
+                }
+            );
+
+
+            /*
+                조각 위에서 마우스 이동 시
+                툴팁 위치도 함께 이동
+            */
+            segment.addEventListener(
+                "mousemove",
+                (event) => {
+
+                    showEmotionChartTooltip(
+                        group.emotionNames,
+                        event
+                    );
+                }
+            );
+
+
+            /*
+                마우스 이탈 시 툴팁 제거
+            */
+            segment.addEventListener(
+                "mouseleave",
+                hideEmotionChartTooltip
+            );
+
+
+            // SVG에 조각 추가
+            emotionChartSegments.appendChild(
+                segment
+            );
+
+
+            // 다음 조각 시작 위치 계산
+            currentOffset +=
+                segmentLength;
         });
     }
 
 
     /* =========================================================
-       20. 감정별 기록 팝업 요소
+       25. 감정 도넛 그래프 초기 생성
        ========================================================= */
 
-    const emotionButtons =
-        document.querySelectorAll(".emotion-bubble");
-
-    const modal =
-        document.querySelector("#emotion-modal");
-
-    const modalName =
-        document.querySelector("#emotion-modal-name");
-
-    const modalRecords =
-        document.querySelectorAll(".emotion-modal-record");
-
-    const modalEmpty =
-        document.querySelector("#emotion-modal-empty");
-
-    const closeButtons =
-        document.querySelectorAll("[data-modal-close]");
+    renderEmotionChart();
 
 
     /* =========================================================
-       21. 감정별 기록 팝업 열기
+       26. 감정별 기록 팝업 요소
        ========================================================= */
 
-    function openEmotionModal(emotionId, emotionName) {
+    /*
+        기존 emotion_modal.html 기능 유지.
 
-        /*
-            감정별 기록 팝업 요소가 없다면
-            함수를 실행하지 않습니다.
-        */
-        if (!modal || !modalName || !modalEmpty) {
+        현재 도넛 그래프에서는
+        감정 클릭 기능을 연결하지 않음.
+
+        추후 그래프 클릭 또는 별도 감정 버튼 추가 시
+        openEmotionModal() 재사용 가능.
+    */
+
+    const modal =
+        document.querySelector(
+            "#emotion-modal"
+        );
+
+    const modalName =
+        document.querySelector(
+            "#emotion-modal-name"
+        );
+
+    const modalRecords =
+        document.querySelectorAll(
+            ".emotion-modal-record"
+        );
+
+    const modalEmpty =
+        document.querySelector(
+            "#emotion-modal-empty"
+        );
+
+    const closeButtons =
+        document.querySelectorAll(
+            "[data-modal-close]"
+        );
+
+
+    /* =========================================================
+       27. 감정별 기록 팝업 열기
+       ========================================================= */
+
+    function openEmotionModal(
+        emotionId,
+        emotionName
+    ) {
+
+        // 팝업 요소 없는 경우 종료
+        if (
+            !modal
+            || !modalName
+            || !modalEmpty
+        ) {
             return;
         }
 
@@ -790,20 +1182,22 @@ document.addEventListener("DOMContentLoaded", () => {
         let visibleRecordCount = 0;
 
 
-        /*
-            팝업 제목에 선택한 감정 이름을 넣습니다.
-        */
-        modalName.textContent = emotionName;
+        // 팝업 감정 이름 설정
+        modalName.textContent =
+            emotionName;
 
 
-        /*
-            선택한 감정과 일치하는 기록만 표시합니다.
-        */
+        // 선택 감정 기록만 표시
         modalRecords.forEach((record) => {
-            const isMatched =
-                record.dataset.recordEmotion === emotionId;
 
-            record.hidden = !isMatched;
+            const isMatched =
+                record.dataset.recordEmotion
+                === emotionId;
+
+
+            record.hidden =
+                !isMatched;
+
 
             if (isMatched) {
                 visibleRecordCount += 1;
@@ -811,59 +1205,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
 
-        /*
-            표시할 기록이 없다면 빈 안내 문구를 표시합니다.
-        */
-        modalEmpty.hidden = visibleRecordCount !== 0;
+        // 기록 없음 문구 처리
+        modalEmpty.hidden =
+            visibleRecordCount !== 0;
 
 
-        /*
-            감정별 기록 팝업을 표시합니다.
-        */
+        // 팝업 표시
         modal.hidden = false;
 
 
-        /*
-            팝업 뒤쪽 페이지의 스크롤을 막습니다.
-        */
-        document.body.classList.add("modal-open");
+        // 배경 스크롤 차단
+        document.body.classList.add(
+            "modal-open"
+        );
     }
 
 
     /* =========================================================
-       22. 감정별 기록 팝업 닫기
+       28. 감정별 기록 팝업 닫기
        ========================================================= */
 
     function closeEmotionModal() {
+
+        // 팝업 없는 경우 종료
         if (!modal) {
             return;
         }
 
+
+        // 팝업 숨김
         modal.hidden = true;
 
-        document.body.classList.remove("modal-open");
+
+        // 배경 스크롤 복구
+        document.body.classList.remove(
+            "modal-open"
+        );
     }
 
 
     /* =========================================================
-       23. 감정 조약돌 클릭
-       ========================================================= */
-
-    emotionButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            openEmotionModal(
-                button.dataset.emotionId,
-                button.dataset.emotionName
-            );
-        });
-    });
-
-
-    /* =========================================================
-       24. 감정 팝업 닫기 버튼 및 배경 클릭
+       29. 감정 팝업 닫기
        ========================================================= */
 
     closeButtons.forEach((button) => {
+
         button.addEventListener(
             "click",
             closeEmotionModal
@@ -872,56 +1258,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       25. Escape 키로 열린 요소 닫기
+       30. Escape 키 처리
        ========================================================= */
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener(
+        "keydown",
+        (event) => {
 
-        /*
-            누른 키가 Escape가 아니라면
-            아래 코드를 실행하지 않습니다.
-        */
-        if (event.key !== "Escape") {
-            return;
-        }
-
-
-        /*
-            감정별 기록 팝업이 열려 있다면 닫습니다.
-        */
-        if (modal && !modal.hidden) {
-            closeEmotionModal();
-        }
-
-
-        /*
-            장소별 기록 팝업이 열려 있다면 닫습니다.
-        */
-        if (locationModal && !locationModal.hidden) {
-            closeLocationModal();
-        }
-
-
-        /*
-            지도 점 세 개 설정 메뉴가 열려 있다면 닫습니다.
-        */
-        if (mapSettingsMenu && !mapSettingsMenu.hidden) {
-            mapSettingsMenu.hidden = true;
-
-            if (mapSettingsButton) {
-                mapSettingsButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
+            // Escape 아닌 경우 종료
+            if (event.key !== "Escape") {
+                return;
             }
-        }
 
 
-        /*
-            기간 설정창이 열려 있다면 닫습니다.
-        */
-        if (periodFilter && !periodFilter.hidden) {
-            closePeriodFilter();
+            // 감정 팝업 닫기
+            if (
+                modal
+                && !modal.hidden
+            ) {
+                closeEmotionModal();
+            }
+
+
+            // 장소 팝업 닫기
+            if (
+                locationModal
+                && !locationModal.hidden
+            ) {
+                closeLocationModal();
+            }
+
+
+            // 지도 설정 메뉴 닫기
+            if (
+                mapSettingsMenu
+                && !mapSettingsMenu.hidden
+            ) {
+                mapSettingsMenu.hidden = true;
+
+
+                if (mapSettingsButton) {
+
+                    mapSettingsButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            }
+
+
+            // 기간 설정창 닫기
+            if (
+                periodFilter
+                && !periodFilter.hidden
+            ) {
+                closePeriodFilter();
+            }
+
+
+            // 감정 툴팁 제거
+            hideEmotionChartTooltip();
         }
-    });
+    );
 });

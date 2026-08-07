@@ -41,11 +41,11 @@
     <div class="emotion-chart-section">
 
         <!--
-            그래프와 가운데 글자를 겹쳐놓기 위한 wrapper입니다.
+            그래프와 가운데 글자를 겹쳐놓기 위한 wrapper
 
             position: relative를 적용하고,
             SVG / 가운데 글자 / 툴팁을
-            이 영역을 기준으로 배치할 예정입니다.
+            이 영역을 기준으로 배치할 예정
         -->
         <div
             class="emotion-chart-wrapper"
@@ -65,10 +65,10 @@
 
                 <!--
                     그래프가 비어 있을 때 보이는
-                    기본 배경 원입니다.
+                    기본 배경 원
 
                     실제 감정별 색상 조각은
-                    diary.js에서 이 원 위에 추가합니다.
+                    diary.js에서 이 원 위에 추가
                 -->
                 <circle
                     class="emotion-chart-background"
@@ -79,7 +79,7 @@
 
                 <!--
                     JavaScript가 생성한 감정 색상별 circle이
-                    이 그룹 안으로 들어갑니다.
+                    이 그룹 안으로 들어감
                 -->
                 <g
                     class="emotion-chart-segments"
@@ -99,7 +99,7 @@
                 </span>
 
                 <strong class="emotion-chart-center-count">
-                    {{ records|length }}개
+                    {{ total_record_count }}개
                 </strong>
 
             </div>
@@ -111,14 +111,14 @@
 
             <!--
                 그래프의 특정 색상 영역에
-                마우스를 올렸을 때 표시됩니다.
+                마우스를 올렸을 때 표시됨
 
                 예:
                 행복 · 설렘
 
-                횟수는 표시하지 않습니다.
+                횟수는 표시 X
 
-                위치와 내용은 diary.js에서 변경합니다.
+                위치와 내용은 diary.js에서 변경함
             -->
             <div
                 class="emotion-chart-tooltip"
@@ -135,10 +135,10 @@
         ========================== -->
 
         <!--
-            화면에는 보이지 않습니다.
+            화면에는 보이지 X
 
             Django에서 전달받은 recorded_emotions를
-            JavaScript가 읽기 위한 데이터 영역입니다.
+            JavaScript가 읽기 위한 데이터 영역
 
             diary.js에서는 이 data-* 값을 읽어서
 
@@ -146,7 +146,7 @@
             2. 해당 감정이 몇 번 기록되었는지
             3. 어떤 색상 그룹에 속하는지
 
-            판단한 뒤 SVG 도넛 그래프를 생성합니다.
+            판단한 뒤 SVG 도넛 그래프를 생성
         -->
         <div
             class="emotion-chart-data"
