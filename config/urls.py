@@ -12,6 +12,7 @@ urlpatterns = [
     path("locations/", include("locations.urls")),
     path("records/", include("records.urls")),
     path("diary/", include("diary.urls")),
+    path("friendships/", include("friendships.urls")),
 ]
 
 if settings.DEBUG:
