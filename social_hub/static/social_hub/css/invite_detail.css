@@ -34,16 +34,6 @@
     text-align: center;
 }
 
-.invite-request-card__tape {
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    width: 92px;
-    height: 28px;
-    background: rgba(255, 214, 143, 0.78);
-    transform: translateX(-50%);
-}
-
 .invite-request-card__character {
     display: grid;
     width: 124px;

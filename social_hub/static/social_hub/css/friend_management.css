@@ -206,6 +206,7 @@
 }
 
 .friend-book__intro {
+    position: relative;
     display: grid;
     justify-items: center;
     margin-bottom: 46px;
@@ -235,6 +236,34 @@
     color: var(--friend-muted);
 }
 
+.friend-book__mail-link {
+    position: absolute;
+    right: 0;
+    bottom: -34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid #d7c2af;
+    border-radius: 11px;
+    color: var(--friend-ink);
+    background: #fffdf7;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.friend-book__mail-link:hover {
+    background: var(--friend-accent);
+    transform: translateY(-2px);
+}
+
+.friend-book__mail-link:focus-visible {
+    outline: 3px solid rgba(214, 128, 97, 0.28);
+    outline-offset: 3px;
+}
+
 .invite-letter {
     display: grid;
     grid-template-columns: 66px 1fr minmax(310px, 0.9fr);
@@ -246,16 +275,6 @@
     border-radius: 24px;
     background: #fff2e8;
     box-shadow: 0 12px 28px rgba(105, 71, 48, 0.09);
-}
-
-.invite-letter__tape {
-    position: absolute;
-    top: -13px;
-    left: 50%;
-    width: 78px;
-    height: 25px;
-    background: rgba(255, 218, 151, 0.75);
-    transform: translateX(-50%);
 }
 
 .invite-letter__icon {
@@ -652,11 +671,18 @@
     }
 
     .friend-book__intro {
+        padding-bottom: 58px;
         margin-bottom: 34px;
     }
 
     .friend-book__intro p {
         font-size: 0.85rem;
+    }
+
+    .friend-book__mail-link {
+        top: auto;
+        right: 0;
+        bottom: 0;
     }
 
     .invite-letter {
