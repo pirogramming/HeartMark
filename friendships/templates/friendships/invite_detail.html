@@ -1,16 +1,32 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}친구 요청 | 마음자국{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'social_hub/css/invite_detail.css' %}">
+{% endblock %}
+
 {% block content %}
-<section>
-    <h1>친구 요청</h1>
-    <p>{{ inviter_name }}님이 친구 요청을 보냈어요.</p>
-    {% if error %}<p role="alert">{{ error }}</p>{% endif %}
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" name="action" value="accept">수락하기</button>
-        <button type="submit" name="action" value="reject">거절하기</button>
-    </form>
-</section>
+<main class="invite-request-page">
+    <section class="invite-request-card" aria-labelledby="invite-request-title">
+        <span class="invite-request-card__tape" aria-hidden="true"></span>
+        <div class="invite-request-card__character">
+            <img src="{{ inviter_character_url }}" alt="{{ inviter_name }}님의 캐릭터">
+        </div>
+        <span class="invite-request-card__eyebrow">FRIEND INVITATION</span>
+        <h1 id="invite-request-title">친구 요청이 도착했어요!</h1>
+        <p><strong>{{ inviter_name }}</strong>님이 함께 마음자국을 나누고 싶대요.</p>
+
+        {% if error %}
+        <p class="invite-request-card__error" role="alert">{{ error }}</p>
+        {% endif %}
+
+        <form class="invite-request-card__actions" method="post">
+            {% csrf_token %}
+            <button class="invite-request-button invite-request-button--subtle" type="submit" name="action" value="reject">거절하기</button>
+            <button class="invite-request-button invite-request-button--accept" type="submit" name="action" value="accept">친구 수락</button>
+        </form>
+    </section>
+</main>
 {% endblock %}
