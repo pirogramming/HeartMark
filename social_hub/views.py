@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.urls import reverse
 
+from friendships.models import Invitation
 from friendships.services import (
     get_friends,
     get_or_create_invite_link,
@@ -49,9 +52,30 @@ def _request_item(invitation, counterpart, received=False):
     }
 
 
+def _search_member_item(user, friend_ids, sent_ids, received_ids):
+    if user.pk in friend_ids:
+        status = "friend"
+    elif user.pk in sent_ids:
+        status = "sent"
+    elif user.pk in received_ids:
+        status = "received"
+    else:
+        status = "none"
+
+    return {
+        "id": user.pk,
+        "username": user.username,
+        "name": _display_name(user),
+        "character_url": _character_url(user),
+        "status": status,
+        "request_url": reverse("friendships:send_request", args=[user.pk]),
+    }
+
+
 @login_required(login_url="accounts:login")
 def friend_management(request):
-    friends = [_friend_item(user) for user in get_friends(request.user)]
+    friend_users = list(get_friends(request.user))
+    friends = [_friend_item(user) for user in friend_users]
     received_requests = [
         _request_item(invitation, invitation.inviter, received=True)
         for invitation in get_received_requests(request.user)
@@ -62,6 +86,41 @@ def friend_management(request):
         if invitation.invitee_id
     ]
     invitation, _ = get_or_create_invite_link(request.user)
+    member_query = request.GET.get("q", "").strip()
+    member_results = []
+    if member_query:
+        pending_invitations = Invitation.objects.filter(
+            status=Invitation.Status.PENDING,
+        ).filter(
+            Q(inviter=request.user) | Q(invitee=request.user)
+        )
+        sent_ids = {
+            item.invitee_id
+            for item in pending_invitations
+            if item.inviter_id == request.user.pk and item.invitee_id
+        }
+        received_ids = {
+            item.inviter_id
+            for item in pending_invitations
+            if item.invitee_id == request.user.pk
+        }
+        friend_ids = {user.pk for user in friend_users}
+        matched_users = (
+            get_user_model().objects.filter(
+                Q(username__icontains=member_query)
+                | Q(first_name__icontains=member_query)
+                | Q(profile__display_name__icontains=member_query)
+            )
+            .exclude(pk=request.user.pk)
+            .select_related("profile")
+            .distinct()
+            .order_by("username")[:12]
+        )
+        member_results = [
+            _search_member_item(user, friend_ids, sent_ids, received_ids)
+            for user in matched_users
+        ]
+
     context = {
         "invite_url": request.build_absolute_uri(
             reverse("friendships:invite_detail", args=[invitation.code])
@@ -69,6 +128,10 @@ def friend_management(request):
         "friends": friends,
         "received_requests": received_requests,
         "sent_requests": sent_requests,
+        "member_query": member_query,
+        "member_results": member_results,
+        "member_search_performed": bool(member_query),
+        "next_url": request.get_full_path(),
     }
     return render(request, "social_hub/friend_management.html", context)
 

@@ -18,6 +18,59 @@
 
     {% include "social_hub/partials/invite_panel.html" %}
 
+    <section class="member-finder" aria-labelledby="member-finder-title">
+        <div class="member-finder__heading">
+            <div>
+                <span class="member-finder__eyebrow">MEMBER SEARCH</span>
+                <h2 id="member-finder-title">가입한 친구 찾기</h2>
+            </div>
+            <p>마음자국에 가입한 친구의 이름이나 아이디를 검색해 보세요.</p>
+        </div>
+
+        <form class="member-finder__form" method="get" action="{% url 'social_hub:friend_management' %}">
+            <label class="sr-only" for="member-query">친구 이름 또는 아이디</label>
+            <span aria-hidden="true">⌕</span>
+            <input id="member-query" name="q" type="search" value="{{ member_query }}" placeholder="이름 또는 아이디를 입력해 주세요" autocomplete="off">
+            <button type="submit">친구 찾기</button>
+        </form>
+
+        {% if member_search_performed %}
+        <div class="member-search-results" aria-live="polite">
+            {% for member in member_results %}
+            <article class="member-result-card">
+                <div class="member-result-card__character">
+                    <img src="{{ member.character_url }}" alt="{{ member.name }}님의 캐릭터">
+                </div>
+                <div class="member-result-card__copy">
+                    <strong>{{ member.name }}</strong>
+                    <span>@{{ member.username }}</span>
+                </div>
+                <div class="member-result-card__action">
+                    {% if member.status == "none" %}
+                    <form method="post" action="{{ member.request_url }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next_url }}">
+                        <button type="submit">친구 요청</button>
+                    </form>
+                    {% elif member.status == "sent" %}
+                    <span class="member-status member-status--waiting">요청 보냄</span>
+                    {% elif member.status == "received" %}
+                    <span class="member-status member-status--received">받은 요청 확인</span>
+                    {% else %}
+                    <span class="member-status member-status--friend">이미 친구예요</span>
+                    {% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <div class="member-search-empty">
+                <span aria-hidden="true">✉</span>
+                <p><strong>검색 결과가 없어요.</strong><br>아이디의 철자나 친구의 프로필 이름을 다시 확인해 주세요.</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
+
     <section class="friend-board" aria-labelledby="friend-board-title">
         <h2 id="friend-board-title" class="friend-board__label">친구 관리</h2>
 

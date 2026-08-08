@@ -25,11 +25,184 @@
 
 .friend-book__intro,
 .invite-letter,
+.member-finder,
 .friend-board {
     position: relative;
     z-index: 1;
     width: min(1060px, 100%);
     margin-inline: auto;
+}
+
+.member-finder {
+    padding: 30px 34px 34px;
+    margin-bottom: 54px;
+    border: 1.5px solid var(--friend-line);
+    border-radius: 24px;
+    background: var(--friend-panel);
+    box-shadow: 0 12px 28px rgba(105, 71, 48, 0.07);
+}
+
+.member-finder__heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 22px;
+}
+
+.member-finder__eyebrow {
+    color: #d68061;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.member-finder__heading h2 {
+    margin: 5px 0 0;
+    font-size: 1.35rem;
+}
+
+.member-finder__heading p {
+    margin: 0;
+    color: var(--friend-muted);
+    font-size: 0.85rem;
+}
+
+.member-finder__form {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 8px 8px 18px;
+    border: 1px solid #e5c7af;
+    border-radius: 16px;
+    background: #fffaf2;
+}
+
+.member-finder__form > span {
+    color: #c57e60;
+    font-size: 1.35rem;
+}
+
+.member-finder__form input {
+    min-width: 0;
+    padding: 10px 0;
+    border: 0;
+    outline: 0;
+    color: var(--friend-ink);
+    background: transparent;
+    font: inherit;
+}
+
+.member-finder__form button,
+.member-result-card__action button {
+    border: 1px solid #c99e80;
+    border-radius: 12px;
+    color: var(--friend-ink);
+    background: var(--friend-accent);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.member-finder__form button {
+    padding: 12px 20px;
+}
+
+.member-search-results {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.member-result-card {
+    display: grid;
+    grid-template-columns: 58px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px;
+    border: 1px solid #efd8c6;
+    border-radius: 17px;
+    background: #fffdf7;
+}
+
+.member-result-card__character {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #fff1e3;
+}
+
+.member-result-card__character img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.member-result-card__copy {
+    display: grid;
+    gap: 3px;
+}
+
+.member-result-card__copy span {
+    color: var(--friend-muted);
+    font-size: 0.78rem;
+}
+
+.member-result-card__action button,
+.member-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 104px;
+    min-height: 40px;
+    padding: 8px 14px;
+}
+
+.member-status {
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.member-status--waiting {
+    color: #956d4e;
+    background: #fff0d9;
+}
+
+.member-status--received {
+    color: #9b5c4e;
+    background: #ffe1dc;
+}
+
+.member-status--friend {
+    color: #5f7755;
+    background: var(--friend-green);
+}
+
+.member-search-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 24px;
+    border: 1px dashed #e5bea2;
+    border-radius: 16px;
+    color: var(--friend-muted);
+    background: #fffaf2;
+    text-align: left;
+}
+
+.member-search-empty > span {
+    font-size: 1.7rem;
+}
+
+.member-search-empty p {
+    margin: 0;
+    line-height: 1.55;
 }
 
 .friend-book__intro {
@@ -328,9 +501,10 @@
     background: var(--friend-accent);
 }
 
+/* 친구수락 버튼 */
 .soft-button--accept {
-    border-color: #bdd3ac;
-    background: var(--friend-green);
+    border-color: #b8d8e8;
+    background: #dff3fc;
 }
 
 .soft-button--danger {
@@ -498,6 +672,38 @@
 
     .invite-link input {
         font-size: 0.72rem;
+    }
+
+    .member-finder {
+        padding: 24px 16px;
+    }
+
+    .member-finder__heading {
+        display: grid;
+        gap: 8px;
+    }
+
+    .member-finder__form {
+        grid-template-columns: auto 1fr;
+    }
+
+    .member-finder__form button {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .member-result-card {
+        grid-template-columns: 52px 1fr;
+    }
+
+    .member-result-card__action {
+        grid-column: 1 / -1;
+    }
+
+    .member-result-card__action form,
+    .member-result-card__action button,
+    .member-status {
+        width: 100%;
     }
 
     .friend-board {
