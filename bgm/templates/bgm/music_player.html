@@ -1,0 +1,99 @@
+{% load static %}
+
+
+{% if music %}
+
+<div class="music-player">
+
+    <!-- ==========================================
+        음악 정보
+    =========================================== -->
+    <div class="music-player-info">
+
+        <!-- 음악 제목 표시함. -->
+        <strong class="music-player-title">
+            {{ music.title }}
+        </strong>
+
+
+        <!-- 제작자 정보가 있는 경우에만 표시함. -->
+        {% if music.artist %}
+            <span class="music-player-artist">
+                {{ music.artist }}
+            </span>
+        {% endif %}
+
+    </div>
+
+
+    <!-- ==========================================
+        실제 음원
+    =========================================== -->
+    <audio
+        id="bgm-audio"
+        preload="metadata"
+    >
+        <!--
+            BackgroundMusic.file_name에 저장된 파일명을 사용해
+            static/bgm/audio/ 내부 음원 연결함.
+        -->
+        <source
+            src="{% static 'bgm/audio/' %}{{ music.file_name }}"
+            type="audio/mpeg"
+        >
+
+        <!-- audio 태그를 지원하지 않는 브라우저에서 표시함. -->
+        브라우저에서 오디오 재생을 지원하지 않습니다.
+    </audio>
+
+
+    <!-- ==========================================
+        재생 버튼
+    =========================================== -->
+    <div class="music-player-controls">
+
+        <!--
+            JavaScript에서 audio.play()와 audio.pause()를
+            전환하는 버튼으로 사용함.
+        -->
+        <button
+            type="button"
+            id="bgm-play-button"
+            class="music-player-play-button"
+        >
+            재생
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+        음원 출처
+    =========================================== -->
+    {% if music.attribution_required and music.source_url %}
+
+        <div class="music-player-source">
+
+            <a
+                href="{{ music.source_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                음원 출처
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+{% else %}
+
+<!-- 대표 감정에 사용할 수 있는 음악이 없는 경우 표시함. -->
+<div class="music-player-empty">
+    재생할 수 있는 음악이 없습니다.
+</div>
+
+{% endif %}
