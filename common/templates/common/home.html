@@ -17,7 +17,8 @@
         <img class="home-character home-character-five" src="{% static 'accounts/images/5.png' %}" alt="">
 
         <h1 id="home-hero-title">내 마음이 머문 순간을 기록해요</h1>
-        <a class="home-cta" href="{{ record_entry_url }}"{% if can_create_record %} data-open-record-modal{% endif %} data-tutorial-target="quick-start">
+        {# 기록 작성은 매번 위치 선택부터 시작한다. #}
+        <a class="home-cta" href="{{ record_entry_url }}" data-tutorial-target="quick-start">
             <span class="home-cta-text">Let's go</span>
             <span class="home-cta-subtext">기록하기</span>
         </a>
@@ -35,7 +36,7 @@
 
         {% if user.is_authenticated %}
             <div class="home-actions home-actions-user" data-tutorial-target="speech-actions">
-                <a class="home-speech-text" href="{{ record_entry_url }}"{% if can_create_record %} data-open-record-modal{% endif %}>{{ home_prompt }}</a>
+                <a class="home-speech-text" href="{{ record_entry_url }}">{{ home_prompt }}</a>
             </div>
         {% else %}
             <a class="home-actions home-actions-locked" href="{% url 'accounts:login' %}" aria-label="로그인하러 가기">

@@ -41,12 +41,7 @@ class HomeRecordEntryTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_unverified_user_is_linked_to_record_entry_check(self):
-        response = self.client.get(reverse("common:home"))
-        self.assertContains(response, f'href="{reverse("records:create")}"')
-        self.assertNotContains(response, 'data-record-modal')
-
-    def test_verified_user_can_open_record_modal_on_home(self):
+    def verify_location(self):
         session = self.client.session
         session[VERIFIED_LOCATION_SESSION_KEY] = {
             "place_id": self.place.pk,
@@ -54,6 +49,16 @@ class HomeRecordEntryTests(TestCase):
         }
         session.save()
 
+    def test_unverified_user_is_linked_to_place_select(self):
         response = self.client.get(reverse("common:home"))
-        self.assertContains(response, "data-open-record-modal")
-        self.assertContains(response, "data-record-modal")
+        self.assertContains(response, f'href="{reverse("locations:place_select")}"')
+        self.assertNotContains(response, "data-record-modal")
+
+    def test_verified_user_is_still_linked_to_place_select(self):
+        """오늘 이미 인증했더라도 홈의 기록 작성 링크는 위치 선택 화면으로 가야 한다."""
+        self.verify_location()
+
+        response = self.client.get(reverse("common:home"))
+        self.assertContains(response, f'href="{reverse("locations:place_select")}"')
+        # 홈에서 곧바로 모달을 여는 트리거는 없어야 한다.
+        self.assertNotContains(response, "data-open-record-modal")
