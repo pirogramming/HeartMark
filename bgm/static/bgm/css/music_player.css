@@ -1,0 +1,393 @@
+/* =========================================================
+   BGM 플레이어
+   ========================================================= */
+
+.music-player {
+    width: 100%;
+    padding: 22px 0 4px;
+
+    color: #252525;
+}
+
+
+/* =========================================================
+   1. 음악 정보
+   ========================================================= */
+
+.music-player__info {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 24px;
+}
+
+
+/* 대표 감정 BGM 안내 문구 */
+.music-player__label {
+    margin-bottom: 6px;
+
+    color: #8d9db4;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* 음악 제목 */
+.music-player__title {
+    margin: 0;
+
+    color: #252525;
+
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+
+/* 제작자 */
+.music-player__artist {
+    margin: 5px 0 0;
+
+    color: #858585;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   2. 진행바 영역
+   ========================================================= */
+
+.music-player__progress {
+    display: grid;
+    grid-template-columns: 38px 1fr 38px;
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+/* 현재 시간 / 전체 시간 */
+.music-player__time {
+    color: #8b8b8b;
+
+    font-size: 11px;
+
+    text-align: center;
+
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* 진행바 */
+.music-player__progress-bar {
+    width: 100%;
+    height: 4px;
+
+    margin: 0;
+
+    border-radius: 999px;
+
+    background: #dedbd5;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+/* Chrome / Edge 진행바 손잡이 */
+.music-player__progress-bar::-webkit-slider-thumb {
+    width: 13px;
+    height: 13px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #8fa2bd;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+/* Firefox 진행바 손잡이 */
+.music-player__progress-bar::-moz-range-thumb {
+    width: 13px;
+    height: 13px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #8fa2bd;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   3. 플레이어 컨트롤
+   ========================================================= */
+
+.music-player__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 22px;
+}
+
+
+/* 공통 컨트롤 버튼 */
+.music-player__control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    padding: 0;
+
+    border: 1px solid #ded9d1;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #444444;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.music-player__control-button:hover {
+    transform: translateY(-1px);
+
+    border-color: #cfc8bd;
+
+    background: #faf8f4;
+}
+
+
+.music-player__control-button:active {
+    transform: translateY(0);
+}
+
+
+/* 재생 버튼은 다른 버튼보다 크게 표시함. */
+.music-player__play-button {
+    width: 48px;
+    height: 48px;
+
+    border-color: #8498b4;
+
+    background: #8fa2bd;
+
+    color: #ffffff;
+
+    font-size: 16px;
+}
+
+
+.music-player__play-button:hover {
+    border-color: #8498b4;
+
+    background: #8498b4;
+}
+
+
+/* 사용할 수 없는 버튼 */
+.music-player__control-button:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   4. 음량 조절
+   ========================================================= */
+
+.music-player__volume {
+    width: 82px;
+    height: 4px;
+
+    margin-left: 2px;
+
+    border-radius: 999px;
+
+    background: #dedbd5;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+/* Chrome / Edge 음량 손잡이 */
+.music-player__volume::-webkit-slider-thumb {
+    width: 11px;
+    height: 11px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #8fa2bd;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    cursor: pointer;
+}
+
+
+/* Firefox 음량 손잡이 */
+.music-player__volume::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #8fa2bd;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   5. 음원 출처
+   ========================================================= */
+
+.music-player__credit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 20px;
+
+    color: #969696;
+
+    font-size: 10px;
+}
+
+
+/* 라이선스 */
+.music-player__license {
+    color: #969696;
+}
+
+
+/* 음원 출처 링크 */
+.music-player__source-link {
+    color: #7f92ae;
+
+    text-decoration: none;
+}
+
+
+.music-player__source-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   6. 오류 메시지
+   ========================================================= */
+
+.music-player__error {
+    margin: 16px 0 0;
+
+    color: #b76a65;
+
+    font-size: 11px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   7. 사용할 음악이 없는 경우
+   ========================================================= */
+
+.music-player-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 150px;
+
+    color: #969696;
+
+    text-align: center;
+}
+
+
+.music-player-empty__icon {
+    margin-bottom: 8px;
+
+    color: #9aaac0;
+
+    font-size: 24px;
+}
+
+
+.music-player-empty p {
+    margin: 0;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   8. 반응형
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .music-player {
+        padding-top: 16px;
+    }
+
+
+    .music-player__progress {
+        grid-template-columns: 34px 1fr 34px;
+
+        gap: 7px;
+    }
+
+
+    .music-player__controls {
+        gap: 9px;
+    }
+
+
+    .music-player__volume {
+        width: 60px;
+    }
+
+
+    .music-player__title {
+        font-size: 18px;
+    }
+}
