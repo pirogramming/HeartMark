@@ -35,7 +35,7 @@
     width: 142px;
     height: 142px;
     place-items: center;
-    border: 1.5px solid var(--mypage-ink);
+    border: 1.5px solid #9f8d7e;
     border-radius: 50%;
     background: #fff;
 }
@@ -67,7 +67,7 @@
     height: 34px;
     padding: 0;
     place-items: center;
-    border: 1.5px solid var(--mypage-ink);
+    border: 1.5px solid #9f8d7e;
     border-radius: 50%;
     color: var(--mypage-ink);
     background: var(--mypage-accent);
