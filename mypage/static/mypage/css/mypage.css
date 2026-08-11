@@ -831,44 +831,6 @@
 .place-map__label small { color: var(--mypage-muted); font-size: 0.7rem; }
 .place-map__label strong { overflow: hidden; color: var(--mypage-ink); font-size: 1rem; text-overflow: ellipsis; white-space: nowrap; }
 
-.mypage-doodle {
-    position: absolute;
-    border-radius: 48% 52% 44% 56%;
-    transform: rotate(-18deg);
-}
-
-.mypage-doodle--coral {
-    top: 36px;
-    left: -30px;
-    width: 74px;
-    height: 74px;
-    background: #ef6868;
-}
-
-.mypage-doodle--blue {
-    top: 62px;
-    right: 18%;
-    width: 34px;
-    height: 50px;
-    background: #7fc9e6;
-}
-
-.mypage-doodle--green {
-    top: 280px;
-    left: 6%;
-    width: 24px;
-    height: 32px;
-    background: #02b77c;
-}
-
-.mypage-doodle--yellow {
-    top: 320px;
-    right: 7%;
-    width: 42px;
-    height: 42px;
-    background: #e7ed68;
-}
-
 .profile-editor[hidden] {
     display: none;
 }
@@ -1287,10 +1249,6 @@
         bottom: 14px;
         width: min(220px, 70%);
         padding: 11px 13px;
-    }
-
-    .mypage-doodle {
-        display: none;
     }
 
     .profile-editor {
