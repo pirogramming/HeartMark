@@ -24,31 +24,6 @@
     border: 0;
 }
 
-.record-preview {
-    min-height: calc(100vh - 80px);
-    display: grid;
-    place-items: center;
-    background:
-        radial-gradient(circle at 15% 20%, #ffe7d0 0 4%, transparent 4.2%),
-        linear-gradient(135deg, #fffff4, #fff9eb);
-}
-
-.record-preview__placeholder {
-    text-align: center;
-    color: var(--record-muted);
-}
-
-.record-preview__placeholder button {
-    padding: 13px 24px;
-    border: 1px solid var(--record-ink);
-    border-radius: 14px 11px 16px 10px;
-    color: var(--record-ink);
-    background: var(--record-accent);
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-}
-
 .record-overlay[hidden] {
     display: none;
 }

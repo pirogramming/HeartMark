@@ -98,6 +98,8 @@ class RecordCreateViewTests(TestCase):
         self.assertEqual(record.main_emotion, 5)
         self.assertEqual(record.place, self.place)
         self.assertEqual(record.place_name, self.place.name)
+        # 저장에 쓰인 인증은 소진되어야 다음 기록이 이 장소를 재사용하지 않는다.
+        self.assertNotIn(VERIFIED_LOCATION_SESSION_KEY, self.client.session)
 
     def test_location_verification_is_required(self):
         self.client.force_login(self.user)
@@ -107,6 +109,36 @@ class RecordCreateViewTests(TestCase):
             reverse("locations:place_select"),
             fetch_redirect_response=False,
         )
+
+    def test_verified_user_still_goes_through_place_select(self):
+        """인증이 남아 있어도 기록 작성 진입은 항상 위치 선택부터 시작한다."""
+        self.client.force_login(self.user)
+        self.verify_location()
+
+        response = self.client.get(reverse("records:create"))
+
+        self.assertRedirects(
+            response,
+            reverse("locations:place_select"),
+            fetch_redirect_response=False,
+        )
+
+    def test_post_without_verification_is_sent_to_place_select(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse("records:create"), {
+            "weather": "cloudy",
+            "content": "인증 없이 제출",
+            "emotions": ["1"],
+            "main_emotion": "1",
+            "image": uploaded_image(),
+        })
+
+        self.assertRedirects(
+            response,
+            reverse("locations:place_select"),
+            fetch_redirect_response=False,
+        )
+        self.assertFalse(Record.objects.exists())
 
 
 class RecordCrudViewTests(TestCase):
