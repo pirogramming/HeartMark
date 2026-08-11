@@ -191,7 +191,11 @@
                     </div>
                     <div class="weekly-mood-copy">
                         {% if weekly_emotion %}<strong>{{ weekly_emotion_label }}</strong>{% endif %}
+                        {% if weekly_emotion %}
                         <p>{{ weekly_message }}</p>
+                        {% else %}
+                        <p>아직 이번 주에 남긴 마음이 없어요.<br>오늘의 마음자국을 남겨 볼까요?</p>
+                        {% endif %}
                     </div>
                 </div>
             </section>
