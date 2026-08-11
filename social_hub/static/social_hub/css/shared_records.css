@@ -253,8 +253,7 @@
     background: #f0ece7;
 }
 
-.shared-place__icon,
-.shared-place__lock {
+.shared-place__icon {
     display: grid;
     width: 36px;
     height: 36px;
@@ -267,6 +266,17 @@
     width: 23px;
     height: 23px;
     color: #d97460;
+}
+
+.shared-place--private .shared-place__icon,
+.shared-place__icon--private {
+    color: #9a938d;
+}
+
+.shared-place--private .shared-place__icon svg,
+.shared-place__icon--private svg {
+    color: #9a938d;
+    stroke: #9a938d !important;
 }
 
 .shared-place strong {

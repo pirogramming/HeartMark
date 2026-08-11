@@ -39,7 +39,12 @@
             </div>
             {% else %}
             <div class="shared-place shared-place--private">
-                <span class="shared-place__lock" aria-hidden="true">⌁</span>
+                <span class="shared-place__icon shared-place__icon--private" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#9a938d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </span>
                 <span><strong>장소를 공개하지 않은 기록이에요.</strong><small>친구의 소중한 위치 정보를 보호하고 있어요.</small></span>
             </div>
             {% endif %}
