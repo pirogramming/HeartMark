@@ -154,11 +154,10 @@
             <h2 id="overview-title" class="insight-label">나의 마음 한눈에</h2>
             <div class="overview-items">
                 <article class="overview-item overview-item--emotion">
-                    <div class="overview-icon">
+                    <div class="overview-icon{% if not weekly_emotion %} overview-icon--empty{% endif %}">
                         {% if weekly_emotion %}
                         <img src="{% static 'records/images/emotions/emotion-' %}{{ weekly_emotion }}.png" alt="이번 주 대표 감정">
                         {% else %}
-                        <span class="overview-empty" aria-hidden="true">?</span>
                         {% endif %}
                     </div>
                     <div><span>이번 주 대표 감정</span><strong>{% if weekly_emotion %}{{ weekly_emotion_label }}{% else %}아직 없어요{% endif %}</strong></div>
@@ -182,11 +181,10 @@
             <section class="insight-card weekly-mood-card" aria-labelledby="weekly-mood-title">
                 <h2 id="weekly-mood-title" class="insight-label">이번 주 마음</h2>
                 <div class="weekly-mood-content">
-                    <div class="weekly-mood-illustration">
+                    <div class="weekly-mood-illustration{% if not weekly_emotion %} weekly-mood-illustration--empty{% endif %}">
                         {% if weekly_emotion %}
                         <img src="{% static 'records/images/emotions/emotion-' %}{{ weekly_emotion }}.png" alt="이번 주에 가장 많이 기록한 감정">
                         {% else %}
-                        <span aria-hidden="true">?</span>
                         {% endif %}
                     </div>
                     <div class="weekly-mood-copy">
