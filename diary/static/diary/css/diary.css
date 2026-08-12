@@ -976,14 +976,28 @@
    ========================================================= */
 
 .emotion-record-card-list {
+    /* 감정 카드 한 줄 배치 */
     display: flex;
     align-items: stretch;
     justify-content: center;
-    flex-wrap: wrap;
+
+    /* 줄바꿈 제거 */
+    flex-wrap: nowrap;
 
     gap: 14px;
 
     width: 100%;
+
+    /* 바깥으로 삐져나오는 요소 숨김 */
+    overflow: hidden;
+}
+
+
+.emotion-record-card {
+    /* 카드 크기 고정 */
+    flex: 0 0 auto;
+
+    min-width: 150px;
 }
 
 
@@ -992,6 +1006,7 @@
 .emotion-record-card {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 
     gap: 10px;
 
@@ -1018,9 +1033,13 @@
         box-shadow 0.18s ease;
 }
 
+.emotion-record-card[hidden] {
+    /* 화면에 들어오지 않는 카드 완전히 제거 */
+    display: none;
+}
+
 
 .emotion-record-card:hover {
-    transform: translateY(-3px);
 
     box-shadow:
         0 8px 16px rgba(70, 55, 40, 0.1);
