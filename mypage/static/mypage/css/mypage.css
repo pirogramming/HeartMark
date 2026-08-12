@@ -158,6 +158,14 @@
     margin-left: auto;
 }
 
+/* diary의 공통 기간 필터 위치를 마이페이지 출석체크 영역에 맞춘다. */
+.attendance-calendar-filter {
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
+    z-index: 30;
+}
+
 .attendance-period-summary {
     display: inline-flex;
     align-items: center;
@@ -965,7 +973,7 @@
         left: 38px;
     }
 
-    .attendance-period-filter {
+    .attendance-calendar-filter {
         min-width: min(500px, calc(100vw - 64px));
         flex-wrap: wrap;
     }
@@ -1107,18 +1115,20 @@
         margin-left: 0;
     }
 
-    .attendance-period-filter {
+    .attendance-calendar-filter {
+        top: calc(100% + 10px);
         right: 0;
+        left: auto;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        width: min(330px, calc(100vw - 48px));
+        width: min(330px, calc(100vw - 36px));
         min-width: 0;
         align-items: end;
         gap: 10px;
         padding: 14px;
     }
 
-    .attendance-period-filter .period-input-group:first-child {
+    .attendance-calendar-filter .period-input-group:first-child {
         grid-column: 1 / -1;
     }
 
