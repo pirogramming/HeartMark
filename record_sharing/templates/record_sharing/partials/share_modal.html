@@ -1,0 +1,60 @@
+<section class="share-form">
+    <h2>이 기록을 공유할 친구</h2>
+    <p>고른 친구만 이 기록을 볼 수 있어요.</p>
+
+    {% if share_friends %}
+    <form method="post" action="{% url 'record_sharing:create' record.pk %}">
+        {% csrf_token %}
+        {# 공유가 끝나면 지금 보던 화면으로 돌아온다. 뷰가 내부 경로인지 검사한다. #}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+        <div class="share-friend-list">
+            {% for friend in share_friends %}
+            <label class="share-friend">
+                <input type="checkbox" name="friends" value="{{ friend.pk }}">
+                <span>{{ friend.first_name|default:friend.username }}</span>
+            </label>
+            {% endfor %}
+        </div>
+
+        {% comment %}
+            장소 공개 여부.
+            체크를 안 하면 값이 아예 넘어오지 않고, 그러면 장소는 비공개가 된다.
+            '나만 보기'가 기본이라는 원칙을 폼에서도 그대로 지킨다.
+        {% endcomment %}
+        <label class="share-location-toggle">
+            <input type="checkbox" name="share_location">
+            <span>
+                장소도 함께 공유할래요
+                <span class="share-location-hint">
+                    체크하지 않으면 장소와 좌표는 친구에게 보이지 않아요.
+                </span>
+            </span>
+        </label>
+
+        <button class="sharing-button" type="submit">공유하기</button>
+    </form>
+    {% else %}
+    <p>아직 친구가 없어요. 먼저 <a href="{% url 'friendships:invite_link' %}">친구를 초대</a>해 보세요.</p>
+    {% endif %}
+
+    {% if share_active %}
+    <h2>지금 공유 중</h2>
+    <div class="share-friend-list">
+        {% for active in share_active %}
+        <div class="share-friend">
+            <span>
+                {{ active.receiver.first_name|default:active.receiver.username }}
+                {% if active.share_location %}<small>· 장소 공개</small>{% endif %}
+            </span>
+            <form method="post" action="{% url 'record_sharing:revoke' record.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <input type="hidden" name="receiver" value="{{ active.receiver_id }}">
+                <button class="sharing-button-ghost" type="submit">공유 취소</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>

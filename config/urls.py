@@ -14,6 +14,7 @@ urlpatterns = [
     path("diary/", include("diary.urls")),
     path("", include("social_hub.urls")),
     path("friendships/", include("friendships.urls")),
+    path("sharing/", include("record_sharing.urls")),
 ]
 
 if settings.DEBUG:

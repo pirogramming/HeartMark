@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "diary",
     "social_hub",
     "friendships",
+    "record_sharing",
 ]
 
 MIDDLEWARE = [

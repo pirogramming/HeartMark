@@ -1,0 +1,368 @@
+
+
+.sharing-page {
+    /* 이 앱에서 쓰는 색을 한곳에 모아둔다. 나중에 색을 바꾸려면 여기만 고치면 된다. */
+    --coral: #ef9a83;
+    --coral-deep: #e07f66;
+    --chip: #fbddd2;
+    --card-line: #f3e2d6;
+    --place-open: #fbe0da;   /* 장소를 공개한 기록 */
+    --place-hidden: #ececec; /* 장소를 숨긴 기록 */
+    --muted: #9a8f88;
+
+    width: min(1120px, calc(100% - 48px));
+    margin: 0 auto;
+    padding-bottom: 80px;
+}
+
+/* ---------- 페이지 머리말 ---------- */
+
+.sharing-eyebrow {
+    margin: 0;
+    color: var(--coral);
+    text-align: center;
+    letter-spacing: 0.18em;
+    font-size: 15px;
+}
+
+.sharing-title {
+    display: block;
+    width: fit-content;
+    margin: 10px auto 0;
+    padding: 10px 34px;
+    border-radius: 18px;
+    background: var(--chip);
+    font-size: 34px;
+}
+
+.sharing-subtitle {
+    margin: 12px 0 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 17px;
+}
+
+.sharing-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 34px 0 20px;
+    flex-wrap: wrap;
+}
+
+.sharing-count {
+    margin: 0;
+    color: #6f635c;
+    font-size: 17px;
+}
+
+/* ---------- 버튼 ---------- */
+
+.sharing-button,
+.sharing-button-ghost {
+    display: inline-block;
+    padding: 9px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sharing-button {
+    border: 1px solid var(--coral-deep);
+    background: var(--coral);
+    color: #fff;
+}
+
+.sharing-button-ghost {
+    border: 1px solid var(--card-line);
+    background: #fff;
+    color: #5c534e;
+}
+
+/* ---------- 편지 카드 ---------- */
+
+.sharing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 24px;
+}
+
+.letter-card {
+    border: 1px solid var(--card-line);
+    border-radius: 22px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.letter-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 22px;
+    border-bottom: 1px dashed var(--card-line);
+}
+
+.letter-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--card-line);
+    background: #fff8e8;
+    object-fit: cover;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+}
+
+.letter-from {
+    margin: 0;
+    font-size: 18px;
+}
+
+.letter-date {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* 카드 오른쪽 위의 우표 모양 도장 */
+.letter-stamp {
+    margin-left: auto;
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--coral);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: var(--coral);
+    text-align: center;
+    line-height: 1.1;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+}
+
+.letter-body {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 18px;
+    padding: 20px 22px;
+}
+
+.letter-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--card-line);
+    border-radius: 12px;
+    background: #fff8e8;
+    object-fit: cover;
+}
+
+.letter-photo-empty {
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.letter-emotion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.letter-emotion img {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+}
+
+.letter-emotion span {
+    display: block;
+    color: var(--coral);
+    font-size: 13px;
+}
+
+.letter-emotion strong {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.letter-text {
+    margin: 14px 0 0;
+    color: #4f4640;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ---------- 장소 (이 앱에서 제일 중요한 부분) ---------- */
+
+.letter-place {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 14px;
+}
+
+/* 친구가 장소를 공개한 경우 */
+.letter-place--open {
+    background: var(--place-open);
+}
+
+/* 장소는 있지만 비공개인 경우 — 색을 달리해서 한눈에 구분되게 한다 */
+.letter-place--hidden {
+    background: var(--place-hidden);
+}
+
+.letter-place-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.letter-place-label {
+    display: block;
+    color: #8b7f78;
+    font-size: 13px;
+}
+
+.letter-place-value {
+    font-size: 17px;
+}
+
+.letter-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 22px 20px;
+    border-top: 1px solid #f7efe8;
+}
+
+.letter-foot small {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* ---------- 빈 화면 ---------- */
+
+.sharing-empty {
+    padding: 70px 24px;
+    border: 1px dashed var(--card-line);
+    border-radius: 22px;
+    background: #fff;
+    text-align: center;
+    color: var(--muted);
+}
+
+/* ---------- 상세 화면 ---------- */
+
+.sharing-detail {
+    border: 1px solid var(--card-line);
+    border-radius: 22px;
+    background: #fff;
+    padding: 28px;
+}
+
+.sharing-detail-photo {
+    width: min(420px, 100%);
+    border-radius: 14px;
+    border: 1px solid var(--card-line);
+}
+
+.sharing-detail-content {
+    margin: 20px 0 0;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.sharing-emotion-list {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.sharing-emotion-list figure {
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+}
+
+.sharing-emotion-list img {
+    display: block;
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+/* ---------- 공유 모달 (서영은이 기록 상세에 붙일 부분) ---------- */
+
+.share-form {
+    border: 1px solid var(--card-line);
+    border-radius: 18px;
+    background: #fff;
+    padding: 20px 22px;
+}
+
+.share-form h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+}
+
+.share-form p {
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.share-friend-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.share-friend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--card-line);
+    border-radius: 12px;
+}
+
+.share-location-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--place-open);
+    margin-bottom: 14px;
+}
+
+.share-location-hint {
+    display: block;
+    margin-top: 2px;
+    color: #8b7f78;
+    font-size: 13px;
+}
+
+@media (max-width: 640px) {
+    .letter-body {
+        grid-template-columns: 1fr;
+    }
+
+    .sharing-grid {
+        grid-template-columns: 1fr;
+    }
+}
