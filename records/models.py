@@ -43,6 +43,7 @@ class Record(models.Model):
         related_name="heartmark_records",
     )
     weather = models.CharField(max_length=10, choices=Weather.choices)
+    title = models.CharField(max_length=40, blank=True)
     content = models.TextField(max_length=500)
     image = models.ImageField(upload_to="records/%Y/%m/%d/")
     emotions = models.JSONField(default=list)
