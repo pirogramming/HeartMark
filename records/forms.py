@@ -24,7 +24,7 @@ class RecordForm(forms.ModelForm):
     class Meta:
         model = Record
         fields = [
-            "weather", "content", "image", "emotions", "main_emotion",
+            "weather", "title", "content", "image", "emotions", "main_emotion",
             "place_name", "latitude", "longitude",
         ]
 
