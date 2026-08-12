@@ -212,12 +212,6 @@
 
         <!-- ==========================================
             Listen BGM 재생 / 정지 버튼
-
-            음악이 꺼져 있을 때:
-            헤드셋 + 사선 아이콘 표시함.
-
-            음악이 재생 중일 때:
-            기존 헤드셋 아이콘 표시함.
         =========================================== -->
         <button
             type="button"
@@ -238,10 +232,9 @@
             >
 
                 <!-- ==========================================
-                    BGM 꺼짐 아이콘
+                    BGM 꺼짐 상태
 
-                    기존 헤드셋 SVG에
-                    사선만 추가한 형태.
+                    헤드셋 + 사선 아이콘
                 =========================================== -->
                 <span
                     class="bgm-icon bgm-icon--off"
@@ -257,30 +250,18 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
+                        class="lucide lucide-headphone-off-icon lucide-headphone-off"
                     >
-                        <!-- 기존 헤드셋 아이콘 -->
-                        <path
-                            d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"
-                        />
-
-                        <path
-                            d="M21 16v2a4 4 0 0 1-4 4h-5"
-                        />
-
-                        <!-- BGM 꺼짐 상태를 나타내는 사선 -->
-                        <path
-                            d="M3 3 21 21"
-                        />
+                        <path d="M21 14h-1.343"/>
+                        <path d="M9.128 3.47A9 9 0 0 1 21 12v3.343"/>
+                        <path d="m2 2 20 20"/>
+                        <path d="M20.414 20.414A2 2 0 0 1 19 21h-1a2 2 0 0 1-2-2v-3"/>
+                        <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 2.636-6.364"/>
                     </svg>
                 </span>
 
 
-                <!-- ==========================================
-                    BGM 재생 중 아이콘
-
-                    기존 detail.html에서 사용하던
-                    headset 아이콘 그대로 사용함.
-                =========================================== -->
+                <!-- BGM 재생 중 아이콘 -->
                 <span
                     class="bgm-icon bgm-icon--on"
                     id="bgm-icon-on"
@@ -296,14 +277,10 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-headset-icon lucide-headset"
+                        class="lucide lucide-headphones-icon lucide-headphones"
                     >
                         <path
-                            d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1 2-2v-3a2 2 0 0 1 2-2h3Z"
-                        />
-
-                        <path
-                            d="M21 16v2a4 4 0 0 1-4 4h-5"
+                            d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"
                         />
                     </svg>
                 </span>
@@ -314,7 +291,6 @@
             <span class="record-action-label">
                 Listen
             </span>
-
         </button>
 
     </nav>
