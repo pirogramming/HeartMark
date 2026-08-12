@@ -911,7 +911,7 @@ body.record-modal-open {
 .record-detail-shell {
     min-height: calc(100vh - 90px);
     padding: 48px 24px;
-    background: #fff8e8;
+    background: transparent;
 }
 
 .record-detail-card {

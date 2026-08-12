@@ -14,10 +14,9 @@
 .mypage-screen {
     position: relative;
     min-height: calc(100vh - 100px);
-    overflow: hidden;
-    padding: 125px max(24px, 7vw) 78px;
+    padding: 66px max(24px, 7vw) 78px;
     color: var(--mypage-ink);
-    background: var(--mypage-paper);
+    background: transparent;
 }
 
 .mypage-profile {
@@ -32,8 +31,8 @@
 .mypage-character-wrap {
     position: relative;
     display: grid;
-    width: 142px;
-    height: 142px;
+    width: 158px;
+    height: 158px;
     place-items: center;
     border: 1.5px solid #9f8d7e;
     border-radius: 50%;
@@ -41,15 +40,15 @@
 }
 
 .mypage-character {
-    width: 112px;
-    height: 112px;
+    width: 126px;
+    height: 126px;
     object-fit: contain;
 }
 
 .mypage-character-fallback {
     display: grid;
-    width: 104px;
-    height: 104px;
+    width: 116px;
+    height: 116px;
     place-items: center;
     border-radius: 48% 52% 46% 54%;
     color: var(--mypage-ink);
@@ -63,15 +62,14 @@
     right: 2px;
     bottom: 4px;
     display: grid;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     place-items: center;
     border: 1.5px solid #9f8d7e;
     border-radius: 50%;
     color: var(--mypage-ink);
     background: var(--mypage-accent);
-    font-size: 1.1rem;
     cursor: pointer;
 }
 
@@ -158,6 +156,14 @@
 .attendance-filter-form {
     position: relative;
     margin-left: auto;
+}
+
+/* diary의 공통 기간 필터 위치를 마이페이지 출석체크 영역에 맞춘다. */
+.attendance-calendar-filter {
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
+    z-index: 30;
 }
 
 .attendance-period-summary {
@@ -324,7 +330,7 @@
 
 .attendance-arrow {
     position: absolute;
-    top: 56%;
+    top: 75%;
     z-index: 3;
     display: grid;
     width: 42px;
@@ -442,6 +448,53 @@
     display: block;
     margin: 0;
     text-align: center;
+}
+
+.attendance-summary-stats {
+    position: relative;
+    top: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: min(820px, 100%);
+    margin: 26px auto 8px;
+    padding-top: 22px;
+    border-top: 2px dashed #dfbf9f;
+}
+
+.attendance-summary-stat {
+    display: flex;
+    transform: translateY(10px);
+    min-height: 70px;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    padding: 10px 16px;
+    border: 1px solid #f0d2bb;
+    border-radius: 17px;
+    background: rgba(255, 255, 244, 0.86);
+    box-shadow: 0 4px 12px rgba(92, 69, 51, 0.06);
+}
+
+.attendance-summary-stat img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.attendance-summary-stat div {
+    display: grid;
+    gap: 3px;
+}
+
+.attendance-summary-stat span {
+    color: var(--mypage-muted);
+    font-size: 0.76rem;
+}
+
+.attendance-summary-stat strong {
+    color: var(--mypage-ink);
+    font-size: 1.16rem;
 }
 
 .attendance-pagination {
@@ -575,6 +628,11 @@
     transform: rotate(-2deg);
 }
 
+.overview-item--emotion .overview-icon:not(.overview-icon--empty) {
+    border: 0;
+    transform: none;
+}
+
 .overview-symbol {
     color: #fff !important;
 }
@@ -601,9 +659,16 @@
 }
 
 .insight-card {
-    min-height: 260px;
+    min-height: 230px;
     padding: 48px 34px 30px;
     border-radius: 26px;
+}
+
+.weekly-mood-card,
+.frequent-place-card {
+    height: 230px;
+    min-height: 0;
+    overflow: visible;
 }
 
 .weekly-mood-content {
@@ -611,7 +676,8 @@
     grid-template-columns: 145px 1fr;
     align-items: center;
     gap: 38px;
-    min-height: 170px;
+    min-height: 145px;
+    padding-left: 34px;
 }
 
 .weekly-mood-illustration {
@@ -627,8 +693,8 @@
 }
 
 .weekly-mood-illustration img {
-    width: 92px;
-    height: 92px;
+    width: 118px;
+    height: 118px;
     object-fit: contain;
 }
 
@@ -640,11 +706,16 @@
 .weekly-mood-illustration--empty {
 }
 
+.weekly-mood-illustration:not(.weekly-mood-illustration--empty) {
+    border: 0;
+    transform: none;
+}
+
 .weekly-mood-content p,
 .place-content p {
     margin: 0;
     color: var(--mypage-muted);
-    font-size: 0.84rem;
+    font-size: 0.98rem;
     line-height: 1.8;
 }
 
@@ -655,7 +726,7 @@
 
 .weekly-mood-copy strong {
     color: var(--mypage-ink);
-    font-size: 1.15rem;
+    font-size: 1.55rem;
 }
 
 .place-content {
@@ -781,8 +852,9 @@
 .place-map {
     position: relative;
     width: min(390px, 100%);
-    min-height: 170px;
-    margin: 24px auto 0;
+    height: 145px;
+    min-height: 0;
+    margin: 20px auto 0;
     overflow: hidden;
     border: 1.5px solid #b9cfae;
     border-radius: 20px;
@@ -920,7 +992,7 @@
 /* Tablet: 768px - 1023px */
 @media (max-width: 1023px) {
     .mypage-screen {
-        padding: 112px 32px 68px;
+        padding: 64px 32px 68px;
     }
 
     .mypage-profile {
@@ -932,13 +1004,13 @@
     }
 
     .mypage-character-wrap {
-        width: 128px;
-        height: 128px;
+        width: 140px;
+        height: 140px;
     }
 
     .mypage-character {
-        width: 102px;
-        height: 102px;
+        width: 112px;
+        height: 112px;
     }
 
     .attendance-card,
@@ -952,12 +1024,17 @@
         border-radius: 36px;
     }
 
+    .attendance-summary-stats {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
     .attendance-heading {
         right: 38px;
         left: 38px;
     }
 
-    .attendance-period-filter {
+    .attendance-calendar-filter {
         min-width: min(500px, calc(100vw - 64px));
         flex-wrap: wrap;
     }
@@ -1019,7 +1096,7 @@
 @media (max-width: 767px) {
     .mypage-screen {
         min-height: calc(100vh - 72px);
-        padding: 92px 14px 52px;
+        padding: 62px 14px 52px;
     }
 
     .mypage-profile {
@@ -1044,13 +1121,13 @@
     }
 
     .mypage-character-wrap {
-        width: 112px;
-        height: 112px;
+        width: 120px;
+        height: 120px;
     }
 
     .mypage-character {
-        width: 88px;
-        height: 88px;
+        width: 94px;
+        height: 94px;
     }
 
     .mypage-edit-button {
@@ -1066,6 +1143,32 @@
         padding: 72px 18px 58px;
         border-width: 1.5px;
         border-radius: 28px;
+    }
+
+    .attendance-summary-stats {
+        gap: 9px;
+        margin: 20px auto 8px;
+        padding-top: 18px;
+    }
+
+    .attendance-summary-stat {
+        min-height: 60px;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 14px;
+    }
+
+    .attendance-summary-stat img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .attendance-summary-stat span {
+        font-size: 0.67rem;
+    }
+
+    .attendance-summary-stat strong {
+        font-size: 0.96rem;
     }
 
     .attendance-heading {
@@ -1099,18 +1202,20 @@
         margin-left: 0;
     }
 
-    .attendance-period-filter {
+    .attendance-calendar-filter {
+        top: calc(100% + 10px);
         right: 0;
+        left: auto;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        width: min(330px, calc(100vw - 48px));
+        width: min(330px, calc(100vw - 36px));
         min-width: 0;
         align-items: end;
         gap: 10px;
         padding: 14px;
     }
 
-    .attendance-period-filter .period-input-group:first-child {
+    .attendance-calendar-filter .period-input-group:first-child {
         grid-column: 1 / -1;
     }
 
@@ -1150,7 +1255,7 @@
     }
 
     .attendance-arrow {
-        top: 54%;
+        top: 73%;
         width: 34px;
         height: 34px;
         font-size: 1.65rem;
@@ -1223,6 +1328,7 @@
         min-height: 0;
         justify-items: center;
         text-align: center;
+        padding-left: 0;
     }
 
     .weekly-mood-illustration {
@@ -1231,8 +1337,16 @@
     }
 
     .weekly-mood-illustration img {
-        width: 78px;
-        height: 78px;
+        width: 108px;
+        height: 108px;
+    }
+
+    .weekly-mood-copy strong {
+        font-size: 1.3rem;
+    }
+
+    .weekly-mood-content p {
+        font-size: 0.9rem;
     }
 
     .place-ticket {
@@ -1249,7 +1363,8 @@
     }
 
     .place-map {
-        min-height: 155px;
+        height: 135px;
+        min-height: 0;
     }
 
     .place-map__label {
