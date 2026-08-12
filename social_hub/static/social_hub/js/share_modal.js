@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const successCount = modal.querySelector("[data-success-count]");
     const sendButton = modal.querySelector("[data-send-share]");
     const locationInput = modal.querySelector("#share-location");
+    const shareForm = modal.querySelector("[data-share-form]");
+    const recordSelect = modal.querySelector("[data-share-record-select]");
     let lastFocused = null;
 
     function selectedFriends() {
@@ -71,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function resetModal() {
         checkboxes.forEach((checkbox) => (checkbox.checked = false));
         if (locationInput) locationInput.checked = false;
+        if (recordSelect) recordSelect.value = "";
         if (searchInput) searchInput.value = "";
         friendRows.forEach((row) => (row.hidden = false));
         if (searchEmpty) searchEmpty.hidden = true;
@@ -130,17 +133,18 @@ document.addEventListener("DOMContentLoaded", () => {
         if (searchEmpty) searchEmpty.hidden = visibleCount !== 0;
     });
 
-    sendButton?.addEventListener("click", () => {
+    shareForm?.addEventListener("submit", (event) => {
         const count = selectedFriends().length;
-        if (!count) return;
+        const selectedRecord = recordSelect?.selectedOptions[0];
+        const shareUrl = selectedRecord?.dataset.shareUrl;
+        if (!count || !shareUrl) {
+            event.preventDefault();
+            if (recordSelect && !recordSelect.value) recordSelect.focus();
+            return;
+        }
+        shareForm.action = shareUrl;
         sendButton.disabled = true;
-        sendButton.textContent = "편지를 보내는 중...";
-        window.setTimeout(() => {
-            if (successCount) successCount.textContent = `${count}명`;
-            if (formView) formView.hidden = true;
-            if (successView) successView.hidden = false;
-            successView?.querySelector("button")?.focus();
-        }, 600);
+        sendButton.textContent = "마음 편지를 보내는 중...";
     });
 
     document.addEventListener("keydown", (event) => {

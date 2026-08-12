@@ -29,7 +29,7 @@
 .friend-board {
     position: relative;
     z-index: 1;
-    width: min(1060px, 100%);
+    width: min(1120px, 100%);
     margin-inline: auto;
 }
 
@@ -209,7 +209,7 @@
     position: relative;
     display: grid;
     justify-items: center;
-    margin-bottom: 46px;
+    margin-bottom: 48px;
     text-align: center;
 }
 
@@ -222,7 +222,7 @@
 .friend-book__intro h1 {
     padding: 12px 26px;
     margin: 8px 0 10px;
-    border-radius: 14px 16px 12px 15px;
+    border-radius: 14px;
     background: var(--friend-accent);
     box-shadow: 0 8px 18px rgba(107, 74, 50, 0.08);
     font-size: clamp(1.8rem, 3vw, 2.5rem);
@@ -237,9 +237,6 @@
 }
 
 .friend-book__mail-link {
-    position: absolute;
-    right: 0;
-    bottom: -34px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -252,6 +249,13 @@
     font-weight: 700;
     text-decoration: none;
     transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.friend-book__toolbar {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin: 34px 0 22px;
 }
 
 .friend-book__mail-link:hover {
@@ -671,7 +675,6 @@
     }
 
     .friend-book__intro {
-        padding-bottom: 58px;
         margin-bottom: 34px;
     }
 
@@ -680,9 +683,7 @@
     }
 
     .friend-book__mail-link {
-        top: auto;
-        right: 0;
-        bottom: 0;
+        position: static;
     }
 
     .invite-letter {
@@ -778,4 +779,35 @@
         font-size: 0.74rem;
     }
 
+}
+.friend-book__messages {
+    position: fixed;
+    top: 105px;
+    left: 50%;
+    z-index: 1050;
+    display: grid;
+    width: min(520px, calc(100% - 32px));
+    gap: 8px;
+    transform: translateX(-50%);
+}
+
+.friend-book__message {
+    padding: 12px 18px;
+    margin: 0;
+    border: 1px solid #e0c5b2;
+    border-radius: 999px;
+    color: #624c3f;
+    background: #fff9eb;
+    box-shadow: 0 8px 22px rgba(85, 60, 45, 0.12);
+    text-align: center;
+}
+
+.friend-book__message--success {
+    border-color: #b9d6ad;
+    background: #f4faed;
+}
+
+.friend-book__message--error {
+    border-color: #e8b5aa;
+    background: #fff0eb;
 }
