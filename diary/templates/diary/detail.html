@@ -393,15 +393,15 @@
         <header class="record-content-modal__header">
 
             <div>
-                <p class="record-content-modal__eyebrow">
-                    그날의 마음
-                </p>
-
                 <h2
                     class="record-content-modal__title"
                     id="read-modal-title"
                 >
-                    Read
+                    {% if record.title %}
+                        {{ record.title }}
+                    {% else %}
+                        제목 없는 기록
+                    {% endif %}
                 </h2>
             </div>
 
