@@ -136,16 +136,27 @@
                     </div>
                 </fieldset>
 
-                <label class="diary-field">
-                <span class="sr-only">오늘의 마음 기록</span>
-                <textarea
-                    name="content"
-                    rows="4"
-                    maxlength="500"
-                    placeholder="오늘의 마음을 기록해 보세요..."
-                    required
-                ></textarea>
-                </label>
+                <div class="diary-entry">
+                    <label class="diary-title-field">
+                        <span class="sr-only">오늘의 한 줄 제목</span>
+                        <input
+                            type="text"
+                            name="title"
+                            maxlength="40"
+                            placeholder="오늘의 한 줄 제목을 적어 주세요"
+                        >
+                    </label>
+                    <label class="diary-field">
+                        <span class="sr-only">오늘의 마음 기록</span>
+                        <textarea
+                            name="content"
+                            rows="4"
+                            maxlength="500"
+                            placeholder="오늘의 마음을 기록해 보세요..."
+                            required
+                        ></textarea>
+                    </label>
+                </div>
 
                 </section>
 

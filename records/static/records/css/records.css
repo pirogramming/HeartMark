@@ -452,6 +452,42 @@
     margin-top: 0;
 }
 
+.diary-entry {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: auto 1fr;
+}
+
+.record-create-layout .diary-entry {
+    min-height: 300px;
+}
+
+.diary-title-field {
+    display: block;
+    padding: 0 10px 9px;
+    border-bottom: 1px solid rgba(98, 76, 61, 0.28);
+}
+
+.diary-title-field input,
+.record-edit-title input {
+    width: 100%;
+    padding: 3px 0;
+    border: 0;
+    outline: 0;
+    color: var(--record-ink);
+    background: transparent;
+    font: inherit;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.diary-title-field input::placeholder,
+.record-edit-title input::placeholder {
+    color: #aa9687;
+    font-weight: 600;
+}
+
 .diary-field textarea {
     width: 100%;
     height: 100%;
@@ -1330,6 +1366,19 @@ body.record-delete-modal-open {
     display: block;
     flex: 1;
     min-height: 0;
+}
+
+.record-edit-entry {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: auto 1fr;
+}
+
+.record-edit-title {
+    display: block;
+    padding: 0 12px 10px;
+    border-bottom: 1px solid rgba(98, 76, 61, 0.28);
 }
 
 .record-edit-diary textarea {
