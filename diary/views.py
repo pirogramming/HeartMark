@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-# 담당 C가 만든 실제 기록 모델을 가져옴
+from bgm.services import get_music_for_record
+# 담당 C가 만든 실제 기록 모델을 가져옵니다.
 from records.models import Record
 
 
@@ -887,11 +888,12 @@ def diary_detail(request, pk):
         user=request.user,
     )
 
+    music = get_music_for_record(record)
 
-    # ========================================================
-    # 대표 감정
-    # ========================================================
-
+    # 대표 감정 번호
+    # 대표 감정 정보입니다.
+    #
+    # Record.main_emotion에는 1~20 사이 번호가 저장됩니다.
     main_emotion_number = int(
         record.main_emotion,
     )
@@ -983,6 +985,9 @@ def diary_detail(request, pk):
 
         # 오른쪽 보조 감정
         "right_emotion": right_emotion,
+
+        # 음악
+        "music": music,
     }
 
 

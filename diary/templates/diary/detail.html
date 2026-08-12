@@ -1,18 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block title %}
 기록 상세 | 마음자국
 {% endblock %}
 
+
 {% block extra_css %}
+<!-- 기록 상세 페이지 전용 CSS 불러옴. -->
 <link
     rel="stylesheet"
     href="{% static 'diary/css/detail.css' %}"
 >
+
+<!-- BGM 플레이어 전용 CSS 불러옴. -->
+<link
+    rel="stylesheet"
+    href="{% static 'bgm/css/music_player.css' %}"
+>
 {% endblock %}
 
+
 {% block content %}
+
 <section class="record-detail-page">
 
     <!-- ==========================================
@@ -199,11 +210,11 @@
         </button>
 
 
-        <!-- 추후 음악 기능을 연결할 버튼 -->
+        <!-- Listen 모달을 여는 버튼 -->
         <button
             type="button"
             class="record-action-button"
-            data-action="listen"
+            data-modal-open="listen-modal"
         >
             <span
                 class="record-action-icon"
@@ -225,7 +236,7 @@
 <!-- ==================================================
     Photo 팝업
 
-    record.image에 저장된 실제 업로드 사진을 표시합니다.
+    record.image에 저장된 실제 업로드 사진 표시함.
 ================================================== -->
 <div
     class="record-content-modal"
@@ -233,7 +244,7 @@
     aria-hidden="true"
     hidden
 >
-    <!-- 어두운 배경을 클릭해도 팝업이 닫힙니다. -->
+    <!-- 어두운 배경 클릭 시 팝업 닫음. -->
     <button
         type="button"
         class="record-content-modal__backdrop"
@@ -251,6 +262,7 @@
         aria-labelledby="photo-modal-title"
     >
         <header class="record-content-modal__header">
+
             <div>
                 <p class="record-content-modal__eyebrow">
                     그날의 장면
@@ -272,9 +284,12 @@
             >
                 ×
             </button>
+
         </header>
 
+
         <div class="record-content-modal__photo">
+
             {% if record.image %}
                 <img
                     src="{{ record.image.url }}"
@@ -285,7 +300,9 @@
                     이 기록에 등록된 사진이 없습니다.
                 </p>
             {% endif %}
+
         </div>
+
     </section>
 </div>
 
@@ -293,7 +310,7 @@
 <!-- ==================================================
     Read 팝업
 
-    record.content에 저장된 실제 일기 내용을 표시합니다.
+    record.content에 저장된 실제 일기 내용 표시함.
 ================================================== -->
 <div
     class="record-content-modal"
@@ -301,6 +318,7 @@
     aria-hidden="true"
     hidden
 >
+    <!-- 어두운 배경 클릭 시 팝업 닫음. -->
     <button
         type="button"
         class="record-content-modal__backdrop"
@@ -318,6 +336,7 @@
         aria-labelledby="read-modal-title"
     >
         <header class="record-content-modal__header">
+
             <div>
                 <p class="record-content-modal__eyebrow">
                     그날의 마음
@@ -339,19 +358,27 @@
             >
                 ×
             </button>
+
         </header>
 
+
         <div class="record-content-modal__diary">
+
             {% if record.content %}
-                <p>{{ record.content|linebreaksbr }}</p>
+                <p>
+                    {{ record.content|linebreaksbr }}
+                </p>
             {% else %}
                 <p class="record-content-modal__empty">
                     이 기록에 작성된 내용이 없습니다.
                 </p>
             {% endif %}
+
         </div>
 
+
         <footer class="record-content-modal__footer">
+
             <span>
                 {% if record.place %}
                     {{ record.place.name }}
@@ -363,12 +390,83 @@
             <time datetime="{{ record.created_at|date:'Y-m-d' }}">
                 {{ record.created_at|date:"Y. m. d" }}
             </time>
+
         </footer>
+
     </section>
 </div>
+
+
+<!-- ==================================================
+    Listen 팝업
+
+    기록의 대표 감정에 연결된 BGM 플레이어 표시함.
+================================================== -->
+<div
+    class="record-content-modal"
+    id="listen-modal"
+    aria-hidden="true"
+    hidden
+>
+    <!-- 어두운 배경 클릭 시 팝업 닫음. -->
+    <button
+        type="button"
+        class="record-content-modal__backdrop"
+        data-modal-close
+        aria-label="음악 팝업 닫기"
+    ></button>
+
+    <section
+        class="
+            record-content-modal__dialog
+            record-content-modal__dialog--listen
+        "
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="listen-modal-title"
+    >
+        <header class="record-content-modal__header">
+
+            <div>
+                <p class="record-content-modal__eyebrow">
+                    그날의 마음 소리
+                </p>
+
+                <h2
+                    class="record-content-modal__title"
+                    id="listen-modal-title"
+                >
+                    Listen
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="record-content-modal__close"
+                data-modal-close
+                aria-label="음악 팝업 닫기"
+            >
+                ×
+            </button>
+
+        </header>
+
+
+        <!-- BGM 앱의 음악 플레이어 불러옴. -->
+        {% include "bgm/music_player.html" %}
+
+    </section>
+</div>
+
 {% endblock %}
 
 
 {% block extra_js %}
+
+<!-- 기존 Photo / Read / Listen 모달 동작 담당함. -->
 <script src="{% static 'diary/js/detail.js' %}"></script>
+
+<!-- BGM 재생·일시정지 동작 담당함. -->
+<script src="{% static 'bgm/js/music_player.js' %}"></script>
+
 {% endblock %}
