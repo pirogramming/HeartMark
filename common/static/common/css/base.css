@@ -12,6 +12,10 @@ body {
     font-family: "HeartMarkFont", sans-serif;
 }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 button,
 input,
 textarea,
