@@ -1171,6 +1171,13 @@ body.modal-open {
     overflow: hidden;
 }
 
+body.modal-open .site-header {
+    /* 팝업이 열린 동안 공통 헤더 숨김 */
+    visibility: hidden;
+
+    /* 숨겨진 헤더 클릭 방지 */
+    pointer-events: none;
+}
 
 .emotion-modal {
     position: fixed;
