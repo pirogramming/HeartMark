@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}받은 마음 편지 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'record_sharing/css/record_sharing.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="sharing-page">
+    <p class="sharing-eyebrow">Shared Heartmarks</p>
+    <h1 class="sharing-title">받은 마음 편지</h1>
+    <p class="sharing-subtitle">친구가 조심스럽게 건넨 마음자국을 모아 받아요.</p>
+
+    <div class="sharing-toolbar">
+        <p class="sharing-count">
+            {% if items %}
+            ✉️ {{ items|length }}통의 마음 편지가 도착했어요.
+            {% else %}
+            아직 도착한 마음 편지가 없어요.
+            {% endif %}
+        </p>
+        <a class="sharing-button-ghost" href="{% url 'friendships:list' %}">친구 관리</a>
+    </div>
+
+    {% if items %}
+    <div class="sharing-grid">
+        {# item = {"share": RecordShare, "record": Record, "place": 공개 가능한 장소 정보} #}
+        {% for item in items %}
+        <article class="letter-card">
+            <header class="letter-head">
+                {% if item.share.sender.profile.character_id %}
+                <img
+                    class="letter-avatar"
+                    src="{% static 'accounts/images/' %}{{ item.share.sender.profile.character_id }}.png"
+                    alt=""
+                >
+                {% else %}
+                <span class="letter-avatar" aria-hidden="true">
+                    {{ item.share.sender.username|first|upper }}
+                </span>
+                {% endif %}
+                <div>
+                    <p class="letter-from">
+                        {{ item.share.sender.first_name|default:item.share.sender.username }}님이 보낸 마음 편지
+                    </p>
+                    <p class="letter-date">{{ item.record.created_at|date:"Y년 n월 j일" }}</p>
+                </div>
+                <span class="letter-stamp" aria-hidden="true">HEART<br>MAIL</span>
+            </header>
+
+            <div class="letter-body">
+                {% if item.record.image %}
+                <img class="letter-photo" src="{{ item.record.image.url }}" alt="기록 사진">
+                {% else %}
+                <div class="letter-photo letter-photo-empty">사진 없음</div>
+                {% endif %}
+
+                <div>
+                    {# 대표 감정 하나만 보여준다. emotion_items 는 대표 감정이 항상 맨 앞이다. #}
+                    {% for emotion in item.record.emotion_items %}
+                        {% if emotion.is_main %}
+                        <div class="letter-emotion">
+                            <img src="{% static 'records/images/emotions/' %}{{ emotion.image_name }}" alt="">
+                            <div>
+                                <span>대표 감정</span>
+                                <strong>{{ emotion.name }}</strong>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <p class="letter-text">{{ item.record.content|truncatechars:60 }}</p>
+
+                    {% comment %}
+                        장소 영역.
+                        item.place 는 views 가 get_shared_place_data() 로 만들어 넘긴 값이다.
+                        여기서 item.record.place 나 item.record.latitude 를 직접 읽으면
+                        비공개 장소가 그대로 새어나가므로 절대 그렇게 하지 않는다.
+
+                        has_place  = 원본 기록에 장소가 있는지
+                        is_visible = 그 장소를 보여줘도 되는지
+                    {% endcomment %}
+                    {% if item.place.has_place %}
+                        {% if item.place.is_visible %}
+                        <div class="letter-place letter-place--open">
+                            <span class="letter-place-pin" aria-hidden="true">📍</span>
+                            <div>
+                                <span class="letter-place-label">함께 공개한 장소</span>
+                                <span class="letter-place-value">
+                                    {{ item.place.name|default:item.place.address }}
+                                </span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="letter-place letter-place--hidden">
+                            <span class="letter-place-pin" aria-hidden="true">🔒</span>
+                            <div>
+                                <span class="letter-place-value">장소를 공개하지 않은 기록이에요.</span>
+                                <span class="letter-place-label">친구가 소중한 위치 정보를 보호하고 있어요.</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <footer class="letter-foot">
+                <small>{{ item.record.created_at|date:"Y년 n월 j일" }}의 마음자국</small>
+                <a class="sharing-button" href="{% url 'record_sharing:shared_detail' item.share.pk %}">
+                    기록 보러가기
+                </a>
+            </footer>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="sharing-empty">
+        <p>아직 받은 마음 편지가 없어요.</p>
+        <p>친구와 마음자국을 나눠 보세요.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
