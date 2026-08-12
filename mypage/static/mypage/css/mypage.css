@@ -14,10 +14,9 @@
 .mypage-screen {
     position: relative;
     min-height: calc(100vh - 100px);
-    overflow: hidden;
     padding: 66px max(24px, 7vw) 78px;
     color: var(--mypage-ink);
-    background: var(--mypage-paper);
+    background: transparent;
 }
 
 .mypage-profile {
