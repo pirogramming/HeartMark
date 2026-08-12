@@ -146,37 +146,25 @@
             <span>가입일 이후의 기간을 선택해 주세요.</span>
         </div>
         {% endif %}
-        <p class="attendance-guide">기록을 작성하면 대표 감정으로 자동 출석돼요.</p>
+        <div class="attendance-summary-stats" aria-label="기록 요약">
+            <article class="attendance-summary-stat">
+                <img src="{% static 'mypage/images/streak-sprout.png' %}" alt="">
+                <div>
+                    <span>연속 기록</span>
+                    <strong>{{ record_streak }}일</strong>
+                </div>
+            </article>
+            <article class="attendance-summary-stat">
+                <img src="{% static 'mypage/images/total-diary.png' %}" alt="">
+                <div>
+                    <span>총 기록</span>
+                    <strong>{{ total_record_count }}개</strong>
+                </div>
+            </article>
+        </div>
     </section>
 
     <section class="mypage-insights" aria-label="나의 마음 기록 요약">
-        <section class="insight-overview" aria-labelledby="overview-title">
-            <h2 id="overview-title" class="insight-label">나의 마음 한눈에</h2>
-            <div class="overview-items">
-                <article class="overview-item overview-item--emotion">
-                    <div class="overview-icon{% if not weekly_emotion %} overview-icon--empty{% endif %}">
-                        {% if weekly_emotion %}
-                        <img src="{% static 'records/images/emotions/emotion-' %}{{ weekly_emotion }}.png" alt="이번 주 대표 감정">
-                        {% else %}
-                        {% endif %}
-                    </div>
-                    <div><span>이번 주 대표 감정</span><strong>{% if weekly_emotion %}{{ weekly_emotion_label }}{% else %}아직 없어요{% endif %}</strong></div>
-                </article>
-                <article class="overview-item">
-                    <span class="overview-symbol overview-symbol--streak" aria-hidden="true">
-                        <img src="{% static 'mypage/images/streak-sprout.png' %}" alt="">
-                    </span>
-                    <div><span>연속 기록</span><strong>{{ record_streak }}일</strong></div>
-                </article>
-                <article class="overview-item">
-                    <span class="overview-symbol overview-symbol--total" aria-hidden="true">
-                        <img src="{% static 'mypage/images/total-diary.png' %}" alt="">
-                    </span>
-                    <div><span>총 기록</span><strong>{{ total_record_count }}개</strong></div>
-                </article>
-            </div>
-        </section>
-
         <div class="insight-detail-grid">
             <section class="insight-card weekly-mood-card" aria-labelledby="weekly-mood-title">
                 <h2 id="weekly-mood-title" class="insight-label">이번 주 마음</h2>

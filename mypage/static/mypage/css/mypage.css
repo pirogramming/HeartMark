@@ -330,7 +330,7 @@
 
 .attendance-arrow {
     position: absolute;
-    top: 56%;
+    top: 75%;
     z-index: 3;
     display: grid;
     width: 42px;
@@ -448,6 +448,53 @@
     display: block;
     margin: 0;
     text-align: center;
+}
+
+.attendance-summary-stats {
+    position: relative;
+    top: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: min(820px, 100%);
+    margin: 26px auto 8px;
+    padding-top: 22px;
+    border-top: 2px dashed #dfbf9f;
+}
+
+.attendance-summary-stat {
+    display: flex;
+    transform: translateY(10px);
+    min-height: 70px;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    padding: 10px 16px;
+    border: 1px solid #f0d2bb;
+    border-radius: 17px;
+    background: rgba(255, 255, 244, 0.86);
+    box-shadow: 0 4px 12px rgba(92, 69, 51, 0.06);
+}
+
+.attendance-summary-stat img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.attendance-summary-stat div {
+    display: grid;
+    gap: 3px;
+}
+
+.attendance-summary-stat span {
+    color: var(--mypage-muted);
+    font-size: 0.76rem;
+}
+
+.attendance-summary-stat strong {
+    color: var(--mypage-ink);
+    font-size: 1.16rem;
 }
 
 .attendance-pagination {
@@ -968,6 +1015,11 @@
         border-radius: 36px;
     }
 
+    .attendance-summary-stats {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
     .attendance-heading {
         right: 38px;
         left: 38px;
@@ -1084,6 +1136,32 @@
         border-radius: 28px;
     }
 
+    .attendance-summary-stats {
+        gap: 9px;
+        margin: 20px auto 8px;
+        padding-top: 18px;
+    }
+
+    .attendance-summary-stat {
+        min-height: 60px;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 14px;
+    }
+
+    .attendance-summary-stat img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .attendance-summary-stat span {
+        font-size: 0.67rem;
+    }
+
+    .attendance-summary-stat strong {
+        font-size: 0.96rem;
+    }
+
     .attendance-heading {
         top: 16px;
         right: 18px;
@@ -1168,7 +1246,7 @@
     }
 
     .attendance-arrow {
-        top: 54%;
+        top: 73%;
         width: 34px;
         height: 34px;
         font-size: 1.65rem;
