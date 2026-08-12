@@ -549,8 +549,8 @@
     width: 62px;
     height: 62px;
     place-items: center;
-    border-radius: 46% 54% 48% 52%;
-    background: #e4ddf3;
+    border-radius: 48% 52% 46% 54% / 53% 47% 55% 45%;
+    background: transparent;
 }
 
 .overview-icon img {
@@ -563,6 +563,16 @@
     color: #8b76a8 !important;
     font-size: 1.5rem !important;
     font-weight: 800;
+}
+
+.overview-icon--empty {
+    border: 2px dashed #cdbfae;
+    transform: rotate(-2deg);
+}
+
+.overview-item--emotion .overview-icon {
+    border: 2px dashed #cdbfae;
+    transform: rotate(-2deg);
 }
 
 .overview-symbol {
@@ -600,7 +610,7 @@
     display: grid;
     grid-template-columns: 145px 1fr;
     align-items: center;
-    gap: 24px;
+    gap: 38px;
     min-height: 170px;
 }
 
@@ -609,9 +619,11 @@
     width: 140px;
     height: 140px;
     place-items: center;
-    border-radius: 45% 55% 48% 52%;
-    background: #e6ddf4;
-    box-shadow: inset 0 0 0 9px rgba(255, 255, 255, 0.32);
+    border: 2px dashed #cdbfae;
+    border-radius: 47% 53% 45% 55% / 54% 46% 52% 48%;
+    background: transparent;
+    box-shadow: none;
+    transform: rotate(1.5deg);
 }
 
 .weekly-mood-illustration img {
@@ -623,6 +635,9 @@
 .weekly-mood-illustration span {
     color: #8c73aa;
     font-size: 3.2rem;
+}
+
+.weekly-mood-illustration--empty {
 }
 
 .weekly-mood-content p,

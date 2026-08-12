@@ -33,21 +33,5 @@
         {% include "social_hub/partials/empty_state.html" with empty_type="shared_records" %}
     {% endif %}
 
-    <div class="shared-record-notice" data-shared-record-notice hidden aria-live="polite"></div>
 </section>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-open-shared-record]");
-    if (!button) return;
-    const notice = document.querySelector("[data-shared-record-notice]");
-    if (!notice) return;
-    notice.textContent = "실제 기록 상세 연결은 공유 백엔드 완성 후 적용돼요.";
-    notice.hidden = false;
-    window.clearTimeout(window.sharedRecordNoticeTimer);
-    window.sharedRecordNoticeTimer = window.setTimeout(() => (notice.hidden = true), 2200);
-});
-</script>
 {% endblock %}

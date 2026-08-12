@@ -69,10 +69,72 @@
     cursor: pointer;
 }
 
+/* 공유 기록 상세: 편지 머리말은 유지하고, 기록 본문은 records 상세 레이아웃을 쓴다. */
+.record-detail-shell--shared {
+    padding: 80px max(24px, 7vw) 100px;
+}
+
+.shared-letter-header {
+    --coral: #ef9a83;
+    --coral-deep: #e07f66;
+    --chip: #fbddd2;
+    --card-line: #f3e2d6;
+    --muted: #9a8f88;
+
+    width: min(1120px, 100%);
+    margin: 0 auto 48px;
+    text-align: center;
+}
+
+.shared-letter-header .sharing-eyebrow {
+    color: #d37d61;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+}
+
+.shared-letter-header .sharing-title {
+    padding: 12px 26px;
+    margin: 8px auto 10px;
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(107, 74, 50, 0.08);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.shared-letter-header .sharing-subtitle {
+    margin: 0;
+}
+
+.shared-letter-header .sharing-toolbar {
+    margin: 34px 0 22px;
+    text-align: left;
+}
+
+.record-detail-shell--shared .record-detail-card {
+    width: min(1120px, 100%);
+}
+
 .sharing-button {
     border: 1px solid var(--coral-deep);
     background: var(--coral);
     color: #fff;
+}
+
+.shared-letter-header .sharing-button-ghost {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid #d7c2af;
+    border-radius: 11px;
+    color: #46372d;
+    background: #fffdf7;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.shared-letter-header .sharing-button-ghost:hover {
+    background: #ffe7d0;
 }
 
 .sharing-button-ghost {

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "social_hub",
     "friendships",
     "record_sharing",
+    "bgm",
 ]
 
 MIDDLEWARE = [

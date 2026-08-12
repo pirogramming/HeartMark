@@ -2,7 +2,9 @@
     <section class="share-letter" role="dialog" aria-modal="true" aria-labelledby="share-letter-title">
         <button class="share-letter__close" type="button" aria-label="공유 창 닫기" data-close-share-modal>×</button>
 
-        <div class="share-letter__form" data-share-form-view>
+        <form class="share-letter__form" data-share-form-view method="post" data-share-form>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'social_hub:friend_management' %}">
             <header class="share-letter__header">
                 <span class="share-letter__icon" aria-hidden="true">✉</span>
                 <div>
@@ -10,6 +12,18 @@
                     <p>이 기록을 함께 보고 싶은 친구를 골라요.</p>
                 </div>
             </header>
+
+            <label class="share-record-select">
+                <span>공유할 기록</span>
+                <select name="record_id" required data-share-record-select>
+                    <option value="">기록을 선택해 주세요</option>
+                    {% for record in share_records %}
+                    <option value="{{ record.pk }}" data-share-url="{% url 'record_sharing:create' record.pk %}">
+                        {{ record.created_at|date:"Y년 n월 j일" }} · {{ record.content|truncatechars:24 }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
 
             <div class="share-friend-search">
                 <span aria-hidden="true">⌕</span>
@@ -20,7 +34,7 @@
             <div class="share-friend-list" role="group" aria-label="공유할 친구 선택">
                 {% for friend in friends %}
                 <label class="share-friend" data-share-friend data-friend-name="{{ friend.name|lower }}">
-                    <input type="checkbox" name="friend_ids" value="{{ friend.id }}">
+                    <input type="checkbox" name="friends" value="{{ friend.id }}">
                     <span class="share-friend__character"><img src="{{ friend.character_url }}" alt=""></span>
                     <span class="share-friend__copy">
                         <strong>{{ friend.name }}</strong>
@@ -49,7 +63,7 @@
             </section>
 
             <label class="location-share-option">
-                <input type="checkbox" id="share-location">
+                <input type="checkbox" id="share-location" name="share_location">
                 <span class="location-share-option__pin" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
@@ -65,9 +79,9 @@
 
             <footer class="share-letter__footer">
                 <span><strong data-footer-count>0명</strong> 선택</span>
-                <button type="button" data-send-share disabled>친구를 선택해 주세요</button>
+                <button type="submit" data-send-share disabled>친구를 선택해 주세요</button>
             </footer>
-        </div>
+        </form>
 
         <div class="share-letter__success" data-share-success hidden>
             <span class="share-success__seal" aria-hidden="true">✉</span>

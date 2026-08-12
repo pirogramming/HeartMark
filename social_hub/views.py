@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.urls import reverse
+from django.utils.formats import date_format
 
 from friendships.models import Invitation
 from friendships.services import (
@@ -12,6 +13,8 @@ from friendships.services import (
     get_received_requests,
     get_sent_requests,
 )
+from record_sharing.services import get_shared_place_data, get_shared_records
+from records.models import EMOTION_NAMES, Record
 
 
 def _display_name(user):
@@ -132,53 +135,34 @@ def friend_management(request):
         "member_results": member_results,
         "member_search_performed": bool(member_query),
         "next_url": request.get_full_path(),
+        "share_records": Record.objects.filter(user=request.user).order_by("-created_at"),
     }
     return render(request, "social_hub/friend_management.html", context)
 
 
+@login_required(login_url="accounts:login")
 def shared_records(request):
-    """공유 백엔드 연결 전 목록 UI 확인을 위한 임시 화면."""
-    context = {
-        "shared_records": [
+    """은아의 공유 서비스가 허용한 기록과 장소 정보만 화면 형태로 변환한다."""
+    items = []
+    for share in get_shared_records(request.user):
+        record = share.record
+        place = get_shared_place_data(share, request.user)
+        items.append(
             {
-                "share_id": 1,
-                "sender_name": "홍연우",
-                "sender_character_static": "accounts/images/1.png",
-                "record_id": 15,
-                "record_date": "2026년 8월 7일",
-                "main_emotion": "16",
-                "main_emotion_name": "기쁨",
-                "image_static": "records/images/main-character-writing.png",
-                "content_preview": "오늘은 천천히 걸으며 좋아하는 풍경을 오래 바라봤어요.",
-                "share_location": True,
-                "place_name": "서울숲",
-            },
-            {
-                "share_id": 2,
-                "sender_name": "신은아",
-                "sender_character_static": "accounts/images/3.png",
-                "record_id": 16,
-                "record_date": "2026년 8월 6일",
-                "main_emotion": "15",
-                "main_emotion_name": "행운",
-                "image_static": "accounts/images/tutorial-record-write.png",
-                "content_preview": "우연히 예쁜 골목을 발견해서 마음자국을 남겼어요.",
-                "share_location": False,
-                "place_name": "",
-            },
-            {
-                "share_id": 3,
-                "sender_name": "한지수",
-                "sender_character_static": "accounts/images/5.png",
-                "record_id": 17,
-                "record_date": "2026년 8월 3일",
-                "main_emotion": "05",
-                "main_emotion_name": "만족",
-                "image_static": "accounts/images/tutorial-calendar.png",
-                "content_preview": "기다리던 일을 마무리해서 뿌듯했던 하루였어요.",
-                "share_location": True,
-                "place_name": "북서울꿈의숲",
-            },
-        ]
-    }
+                "share_id": share.pk,
+                "sender_name": _display_name(share.sender),
+                "sender_character_url": _character_url(share.sender),
+                "record_id": record.pk,
+                "record_date": date_format(record.created_at, "Y년 n월 j일"),
+                "main_emotion": f"{record.main_emotion:02d}",
+                "main_emotion_name": EMOTION_NAMES.get(record.main_emotion, f"감정 {record.main_emotion}"),
+                "image_url": record.image.url if record.image else "",
+                "content_preview": record.content,
+                "share_location": bool(place and place["is_visible"]),
+                "place_name": place["name"] if place and place["is_visible"] else "",
+                "detail_url": reverse("record_sharing:shared_detail", args=[share.pk]),
+            }
+        )
+
+    context = {"shared_records": items}
     return render(request, "social_hub/shared_records.html", context)
