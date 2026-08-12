@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     "records",
     "diary",
     "friendships",
+    "record_sharing",
+    "bgm",
 ]
 
 MIDDLEWARE = [
