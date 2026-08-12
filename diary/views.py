@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from bgm.services import get_music_for_record
+from bgm.services import get_available_music
 # 담당 C가 만든 실제 기록 모델을 가져옵니다.
 from records.models import Record
 
@@ -894,7 +894,8 @@ def diary_detail(request, pk):
         user=request.user,
     )
 
-    music = get_music_for_record(record)
+    # 현재 사용할 수 있는 전체 BGM 목록 조회함.
+    musics = get_available_music()
 
     # 대표 감정 번호
     # 대표 감정 정보입니다.
@@ -993,7 +994,7 @@ def diary_detail(request, pk):
         "right_emotion": right_emotion,
 
         # 음악
-        "music": music,
+        "music": musics,
     }
 
 
