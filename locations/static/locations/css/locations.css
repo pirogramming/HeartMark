@@ -5,7 +5,9 @@
    나중에 공통 토큰이 생기더라도 이름이 겹치지 않게함. */
 
 :root {
-    --loc-bg: #fbf1e2;            /* 와이어프레임의 크림/베이지 배경 */
+    /* 페이지 배경은 common/css/base.css(body 배경 + .page-particles)가 담당한다.
+       이 값은 검색 결과 hover 같은 옅은 강조 배경에만 쓴다. */
+    --loc-bg: #fbf1e2;            /* 크림/베이지 강조 배경 */
     --loc-card-bg: #fffaf2;       /* 카드/지도 박스 배경 (배경보다 살짝 밝은 톤) */
     --loc-border: #e7d9c3;        /* 카드·지도·검색창 테두리 */
     --loc-primary: #d86f12;       /* 헤더의 "로그인" 링크(common/css/base.css .nav-auth-link)와 같은 주황 계열로 통일 */
@@ -80,7 +82,8 @@
 .place-select {
     min-height: calc(100vh - 100px); /* common/css/base.css의 .site-main padding-top(100px)만큼 뺀 나머지를 채움 */
     padding: 48px 24px 72px;
-    background: var(--loc-bg);
+    /* 공통 배경(body 색 + .page-particles 파츠)이 그대로 비치도록 배경을 깔지 않는다. */
+    background: transparent;
     display: flex;
     justify-content: center;
 }
@@ -204,7 +207,8 @@
 .seoul-map-page {
     min-height: calc(100vh - 100px);
     padding: 48px 24px 72px;
-    background: var(--loc-bg);
+    /* 화면 1과 동일하게 공통 배경을 그대로 사용한다. */
+    background: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
