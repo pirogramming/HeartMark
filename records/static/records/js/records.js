@@ -183,9 +183,7 @@
     setToday();
     updateEmotionState();
 
-    const shouldOpenFromUrl = new URLSearchParams(window.location.search)
-        .get("open_record") === "1";
-    if (document.querySelector("[data-record-preview]") || shouldOpenFromUrl) {
-        openModal();
-    }
+    // 모달은 위치 확정 후 지도 화면의 "기록하러 가기" 버튼([data-open-record-modal])으로만
+    // 연다. 예전에는 ?open_record=1 쿼리 파라미터로도 열 수 있었지만, 위치 선택을
+    // 건너뛰고 바로 작성에 들어가는 우회 경로가 되어 제거했다.
 })();

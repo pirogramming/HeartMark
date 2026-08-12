@@ -3,22 +3,13 @@
    ========================================================= */
 
 .diary-list-container {
-    /*
-        페이지 콘텐츠의 최대 너비입니다.
-
-        화면이 1280px 이상이면 최대 1200px,
-        그보다 좁으면 좌우에 각각 40px 여백을 남깁니다.
-    */
+    /* 페이지 콘텐츠 최대 너비 */
     width: min(1200px, calc(100% - 80px));
 
-    /*
-        컨테이너를 화면 가로 중앙에 배치합니다.
-    */
+    /* 화면 가로 중앙 배치 */
     margin: 0 auto;
 
-    /*
-        위쪽 28px, 아래쪽 50px의 내부 여백입니다.
-    */
+    /* 위아래 내부 여백 */
     padding: 28px 0 50px;
 }
 
@@ -27,27 +18,40 @@
    2. 전체 / 감정별 / 장소별 탭
    ========================================================= */
 
-.diary-tabs-wrapper {
+.diary-tabs-row {
     /*
-        탭 묶음을 가로 중앙에 배치합니다.
+        탭과 점 세 개 버튼을 같은 줄에 배치
+        탭은 화면 중앙 유지
+        점 세 개 버튼의 위치 기준 역할
     */
+    position: relative;
+
     display: flex;
+    align-items: center;
     justify-content: center;
 
     width: 100%;
 
-    /*
-        탭과 아래 콘텐츠 사이의 간격입니다.
-    */
+    /* 탭과 콘텐츠 사이 간격 */
     margin-bottom: 12px;
 }
 
 
-.diary-tabs {
+.diary-tabs-wrapper {
     /*
-        각 탭 버튼을 한 줄로 배치합니다.
-        내용만큼만 너비를 차지합니다.
+        탭 자체만 중앙 배치
+        width: 100% 제거하여 오른쪽 버튼이 탭 위치에 영향 주지 않도록 함
     */
+    display: flex;
+    justify-content: center;
+
+    width: auto;
+    margin-bottom: 0;
+}
+
+
+.diary-tabs {
+    /* 탭 한 줄 배치 */
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -64,9 +68,7 @@
 
 
 .diary-tab {
-    /*
-        a 태그 또는 버튼으로 만들어진 각각의 탭입니다.
-    */
+    /* 각 탭 기본 스타일 */
     padding: 10px 18px;
 
     border: 0;
@@ -83,9 +85,7 @@
 
 
 .diary-tab.active {
-    /*
-        현재 선택된 탭입니다.
-    */
+    /* 현재 선택된 탭 */
     background: #fff4cb;
     color: #222222;
 
@@ -98,50 +98,31 @@
    ========================================================= */
 
 .diary-list-header {
-    /*
-        전체 기록 제목, 기록 개수, 필터를
-        왼쪽부터 가로 한 줄로 배치합니다.
-
-        화면:
-        전체 기록  7개  최신순  기간 설정
-    */
+    /* 제목과 필터 가로 배치 */
     display: flex;
     align-items: center;
     justify-content: flex-start;
 
-    /*
-        제목·개수 묶음과 필터 사이의 간격입니다.
-
-        값을 키우면 필터가 제목에서 더 멀어집니다.
-    */
+    /* 제목과 필터 사이 간격 */
     gap: 18px;
 
-    /*
-        헤더와 카드 목록 사이의 간격입니다.
-    */
+    /* 카드 목록과의 간격 */
     margin-bottom: 24px;
 }
 
 
 .diary-list-heading {
-    /*
-        '전체 기록'과 '7개'를 같은 줄에 배치합니다.
-    */
+    /* 제목과 기록 개수 한 줄 배치 */
     display: flex;
     align-items: center;
     gap: 10px;
 
-    /*
-        남는 공간을 불필요하게 차지하지 않습니다.
-    */
     flex: 0 0 auto;
 }
 
 
 .diary-list-title {
-    /*
-        h1 태그의 브라우저 기본 여백을 제거합니다.
-    */
+    /* h1 기본 여백 제거 */
     margin: 0;
 
     color: #222222;
@@ -152,10 +133,19 @@
 }
 
 
+.diary-list-description {
+    /* 제목 아래 설명 문구 */
+    margin: 8px 0 0;
+
+    color: #8b857d;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
 .diary-list-count {
-    /*
-        기록 개수를 작은 캡슐 모양으로 표시합니다.
-    */
+    /* 기록 개수 캡슐 */
     padding: 5px 10px;
 
     border-radius: 999px;
@@ -167,9 +157,6 @@
     font-weight: 700;
     line-height: 1;
 
-    /*
-        '7'과 '개'가 서로 다른 줄로 나뉘지 않게 합니다.
-    */
     white-space: nowrap;
 }
 
@@ -180,31 +167,21 @@
 
 .diary-filter-form,
 .diary-list-controls {
-    /*
-        최신순 선택창과 기간 설정 버튼을
-        같은 줄에 배치합니다.
-    */
+    /* 필터 버튼 가로 배치 */
     display: flex;
     align-items: center;
     gap: 8px;
 
-    /*
-        기간 설정 팝업의 위치 기준이 됩니다.
-    */
+    /* 기간 설정창 위치 기준 */
     position: relative;
 
-    /*
-        필터 영역이 남은 가로 공간 전체를 차지하지 않습니다.
-    */
     flex: 0 0 auto;
 }
 
 
 .diary-sort-select,
 .period-toggle-button {
-    /*
-        최신순 선택창과 기간 설정 버튼의 공통 스타일입니다.
-    */
+    /* 필터 공통 스타일 */
     min-height: 42px;
     padding: 0 16px;
 
@@ -214,9 +191,6 @@
     background: #ffffff;
     color: #333333;
 
-    /*
-        페이지에서 사용하는 글꼴을 그대로 상속합니다.
-    */
     font: inherit;
 
     cursor: pointer;
@@ -227,10 +201,6 @@
 .period-toggle-button:focus,
 .period-filter input:focus {
     /*
-        키보드나 마우스로 요소를 선택했을 때
-        노란색 외곽선을 표시합니다.
-    */
-    /*
     outline: 2px solid #e9c767;
     outline-offset: 2px;
     */
@@ -238,9 +208,7 @@
 
 
 .period-toggle-button.active {
-    /*
-        기간 설정 창이 열려 있을 때의 버튼입니다.
-    */
+    /* 기간 설정 활성 상태 */
     border-color: #e1bd55;
 
     background: #fff7d9;
@@ -250,57 +218,22 @@
 
 
 /* =========================================================
-    기간 설정 팝업
+   5. 기간 설정 팝업
    ========================================================= */
 
 .period-filter {
-    /*
-        최신순 선택창과 기간 설정 버튼을 감싸는
-        .diary-filter-form을 기준으로 배치됩니다.
-
-        기존에는 필터 아래쪽에 표시되었지만,
-        이제는 필터의 오른쪽에 나란히 표시합니다.
-    */
+    /* 필터 폼 기준 절대 배치 */
     position: absolute;
     z-index: 50;
 
-    /*
-        top: 0
-        → 최신순·기간 설정 버튼과 날짜 선택창의
-        위쪽 높이를 똑같이 맞춥니다.
-
-        값을 키우면 날짜 선택창이 아래로 내려가고,
-        음수로 바꾸면 위로 올라갑니다.
-    */
     top: 0;
-
-    /*
-        left: calc(100% + 16px)
-        → 필터 폼의 오른쪽 끝에서 16px 떨어진 위치에
-        날짜 선택창을 표시합니다.
-
-        16px을 크게 하면 기간 설정 버튼과 더 멀어지고,
-        작게 하면 버튼과 더 가까워집니다.
-    */
     left: calc(100% + 16px);
-
-    /*
-        기존의 right: 0을 해제합니다.
-
-        right: 0이 남아 있으면
-        left와 right가 동시에 적용되어
-        너비나 위치가 예상과 다르게 계산될 수 있습니다.
-    */
     right: auto;
 
     display: flex;
     align-items: flex-end;
     gap: 10px;
 
-    /*
-        시작일·종료일·버튼이 들어갈 최소 너비입니다.
-        현재 화면에서는 약 500px 정도가 적당합니다.
-    */
     min-width: 500px;
 
     padding: 18px;
@@ -315,18 +248,13 @@
 
 
 .period-filter[hidden] {
-    /*
-        hidden 속성이 있을 때 완전히 숨깁니다.
-    */
+    /* hidden 상태 제거 */
     display: none;
 }
 
 
 .period-input-group {
-    /*
-        시작일 또는 종료일의 label과 input을
-        위아래로 배치합니다.
-    */
+    /* 라벨과 날짜 입력창 세로 배치 */
     display: flex;
     flex-direction: column;
     gap: 7px;
@@ -354,9 +282,7 @@
 
 
 .period-separator {
-    /*
-        시작일과 종료일 사이의 물결표입니다.
-    */
+    /* 시작일과 종료일 구분 */
     padding-bottom: 10px;
 
     color: #999999;
@@ -365,9 +291,7 @@
 
 .period-apply-button,
 .period-reset-button {
-    /*
-        적용 버튼과 초기화 버튼의 공통 스타일입니다.
-    */
+    /* 적용 / 초기화 공통 스타일 */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -405,9 +329,7 @@
    ========================================================= */
 
 .diary-grid {
-    /*
-        기본 화면에서 한 줄에 카드 5개를 배치합니다.
-    */
+    /* 한 줄에 카드 5개 배치 */
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 22px;
@@ -417,9 +339,6 @@
 
 
 .diary-card {
-    /*
-        카드가 grid 칸보다 커지는 것을 방지합니다.
-    */
     min-width: 0;
 
     overflow: hidden;
@@ -440,9 +359,7 @@
 
 
 .diary-card:hover {
-    /*
-        마우스를 올리면 카드가 살짝 위로 이동합니다.
-    */
+    /* hover 시 카드 이동 */
     transform: translateY(-5px);
 
     box-shadow:
@@ -452,9 +369,7 @@
 
 
 .diary-card-link {
-    /*
-        카드 전체 영역을 클릭할 수 있게 합니다.
-    */
+    /* 카드 전체 클릭 영역 */
     display: block;
 
     height: 100%;
@@ -469,16 +384,11 @@
    ========================================================= */
 
 .diary-card-image-wrapper {
-    /*
-        카드 이미지 영역입니다.
-    */
     position: relative;
 
     width: 100%;
 
-    /*
-        이미지 영역의 가로:세로 비율을 4:3으로 유지합니다.
-    */
+    /* 이미지 4:3 비율 유지 */
     aspect-ratio: 4 / 3;
 
     overflow: hidden;
@@ -493,10 +403,7 @@
     width: 100%;
     height: 100%;
 
-    /*
-        사진이 이미지 영역을 빈틈없이 채우도록 합니다.
-        넘치는 부분은 잘립니다.
-    */
+    /* 이미지 영역 채우기 */
     object-fit: cover;
 
     transition: transform 0.3s ease;
@@ -504,17 +411,13 @@
 
 
 .diary-card:hover .diary-card-image {
-    /*
-        카드에 마우스를 올리면 사진이 살짝 확대됩니다.
-    */
+    /* hover 시 이미지 확대 */
     transform: scale(1.04);
 }
 
 
 .diary-card-image-placeholder {
-    /*
-        사진이 없을 때 보이는 대체 영역입니다.
-    */
+    /* 이미지 없음 영역 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -534,9 +437,7 @@
    ========================================================= */
 
 .diary-card-content {
-    /*
-        날짜, 기록 내용, 장소 줄을 위아래로 배치합니다.
-    */
+    /* 날짜 / 내용 / 장소 세로 배치 */
     display: flex;
     flex-direction: column;
 
@@ -556,9 +457,7 @@
 
 
 .diary-card-title {
-    /*
-        기록 내용을 최대 두 줄까지만 보여줍니다.
-    */
+    /* 기록 내용 최대 두 줄 제한 */
     display: -webkit-box;
 
     min-height: 44px;
@@ -584,35 +483,20 @@
    ========================================================= */
 
 .diary-card-bottom-row {
-    /*
-        장소는 왼쪽,
-        감정 아이콘은 오른쪽에 배치합니다.
-    */
+    /* 장소 왼쪽 / 감정 오른쪽 */
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    /*
-        장소 이름과 감정 아이콘 사이의 최소 간격입니다.
-    */
     gap: 12px;
 
-    /*
-        제목과 장소 줄 사이의 간격입니다.
-    */
     margin-top: 12px;
 }
 
 
 .diary-card-location {
-    /*
-        장소 영역이 남은 공간을 사용합니다.
-    */
     flex: 1;
 
-    /*
-        flex 자식의 글자가 정상적으로 줄어들 수 있게 합니다.
-    */
     min-width: 0;
 
     margin: 0;
@@ -630,23 +514,14 @@
 
 
 .diary-card-location--empty {
-    /*
-        장소 정보가 없을 때 문구를 더 연하게 표시합니다.
-    */
+    /* 장소 없음 스타일 */
     color: #aaa397;
 }
 
 
 .diary-card-emotion {
-    /*
-        기존의 absolute 배치를 해제하고,
-        장소 오른쪽에서 일반적인 요소로 배치합니다.
-    */
     position: static;
 
-    /*
-        장소 이름이 길어져도 아이콘이 작아지지 않게 합니다.
-    */
     flex-shrink: 0;
 
     display: flex;
@@ -670,9 +545,7 @@
    ========================================================= */
 
 .diary-empty {
-    /*
-        빈 화면 안내가 grid 전체 열을 차지하게 합니다.
-    */
+    /* grid 전체 사용 */
     grid-column: 1 / -1;
 
     padding: 80px 20px;
@@ -736,286 +609,540 @@
    ========================================================= */
 
 .emotion-page-header {
-    /*
-        왼쪽의 제목과 오른쪽의 이번 달 감정 요약을
-        양쪽에 나누어 배치합니다.
-    */
+    /* 감정별 제목 영역 */
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 30px;
 
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 }
 
 
-.emotion-month-summary {
+.emotion-page-heading {
+    /* 제목과 설명 세로 배치 */
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   12. 감정 도넛 그래프 전체 영역
+   ========================================================= */
+
+.emotion-chart-section {
     display: flex;
     align-items: center;
-    gap: 10px;
-
-    padding: 12px 18px;
-
-    border: 1px solid #eadfce;
-    border-radius: 14px;
-
-    background: #ffffff;
-
-    font-size: 13px;
-}
-
-
-.emotion-month-summary strong {
-    color: #d98d36;
-
-    font-size: 18px;
-}
-
-
-.top-emotion-list {
-    /*
-        공동 1위 감정이 여러 개일 경우
-        한 줄 또는 여러 줄로 자연스럽게 표시
-    */
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-
-.top-emotion-name {
-    color: #d98d36;
-
-    white-space: nowrap;
-}
-
-
-.top-emotion-separator {
-    color: #b7aa97;
-}
-
-
-.emotion-bubble-area {
-    /*
-        감정 조약돌들의 absolute 배치 기준입니다.
-    */
-    position: relative;
+    justify-content: center;
 
     width: 100%;
-    min-height: 560px;
 
-    border-radius: 24px;
-
-    /*background: #ffffff;*/
+    min-height: 360px;
 }
 
 
-.emotion-bubble {
+/* =========================================================
+   13. 감정 도넛 그래프 wrapper
+   ========================================================= */
+
+.emotion-chart-wrapper {
+    position: relative;
+
+    /* 참고 이미지에 가까운 크기 */
+    width: 360px;
+    max-width: 100%;
+
+    aspect-ratio: 1 / 1;
+}
+
+
+
+/* =========================================================
+   14. SVG 감정 도넛 그래프
+   ========================================================= */
+
+.emotion-chart {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   15. 도넛 그래프 배경
+   ========================================================= */
+
+.emotion-chart-background {
+    /* 도넛 뒤 기본 원 */
+    fill: none;
+
+    stroke: #f2eee7;
+    stroke-width: 52;
+
+    pointer-events: none;
+}
+
+
+/* 그래프 안쪽 원 */
+
+.emotion-chart-inner-circle {
+    fill: #fffdfa;
+
+    stroke: #eee5da;
+    stroke-width: 2;
+
+    pointer-events: none;
+
+    filter:
+        drop-shadow(
+            0 2px 4px rgba(80, 65, 50, 0.08)
+        );
+}
+
+
+/* =========================================================
+   16. 도넛 그래프 조각
+   ========================================================= */
+
+.emotion-chart-segment {
+    fill: none;
+
+    /* 참고 이미지와 비슷한 두꺼운 띠 */
+    stroke-width: 52;
+
+    /*
+        끝을 완전한 반원으로 만들지 않음
+
+        butt
+        → 참고 이미지처럼 조각 경계가 깔끔함
+    */
+    stroke-linecap: butt;
+
+    /*
+        그래프 시작 위치를
+        12시 방향으로 이동
+    */
+    transform: rotate(-90deg);
+
+    transform-origin: 160px 160px;
+
+    pointer-events: stroke;
+
+    cursor: pointer;
+
+    filter:
+        drop-shadow(
+            0 2px 3px rgba(74, 58, 45, 0.06)
+        );
+
+    transition:
+        stroke-width 0.18s ease,
+        filter 0.18s ease,
+        opacity 0.18s ease;
+}
+
+
+/* 감정 색상 */
+
+.emotion-chart-segment--yellow {
+    stroke: #f9dda0;
+}
+
+
+.emotion-chart-segment--blue {
+    stroke: #bcdcf7;
+}
+
+
+.emotion-chart-segment--pink {
+    stroke: #f6c9cf;
+}
+
+
+.emotion-chart-segment--purple {
+    stroke: #cfc2f2;
+}
+
+
+.emotion-chart-segment--red {
+    stroke: #f2b6b2;
+}
+
+
+.emotion-chart-segment--orange {
+    stroke: #f7c995;
+}
+
+
+.emotion-chart-segment--default {
+    stroke: #dedede;
+}
+
+
+/* hover 강조 */
+
+.emotion-chart-segment:hover {
+    stroke-width: 57;
+
+    filter:
+        brightness(1.02)
+        drop-shadow(
+            0 4px 5px rgba(65, 50, 40, 0.11)
+        );
+}
+
+
+/* =========================================================
+   17. 감정 그래프 중앙 기록 수
+   ========================================================= */
+
+.emotion-chart-center {
     position: absolute;
+
+    top: 50%;
+    left: 50%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
 
-    /*
-        기존 테두리를 제거
-    */
-    border: none;
+    gap: 9px;
 
-    /*
-        조약돌 모양은 그대로 유지
-    */
-    border-radius: 42% 58% 53% 47% / 50% 50% 50% 50%;
+    transform: translate(-50%, -50%);
 
-    background: rgba(255, 250, 231, 0.95);
-    color: #333333;
-
-    /*
-        테두리 대신 기본 상태에서도 그림자를 표시합니다.
-
-        0      → 좌우 이동 없음
-        5px    → 아래로 5px 이동
-        14px   → 그림자 흐림 정도
-        rgba   → 검정색, 투명도 12%
-    */
-    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
-
-    font: inherit;
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    pointer-events: none;
 }
 
 
-.emotion-bubble:hover {
-    z-index: 5;
-
-    transform: scale(1.08);
-
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-}
-
-
-.emotion-bubble-name {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-
-.emotion-bubble-count {
-    color: #8e877c;
+.emotion-chart-center-label {
+    color: #776f69;
 
     font-size: 15px;
+    font-weight: 600;
 }
 
 
-/* 감정별 색상 */
+.emotion-chart-center-count {
+    color: #8b71d1;
 
-.emotion-bubble--yellow {
-    /*border-color: #f9d472;*/
+    font-size: 34px;
+    font-weight: 800;
 
-    background: #fff7e3;
-}
-
-
-.emotion-bubble--blue {
-    /*border-color: #dae6f3;*/
-
-    background: #eff7ff;
-}
-
-
-.emotion-bubble--pink {
-    /*border-color: #f8b3b4;*/
-
-    background: #fff2f2;
-}
-
-
-.emotion-bubble--purple {
-    /*border-color: #9d72ce;*/
-
-    background: #f8f1ff;
-}
-
-
-.emotion-bubble--red {
-    /*border-color: #ce7772;*/
-
-    background: #fff4f1;
-}
-
-
-.emotion-bubble--orange {
-    /*border-color: #cea972;*/
-
-    background: #fff9f1;
-}
-
-
-.emotion-bubble--default {
-    /*border-color: #c5c5c5;*/
-
-    background: #dedede;
-}
-
-
-/* 기록 개수에 따른 감정 조약돌 크기 */
-
-.emotion-bubble--large {
-    width: 130px;
-    height: 130px;
-}
-
-
-.emotion-bubble--medium {
-    width: 92px;
-    height: 92px;
-}
-
-
-.emotion-bubble--small {
-    width: 64px;
-    height: 64px;
-}
-
-
-/* 감정 조약돌의 임시 배치 위치 */
-
-.emotion-bubble:nth-child(1) {
-    top: 30px;
-    left: 9%;
-}
-
-
-.emotion-bubble:nth-child(2) {
-    top: 70px;
-    left: 25%;
-}
-
-
-.emotion-bubble:nth-child(3) {
-    top: 160px;
-    left: 15%;
-}
-
-
-.emotion-bubble:nth-child(4) {
-    top: 110px;
-    left: 44%;
-}
-
-
-.emotion-bubble:nth-child(5) {
-    top: 260px;
-    left: 34%;
-}
-
-
-.emotion-bubble:nth-child(6) {
-    top: 80px;
-    left: 68%;
-}
-
-
-.emotion-bubble:nth-child(7) {
-    top: 210px;
-    left: 75%;
-}
-
-
-.emotion-bubble:nth-child(8) {
-    top: 340px;
-    left: 60%;
-}
-
-
-.emotion-bubble:nth-child(9) {
-    top: 390px;
-    left: 20%;
-}
-
-
-.emotion-bubble:nth-child(10) {
-    top: 370px;
-    left: 80%;
+    line-height: 1;
 }
 
 
 /* =========================================================
-   12. 감정별 기록 팝업
+   18. 감정 그래프 툴팁
+   ========================================================= */
+
+.emotion-chart-tooltip {
+    /*
+        그래프 wrapper 기준 배치
+    */
+    position: absolute;
+    z-index: 20;
+
+    /*
+        JS에서 마우스 위치에 맞춰
+        left / top 값 변경
+    */
+    left: 0;
+    top: 0;
+
+    /*
+        툴팁이 마우스 정중앙에 위치하도록 조정
+    */
+    transform: translate(-50%, -100%);
+
+    padding: 9px 13px;
+
+    border: 1px solid #e2ddd4;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.96);
+    color: #37332e;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    box-shadow:
+        0 7px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.emotion-chart-tooltip[hidden] {
+    /* 툴팁 숨김 */
+    display: none;
+}
+
+
+/* =========================================================
+   19. 감정 기록 없음
+   ========================================================= */
+
+.emotion-chart-empty {
+    /* 그래프 아래 빈 기록 안내 */
+    margin-top: 12px;
+
+    text-align: center;
+}
+
+
+.emotion-chart-empty-title {
+    margin: 0 0 7px;
+
+    color: #403c36;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+.emotion-chart-empty-description {
+    margin: 0;
+
+    color: #918a81;
+
+    font-size: 13px;
+}
+
+.emotion-summary-board {
+    width: 100%;
+
+    padding:
+        30px
+        28px
+        26px;
+
+    border: 1px solid #eee7dd;
+    border-radius: 28px;
+
+    background:
+        rgba(255, 253, 248, 0.82);
+
+    box-shadow:
+        0 8px 24px rgba(69, 52, 38, 0.06);
+}
+
+.emotion-card-guide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin:
+        -2px
+        0
+        20px;
+
+    color: #9a9188;
+
+    font-size: 12px;
+}
+
+
+.emotion-card-guide-line {
+    width: 45px;
+
+    border-top:
+        2px dotted #ddd1ee;
+}
+
+
+.emotion-card-guide-heart {
+    color: #bda8e1;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   감정별 기록 카드 목록
+   ========================================================= */
+
+.emotion-record-card-list {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    width: 100%;
+}
+
+
+/* 감정 카드 */
+
+.emotion-record-card {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 150px;
+
+    padding:
+        10px
+        14px;
+
+    border: 1px solid #eee7dd;
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    font: inherit;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(70, 55, 40, 0.06);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.emotion-record-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 16px rgba(70, 55, 40, 0.1);
+}
+
+
+/* 감정 이미지 */
+
+.emotion-record-card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+}
+
+
+.emotion-record-card-image img {
+    display: block;
+
+    width: 44px;
+    height: 44px;
+
+    object-fit: contain;
+}
+
+
+/* 감정 정보 */
+
+.emotion-record-card-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 4px;
+}
+
+
+.emotion-record-card-name {
+    color: #403b36;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.emotion-record-card-count {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* 카드별 포인트 색상 */
+
+.emotion-record-card--blue {
+    background: #f5faff;
+}
+
+
+.emotion-record-card--blue
+.emotion-record-card-count {
+    color: #67a7df;
+}
+
+
+.emotion-record-card--pink {
+    background: #fff7f8;
+}
+
+
+.emotion-record-card--pink
+.emotion-record-card-count {
+    color: #e58ea0;
+}
+
+
+.emotion-record-card--yellow {
+    background: #fffdf5;
+}
+
+
+.emotion-record-card--yellow
+.emotion-record-card-count {
+    color: #d6aa36;
+}
+
+
+.emotion-record-card--purple {
+    background: #faf7ff;
+}
+
+
+.emotion-record-card--purple
+.emotion-record-card-count {
+    color: #9276cf;
+}
+
+
+.emotion-record-card--red {
+    background: #fff7f5;
+}
+
+
+.emotion-record-card--red
+.emotion-record-card-count {
+    color: #db827b;
+}
+
+
+.emotion-record-card--orange {
+    background: #fff9f3;
+}
+
+
+.emotion-record-card--orange
+.emotion-record-card-count {
+    color: #d99c59;
+}
+
+/* =========================================================
+   20. 감정별 기록 팝업
    ========================================================= */
 
 body.modal-open {
-    /*
-        팝업이 열렸을 때 뒤쪽 페이지가 스크롤되지 않게 합니다.
-    */
+    /* 팝업 뒤 페이지 스크롤 차단 */
     overflow: hidden;
 }
 
@@ -1120,39 +1247,45 @@ body.modal-open {
 
 
 /* =========================================================
-   13. 장소별 기록 화면 및 지도 설정
+   21. 장소별 기록 화면 및 지도 설정
    ========================================================= */
 
 .location-map-section {
-    /*
-        지도 설정 툴바와 지도를 위아래로 배치합니다.
-    */
+    /* 지도만 세로 배치 */
     display: flex;
     flex-direction: column;
-    gap: 10px;
 
     width: 100%;
 }
 
 
+/*
+    기존 지도 위 별도 툴바는 사용하지 않음
+    list.html에서 .map-toolbar 영역을 제거한 상태 기준
+*/
 .map-toolbar {
-    /*
-        점 세 개 버튼을 오른쪽 끝에 배치합니다.
-    */
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    width: 100%;
+    display: none;
 }
 
 
 .map-display-settings {
-    /*
-        설정 메뉴가 점 세 개 버튼을 기준으로 표시되게 합니다.
-    */
+    /* 설정 메뉴 위치 기준 */
     position: relative;
     z-index: 30;
+}
+
+
+/*
+    탭 행 안에 있는 지도 설정 버튼 영역
+    탭은 가운데 유지하고 설정 버튼만 오른쪽 끝에 고정
+*/
+.diary-tabs-row > .map-display-settings {
+    position: absolute;
+
+    top: 50%;
+    right: 0;
+
+    transform: translateY(-50%);
 }
 
 
@@ -1188,8 +1321,6 @@ body.modal-open {
 .map-settings-button:hover {
     transform: translateY(-1px);
 
-    /*background: #fff8df;*/
-
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
 
@@ -1201,9 +1332,7 @@ body.modal-open {
 
 
 .map-settings-menu {
-    /*
-        점 세 개 버튼 바로 아래에 표시되는 설정 메뉴입니다.
-    */
+    /* 점 세 개 버튼 아래 배치 */
     position: absolute;
     z-index: 40;
 
@@ -1269,18 +1398,18 @@ body.modal-open {
 
 
 /* =========================================================
-   14. 서울 지도
+   22. 서울 지도
    ========================================================= */
 
 .location-map-wrapper {
-    /*
-        서울 지도 SVG의 크기와 가운데 정렬을 담당합니다.
-    */
+    /* 지도 크기 및 중앙 정렬 */
     position: relative;
 
     width: min(800px, 100%);
 
     margin: 0 auto;
+
+    overflow: hidden;
 }
 
 
@@ -1293,9 +1422,7 @@ body.modal-open {
 
 
 .seoul-map path {
-    /*
-        모든 서울 구역 path의 기본 스타일입니다.
-    */
+    /* 서울 구역 기본 스타일 */
     fill: #ffffff;
     stroke: #777777;
     stroke-width: 1;
@@ -1309,18 +1436,13 @@ body.modal-open {
 
 
 .seoul-map path:focus {
-    /*
-        SVG 구역을 클릭했을 때
-        기본 브라우저 외곽선을 제거합니다.
-    */
+    /* SVG 기본 포커스 제거 */
     outline: none;
 }
 
 
 .seoul-map path.has-record {
-    /*
-        기록이 있는 구역에 적용됩니다.
-    */
+    /* 기록 있는 구역 */
     stroke-width: 2;
 
     cursor: pointer;
@@ -1328,20 +1450,13 @@ body.modal-open {
 
 
 .seoul-map path.has-record:hover {
-    /*
-        기록이 있는 구역에 마우스를 올렸을 때
-        살짝 어두워지고 테두리가 굵어집니다.
-    */
-    /*stroke-width: 3;*/
-
+    /* 기록 있는 구역 hover */
     filter: brightness(0.94);
 }
 
 
 .district-labels {
-    /*
-        구 이름 텍스트가 지도 클릭을 방해하지 않게 합니다.
-    */
+    /* 지도 라벨 클릭 방해 제거 */
     pointer-events: none;
 }
 
@@ -1358,16 +1473,12 @@ body.modal-open {
     text-anchor: middle;
     dominant-baseline: middle;
 
-    /*
-        흰색 외곽선을 먼저 그리고
-        그 위에 글자를 표시합니다.
-    */
     paint-order: stroke;
 }
 
 
 /* =========================================================
-   15. 장소별 기록 팝업
+   23. 장소별 기록 팝업
    ========================================================= */
 
 .location-modal {
@@ -1470,115 +1581,544 @@ body.modal-open {
 
 
 /* =========================================================
-   16. 반응형 스타일
+   24. 반응형 스타일
    ========================================================= */
 
-/*
-    화면 너비가 1200px 이하일 때
-    카드 개수를 한 줄에 4개로 줄입니다.
-*/
+
+/* =========================================================
+   1200px 이하
+   ========================================================= */
+
 @media (max-width: 1200px) {
+
+    /* 전체 기록 카드 한 줄 4개 */
     .diary-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
 
-/*
-    화면 너비가 900px 이하일 때
-    카드와 팝업 목록을 한 줄에 3개로 줄입니다.
-*/
+/* =========================================================
+   900px 이하
+   ========================================================= */
+
 @media (max-width: 900px) {
+
+    /*
+        전체 기록 카드와 팝업 카드
+        한 줄에 3개 배치
+    */
     .diary-grid,
     .emotion-modal-grid,
     .location-modal-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+
+    /*
+        감정 도넛 그래프 크기 축소
+
+        기존 360px보다 조금 작게 조정
+        화면이 줄어들기 시작하는 구간에서
+        그래프가 과하게 커 보이지 않도록 함
+    */
+    .emotion-chart-wrapper {
+        width: min(340px, 100%);
+    }
+
+
+    /*
+        감정 카드가 너무 길게 한 줄로 늘어나는 것 방지
+
+        데스크톱에서는 flex이지만
+        900px 이하부터 grid로 변경
+    */
+    .emotion-record-card-list {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+
+    /*
+        기존 min-width: 150px 제거
+
+        grid 칸 너비에 맞춰
+        카드가 자연스럽게 줄어들도록 함
+    */
+    .emotion-record-card {
+        min-width: 0;
+        width: 100%;
+    }
 }
 
 
-/*
-    화면 너비가 760px 이하일 때
-    전체 기록 제목과 필터를 위아래로 배치합니다.
-*/
+/* =========================================================
+   760px 이하
+   ========================================================= */
+
 @media (max-width: 760px) {
+
+    /* 페이지 좌우 여백 축소 */
     .diary-list-container {
-        /*
-            작은 화면에서는 좌우 여백을 각각 20px로 줄입니다.
-        */
         width: calc(100% - 40px);
     }
 
+
+    /* -----------------------------------------------------
+       상단 탭 / 지도 설정 버튼
+       ----------------------------------------------------- */
+
+    .diary-tabs-row > .map-display-settings {
+        right: 0;
+    }
+
+
+    .diary-tabs-row .map-settings-button {
+        width: 38px;
+        height: 38px;
+
+        font-size: 22px;
+    }
+
+
+    /* -----------------------------------------------------
+       전체 기록 헤더
+       ----------------------------------------------------- */
+
     .diary-list-header {
+        /*
+            제목과 필터를
+            세로 방향으로 변경
+        */
         align-items: flex-start;
         flex-direction: column;
+
         gap: 14px;
     }
+
 
     .diary-filter-form,
     .diary-list-controls {
         width: 100%;
     }
 
+
+    /* -----------------------------------------------------
+       기간 설정 팝업
+       ----------------------------------------------------- */
+
     .period-filter {
         /*
-            작은 화면에서는 오른쪽에 표시할 공간이 부족하므로
-            다시 필터 버튼 아래쪽에 표시합니다.
+            데스크톱에서는 오른쪽에 열리지만
+            작은 화면에서는 아래쪽에 표시
         */
         top: calc(100% + 10px);
 
-        /*
-            필터 폼의 왼쪽에 날짜창을 맞춥니다.
-        */
         left: 0;
         right: auto;
 
-        /*
-            날짜 입력창과 버튼이 공간이 부족할 때
-            다음 줄로 내려가도록 합니다.
-        */
         flex-wrap: wrap;
 
+        min-width: min(
+            500px,
+            calc(100vw - 40px)
+        );
+    }
+
+
+    /* -----------------------------------------------------
+       감정별 화면
+       ----------------------------------------------------- */
+
+    .emotion-page-header {
         /*
-            모바일 화면보다 날짜창이 커지지 않게 제한합니다.
+            제목 영역 세로 배치
         */
-        min-width: min(500px, calc(100vw - 40px));
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .emotion-summary-board {
+        /*
+            감정별 전체 보드의
+            좌우 여백 축소
+        */
+        padding:
+            24px
+            18px
+            22px;
+
+        border-radius: 22px;
+    }
+
+
+    .emotion-chart-section {
+        /*
+            기존 min-height: 450px 제거
+
+            모바일에서 도넛 아래에
+            불필요한 빈 공간이 생기지 않도록 함
+        */
+        min-height: 300px;
+    }
+
+
+    .emotion-chart-wrapper {
+        /*
+            화면 너비에 맞춰
+            도넛 그래프 자동 축소
+        */
+        width: min(300px, 78vw);
+    }
+
+
+    .emotion-chart-center-count {
+        font-size: 30px;
+    }
+
+
+    .emotion-chart-center-label {
+        font-size: 13px;
+    }
+
+
+    /*
+        감정 카드
+        한 줄 2개 배치
+    */
+    .emotion-record-card-list {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+
+        width: 100%;
+    }
+
+
+    .emotion-record-card {
+        /*
+            기존 최소 너비 제거
+
+            화면 크기에 따라
+            카드가 자연스럽게 축소됨
+        */
+        min-width: 0;
+        width: 100%;
+
+        padding:
+            10px
+            12px;
+    }
+
+
+    .emotion-record-card-image {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .emotion-record-card-image img {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .emotion-card-guide {
+        margin-bottom: 16px;
     }
 }
 
 
-/*
-    화면 너비가 650px 이하일 때
-    카드 및 팝업 목록을 한 줄에 2개로 줄입니다.
-*/
+/* =========================================================
+   650px 이하
+   ========================================================= */
+
 @media (max-width: 650px) {
+
+    /* -----------------------------------------------------
+       전체 기록 카드
+       ----------------------------------------------------- */
+
     .diary-grid,
     .emotion-modal-grid,
     .location-modal-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        /*
+            전체 기록 및 팝업 카드는
+            한 줄 2개
+        */
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
         gap: 14px;
     }
 
+
     .diary-card-content {
         min-height: 118px;
+
         padding: 12px;
     }
+
 
     .diary-card-title {
         font-size: 14px;
     }
 
-    .emotion-page-header {
-        flex-direction: column;
+
+    /* -----------------------------------------------------
+       감정별 도넛 그래프
+       ----------------------------------------------------- */
+
+    .emotion-chart-section {
+        /*
+            760px 구간보다
+            조금 더 작게 축소
+        */
+        min-height: 270px;
     }
 
-    .emotion-bubble-area {
-        min-height: 720px;
+
+    .emotion-chart-wrapper {
+        /*
+            기존 350px 제거
+
+            760px에서 300px로 줄였는데
+            다시 350px이 되면서 커지던 문제 수정
+        */
+        width: min(270px, 76vw);
     }
+
+
+    .emotion-chart-background,
+    .emotion-chart-segment {
+        /*
+            작은 화면에서
+            도넛 띠 두께 축소
+        */
+        stroke-width: 40;
+    }
+
+
+    .emotion-chart-segment:hover {
+        stroke-width: 44;
+    }
+
+
+    .emotion-chart-center-count {
+        font-size: 27px;
+    }
+
+
+    .emotion-chart-center-label {
+        font-size: 12px;
+    }
+
+
+    /* -----------------------------------------------------
+       감정별 카드
+       ----------------------------------------------------- */
+
+    .emotion-summary-board {
+        padding:
+            20px
+            14px
+            18px;
+
+        border-radius: 18px;
+    }
+
+
+    /*
+        650px 이하에서도
+        일단 두 줄 배치 유지
+
+        너무 빨리 한 줄 하나로 바뀌지 않도록 함
+    */
+    .emotion-record-card-list {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    .emotion-record-card {
+        gap: 8px;
+
+        min-height: 62px;
+
+        padding:
+            9px
+            10px;
+    }
+
+
+    .emotion-record-card-image {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .emotion-record-card-image img {
+        width: 35px;
+        height: 35px;
+    }
+
+
+    .emotion-record-card-name {
+        font-size: 13px;
+    }
+
+
+    .emotion-record-card-count {
+        font-size: 12px;
+    }
+
+
+    /* -----------------------------------------------------
+       팝업
+       ----------------------------------------------------- */
 
     .emotion-modal-content,
     .location-modal-content {
         width: calc(100% - 28px);
+
         padding: 20px;
+    }
+}
+
+
+/* =========================================================
+   480px 이하
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    /* 페이지 좌우 여백 추가 축소 */
+    .diary-list-container {
+        width: calc(100% - 24px);
+    }
+
+
+    /* -----------------------------------------------------
+       감정별 도넛 그래프
+       ----------------------------------------------------- */
+
+    .emotion-chart-section {
+        min-height: 240px;
+    }
+
+
+    .emotion-chart-wrapper {
+        width: min(235px, 72vw);
+    }
+
+
+    .emotion-chart-background,
+    .emotion-chart-segment {
+        /*
+            아주 작은 화면에서
+            도넛 띠 추가 축소
+        */
+        stroke-width: 35;
+    }
+
+
+    .emotion-chart-segment:hover {
+        stroke-width: 38;
+    }
+
+
+    .emotion-chart-center-count {
+        font-size: 24px;
+    }
+
+
+    .emotion-chart-center-label {
+        font-size: 11px;
+    }
+
+
+    /* -----------------------------------------------------
+       감정별 보드
+       ----------------------------------------------------- */
+
+    .emotion-summary-board {
+        padding:
+            18px
+            12px
+            16px;
+
+        border-radius: 16px;
+    }
+
+
+    .emotion-card-guide {
+        gap: 6px;
+
+        margin-bottom: 14px;
+
+        font-size: 11px;
+    }
+
+
+    .emotion-card-guide-line {
+        width: 30px;
+    }
+
+
+    /*
+        아주 작은 모바일에서는
+        감정 카드 한 줄 하나씩 배치
+    */
+    .emotion-record-card-list {
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+    }
+
+
+    .emotion-record-card {
+        min-height: 58px;
+
+        padding:
+            8px
+            12px;
+    }
+
+
+    .emotion-record-card-image {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .emotion-record-card-image img {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    /* -----------------------------------------------------
+       전체 기록 카드
+       ----------------------------------------------------- */
+
+    .diary-grid,
+    .emotion-modal-grid,
+    .location-modal-grid {
+        /*
+            아주 작은 화면에서는
+            기록 카드도 한 줄 하나씩 표시
+        */
+        grid-template-columns: 1fr;
     }
 }

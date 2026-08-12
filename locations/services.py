@@ -27,5 +27,16 @@ def get_verified_place(request):
     return place
 
 
+def clear_verified_place(request):
+    """
+    세션에 남아 있는 위치 인증을 지운다.
+
+    기록이 실제로 저장된 직후에 호출한다. 인증 정보를 그대로 두면 날짜가 바뀌기 전까지
+    같은 Place가 계속 유효한 상태로 남아, 다음 기록이 (사용자가 다시 고르지 않은)
+    이전 장소로 저장될 여지가 생긴다.
+    """
+    request.session.pop(VERIFIED_LOCATION_SESSION_KEY, None)
+
+
 def has_verified_location(request):
     return bool(request.user.is_authenticated and get_verified_place(request))
