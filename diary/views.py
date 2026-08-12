@@ -386,6 +386,12 @@ def diary_list(request):
         if emotion["record_count"] > 0
     ]
 
+    # 기록 횟수 많은 순으로 정렬
+    recorded_emotions.sort(
+        key=lambda emotion: emotion["record_count"],
+        reverse=True,
+    )
+
 
     # ========================================================
     # 9. 가장 많이 기록한 대표 감정 계산

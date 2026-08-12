@@ -1259,6 +1259,141 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
+        /* =========================================================
+       감정 카드 한 줄 표시 개수 계산
+       ========================================================= */
+
+        /* =========================================================
+       감정 카드 한 줄 표시 개수 계산
+       ========================================================= */
+
+    function updateVisibleEmotionCards() {
+
+        const cardList =
+            document.querySelector(
+                ".emotion-record-card-list"
+            );
+
+
+        // 카드 목록 없는 경우 종료
+        if (!cardList) {
+            return;
+        }
+
+
+        const cards =
+            Array.from(
+                emotionRecordCards
+            );
+
+
+        // 카드 없는 경우 종료
+        if (cards.length === 0) {
+            return;
+        }
+
+
+        // 모든 카드 우선 표시
+        cards.forEach((card) => {
+            card.hidden = false;
+        });
+
+
+        // 카드 목록 실제 너비
+        const containerWidth =
+            cardList.clientWidth;
+
+
+        // 카드 사이 간격 계산
+        const computedStyle =
+            window.getComputedStyle(
+                cardList
+            );
+
+        const gap =
+            parseFloat(
+                computedStyle.gap
+            )
+            || 0;
+
+
+        let usedWidth = 0;
+
+        let overflowStarted = false;
+
+
+        cards.forEach((card, index) => {
+
+            /*
+                이미 앞 카드에서 공간 초과 발생한 경우
+                이후 카드 전부 숨김
+            */
+            if (overflowStarted) {
+                card.hidden = true;
+
+                return;
+            }
+
+
+            // 현재 카드 실제 너비
+            const cardWidth =
+                card.getBoundingClientRect().width;
+
+
+            /*
+                첫 번째 카드 제외
+                앞 카드와의 gap 포함
+            */
+            const requiredWidth =
+                cardWidth
+                + (
+                    index > 0
+                        ? gap
+                        : 0
+                );
+
+
+            /*
+                현재 카드를 추가했을 때
+                한 줄 영역을 넘는 경우
+            */
+            if (
+                usedWidth
+                + requiredWidth
+                > containerWidth
+            ) {
+                // 현재 카드 숨김
+                card.hidden = true;
+
+                // 이후 카드도 모두 숨기도록 표시
+                overflowStarted = true;
+
+                return;
+            }
+
+
+            // 현재 카드 너비 누적
+            usedWidth +=
+                requiredWidth;
+        });
+    }
+
+        /* =========================================================
+       감정 카드 최초 표시 개수 계산
+       ========================================================= */
+
+    updateVisibleEmotionCards();
+
+
+    /* =========================================================
+       화면 크기 변경 시 감정 카드 재계산
+       ========================================================= */
+
+    window.addEventListener(
+        "resize",
+        updateVisibleEmotionCards
+    );
+
 
     /* =========================================================
        30. 감정 팝업 닫기
