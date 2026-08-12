@@ -1,0 +1,74 @@
+<!-- =========================
+        감정별 기록 팝업
+========================== -->
+<div
+    class="emotion-modal"
+    id="emotion-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="emotion-modal-title"
+    hidden
+>
+    <div
+        class="emotion-modal-backdrop"
+        data-modal-close
+    ></div>
+
+    <div class="emotion-modal-content">
+        <div class="emotion-modal-header">
+            <div>
+                <p class="emotion-modal-label">
+                    감정별 기록
+                </p>
+
+                <h2 id="emotion-modal-title">
+                    <span id="emotion-modal-name">
+                        감사
+                    </span>
+                    기록
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="emotion-modal-close"
+                data-modal-close
+                aria-label="팝업 닫기"
+            >
+                ×
+            </button>
+        </div>
+
+
+        <div class="emotion-modal-grid">
+            {% for record in records %}
+
+                {% comment %}
+                data-record-emotion에는 실제 대표 감정 번호가 들어갑니다.
+
+                예:
+                record.main_emotion이 3이면
+                data-record-emotion="3"
+                {% endcomment %}
+
+                <div
+                    class="emotion-modal-record"
+                    data-record-emotion="{{ record.main_emotion }}"
+                    hidden
+                >
+                    {% include "diary/partials/diary_card.html" with record=record %}
+                </div>
+
+            {% endfor %}
+        </div>
+
+
+        <div
+            class="emotion-modal-empty"
+            id="emotion-modal-empty"
+            hidden
+        >
+            이 감정으로 작성한 기록이 없어요.
+        </div>
+    </div>
+</div>
