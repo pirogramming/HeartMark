@@ -36,7 +36,12 @@
                 {% endif %}
             </div>
 
-            <div class="record-detail-content">{{ record.content|linebreaksbr }}</div>
+            <div class="record-detail-content">
+                {% if record.title %}
+                <h1 class="record-detail-title">{{ record.title }}</h1>
+                {% endif %}
+                <div class="record-detail-body">{{ record.content|linebreaksbr }}</div>
+            </div>
         </div>
 
         <footer class="record-detail-footer">

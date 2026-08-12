@@ -1066,6 +1066,18 @@ body.record-delete-modal-open {
     line-height: 36px;
 }
 
+.record-detail-title {
+    height: 36px;
+    margin: 0;
+    color: var(--record-ink);
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    line-height: 36px;
+}
+
+.record-detail-body {
+    min-height: 100%;
+}
+
 .record-detail-emotions {
     display: flex;
     min-width: 0;
