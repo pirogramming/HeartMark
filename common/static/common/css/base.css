@@ -466,6 +466,217 @@ body {
     }
 }
 
+/*
+ * PC 파츠 배치 기준
+ * 1440 × 900 디자인 캔버스를 화면 가운데 고정하고 모든 좌표를 px로 유지한다.
+ * 화면이 넓어져도 배열은 움직이지 않으며, 짧은 페이지에서는 아래 파츠가 잘린다.
+ */
+@media (min-width: 1024px) {
+    .page-particle--repeat {
+        display: block;
+    }
+
+    .page-particles .page-particle--1 {
+        --particle-size: 72px;
+        --particle-top: 378px;
+        left: calc(50% - 720px);
+    }
+
+    .page-particles .page-particle--2 {
+        --particle-size: 52px;
+        --particle-top: 612px;
+        left: calc(50% - 720px + 158px);
+    }
+
+    .page-particles .page-particle--3 {
+        --particle-size: 52px;
+        --particle-top: 189px;
+        left: calc(50% - 720px + 144px);
+    }
+
+    .page-particles .page-particle--4 {
+        --particle-size: 30px;
+        --particle-top: 612px;
+        left: calc(50% - 720px + 605px);
+    }
+
+    .page-particles .page-particle--5 {
+        --particle-size: 52px;
+        --particle-top: 810px;
+        left: calc(50% - 720px + 101px);
+    }
+
+    .page-particles .page-particle--6 {
+        --particle-size: 30px;
+        --particle-top: 675px;
+        left: calc(50% - 720px + 1224px);
+    }
+
+    .page-particles .page-particle--7 {
+        --particle-size: 68px;
+        --particle-top: 90px;
+        left: calc(50% - 720px + 1426px);
+    }
+
+    .page-particles .page-particle--8 {
+        --particle-size: 68px;
+        --particle-top: 423px;
+        left: calc(50% - 720px + 1339px);
+    }
+
+    .page-particles .page-particle--9 {
+        --particle-size: 52px;
+        --particle-top: 756px;
+        left: calc(50% - 720px + 1022px);
+    }
+
+    .page-particles .page-particle--10 {
+        --particle-size: 32px;
+        --particle-top: 225px;
+        left: calc(50% - 720px + 936px);
+    }
+
+    .page-particles .page-particle--12 {
+        --particle-size: 72px;
+        --particle-top: 9px;
+        left: calc(50% - 720px + 1224px);
+    }
+
+    .page-particles .page-particle--13 {
+        --particle-size: 32px;
+        --particle-top: 45px;
+        left: calc(50% - 720px + 29px);
+    }
+
+    .page-particles .page-particle--14 {
+        --particle-size: 68px;
+        --particle-top: 720px;
+        left: calc(50% - 720px + 1354px);
+    }
+
+    .page-particles .page-particle--15 {
+        --particle-size: 32px;
+        --particle-top: 810px;
+        left: calc(50% - 720px + 475px);
+    }
+
+    .page-particles .page-particle--16 {
+        --particle-size: 72px;
+        --particle-top: 9px;
+        left: calc(50% - 720px + 504px);
+    }
+
+    .page-particles .page-particle--18 {
+        --particle-size: 22px;
+        --particle-top: 279px;
+        left: calc(50% - 720px + 360px);
+    }
+
+    /* 첫 900px 디자인 바로 다음에 이어지는 두 번째 파츠 배치 */
+    .page-particles .page-particle--1.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_033.png");
+        --particle-size: 72px;
+        --particle-top: 1206px;
+        left: calc(50% - 720px);
+    }
+
+    .page-particles .page-particle--2.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_022.png");
+        --particle-size: 58px;
+        --particle-top: 1377px;
+        left: calc(50% - 720px + 158px);
+    }
+
+    .page-particles .page-particle--3.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_021.png");
+        --particle-size: 52px;
+        --particle-top: 1089px;
+        left: calc(50% - 720px + 144px);
+    }
+
+    .page-particles .page-particle--4.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_055.png");
+        --particle-size: 30px;
+        --particle-top: 1494px;
+        left: calc(50% - 720px + 317px);
+    }
+
+    .page-particles .page-particle--5.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_003.png");
+        --particle-size: 58px;
+        --particle-top: 1602px;
+        left: calc(50% - 720px + 101px);
+    }
+
+    .page-particles .page-particle--6.page-particle--repeat {
+        --particle-top: 1485px;
+        left: calc(50% - 720px + 1224px);
+    }
+
+    .page-particles .page-particle--7.page-particle--repeat {
+        --particle-top: 1008px;
+        left: calc(50% - 720px + 1426px);
+    }
+
+    .page-particles .page-particle--8.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_002.png");
+        --particle-top: 1296px;
+        left: calc(50% - 720px + 1339px);
+    }
+
+    .page-particles .page-particle--9.page-particle--repeat {
+        --particle-top: 1638px;
+        left: calc(50% - 720px + 1022px);
+    }
+
+    .page-particles .page-particle--10.page-particle--repeat {
+        --particle-top: 1125px;
+        left: calc(50% - 720px + 936px);
+    }
+
+    .page-particles .page-particle--12.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_020.png");
+        --particle-top: 990px;
+        left: calc(50% - 720px + 1181px);
+    }
+
+    .page-particles .page-particle--13.page-particle--repeat {
+        --particle-top: 972px;
+        left: calc(50% - 720px + 29px);
+    }
+
+    .page-particles .page-particle--14.page-particle--repeat {
+        --particle-top: 1602px;
+        left: calc(50% - 720px + 1354px);
+    }
+
+    .page-particles .page-particle--15.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_019.png");
+        --particle-size: 54px;
+        --particle-top: 1692px;
+        left: calc(50% - 720px + 360px);
+    }
+
+    .page-particles .page-particle--16.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_011.png");
+        --particle-top: 954px;
+        left: calc(50% - 720px + 720px);
+    }
+
+    .page-particles .page-particle--18.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_007.png");
+        --particle-top: 1233px;
+        left: calc(50% - 720px + 360px);
+    }
+
+    .page-particles .page-particle--19.page-particle--repeat {
+        --particle-image: url("/static/accounts/images/particle_018.png");
+        --particle-size: 38px;
+        --particle-top: 1269px;
+        left: calc(50% - 720px + 1123px);
+    }
+}
+
 a {
     color: inherit;
 }
@@ -591,5 +802,49 @@ input {
     .site-nav a {
         font-size: 15px;
         white-space: nowrap;
+    }
+}
+
+/* PC 공통 파츠: 1440 × 1800 고정 디자인을 페이지 높이만큼 반복한다. */
+@media (min-width: 1024px) {
+    html,
+    body {
+        min-height: 100%;
+    }
+
+    body {
+        min-height: 100vh;
+    }
+
+    .page-particles {
+        inset: 0;
+        min-height: 100vh;
+        background: none;
+    }
+
+    .page-particles::before,
+    .page-particles::after {
+        position: absolute;
+        right: 0;
+        left: 0;
+        content: "";
+    }
+
+    /* 첫 이미지는 1800px 전체를 그대로 보여준다. */
+    .page-particles::before {
+        top: 0;
+        height: 1800px;
+        background: url("../images/page-particles-final.png") top center / 1695px 1800px no-repeat;
+    }
+
+    /* 첫 이미지가 끝난 뒤에만 반복 전용 배치를 이어 붙인다. */
+    .page-particles::after {
+        top: 1800px;
+        bottom: 0;
+        background: url("../images/page-particles-repeat.png") top center / 1695px 900px repeat-y;
+    }
+
+    .page-particles .page-particle {
+        display: none;
     }
 }
