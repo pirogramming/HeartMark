@@ -1,0 +1,46 @@
+# EC2에서 실행되는 배포용 compose 파일.
+# build 섹션이 없다. 이미지는 CI가 Docker Hub에 올린 것을 pull해서 쓴다.
+#
+# EC2의 ~/heartmark/ 에 이 파일과 docker/nginx/default.conf, .env 가 있어야 한다.
+# .env는 CI가 건드리지 않으니 서버에서 한 번 만들어두고 계속 재사용한다.
+
+services:
+  web:
+    image: ${DOCKER_USERNAME}/heartmark:staging
+    env_file:
+      - .env
+    environment:
+      # 서버에서는 DEBUG를 코드로 못 켜게 여기에 못박는다.
+      # .env를 실수로 빠뜨려도 프로덕션에서 DEBUG가 켜지지 않는다.
+      DJANGO_DEBUG: "False"
+      DJANGO_DB_PATH: /app/data/db.sqlite3
+      DJANGO_MEDIA_ROOT: /app/media
+      DJANGO_STATIC_ROOT: /app/staticfiles
+    volumes:
+      # SQLite 파일, 업로드 미디어, 정적 파일을 볼륨에 둔다.
+      # 이미지가 새로 배포돼도 이 세 개는 그대로 남는다.
+      - db_data:/app/data
+      - media_data:/app/media
+      - static_data:/app/staticfiles
+    # 외부로 포트를 열지 않는다. nginx만 이 컨테이너에 접근한다.
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # web이 collectstatic으로 채운 정적 파일을 같은 볼륨으로 읽는다.
+      - static_data:/app/staticfiles:ro
+      - media_data:/app/media:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  media_data:
+  static_data:

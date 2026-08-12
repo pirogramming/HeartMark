@@ -25,9 +25,28 @@ def load_local_env():
 
 load_local_env()
 
-SECRET_KEY = "development-only"
-DEBUG = True
-ALLOWED_HOSTS = []
+# 배포 환경에서는 아래 값들을 모두 환경변수로 주입한다.
+# 기본값은 로컬 개발 기준이라, .env 없이도 로컬 실행은 그대로 동작한다.
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "development-only")
+
+# 서버용 compose 파일에 DJANGO_DEBUG=False가 박혀 있으므로
+# 누가 .env를 빠뜨려도 프로덕션에서 DEBUG가 켜지지 않는다.
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() not in ("false", "0", "no")
+
+# "1.2.3.4,example.com" 형태의 콤마 구분 문자열을 받는다.
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+    if host.strip()
+]
+
+# nginx 뒤에 있을 때 POST 요청의 CSRF origin 검사를 통과시키기 위한 값.
+# "http://1.2.3.4" 처럼 스킴을 반드시 포함해야 한다.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -84,10 +103,23 @@ TEMPLATES = [
 ]
 WSGI_APPLICATION = "config.wsgi.application"
 
+# 컨테이너에서는 DB 파일을 /app/data 아래에 둔다.
+# BASE_DIR(=/app)에 볼륨을 마운트하면 코드가 덮여버리므로 경로를 분리했다.
+DB_PATH = os.environ.get("DJANGO_DB_PATH") or (BASE_DIR / "db.sqlite3")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_PATH,
+        "OPTIONS": {
+            # WAL 모드는 읽기와 쓰기가 서로를 막지 않게 해준다.
+            # gunicorn 워커가 여러 개인 환경에서 "database is locked"를 크게 줄여준다.
+            "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;",
+            # 잠금이 걸렸을 때 바로 실패하지 않고 최대 20초까지 기다린다.
+            "timeout": 20,
+            # 쓰기 트랜잭션의 잠금을 시작 시점에 잡아 갱신 충돌을 방지한다.
+            "transaction_mode": "IMMEDIATE",
+        },
     }
 }
 
@@ -96,9 +128,16 @@ TIME_ZONE = "Asia/Seoul"
 USE_I18N = True
 USE_TZ = True
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# collectstatic이 각 앱의 static/을 모아두는 위치. nginx가 이 디렉토리를 서빙한다.
+STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT") or (BASE_DIR / "staticfiles")
+
+# 프로젝트 루트의 static/은 현재 존재하지 않는다.
+# 없는 경로를 그대로 두면 collectstatic이 W004 경고를 내므로 있을 때만 넣는다.
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+
 MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.environ.get("DJANGO_MEDIA_ROOT") or (BASE_DIR / "media")
 
 LOGIN_URL = "/accounts/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

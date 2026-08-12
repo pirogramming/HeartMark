@@ -4,33 +4,69 @@ on:
   push:
     branches:
       - staging      # staging 브랜치에 push할 때 실행
+  workflow_dispatch:  # Actions 탭에서 수동 실행도 가능하게 함
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest    # GitHub Actions 실행 환경
+    runs-on: ubuntu-latest
 
     steps:
       - name: 코드 체크아웃
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Docker Hub 로그인
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker 이미지 빌드 및 push
+        # docker-compose.yml의 ${DOCKER_USERNAME}는 runner의 환경변수를 읽는다.
+        # login-action은 로그인만 할 뿐 이 값을 심어주지 않으므로 직접 넣어야 한다.
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           docker compose build
           docker compose push
 
-      - name: EC2에 배포
-        uses: appleboy/ssh-action@v0.1.6
+      - name: 배포 파일 EC2로 전송
+        # EC2에는 소스가 없으므로 compose 파일과 nginx 설정을 매 배포마다 보내준다.
+        # .env는 서버에서 직접 관리하며 여기서 덮어쓰지 않는다.
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
+          source: "docker-compose.prod.yml,docker/nginx/default.conf"
+          target: "~/heartmark"
+
+      - name: EC2에 배포
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          envs: DOCKER_USERNAME,DOCKER_PASSWORD
           script: |
-            cd ~
-            docker compose pull
-            docker compose up -d
+            set -e
+            cd ~/heartmark
+
+            # .env가 없으면 앱이 시크릿 없이 떠서 소셜 로그인 등이 조용히 깨진다.
+            # 배포를 진행하기 전에 확실히 실패시킨다.
+            if [ ! -f .env ]; then
+              echo ".env가 없습니다. ~/heartmark/.env를 먼저 만들어주세요."
+              exit 1
+            fi
+
+            # private 이미지를 pull하려면 EC2에서도 로그인이 필요하다.
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
+
+            # 이전 배포에서 남은 태그 없는 이미지를 정리한다.
+            # EC2 디스크가 작으면 금방 가득 차기 때문에 매 배포마다 돌린다.
+            docker image prune -f
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

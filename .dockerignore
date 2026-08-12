@@ -1,0 +1,23 @@
+.git
+.github
+.venv
+venv
+__pycache__
+*.py[cod]
+
+# 로컬 개발용 DB/미디어는 이미지에 넣지 않는다.
+# 서버에서는 named volume에 별도로 보관된다.
+db.sqlite3
+media/
+staticfiles/
+data/
+
+# 시크릿은 이미지에 절대 굽지 않는다. EC2의 .env를 런타임에 주입한다.
+.env
+*.env
+!.env.example
+
+.idea
+.vscode
+docs
+README.md
