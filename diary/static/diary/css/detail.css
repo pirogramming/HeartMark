@@ -1088,7 +1088,6 @@ body.record-content-modal-open {
     overflow: hidden;
 }
 
-
 /* ==================================================
    모바일 팝업
 ================================================== */
@@ -1096,209 +1095,418 @@ body.record-content-modal-open {
 @media (max-width: 560px) {
 
     .record-content-modal {
+        /*
+            화면 가장자리와 팝업 사이 여백.
+        */
         padding: 14px;
     }
+
 
     .record-content-modal__dialog,
     .record-content-modal__dialog--photo,
     .record-content-modal__dialog--read {
+        /*
+            모바일 화면 좌우 14px씩 여백 확보.
+        */
         width: calc(100vw - 28px);
+
+        /*
+            화면 높이를 넘지 않도록 제한.
+        */
         max-height: calc(100vh - 28px);
+
+        /*
+            팝업 내부 여백 축소.
+        */
         padding: 22px 18px;
+
+        /*
+            손그림 느낌의 불규칙한 둥근 모서리 유지.
+        */
         border-radius: 24px 19px 27px 21px;
     }
 
+
     .record-content-modal__title {
+        /*
+            팝업 제목 크기 축소.
+        */
         font-size: 24px;
     }
 
+
     .record-content-modal__photo {
+        /*
+            사진 영역 최소 높이.
+        */
         min-height: 220px;
     }
 
+
     .record-content-modal__photo img {
+        /*
+            사진이 화면 아래로 넘치는 현상 방지.
+        */
         max-height: calc(100vh - 180px);
     }
 
+
     .record-content-modal__diary p {
+        /*
+            일기 본문 크기와 줄 간격 조절.
+        */
         font-size: 15px;
         line-height: 34px;
     }
 
+
     .record-content-modal__footer {
+        /*
+            모바일에서 하단 내용을 세로 배치.
+        */
         align-items: flex-start;
         flex-direction: column;
         gap: 5px;
     }
 }
 
+
+
 /* ==================================================
-    태블릿 화면
-    화면 너비가 850px 이하일 때
-   ================================================== */
+   태블릿 화면
+   화면 너비가 850px 이하일 때
+================================================== */
 
 @media (max-width: 850px) {
 
     .record-detail-page {
         /*
-            작은 화면에서 좌우 여백을 줄입니다.
+            작은 화면에서 좌우 여백 축소.
         */
         width: calc(100% - 30px);
 
         /*
-            상단 여백을 조금 줄입니다.
+            상단 헤더 공간 확보.
         */
         padding-top: 145px;
     }
 
+
     .emotion-summary {
         /*
-            태블릿에서는 카드 3개를
-            세로 형태로 바꿉니다.
-
-            가운데 대표 카드가 첫 번째,
-            보조 카드 2개가 아래쪽에 오게 하려면
-            HTML 순서를 바꾸거나 order를 사용해야 합니다.
+            감정 카드 3개를 한 줄에 유지.
         */
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
 
         /*
-            세로 카드 사이 간격입니다.
+            카드 사이 간격 축소.
         */
-        gap: 18px;
+        gap: 14px;
 
         /*
-            카드 최대 너비를 가운데 맞추기 위한 정렬입니다.
+            세 카드가 동일한 영역을 사용하도록 설정.
         */
-        justify-items: center;
+        align-items: center;
+
+        /*
+            전체 영역 사용.
+        */
+        width: 100%;
     }
+
 
     .emotion-card {
         /*
-            태블릿에서 카드가 화면 전체를 너무 넓게 차지하지 않도록
-            최대 너비를 설정합니다.
+            기존 고정 너비 제거.
+            각 grid 칸 너비에 맞춤.
         */
-        width: min(430px, 100%);
+        width: 100%;
+
+        /*
+            카드가 grid 영역보다 커지는 현상 방지.
+        */
+        min-width: 0;
     }
+
+
+    .emotion-card--secondary {
+        /*
+            보조 감정 카드 높이 축소.
+        */
+        min-height: 300px;
+
+        /*
+            카드 내부 여백 축소.
+        */
+        padding: 22px 12px;
+    }
+
 
     .emotion-card--main {
         /*
-            대표 감정 카드를 첫 번째로 보여줍니다.
-
-            원래 HTML에서는:
-            왼쪽 보조 → 대표 → 오른쪽 보조
-
-            order: -1을 주면 대표 카드가 가장 위로 올라갑니다.
+            기존 대표 카드 우선 배치 해제.
+            HTML 원래 순서 유지.
         */
-        order: -1;
+        order: 0;
+
+        /*
+            대표 카드 크기 축소.
+        */
+        min-height: 340px;
+
+        /*
+            카드 내부 여백 축소.
+        */
+        padding: 22px 12px;
+    }
+
+
+    .emotion-card-image-wrapper {
+        /*
+            보조 감정 이미지 영역 축소.
+        */
+        width: 115px;
+        height: 115px;
+    }
+
+
+    .emotion-card-image-wrapper--main {
+        /*
+            대표 감정 이미지 영역 축소.
+        */
+        width: 145px;
+        height: 145px;
+    }
+
+
+    .emotion-card-name {
+        /*
+            보조 감정 이름 크기 축소.
+        */
+        font-size: 18px;
+    }
+
+
+    .emotion-card-name--main {
+        /*
+            대표 감정 이름 크기 축소.
+        */
+        font-size: 24px;
     }
 }
 
 
+
 /* ==================================================
-    모바일 화면
-    화면 너비가 560px 이하일 때
-   ================================================== */
+   모바일 화면
+   화면 너비가 560px 이하일 때
+================================================== */
 
 @media (max-width: 560px) {
 
     .record-detail-page {
         /*
-            모바일에서 위쪽과 아래쪽 여백을 줄입니다.
+            모바일 위아래 여백 축소.
         */
         padding: 130px 0 70px;
     }
 
+
     .record-detail-header {
         /*
-            모바일에서 제목과 카드 사이 간격을 줄입니다.
+            제목과 감정 카드 사이 간격 축소.
         */
-        margin-bottom: 30px;
+        margin-bottom: 24px;
     }
+
 
     .record-detail-location {
         /*
-            모바일 장소명 글자 크기입니다.
+            모바일 장소명 크기.
         */
         font-size: 29px;
     }
 
+
     .record-detail-date {
         /*
-            모바일 날짜 글자 크기입니다.
+            모바일 날짜 크기.
         */
         font-size: 16px;
     }
 
-    .emotion-card--secondary {
-        /*
-            모바일에서 보조 카드 높이를 줄입니다.
-        */
-        min-height: 270px;
-    }
 
-    .emotion-card--main {
-        /*
-            모바일에서 대표 카드 높이를 줄입니다.
-        */
-        min-height: 340px;
-    }
+    /* ==================================================
+       감정 카드
+    ================================================== */
 
-    .emotion-card-image-wrapper {
+    .emotion-summary {
         /*
-            모바일에서 보조 감정 이미지 영역을 줄입니다.
+            모바일에서도 카드 3개 한 줄 유지.
         */
-        width: 110px;
-        height: 110px;
-    }
-
-    .emotion-card-image-wrapper--main {
-        /*
-            모바일에서 대표 감정 이미지 영역을 줄입니다.
-        */
-        width: 160px;
-        height: 160px;
-    }
-
-    .emotion-card-name {
-        /*
-            모바일 보조 감정 이름 크기입니다.
-        */
-        font-size: 18px;
-    }
-
-    .emotion-card-name--main {
-        /*
-            모바일 대표 감정 이름 크기입니다.
-        */
-        font-size: 27px;
-    }
-
-    .record-detail-actions {
-        /*
-            모바일에서는 버튼을 세로로 나열합니다.
-        */
-        flex-direction: column;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
 
         /*
-            버튼 전체 너비를 제한하고 가운데 정렬합니다.
+            좁은 화면에 맞춰 카드 사이 간격 축소.
         */
-        width: min(320px, 100%);
+        gap: 8px;
 
         /*
-            좌우 자동 여백으로 버튼 그룹을 가운데 배치합니다.
-        */
-        margin: 30px auto 0;
-    }
-
-    .record-action-button {
-        /*
-            모바일에서는 버튼 3개를 같은 너비로 만듭니다.
+            카드 영역 전체 너비 사용.
         */
         width: 100%;
 
         /*
-            버튼 내용을 가운데 배치합니다.
+            좌우 약간의 내부 여백.
+        */
+        padding: 0 4px;
+
+        /*
+            padding 포함 너비 계산.
+        */
+        box-sizing: border-box;
+    }
+
+
+    .emotion-card {
+        /*
+            각 grid 칸에 맞춰 카드 너비 결정.
+        */
+        width: 100%;
+
+        /*
+            내용 때문에 카드가 강제로 넓어지는 현상 방지.
+        */
+        min-width: 0;
+
+        /*
+            카드 모서리 크기 축소.
+        */
+        border-radius: 22px;
+
+        /*
+            카드 내부 여백 축소.
+        */
+        padding: 15px 6px;
+    }
+
+
+    .emotion-card--secondary {
+        /*
+            보조 카드 높이 축소.
+        */
+        min-height: 220px;
+    }
+
+
+    .emotion-card--main {
+        /*
+            대표 카드도 동일 행 유지.
+        */
+        order: 0;
+
+        /*
+            대표 감정임을 보여주기 위해
+            보조 카드보다 약간 크게 유지.
+        */
+        min-height: 245px;
+    }
+
+
+    /* ==================================================
+       감정 이미지
+    ================================================== */
+
+    .emotion-card-image-wrapper {
+        /*
+            보조 감정 이미지 영역 축소.
+        */
+        width: 76px;
+        height: 76px;
+    }
+
+
+    .emotion-card-image-wrapper--main {
+        /*
+            대표 감정 이미지 영역.
+            보조 감정보다 조금 크게 유지.
+        */
+        width: 92px;
+        height: 92px;
+    }
+
+
+    .emotion-card-image-wrapper img,
+    .emotion-card-image-wrapper--main img {
+        /*
+            이미지 영역 안에서 비율 유지.
+        */
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+
+    /* ==================================================
+       감정 이름
+    ================================================== */
+
+    .emotion-card-name {
+        /*
+            보조 감정 이름 크기 축소.
+        */
+        font-size: 14px;
+
+        /*
+            좁은 카드에서 줄바꿈 최소화.
+        */
+        white-space: nowrap;
+    }
+
+
+    .emotion-card-name--main {
+        /*
+            대표 감정 이름은 조금 더 크게 표시.
+        */
+        font-size: 18px;
+
+        /*
+            좁은 카드에서 줄바꿈 최소화.
+        */
+        white-space: nowrap;
+    }
+
+
+    /* ==================================================
+       Photo / Read / Listen 버튼
+    ================================================== */
+
+    .record-detail-actions {
+        /*
+            모바일에서는 버튼 세로 배치.
+        */
+        flex-direction: column;
+
+        /*
+            버튼 영역 최대 너비 제한.
+        */
+        width: min(320px, 100%);
+
+        /*
+            버튼 그룹 가운데 정렬.
+        */
+        margin: 30px auto 0;
+    }
+
+
+    .record-action-button {
+        /*
+            세 버튼 동일한 너비 사용.
+        */
+        width: 100%;
+
+        /*
+            버튼 내부 아이콘과 글자 가운데 배치.
         */
         justify-content: center;
     }
