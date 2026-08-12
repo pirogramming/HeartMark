@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: ${DOCKER_USERNAME}/my-app:staging   # Docker Hub에 올릴 이미지 이름
+    ports:
+      - "8000:8000"                            # EC2외부포트:컨테이너포트
+    restart: always
