@@ -81,6 +81,35 @@
     margin: 0;
 }
 
+.share-record-select {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 14px;
+}
+
+.share-record-select > span {
+    color: #6f5545;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.share-record-select select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid #e1d2c3;
+    border-radius: 13px;
+    outline: none;
+    color: #46372d;
+    background: #fff;
+    font: inherit;
+}
+
+.share-record-select select:focus {
+    border-color: #cf8a66;
+    box-shadow: 0 0 0 3px rgba(207, 138, 102, 0.13);
+}
+
 .share-letter__header h2 {
     margin-bottom: 5px;
     font-size: 1.55rem;

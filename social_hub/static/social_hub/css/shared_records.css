@@ -84,11 +84,17 @@
 }
 
 .shared-mailbox__toolbar > a {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
     padding: 10px 16px;
     border: 1px solid #d7c2af;
     border-radius: 11px;
+    color: var(--shared-ink);
     background: #fffdf7;
     font-weight: 700;
+    line-height: 1;
     text-decoration: none;
 }
 
@@ -304,7 +310,9 @@
     font-size: 0.7rem;
 }
 
-.shared-record-card__footer button {
+.shared-record-card__footer a {
+    display: inline-grid;
+    place-items: center;
     min-height: 41px;
     padding: 0 17px;
     border: 1px solid #58463a;
@@ -313,6 +321,18 @@
     background: var(--shared-accent);
     font-weight: 700;
     cursor: pointer;
+    text-decoration: none;
+}
+
+.shared-record-card__photo > span {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    padding: 16px;
+    color: var(--shared-muted);
+    font-size: 0.78rem;
+    text-align: center;
 }
 
 .shared-mailbox > .friend-empty {
@@ -439,7 +459,7 @@
         padding: 10px 16px 18px;
     }
 
-    .shared-record-card__footer button {
+    .shared-record-card__footer a {
         width: 100%;
     }
 

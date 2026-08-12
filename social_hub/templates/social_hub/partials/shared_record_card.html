@@ -2,7 +2,7 @@
 <article class="shared-record-card">
     <header class="shared-record-card__sender">
         <span class="shared-record-card__avatar">
-            <img src="{% static item.sender_character_static %}" alt="">
+            <img src="{{ item.sender_character_url }}" alt="">
         </span>
         <div>
             <strong>{{ item.sender_name }}님이 보낸 마음 편지</strong>
@@ -13,7 +13,11 @@
 
     <div class="shared-record-card__body">
         <div class="shared-record-card__photo">
-            <img src="{% static item.image_static %}" alt="{{ item.record_date }} 기록 사진">
+            {% if item.image_url %}
+            <img src="{{ item.image_url }}" alt="{{ item.record_date }} 기록 사진">
+            {% else %}
+            <span>등록된 사진이 없어요.</span>
+            {% endif %}
         </div>
 
         <div class="shared-record-card__content">
@@ -53,6 +57,6 @@
 
     <footer class="shared-record-card__footer">
         <span>{{ item.record_date }}의 마음자국</span>
-        <button type="button" data-open-shared-record data-record-id="{{ item.record_id }}">기록 보러가기</button>
+        <a href="{{ item.detail_url }}">기록 보러가기</a>
     </footer>
 </article>
