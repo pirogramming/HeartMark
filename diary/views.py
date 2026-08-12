@@ -994,7 +994,7 @@ def diary_detail(request, pk):
         "right_emotion": right_emotion,
 
         # 음악
-        "music": musics,
+        "musics": musics,
     }
 
 
