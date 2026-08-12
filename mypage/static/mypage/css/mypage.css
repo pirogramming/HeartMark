@@ -15,7 +15,7 @@
     position: relative;
     min-height: calc(100vh - 100px);
     overflow: hidden;
-    padding: 125px max(24px, 7vw) 78px;
+    padding: 66px max(24px, 7vw) 78px;
     color: var(--mypage-ink);
     background: var(--mypage-paper);
 }
@@ -32,8 +32,8 @@
 .mypage-character-wrap {
     position: relative;
     display: grid;
-    width: 142px;
-    height: 142px;
+    width: 158px;
+    height: 158px;
     place-items: center;
     border: 1.5px solid #9f8d7e;
     border-radius: 50%;
@@ -41,15 +41,15 @@
 }
 
 .mypage-character {
-    width: 112px;
-    height: 112px;
+    width: 126px;
+    height: 126px;
     object-fit: contain;
 }
 
 .mypage-character-fallback {
     display: grid;
-    width: 104px;
-    height: 104px;
+    width: 116px;
+    height: 116px;
     place-items: center;
     border-radius: 48% 52% 46% 54%;
     color: var(--mypage-ink);
@@ -63,15 +63,14 @@
     right: 2px;
     bottom: 4px;
     display: grid;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     place-items: center;
     border: 1.5px solid #9f8d7e;
     border-radius: 50%;
     color: var(--mypage-ink);
     background: var(--mypage-accent);
-    font-size: 1.1rem;
     cursor: pointer;
 }
 
@@ -575,6 +574,11 @@
     transform: rotate(-2deg);
 }
 
+.overview-item--emotion .overview-icon:not(.overview-icon--empty) {
+    border: 0;
+    transform: none;
+}
+
 .overview-symbol {
     color: #fff !important;
 }
@@ -638,6 +642,11 @@
 }
 
 .weekly-mood-illustration--empty {
+}
+
+.weekly-mood-illustration:not(.weekly-mood-illustration--empty) {
+    border: 0;
+    transform: none;
 }
 
 .weekly-mood-content p,
@@ -920,7 +929,7 @@
 /* Tablet: 768px - 1023px */
 @media (max-width: 1023px) {
     .mypage-screen {
-        padding: 112px 32px 68px;
+        padding: 64px 32px 68px;
     }
 
     .mypage-profile {
@@ -932,13 +941,13 @@
     }
 
     .mypage-character-wrap {
-        width: 128px;
-        height: 128px;
+        width: 140px;
+        height: 140px;
     }
 
     .mypage-character {
-        width: 102px;
-        height: 102px;
+        width: 112px;
+        height: 112px;
     }
 
     .attendance-card,
@@ -1019,7 +1028,7 @@
 @media (max-width: 767px) {
     .mypage-screen {
         min-height: calc(100vh - 72px);
-        padding: 92px 14px 52px;
+        padding: 62px 14px 52px;
     }
 
     .mypage-profile {
@@ -1044,13 +1053,13 @@
     }
 
     .mypage-character-wrap {
-        width: 112px;
-        height: 112px;
+        width: 120px;
+        height: 120px;
     }
 
     .mypage-character {
-        width: 88px;
-        height: 88px;
+        width: 94px;
+        height: 94px;
     }
 
     .mypage-edit-button {
