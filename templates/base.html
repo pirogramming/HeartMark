@@ -11,7 +11,44 @@
     {% endif %}
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
+    <div class="page-particles" aria-hidden="true">
+        <span class="page-particle page-particle--1"></span>
+        <span class="page-particle page-particle--2"></span>
+        <span class="page-particle page-particle--3"></span>
+        <span class="page-particle page-particle--4"></span>
+        <span class="page-particle page-particle--5"></span>
+        <span class="page-particle page-particle--6"></span>
+        <span class="page-particle page-particle--7"></span>
+        <span class="page-particle page-particle--8"></span>
+        <span class="page-particle page-particle--9"></span>
+        <span class="page-particle page-particle--10"></span>
+        <span class="page-particle page-particle--12"></span>
+        <span class="page-particle page-particle--13"></span>
+        <span class="page-particle page-particle--14"></span>
+        <span class="page-particle page-particle--15"></span>
+        <span class="page-particle page-particle--16"></span>
+        <span class="page-particle page-particle--18"></span>
+
+        <!-- 여기서부터 아래부분입니다 -->
+        <span class="page-particle page-particle--1 page-particle--repeat"></span>
+        <span class="page-particle page-particle--2 page-particle--repeat"></span>
+        <span class="page-particle page-particle--3 page-particle--repeat"></span>
+        <span class="page-particle page-particle--4 page-particle--repeat"></span>
+        <span class="page-particle page-particle--5 page-particle--repeat"></span>
+        <span class="page-particle page-particle--6 page-particle--repeat"></span>
+        <span class="page-particle page-particle--7 page-particle--repeat"></span>
+        <span class="page-particle page-particle--8 page-particle--repeat"></span>
+        <span class="page-particle page-particle--9 page-particle--repeat"></span>
+        <span class="page-particle page-particle--10 page-particle--repeat"></span>
+        <span class="page-particle page-particle--12 page-particle--repeat"></span>
+        <span class="page-particle page-particle--13 page-particle--repeat"></span>
+        <span class="page-particle page-particle--14 page-particle--repeat"></span>
+        <span class="page-particle page-particle--15 page-particle--repeat"></span>
+        <span class="page-particle page-particle--16 page-particle--repeat"></span>
+        <span class="page-particle page-particle--18 page-particle--repeat"></span>
+        <span class="page-particle page-particle--19 page-particle--repeat"></span>
+    </div>
     {% include "includes/header.html" %}
     <main class="site-main">
         {% block content %}{% endblock %}

@@ -24,11 +24,446 @@ select {
 }
 
 body {
+    position: relative;
     margin: 0;
     overflow-x: hidden;
     background: #fff8e8;
     color: #171717;
     font-family: "HeartMarkFont", Arial, "Noto Sans KR", sans-serif;
+}
+
+.page-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    min-height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.page-particle {
+    position: absolute;
+    display: block;
+    width: var(--particle-size);
+    height: var(--particle-size);
+    background: var(--particle-image) center / contain no-repeat;
+    opacity: 0.9;
+    transform: translate(-50%, -50%) rotate(var(--particle-rotate, 0deg));
+}
+
+.page-particle {
+    top: var(--particle-top);
+}
+
+.site-main {
+    position: relative;
+    z-index: 1;
+}
+
+.page-particle--1 {
+    --particle-image: url("/static/accounts/images/particle_001.png");
+    --particle-size: clamp(56px, 5.5vw, 90px);
+    --particle-top: clamp(240px, 42vh, 430px);
+    left: 0;
+}
+
+.page-particle--2 {
+    --particle-image: url("/static/accounts/images/particle_002.png");
+    --particle-size: clamp(36px, 3.6vw, 66px);
+    --particle-top: clamp(390px, 68vh, 700px);
+    left: clamp(64px, 11vw, 170px);
+    --particle-rotate: -8deg;
+}
+
+.page-particle--3 {
+    --particle-image: url("/static/accounts/images/particle_003.png");
+    --particle-size: clamp(36px, 3.6vw, 66px);
+    --particle-top: clamp(130px, 21vh, 240px);
+    left: clamp(58px, 10vw, 160px);
+    --particle-rotate: -8deg;
+}
+
+.page-particle--4 {
+    --particle-image: url("/static/accounts/images/particle_004.png");
+    --particle-size: clamp(22px, 2.2vw, 34px);
+    --particle-top: clamp(390px, 68vh, 700px);
+    left: clamp(260px, 42vw, 620px);
+}
+
+.page-particle--5 {
+    --particle-image: url("/static/accounts/images/particle_005.png");
+    --particle-size: clamp(36px, 3.2vw, 58px);
+    --particle-top: clamp(520px, 90vh, 880px);
+    left: clamp(36px, 7vw, 112px);
+    --particle-rotate: -10deg;
+}
+
+.page-particle--6 {
+    --particle-image: url("/static/accounts/images/particle_006.png");
+    --particle-size: clamp(23px, 2vw, 34px);
+    --particle-top: clamp(430px, 75vh, 760px);
+    left: clamp(560px, 85vw, calc(100% - 72px));
+    --particle-rotate: 3deg;
+}
+
+.page-particle--7 {
+    --particle-image: url("/static/accounts/images/particle_007.png");
+    --particle-size: clamp(48px, 4.5vw, 82px);
+    --particle-top: clamp(72px, 10vh, 130px);
+    left: 100%;
+}
+
+.page-particle--8 {
+    --particle-image: url("/static/accounts/images/particle_008.png");
+    --particle-size: clamp(48px, 4.5vw, 82px);
+    --particle-top: clamp(270px, 47vh, 480px);
+    left: clamp(620px, 93vw, calc(100% - 24px));
+    --particle-rotate: 4deg;
+}
+
+.page-particle--9 {
+    --particle-image: url("/static/accounts/images/particle_009.png");
+    --particle-size: clamp(36px, 3.6vw, 66px);
+    --particle-top: clamp(480px, 84vh, 820px);
+    left: clamp(440px, 71vw, calc(100% - 180px));
+}
+
+.page-particle--10 {
+    --particle-image: url("/static/accounts/images/particle_010.png");
+    --particle-size: clamp(22px, 2.4vw, 38px);
+    --particle-top: clamp(150px, 25vh, 290px);
+    left: clamp(390px, 65vw, calc(100% - 260px));
+    --particle-rotate: 8deg;
+}
+
+.page-particle--12 {
+    --particle-image: url("/static/accounts/images/particle_012.png");
+    --particle-size: clamp(56px, 5.5vw, 90px);
+    --particle-top: clamp(8px, 1vh, 24px);
+    left: clamp(560px, 85vw, calc(100% - 80px));
+    --particle-rotate: 8deg;
+}
+
+
+.page-particle--13 {
+    --particle-image: url("/static/accounts/images/particle_013.png");
+    --particle-size: clamp(22px, 2.4vw, 38px);
+    --particle-top: clamp(32px, 5vh, 70px);
+    left: clamp(12px, 2vw, 34px);
+    --particle-rotate: 8deg;
+}
+
+
+
+.page-particle--14 {
+    --particle-image: url("/static/accounts/images/particle_014.png");
+    --particle-size: clamp(48px, 4.5vw, 82px);
+    --particle-top: clamp(460px, 80vh, 800px);
+    left: clamp(620px, 94vw, calc(100% - 24px));
+    --particle-rotate: -10deg;
+}
+
+.page-particle--15 {
+    --particle-image: url("/static/accounts/images/particle_015.png");
+    --particle-size: clamp(22px, 2.4vw, 38px);
+    --particle-top: clamp(520px, 90vh, 880px);
+    left: clamp(210px, 33vw, 500px);
+    --particle-rotate: 8deg;
+}
+
+
+.page-particle--16 {
+    --particle-image: url("/static/accounts/images/particle_016.png");
+    --particle-size: clamp(56px, 5.5vw, 90px);
+    --particle-top: clamp(8px, 1vh, 24px);
+    left: clamp(220px, 35vw, 520px);
+}
+
+
+.page-particle--18 {
+    --particle-image: url("/static/accounts/images/particle_018.png");
+    --particle-size: clamp(12px, 1.4vw, 28px);
+    --particle-top: clamp(180px, 31vh, 330px);
+    left: clamp(150px, 25vw, 380px);
+}
+
+@media (min-width: 1024px) {
+    .page-particle--1 {
+        --particle-top: 42vh;
+        left: 0;
+    }
+
+    .page-particle--2 {
+        --particle-top: 68vh;
+        left: 11%;
+    }
+
+    .page-particle--3 {
+        --particle-top: 21vh;
+        left: 10%;
+    }
+
+    .page-particle--4 {
+        --particle-top: 68vh;
+        left: 42%;
+    }
+
+    .page-particle--5 {
+        --particle-top: 90vh;
+        left: 7%;
+    }
+
+    .page-particle--6 {
+        --particle-top: 75vh;
+        left: 85%;
+    }
+
+    .page-particle--7 {
+        --particle-top: 10vh;
+        left: 99%;
+    }
+
+    .page-particle--8 {
+        --particle-top: 47vh;
+        left: 93%;
+    }
+
+    .page-particle--9 {
+        --particle-top: 84vh;
+        left: 71%;
+    }
+
+    .page-particle--10 {
+        --particle-top: 25vh;
+        left: 65%;
+    }
+
+    .page-particle--12 {
+        --particle-top: 1vh;
+        left: 85%;
+    }
+
+    .page-particle--13 {
+        --particle-top: 5vh;
+        left: 2%;
+    }
+
+    .page-particle--14 {
+        --particle-top: 80vh;
+        left: 94%;
+    }
+
+    .page-particle--15 {
+        --particle-top: 90vh;
+        left: 33%;
+    }
+
+    .page-particle--16 {
+        --particle-top: 1vh;
+        left: 35%;
+    }
+
+    .page-particle--18 {
+        --particle-top: 31vh;
+        left: 25%;
+    }
+}
+
+/* 여기서부터 아래부분입니다 */
+.page-particle--repeat {
+    display: none;
+}
+
+.page-home .page-particle--repeat {
+    display: block;
+}
+
+.page-home .page-particle--19.page-particle--repeat {
+    --particle-image: url("/static/accounts/images/particle_018.png");
+    --particle-size: clamp(26px, 2.7vw, 46px);
+    --particle-top: calc(clamp(280px, 50vh, 520px) + 108vh);
+    left: clamp(620px, 78vw, calc(100% - 180px));
+    --particle-rotate: -8deg;
+}
+
+.page-home .page-particle--1.page-particle--repeat {
+    --particle-top: calc(clamp(240px, 42vh, 430px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_033.png");
+    left: 0;
+}
+
+.page-home .page-particle--2.page-particle--repeat {
+    --particle-top: calc(clamp(390px, 68vh, 700px) + 108vh);
+    --particle-size: clamp(40px, 4vw, 72px);
+    --particle-image: url("/static/accounts/images/particle_022.png");
+    left: clamp(64px, 11vw, 170px);
+}
+
+.page-home .page-particle--3.page-particle--repeat {
+    --particle-top: calc(clamp(130px, 21vh, 240px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_021.png");
+    left: clamp(58px, 10vw, 160px);
+}
+
+.page-home .page-particle--4.page-particle--repeat {
+    --particle-top: calc(clamp(390px, 68vh, 700px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_055.png");
+    left: clamp(260px, 42vw, 620px);
+}
+
+.page-home .page-particle--5.page-particle--repeat {
+    --particle-top: calc(clamp(520px, 90vh, 880px) + 108vh);
+    --particle-size: clamp(40px, 4vw, 72px);
+    --particle-image: url("/static/accounts/images/particle_003.png");
+    left: clamp(36px, 7vw, 112px);
+}
+
+.page-home .page-particle--6.page-particle--repeat {
+    --particle-top: calc(clamp(430px, 75vh, 760px) + 108vh);
+    left: clamp(560px, 85vw, calc(100% - 72px));
+}
+
+.page-home .page-particle--7.page-particle--repeat {
+    --particle-top: calc(clamp(72px, 10vh, 130px) + 108vh);
+    left: 100%;
+}
+
+.page-home .page-particle--8.page-particle--repeat {
+    --particle-top: calc(clamp(270px, 47vh, 480px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_002.png");
+    left: clamp(620px, 93vw, calc(100% - 24px));
+}
+
+.page-home .page-particle--9.page-particle--repeat {
+    --particle-top: calc(clamp(480px, 84vh, 820px) + 108vh);
+    left: clamp(440px, 71vw, calc(100% - 180px));
+}
+
+.page-home .page-particle--10.page-particle--repeat {
+    --particle-top: calc(clamp(150px, 25vh, 290px) + 108vh);
+    left: clamp(390px, 65vw, calc(100% - 260px));
+}
+
+.page-home .page-particle--12.page-particle--repeat {
+    --particle-top: calc(clamp(8px, 1vh, 24px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_020.png");
+    left: clamp(560px, 85vw, calc(100% - 80px));
+}
+
+.page-home .page-particle--13.page-particle--repeat {
+    --particle-top: calc(clamp(32px, 5vh, 70px) + 108vh);
+    left: clamp(12px, 2vw, 34px);
+}
+
+.page-home .page-particle--14.page-particle--repeat {
+    --particle-top: calc(clamp(460px, 80vh, 800px) + 108vh);
+    left: clamp(620px, 94vw, calc(100% - 24px));
+}
+
+.page-home .page-particle--15.page-particle--repeat {
+    --particle-top: calc(clamp(520px, 90vh, 880px) + 108vh);
+    --particle-size: clamp(36px, 3vw, 64px);
+    --particle-image: url("/static/accounts/images/particle_019.png");
+    left: clamp(210px, 33vw, 500px);
+}
+
+.page-home .page-particle--16.page-particle--repeat {
+    --particle-top: calc(clamp(8px, 1vh, 24px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_011.png");
+    left: clamp(220px, 35vw, 520px);
+}
+
+.page-home .page-particle--18.page-particle--repeat {
+    --particle-top: calc(clamp(180px, 31vh, 330px) + 108vh);
+    --particle-image: url("/static/accounts/images/particle_007.png");
+    left: clamp(150px, 25vw, 380px);
+}
+
+@media (min-width: 1024px) {
+    .page-home .page-particle--1.page-particle--repeat {
+        --particle-top: 134vh;
+        left: 0;
+    }
+
+    .page-home .page-particle--2.page-particle--repeat {
+        --particle-top: 153vh;
+        left: 11%;
+    }
+
+    .page-home .page-particle--3.page-particle--repeat {
+        --particle-top: 121vh;
+        left: 10%;
+    }
+
+    .page-home .page-particle--4.page-particle--repeat {
+        --particle-top: 166vh;
+        left: 22%;
+    }
+
+    .page-home .page-particle--5.page-particle--repeat {
+        --particle-top: 178vh;
+        left: 7%;
+    }
+
+    .page-home .page-particle--6.page-particle--repeat {
+        --particle-top: 165vh;
+        left: 85%;
+    }
+
+    .page-home .page-particle--7.page-particle--repeat {
+        --particle-top: 112vh;
+        left: 99%;
+    }
+
+    .page-home .page-particle--8.page-particle--repeat {
+        --particle-top: 144vh;
+        left: 93%;
+    }
+
+    .page-home .page-particle--9.page-particle--repeat {
+        --particle-top: 182vh;
+        left: 71%;
+    }
+
+    .page-home .page-particle--10.page-particle--repeat {
+        --particle-top: 125vh;
+        left: 65%;
+    }
+
+    .page-home .page-particle--12.page-particle--repeat {
+        --particle-top: 110vh;
+        left: 82%;
+    }
+
+    .page-home .page-particle--13.page-particle--repeat {
+        --particle-top: 108vh;
+        left: 2%;
+    }
+
+    .page-home .page-particle--14.page-particle--repeat {
+        --particle-top: 178vh;
+        left: 94%;
+    }
+
+    .page-home .page-particle--15.page-particle--repeat {
+        --particle-top: 188vh;
+        left: 25%;
+    }
+
+    .page-home .page-particle--16.page-particle--repeat {
+        --particle-top: 106vh;
+        left: 50%;
+    }
+
+    .page-home .page-particle--18.page-particle--repeat {
+        --particle-top: 137vh;
+        left: 25%;
+    }
+
+    .page-home .page-particle--19.page-particle--repeat {
+        --particle-top: 141vh;
+        left: 78%;
+    }
 }
 
 a {
@@ -122,6 +557,10 @@ input {
 @media (max-width: 767px) {
     .site-main {
         padding-top: 150px;
+    }
+    .page-particle--15 {
+        --particle-top: 83vh;
+        left: 42%;
     }
 
     .site-header {
