@@ -1,0 +1,79 @@
+<div class="share-letter-modal" id="share-letter-modal" hidden>
+    <section class="share-letter" role="dialog" aria-modal="true" aria-labelledby="share-letter-title">
+        <button class="share-letter__close" type="button" aria-label="공유 창 닫기" data-close-share-modal>×</button>
+
+        <div class="share-letter__form" data-share-form-view>
+            <header class="share-letter__header">
+                <span class="share-letter__icon" aria-hidden="true">✉</span>
+                <div>
+                    <h2 id="share-letter-title">마음 편지 보내기</h2>
+                    <p>이 기록을 함께 보고 싶은 친구를 골라요.</p>
+                </div>
+            </header>
+
+            <div class="share-friend-search">
+                <span aria-hidden="true">⌕</span>
+                <label class="sr-only" for="share-friend-search">공유할 친구 검색</label>
+                <input id="share-friend-search" type="search" placeholder="친구 이름 검색" autocomplete="off">
+            </div>
+
+            <div class="share-friend-list" role="group" aria-label="공유할 친구 선택">
+                {% for friend in friends %}
+                <label class="share-friend" data-share-friend data-friend-name="{{ friend.name|lower }}">
+                    <input type="checkbox" name="friend_ids" value="{{ friend.id }}">
+                    <span class="share-friend__character"><img src="{{ friend.character_url }}" alt=""></span>
+                    <span class="share-friend__copy">
+                        <strong>{{ friend.name }}</strong>
+                        <small>{{ friend.message }}</small>
+                    </span>
+                    <span class="share-friend__check" aria-hidden="true">✓</span>
+                </label>
+                {% empty %}
+                <div class="share-letter__empty">
+                    <span aria-hidden="true">✉</span>
+                    <strong>아직 마음 편지를 보낼 친구가 없어요.</strong>
+                    <p>먼저 친구를 초대해 볼까요?</p>
+                </div>
+                {% endfor %}
+                <p class="share-search-empty" data-share-search-empty hidden>검색한 이름의 친구가 없어요.</p>
+            </div>
+
+            <section class="share-selected" aria-labelledby="share-selected-title">
+                <div class="share-selected__heading">
+                    <h3 id="share-selected-title">선택한 친구</h3>
+                    <span data-selected-count>0명</span>
+                </div>
+                <div class="share-selected__chips" data-selected-chips>
+                    <p>아직 선택한 친구가 없어요.</p>
+                </div>
+            </section>
+
+            <label class="location-share-option">
+                <input type="checkbox" id="share-location">
+                <span class="location-share-option__pin" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </span>
+                <span class="location-share-option__copy">
+                    <strong>인증한 장소도 함께 보여주기</strong>
+                    <small>위치를 공개하면 장소명과 지도가 친구에게 보여요.</small>
+                </span>
+                <span class="location-share-option__switch" aria-hidden="true"></span>
+            </label>
+
+            <footer class="share-letter__footer">
+                <span><strong data-footer-count>0명</strong> 선택</span>
+                <button type="button" data-send-share disabled>친구를 선택해 주세요</button>
+            </footer>
+        </div>
+
+        <div class="share-letter__success" data-share-success hidden>
+            <span class="share-success__seal" aria-hidden="true">✉</span>
+            <h2>마음 편지를 보냈어요!</h2>
+            <p><strong data-success-count>0명</strong>의 친구에게 기록을 공유했어요.</p>
+            <button type="button" data-close-share-modal>확인</button>
+        </div>
+    </section>
+</div>

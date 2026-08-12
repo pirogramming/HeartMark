@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.http import urlencode
 
@@ -24,6 +25,14 @@ def _display_name(user):
     if profile and profile.display_name:
         return profile.display_name
     return user.first_name or user.username
+
+
+def _character_url(user):
+    profile = getattr(user, "profile", None)
+    character_id = getattr(profile, "character_id", None)
+    if character_id not in range(1, 6):
+        character_id = 2
+    return static(f"accounts/images/{character_id}.png")
 
 
 def _login_redirect(request):
@@ -67,7 +76,7 @@ def invite_detail(request, code):
             if action == "accept":
                 accept_invitation(invitation, request.user)
                 messages.success(request, "친구가 되었어요.")
-                return redirect("friendships:list")
+                return redirect("social_hub:friend_management")
             if action == "reject":
                 reject_invitation(invitation, request.user)
                 messages.info(request, "친구 요청을 거절했어요.")
@@ -82,6 +91,7 @@ def invite_detail(request, code):
         {
             "invitation": invitation,
             "inviter_name": _display_name(invitation.inviter),
+            "inviter_character_url": _character_url(invitation.inviter),
             "error": error,
         },
     )
@@ -89,15 +99,7 @@ def invite_detail(request, code):
 
 @login_required(login_url="accounts:login")
 def friend_list(request):
-    return render(
-        request,
-        "friendships/friend_list.html",
-        {
-            "friends": get_friends(request.user),
-            "received_requests": get_received_requests(request.user),
-            "sent_requests": get_sent_requests(request.user),
-        },
-    )
+    return redirect("social_hub:friend_management")
 
 
 @login_required(login_url="accounts:login")
@@ -110,7 +112,7 @@ def send_request(request, user_id):
         messages.success(request, "친구 요청을 보냈어요.")
     except FriendshipError as exc:
         messages.error(request, str(exc))
-    return redirect(request.POST.get("next") or "friendships:list")
+    return redirect(request.POST.get("next") or "social_hub:friend_management")
 
 
 @login_required(login_url="accounts:login")
@@ -129,7 +131,7 @@ def respond_request(request, pk, action):
             messages.error(request, "알 수 없는 요청입니다.")
     except FriendshipError as exc:
         messages.error(request, str(exc))
-    return redirect("friendships:list")
+    return redirect("social_hub:friend_management")
 
 
 @login_required(login_url="accounts:login")
@@ -141,4 +143,4 @@ def friend_delete(request, user_id):
             messages.info(request, "친구를 삭제했어요.")
         except FriendshipError as exc:
             messages.error(request, str(exc))
-    return redirect("friendships:list")
+    return redirect("social_hub:friend_management")
