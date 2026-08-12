@@ -1,0 +1,20 @@
+[Unit]
+Description=HeartMark Django application
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/HeartMark
+EnvironmentFile=/home/ubuntu/HeartMark/.env
+ExecStart=/home/ubuntu/HeartMark/venv/bin/gunicorn \
+    --workers 2 \
+    --bind 127.0.0.1:8000 \
+    --access-logfile - \
+    --error-logfile - \
+    config.wsgi:application
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
