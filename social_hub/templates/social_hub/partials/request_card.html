@@ -1,0 +1,18 @@
+<article class="person-card" data-person-card data-person-name="{{ person.name|lower }}" data-person-id="{{ person.id }}">
+    <div class="person-card__character">
+        <img src="{{ person.character_url }}" alt="{{ person.name }}님의 캐릭터">
+    </div>
+    <div class="person-card__copy">
+        <strong>{{ person.name }}</strong>
+        <p>{{ person.message }}</p>
+    </div>
+    <div class="person-card__actions">
+        {% if request_type == "received" %}
+        <form method="post" action="{{ person.reject_url }}">{% csrf_token %}<button class="soft-button" type="submit">거절</button></form>
+        <form method="post" action="{{ person.accept_url }}">{% csrf_token %}<button class="soft-button soft-button--accept" type="submit">친구 수락</button></form>
+        {% else %}
+        <span class="waiting-sticker">답장 기다리는 중</span>
+        <form method="post" action="{{ person.reject_url }}">{% csrf_token %}<button class="soft-button" type="submit">요청 취소</button></form>
+        {% endif %}
+    </div>
+</article>

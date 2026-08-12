@@ -1,16 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 
-from locations.services import get_verified_place
+from locations.services import clear_verified_place, get_verified_place
 
 from .forms import RecordForm
 from .models import Record
-
-
-def record_modal_preview(request):
-    """메인 화면 완성 전 기록 작성 모달을 독립적으로 확인하는 임시 화면."""
-    return redirect(f"{reverse('common:home')}?open_record=1")
 
 
 def has_verified_location(request):
@@ -20,15 +14,20 @@ def has_verified_location(request):
 
 @login_required(login_url="accounts:login")
 def record_create(request):
-    verified_place = get_verified_place(request)
-    if verified_place is None:
+    # GET으로 이 URL에 들어오는 건 "기록을 쓰겠다"는 진입 시도다.
+    # 기록은 매번 그 순간의 장소에 남기는 것이므로, 오늘 이미 인증했더라도
+    # 예외 없이 화면 1(위치 선택)부터 다시 시작시킨다.
+    # 실제 작성 모달은 위치 확정 후 지도 화면에서 열리고, 그 폼이 여기로 POST한다.
+    if request.method == "GET":
         return redirect("locations:place_select")
 
-    if request.method == "GET":
-        return redirect(f"{reverse('common:home')}?open_record=1")
+    verified_place = get_verified_place(request)
+    if verified_place is None:
+        # 인증이 만료됐거나 세션이 끊긴 채로 폼이 제출된 경우.
+        return redirect("locations:place_select")
 
     form = RecordForm(request.POST or None, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
+    if form.is_valid():
         record = form.save(commit=False)
         record.user = request.user
         record.place = verified_place
@@ -36,6 +35,9 @@ def record_create(request):
         record.latitude = verified_place.latitude
         record.longitude = verified_place.longitude
         record.save()
+        # 저장이 끝난 인증은 여기서 소진시킨다. 남겨두면 다음 기록이 사용자가
+        # 다시 고르지 않은 이 장소로 저장될 수 있다.
+        clear_verified_place(request)
         return redirect("records:detail", pk=record.pk)
     return render(request, "records/record_form.html", {"form": form, "mode": "create"})
 

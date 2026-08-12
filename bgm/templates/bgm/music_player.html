@@ -1,0 +1,202 @@
+{% load static %}
+
+
+{% if music %}
+
+<div class="music-player">
+
+    <!-- ==========================================
+        음악 정보
+    =========================================== -->
+    <div class="music-player__info">
+
+        <!-- 작은 안내 문구 -->
+        <span class="music-player__label">
+            대표 감정 BGM
+        </span>
+
+        <!-- 음악 제목 -->
+        <h3 class="music-player__title">
+            {{ music.title }}
+        </h3>
+
+        <!-- 제작자 정보 -->
+        {% if music.artist %}
+            <p class="music-player__artist">
+                {{ music.artist }}
+            </p>
+        {% endif %}
+
+    </div>
+
+
+    <!-- ==========================================
+        실제 오디오 요소
+
+        화면에는 보이지 않고
+        JavaScript에서 재생 상태를 제어함.
+    =========================================== -->
+    <audio
+        id="bgm-audio"
+        preload="metadata"
+    >
+        <source
+            src="{% static 'bgm/audio/' %}{{ music.file_name }}"
+            type="audio/mpeg"
+        >
+
+        브라우저에서 오디오 재생을 지원하지 않습니다.
+    </audio>
+
+
+    <!-- ==========================================
+        재생 진행 영역
+    =========================================== -->
+    <div class="music-player__progress">
+
+        <!-- 현재 재생 시간 -->
+        <span
+            class="music-player__time"
+            id="bgm-current-time"
+        >
+            0:00
+        </span>
+
+        <!--
+            현재 음악의 재생 위치 표시함.
+            사용자가 직접 이동할 수도 있음.
+        -->
+        <input
+            type="range"
+            class="music-player__progress-bar"
+            id="bgm-progress"
+            min="0"
+            max="100"
+            value="0"
+            step="0.1"
+            aria-label="음악 재생 위치"
+        >
+
+        <!-- 전체 음악 길이 -->
+        <span
+            class="music-player__time"
+            id="bgm-duration"
+        >
+            0:00
+        </span>
+
+    </div>
+
+
+    <!-- ==========================================
+        플레이어 버튼 영역
+    =========================================== -->
+    <div class="music-player__controls">
+
+        <!-- 처음부터 다시 듣기 -->
+        <button
+            type="button"
+            class="music-player__control-button"
+            id="bgm-restart-button"
+            aria-label="처음부터 다시 듣기"
+        >
+            ↺
+        </button>
+
+
+        <!-- 재생 / 일시정지 -->
+        <button
+            type="button"
+            class="
+                music-player__control-button
+                music-player__play-button
+            "
+            id="bgm-play-button"
+            aria-label="음악 재생"
+        >
+            ▶
+        </button>
+
+
+        <!-- 음소거 -->
+        <button
+            type="button"
+            class="music-player__control-button"
+            id="bgm-mute-button"
+            aria-label="음소거"
+        >
+            🔊
+        </button>
+
+
+        <!-- 음량 -->
+        <input
+            type="range"
+            class="music-player__volume"
+            id="bgm-volume"
+            min="0"
+            max="1"
+            value="0.7"
+            step="0.05"
+            aria-label="음악 음량"
+        >
+
+    </div>
+
+
+    <!-- ==========================================
+        재생 오류 안내
+    =========================================== -->
+    <p
+        class="music-player__error"
+        id="bgm-error"
+        hidden
+    >
+        음악을 불러올 수 없습니다.
+    </p>
+
+
+    <!-- ==========================================
+        음원 정보 / 출처
+    =========================================== -->
+    {% if music.source_url or music.license_name %}
+    <div class="music-player__credit">
+
+        {% if music.license_name %}
+            <span class="music-player__license">
+                {{ music.license_name }}
+            </span>
+        {% endif %}
+
+        {% if music.source_url %}
+            <a
+                class="music-player__source-link"
+                href="{{ music.source_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                음원 출처
+            </a>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+</div>
+
+
+{% else %}
+
+<div class="music-player-empty">
+
+    <span class="music-player-empty__icon">
+        ♪
+    </span>
+
+    <p>
+        이 감정에 등록된 음악이 없습니다.
+    </p>
+
+</div>
+
+{% endif %}

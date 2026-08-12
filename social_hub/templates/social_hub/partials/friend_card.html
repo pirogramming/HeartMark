@@ -1,0 +1,13 @@
+<article class="person-card" data-person-card data-person-name="{{ person.name|lower }}" data-person-id="{{ person.id }}">
+    <div class="person-card__character">
+        <img src="{{ person.character_url }}" alt="{{ person.name }}님의 캐릭터">
+    </div>
+    <div class="person-card__copy">
+        <strong>{{ person.name }}</strong>
+        <p>{{ person.message }}</p>
+    </div>
+    <div class="person-card__actions">
+        <button class="soft-button soft-button--primary" type="button" data-open-share-modal data-preselect-friend="{{ person.id }}">기록 공유</button>
+        <button class="person-card__more" type="button" aria-label="{{ person.name }} 친구 메뉴" data-delete-friend data-delete-url="{{ person.delete_url }}">•••</button>
+    </div>
+</article>

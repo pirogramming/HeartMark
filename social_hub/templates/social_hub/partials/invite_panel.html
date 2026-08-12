@@ -1,0 +1,14 @@
+<section class="invite-letter" aria-labelledby="invite-title">
+    <div class="invite-letter__icon" aria-hidden="true">✉</div>
+    <div class="invite-letter__copy">
+        <span>마음자국 초대장</span>
+        <h2 id="invite-title">나와 함께 마음을 기록할래요?</h2>
+        <p>초대 링크를 보내 새로운 친구를 만나 보세요.</p>
+    </div>
+    <div class="invite-link">
+        <label class="sr-only" for="invite-url">내 초대 링크</label>
+        <input id="invite-url" value="{{ invite_url }}" readonly>
+        <button type="button" data-copy-invite data-copy-label="링크 복사">링크 복사</button>
+    </div>
+    <p class="invite-copy-status" data-copy-status aria-live="polite"></p>
+</section>

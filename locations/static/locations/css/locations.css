@@ -30,11 +30,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 20px;
+    padding: 18px 28px;
     border: none;
     border-radius: 999px;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 20px;
+    /* 손글씨 폰트(온글잎 박다현체)는 굵기가 하나뿐이라 볼드가 합성되면서 뭉개져 보인다.
+       그래서 이 두 화면의 버튼은 전부 기본 굵기로 둔다. */
+    font-weight: 400;
     text-decoration: none;
     cursor: pointer;
     transition: opacity 0.15s ease, transform 0.15s ease;
@@ -77,7 +79,7 @@
    ===================================================================== */
 .place-select {
     min-height: calc(100vh - 100px); /* common/css/base.css의 .site-main padding-top(100px)만큼 뺀 나머지를 채움 */
-    padding: 40px 24px 60px;
+    padding: 48px 24px 72px;
     background: var(--loc-bg);
     display: flex;
     justify-content: center;
@@ -85,23 +87,25 @@
 
 .place-select-card {
     width: 100%;
-    max-width: 420px;
+    /* 헤더 폰트(base.css .site-nav a = 21px) 기준으로 보면 기존 420px 카드는
+       화면 대비 너무 작아 보여서, 카드와 내부 요소를 한 단계씩 키웠다. */
+    max-width: 620px;
     height: fit-content;
     background: var(--loc-card-bg);
     border: 1px solid var(--loc-border);
-    border-radius: 28px;
-    padding: 28px 24px 32px;
+    border-radius: 32px;
+    padding: 40px 36px 44px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 22px;
 }
 
 .place-select-map {
     width: 100%;
-    height: 220px;
-    border-radius: 20px;
+    height: 340px;
+    border-radius: 24px;
     overflow: hidden; /* 카카오맵 SDK가 그린 지도도 이 모서리에 맞춰 잘리도록 */
     background: #eef1ea;
     display: flex;
@@ -112,30 +116,30 @@
 .place-select-map-placeholder {
     margin: 0;
     color: var(--loc-text-muted);
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .place-select-address {
     margin: 0;
     width: 100%;
-    padding: 10px 20px;
+    padding: 16px 24px;
     background: #fff;
     border: 1px solid var(--loc-border);
     border-radius: 999px;
     color: var(--loc-text);
-    font-size: 14px;
+    font-size: 19px;
     text-align: center;
 }
 
 .place-select-question {
     margin: 0;
     color: var(--loc-text-muted);
-    font-size: 14px;
+    font-size: 19px;
 }
 
 .place-select-actions {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     width: 100%;
 }
 
@@ -147,7 +151,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
 }
 
 .place-select-search.hidden {
@@ -156,25 +160,25 @@
 
 .place-select-search input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 16px 22px;
     border: 1px solid var(--loc-border);
     border-radius: 999px;
-    font-size: 14px;
+    font-size: 19px;
 }
 
 .place-select-search-results {
     list-style: none;
     margin: 0;
     padding: 0;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
     border: 1px solid var(--loc-border);
-    border-radius: 16px;
+    border-radius: 20px;
 }
 
 .place-select-search-item {
-    padding: 10px 16px;
-    font-size: 14px;
+    padding: 15px 22px;
+    font-size: 18px;
     color: var(--loc-text);
     cursor: pointer;
     border-bottom: 1px solid var(--loc-border);
@@ -189,8 +193,8 @@
 }
 
 .place-select-search-empty {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 15px 22px;
+    font-size: 17px;
     color: var(--loc-text-muted);
 }
 
@@ -199,24 +203,25 @@
    ===================================================================== */
 .seoul-map-page {
     min-height: calc(100vh - 100px);
-    padding: 40px 24px 60px;
+    padding: 48px 24px 72px;
     background: var(--loc-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 28px;
 }
 
 .seoul-map-title {
     margin: 0;
-    font-size: 28px;
-    font-weight: 800;
+    font-size: 42px;
+    font-weight: 400;
     color: var(--loc-text);
 }
 
 .seoul-map-wrap {
     width: 100%;
-    max-width: 480px;
+    /* SVG는 width: 100%로 늘어나므로 이 값만 키우면 지도와 구 라벨이 함께 커진다. */
+    max-width: 760px;
 }
 
 .seoul-map-wrap svg {
@@ -251,19 +256,19 @@
 
 .seoul-map-address {
     margin: 0;
-    font-size: 15px;
+    font-size: 21px;
     color: var(--loc-text-muted);
     text-align: center;
 }
 
 .seoul-map-address-highlight {
     color: var(--loc-primary);
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .seoul-map-write-btn {
     flex: none; /* .seoul-map-page가 flex column이라 기본 .btn 규칙을 안 쓰므로 늘어나지 않게 명시 */
-    min-width: 200px;
+    min-width: 280px;
 }
 
 /* =====================================================================
@@ -272,15 +277,45 @@
 @media (max-width: 820px) {
     .place-select,
     .seoul-map-page {
-        padding: 24px 16px 40px;
+        padding: 28px 16px 48px;
     }
 
     .place-select-card {
-        padding: 22px 18px 26px;
-        border-radius: 22px;
+        padding: 26px 20px 30px;
+        border-radius: 24px;
+        gap: 18px;
+    }
+
+    /* 좁은 화면에서는 [직접 입력할게요] / [네] 두 버튼이 한 줄에 들어가야 하므로
+       데스크톱에서 키운 버튼 크기를 여기서 다시 한 단계 줄인다. */
+    .btn {
+        padding: 15px 20px;
+        font-size: 17px;
+    }
+
+    .place-select-map {
+        height: 260px;
+    }
+
+    .place-select-address,
+    .place-select-question,
+    .place-select-search input {
+        font-size: 17px;
+    }
+
+    .place-select-search-item {
+        font-size: 16px;
     }
 
     .seoul-map-title {
-        font-size: 22px;
+        font-size: 30px;
+    }
+
+    .seoul-map-address {
+        font-size: 18px;
+    }
+
+    .seoul-map-write-btn {
+        min-width: 220px;
     }
 }

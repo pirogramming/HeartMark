@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}받은 마음 편지 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'record_sharing/css/record_sharing.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="sharing-page">
+    <p class="sharing-eyebrow">Shared Heartmark</p>
+    <h1 class="sharing-title">
+        {{ share.sender.first_name|default:share.sender.username }}님의 마음자국
+    </h1>
+    <p class="sharing-subtitle">{{ record.created_at|date:"Y년 n월 j일" }}에 남긴 기록이에요.</p>
+
+    <div class="sharing-toolbar">
+        <p class="sharing-count">
+            {{ share.created_at|date:"n월 j일" }}에 나에게 공유되었어요.
+        </p>
+        <a class="sharing-button-ghost" href="{{ shared_list_url }}">받은 편지함으로</a>
+    </div>
+
+    <article class="sharing-detail">
+        {% if record.image %}
+        <img class="sharing-detail-photo" src="{{ record.image.url }}" alt="기록 사진">
+        {% endif %}
+
+        <p class="sharing-detail-content">{{ record.content|linebreaksbr }}</p>
+
+        <div class="sharing-emotion-list">
+            {% for emotion in record.emotion_items %}
+            <figure>
+                <img src="{% static 'records/images/emotions/' %}{{ emotion.image_name }}" alt="{{ emotion.name }}">
+                <figcaption>
+                    {% if emotion.is_main %}<span class="letter-place-label">대표</span><br>{% endif %}
+                    {{ emotion.name }}
+                </figcaption>
+            </figure>
+            {% endfor %}
+        </div>
+
+        {% comment %}
+            장소. place 는 views 가 get_shared_place_data() 로 만들어 준 값이다.
+            record.place / record.latitude 를 직접 읽지 않는다.
+        {% endcomment %}
+        {% if place.has_place %}
+            {% if place.is_visible %}
+            <div class="letter-place letter-place--open">
+                <span class="letter-place-pin" aria-hidden="true">📍</span>
+                <div>
+                    <span class="letter-place-label">함께 공개한 장소</span>
+                    <span class="letter-place-value">{{ place.name|default:place.address }}</span>
+                    {% if place.address and place.name %}
+                    <span class="letter-place-label">{{ place.address }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="letter-place letter-place--hidden">
+                <span class="letter-place-pin" aria-hidden="true">🔒</span>
+                <div>
+                    <span class="letter-place-value">장소를 공개하지 않은 기록이에요.</span>
+                    <span class="letter-place-label">친구가 소중한 위치 정보를 보호하고 있어요.</span>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

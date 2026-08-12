@@ -4,7 +4,12 @@
         <img src="{% static 'accounts/images/logo.png' %}" alt="마음자국">
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="{{ record_entry_url }}"{% if can_create_record %} data-open-record-modal{% endif %} data-tutorial-target="record-write">기록작성</a>
+        {% comment %}
+            record_entry_url은 항상 위치 선택 화면(locations:place_select)이다.
+            모달을 바로 여는 트리거 속성은 위치 확정 후 넘어가는 지도 화면
+            (locations/map.html)의 "기록하러 가기" 버튼에만 붙인다.
+        {% endcomment %}
+        <a href="{{ record_entry_url }}" data-tutorial-target="record-write">기록작성</a>
         <a href="{% url 'diary:list' %}" data-tutorial-target="record-list">기록보기</a>
         <a href="{% url 'diary:calendar' %}" data-tutorial-target="calendar">달력</a>
         <a href="{% url 'mypage:home' %}" data-tutorial-target="mypage">마이페이지</a>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}받은 마음 편지 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'social_hub/css/shared_records.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="shared-mailbox">
+    <header class="shared-mailbox__header">
+        <span class="shared-mailbox__eyebrow">Shared Heartmarks</span>
+        <h1>받은 마음 편지</h1>
+        <p>친구가 조심스럽게 건넨 마음자국을 모아 봤어요.</p>
+    </header>
+
+    <div class="shared-mailbox__toolbar">
+        <div class="shared-mailbox__count">
+            <span aria-hidden="true">✉</span>
+            <strong>{{ shared_records|length }}통</strong>의 마음 편지가 도착했어요.
+        </div>
+        <a href="{% url 'social_hub:friend_management' %}">친구 관리</a>
+    </div>
+
+    {% if shared_records %}
+    <div class="shared-record-grid">
+        {% for shared_record in shared_records %}
+            {% include "social_hub/partials/shared_record_card.html" with item=shared_record %}
+        {% endfor %}
+    </div>
+    {% else %}
+        {% include "social_hub/partials/empty_state.html" with empty_type="shared_records" %}
+    {% endif %}
+
+    <div class="shared-record-notice" data-shared-record-notice hidden aria-live="polite"></div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-open-shared-record]");
+    if (!button) return;
+    const notice = document.querySelector("[data-shared-record-notice]");
+    if (!notice) return;
+    notice.textContent = "실제 기록 상세 연결은 공유 백엔드 완성 후 적용돼요.";
+    notice.hidden = false;
+    window.clearTimeout(window.sharedRecordNoticeTimer);
+    window.sharedRecordNoticeTimer = window.setTimeout(() => (notice.hidden = true), 2200);
+});
+</script>
+{% endblock %}
