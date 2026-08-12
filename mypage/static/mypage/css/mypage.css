@@ -659,9 +659,16 @@
 }
 
 .insight-card {
-    min-height: 260px;
+    min-height: 230px;
     padding: 48px 34px 30px;
     border-radius: 26px;
+}
+
+.weekly-mood-card,
+.frequent-place-card {
+    height: 230px;
+    min-height: 0;
+    overflow: visible;
 }
 
 .weekly-mood-content {
@@ -669,7 +676,8 @@
     grid-template-columns: 145px 1fr;
     align-items: center;
     gap: 38px;
-    min-height: 170px;
+    min-height: 145px;
+    padding-left: 34px;
 }
 
 .weekly-mood-illustration {
@@ -685,8 +693,8 @@
 }
 
 .weekly-mood-illustration img {
-    width: 92px;
-    height: 92px;
+    width: 118px;
+    height: 118px;
     object-fit: contain;
 }
 
@@ -707,7 +715,7 @@
 .place-content p {
     margin: 0;
     color: var(--mypage-muted);
-    font-size: 0.84rem;
+    font-size: 0.98rem;
     line-height: 1.8;
 }
 
@@ -718,7 +726,7 @@
 
 .weekly-mood-copy strong {
     color: var(--mypage-ink);
-    font-size: 1.15rem;
+    font-size: 1.55rem;
 }
 
 .place-content {
@@ -844,8 +852,9 @@
 .place-map {
     position: relative;
     width: min(390px, 100%);
-    min-height: 170px;
-    margin: 24px auto 0;
+    height: 145px;
+    min-height: 0;
+    margin: 20px auto 0;
     overflow: hidden;
     border: 1.5px solid #b9cfae;
     border-radius: 20px;
@@ -1319,6 +1328,7 @@
         min-height: 0;
         justify-items: center;
         text-align: center;
+        padding-left: 0;
     }
 
     .weekly-mood-illustration {
@@ -1327,8 +1337,16 @@
     }
 
     .weekly-mood-illustration img {
-        width: 78px;
-        height: 78px;
+        width: 108px;
+        height: 108px;
+    }
+
+    .weekly-mood-copy strong {
+        font-size: 1.3rem;
+    }
+
+    .weekly-mood-content p {
+        font-size: 0.9rem;
     }
 
     .place-ticket {
@@ -1345,7 +1363,8 @@
     }
 
     .place-map {
-        min-height: 155px;
+        height: 135px;
+        min-height: 0;
     }
 
     .place-map__label {
