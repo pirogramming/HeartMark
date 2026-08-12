@@ -10,11 +10,6 @@
 
 {% block content %}
 <section class="mypage-screen">
-    <span class="mypage-doodle mypage-doodle--coral" aria-hidden="true"></span>
-    <span class="mypage-doodle mypage-doodle--blue" aria-hidden="true"></span>
-    <span class="mypage-doodle mypage-doodle--green" aria-hidden="true"></span>
-    <span class="mypage-doodle mypage-doodle--yellow" aria-hidden="true"></span>
-
     <section class="mypage-profile" aria-labelledby="mypage-user-name">
         <div class="mypage-character-wrap">
             {% if character_url %}
@@ -35,6 +30,25 @@
             {{ request.user.first_name|default:request.user.username }}
         </h1>
     </section>
+
+    <nav class="mypage-friend-shortcuts" aria-label="친구 메뉴">
+        <a class="mypage-friend-shortcut" href="/friends/">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>친구 관리</span>
+        </a>
+        <a class="mypage-friend-shortcut" href="/shared-records/">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m3 7 9 6 9-6"></path>
+            </svg>
+            <span>받은 마음 편지</span>
+        </a>
+    </nav>
 
     <section class="attendance-card" aria-labelledby="attendance-title">
         <div class="attendance-heading">
@@ -177,7 +191,11 @@
                     </div>
                     <div class="weekly-mood-copy">
                         {% if weekly_emotion %}<strong>{{ weekly_emotion_label }}</strong>{% endif %}
+                        {% if weekly_emotion %}
                         <p>{{ weekly_message }}</p>
+                        {% else %}
+                        <p>아직 이번 주에 남긴 마음이 없어요.<br>오늘의 마음자국을 남겨 볼까요?</p>
+                        {% endif %}
                     </div>
                 </div>
             </section>
