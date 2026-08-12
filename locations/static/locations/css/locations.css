@@ -206,20 +206,18 @@
    ===================================================================== */
 .seoul-map-page {
     min-height: calc(100vh - 100px);
-    padding: 48px 24px 72px;
+    /* "서울" 제목(약 50px)과 그 아래 간격이 빠진 만큼 지도부터 위로 끌어올린다.
+       위 여백 48px를 없애고 나머지 30px는 음수 margin으로 당긴다
+       (common/css/base.css의 .site-main padding-top 100px 안쪽이라 헤더와 겹치지 않음). */
+    margin-top: -30px;
+    padding: 0 24px 72px;
     /* 화면 1과 동일하게 공통 배경을 그대로 사용한다. */
     background: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
-}
-
-.seoul-map-title {
-    margin: 0;
-    font-size: 42px;
-    font-weight: 400;
-    color: var(--loc-text);
+    /* 지도 - 주소 - 버튼 사이 간격 */
+    gap: 14px;
 }
 
 .seoul-map-wrap {
@@ -279,9 +277,15 @@
    반응형: 카드/지도 폭을 화면 안에 맞추기 (base.css의 820px 기준과 통일)
    ===================================================================== */
 @media (max-width: 820px) {
-    .place-select,
-    .seoul-map-page {
+    .place-select {
         padding: 28px 16px 48px;
+    }
+
+    /* 좁은 화면은 헤더가 세로로 쌓여 아래로 내려오므로 당기는 폭을 줄인다. */
+    .seoul-map-page {
+        margin-top: -12px;
+        padding: 0 16px 48px;
+        gap: 10px;
     }
 
     .place-select-card {
@@ -309,10 +313,6 @@
 
     .place-select-search-item {
         font-size: 16px;
-    }
-
-    .seoul-map-title {
-        font-size: 30px;
     }
 
     .seoul-map-address {
