@@ -916,6 +916,12 @@
 }
 
 .emotion-summary-board {
+    /*
+        padding과 border를
+        width: 100% 안에 포함
+    */
+    box-sizing: border-box;
+
     width: 100%;
 
     padding:
