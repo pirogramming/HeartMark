@@ -816,12 +816,23 @@
 .record-content-modal {
     position: fixed;
     inset: 0;
-    z-index: 1500;
+
+    /*
+        사이트 헤더보다 팝업이 위에 표시되도록 설정함.
+    */
+    z-index: 9999;
 
     display: grid;
     place-items: center;
 
-    padding: 28px;
+    /*
+        상단 헤더 영역만큼 공간 확보함.
+
+        첫 번째 값 130px
+        → 팝업과 화면 위쪽 사이 공간.
+    */
+    padding: 130px 28px 28px;
+
     box-sizing: border-box;
 }
 
@@ -866,7 +877,7 @@
     z-index: 1;
 
     width: min(720px, calc(100vw - 56px));
-    max-height: calc(100vh - 56px);
+    max-height: calc(100vh - 158px);
 
     overflow: auto;
 
@@ -897,7 +908,28 @@
     Read 팝업보다 조금 넓게 설정합니다.
 */
 .record-content-modal__dialog--photo {
+    /*
+        Photo 팝업 최대 가로 크기.
+    */
     width: min(850px, calc(100vw - 56px));
+
+    /*
+        화면 높이를 넘지 않도록 제한함.
+        상단 헤더 영역도 고려함.
+    */
+    max-height: calc(100vh - 158px);
+
+    /*
+        Photo 팝업에서는 스크롤 제거함.
+    */
+    overflow: hidden;
+
+    /*
+        닫기 버튼 영역과 사진 영역을
+        세로로 배치함.
+    */
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -938,6 +970,19 @@
     margin-bottom: 22px;
 
     border-bottom: 1px dashed rgba(93, 90, 84, 0.35);
+}
+
+.record-content-modal__header--photo {
+    justify-content: flex-end;
+
+    /*
+        제목이 없으므로
+        기존 구분선과 큰 여백 제거함.
+    */
+    padding-bottom: 0;
+    margin-bottom: 16px;
+
+    border-bottom: 0;
 }
 
 
