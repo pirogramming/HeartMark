@@ -210,18 +210,83 @@
         </button>
 
 
-        <!-- Listen 모달을 여는 버튼 -->
+        <!-- ==========================================
+            Listen BGM 재생 / 정지 버튼
+        =========================================== -->
         <button
             type="button"
-            class="record-action-button"
-            data-modal-open="listen-modal"
+            class="
+                record-action-button
+                record-action-button--listen
+            "
+            id="bgm-toggle-button"
+            aria-label="BGM 재생"
+            aria-pressed="false"
         >
             <span
-                class="record-action-icon"
+                class="
+                    record-action-icon
+                    record-action-icon--listen
+                "
                 aria-hidden="true"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headset-icon lucide-headset"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg>
+
+                <!-- ==========================================
+                    BGM 꺼짐 상태
+
+                    헤드셋 + 사선 아이콘
+                =========================================== -->
+                <span
+                    class="bgm-icon bgm-icon--off"
+                    id="bgm-icon-off"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-headphone-off-icon lucide-headphone-off"
+                    >
+                        <path d="M21 14h-1.343"/>
+                        <path d="M9.128 3.47A9 9 0 0 1 21 12v3.343"/>
+                        <path d="m2 2 20 20"/>
+                        <path d="M20.414 20.414A2 2 0 0 1 19 21h-1a2 2 0 0 1-2-2v-3"/>
+                        <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 2.636-6.364"/>
+                    </svg>
+                </span>
+
+
+                <!-- BGM 재생 중 아이콘 -->
+                <span
+                    class="bgm-icon bgm-icon--on"
+                    id="bgm-icon-on"
+                    hidden
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-headphones-icon lucide-headphones"
+                    >
+                        <path
+                            d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"
+                        />
+                    </svg>
+                </span>
+
             </span>
+
 
             <span class="record-action-label">
                 Listen

@@ -1,36 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
     // ========================================================
-    // 1. 플레이어 요소 가져옴.
+    // 1. 필요한 요소 가져옴.
     // ========================================================
 
-    const audio = document.querySelector("#bgm-audio");
-
-    const playButton = document.querySelector(
-        "#bgm-play-button",
+    const toggleButton = document.querySelector(
+        "#bgm-toggle-button",
     );
 
-    const restartButton = document.querySelector(
-        "#bgm-restart-button",
+    const audio = document.querySelector(
+        "#bgm-audio",
     );
 
-    const muteButton = document.querySelector(
-        "#bgm-mute-button",
+    const musicItems = Array.from(
+        document.querySelectorAll(
+            ".bgm-music-data",
+        ),
     );
 
-    const volumeSlider = document.querySelector(
-        "#bgm-volume",
+    const iconOff = document.querySelector(
+        "#bgm-icon-off",
     );
 
-    const progressBar = document.querySelector(
-        "#bgm-progress",
-    );
-
-    const currentTimeText = document.querySelector(
-        "#bgm-current-time",
-    );
-
-    const durationText = document.querySelector(
-        "#bgm-duration",
+    const iconOn = document.querySelector(
+        "#bgm-icon-on",
     );
 
     const errorMessage = document.querySelector(
@@ -38,280 +30,173 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    // 음악이 없는 기록에서는 플레이어 로직 실행하지 않음.
-    if (!audio) {
+    // Listen 버튼이 없으면 실행 중단함.
+    if (!toggleButton) {
         return;
     }
 
 
+    // 등록된 음원이 없으면 버튼 비활성화함.
+    if (!audio || musicItems.length === 0) {
+        toggleButton.disabled = true;
+
+        toggleButton.setAttribute(
+            "aria-label",
+            "재생 가능한 BGM 없음",
+        );
+
+        return;
+    }
+
+
+    // 직전에 선택된 음악 위치 저장함.
+    let previousMusicIndex = -1;
+
+
     // ========================================================
-    // 2. 시간 표시 함수
+    // 2. 아이콘 상태 변경
     // ========================================================
 
-    function formatTime(seconds) {
-        // 음원 정보를 아직 불러오지 못한 경우 0:00 반환함.
-        if (!Number.isFinite(seconds)) {
-            return "0:00";
+    function updateButtonState(isPlaying) {
+        if (iconOn) {
+            iconOn.hidden = !isPlaying;
         }
 
-        const minutes = Math.floor(
-            seconds / 60,
+        if (iconOff) {
+            iconOff.hidden = isPlaying;
+        }
+
+        toggleButton.classList.toggle(
+            "is-playing",
+            isPlaying,
         );
 
-        const remainingSeconds = Math.floor(
-            seconds % 60,
+        toggleButton.setAttribute(
+            "aria-pressed",
+            String(isPlaying),
         );
 
-        return (
-            `${minutes}:`
-            + `${remainingSeconds}`.padStart(
-                2,
-                "0",
-            )
+        toggleButton.setAttribute(
+            "aria-label",
+            isPlaying
+                ? "BGM 정지"
+                : "BGM 재생",
         );
     }
 
 
     // ========================================================
-    // 3. 재생 버튼 상태 변경 함수
+    // 3. 랜덤 음악 위치 선택
     // ========================================================
 
-    function updatePlayButton() {
-        if (!playButton) {
+    function getRandomMusicIndex() {
+        // 음악이 한 곡뿐이면 첫 번째 곡 사용함.
+        if (musicItems.length === 1) {
+            return 0;
+        }
+
+        let randomIndex;
+
+        // 직전 음악과 다른 곡이 나올 때까지 다시 선택함.
+        do {
+            randomIndex = Math.floor(
+                Math.random() * musicItems.length,
+            );
+        } while (
+            randomIndex === previousMusicIndex
+        );
+
+        return randomIndex;
+    }
+
+
+    // ========================================================
+    // 4. 랜덤 음악 선택 후 재생
+    // ========================================================
+
+    async function playRandomMusic() {
+        // 랜덤 음악 위치 선택함.
+        const randomIndex = getRandomMusicIndex();
+
+        const selectedMusic = musicItems[
+            randomIndex
+        ];
+
+        const musicSrc = selectedMusic.dataset.src;
+
+        // 음원 경로가 없으면 실행 중단함.
+        if (!musicSrc) {
             return;
         }
 
-        // 음악이 멈춘 상태
-        if (audio.paused) {
-            playButton.textContent = "▶";
-            playButton.setAttribute(
-                "aria-label",
-                "음악 재생",
+        // 직전 음악 위치 갱신함.
+        previousMusicIndex = randomIndex;
+
+        // 이전 음악 정지함.
+        audio.pause();
+
+        // 새로운 음원 지정함.
+        audio.src = musicSrc;
+
+        // 새로운 음악 처음부터 시작함.
+        audio.currentTime = 0;
+
+        // 오류 문구 숨김.
+        if (errorMessage) {
+            errorMessage.hidden = true;
+        }
+
+        try {
+            // 음악 재생함.
+            await audio.play();
+
+            // 재생 상태 표시함.
+            updateButtonState(true);
+
+        } catch (error) {
+            console.error(
+                "BGM 재생 중 오류 발생:",
+                error,
             );
 
-            return;
-        }
+            updateButtonState(false);
 
-        // 음악이 재생 중인 상태
-        playButton.textContent = "❚❚";
-        playButton.setAttribute(
-            "aria-label",
-            "음악 일시정지",
-        );
+            if (errorMessage) {
+                errorMessage.hidden = false;
+            }
+        }
     }
 
 
     // ========================================================
-    // 4. 음소거 버튼 상태 변경 함수
+    // 5. Listen 버튼 클릭
     // ========================================================
 
-    function updateMuteButton() {
-        if (!muteButton) {
-            return;
-        }
-
-        // 음소거 상태이거나 음량이 0인 경우
-        if (audio.muted || audio.volume === 0) {
-            muteButton.textContent = "🔇";
-
-            muteButton.setAttribute(
-                "aria-label",
-                "음소거 해제",
-            );
-
-            return;
-        }
-
-        muteButton.textContent = "🔊";
-
-        muteButton.setAttribute(
-            "aria-label",
-            "음소거",
-        );
-    }
-
-
-    // ========================================================
-    // 5. 초기 음량 설정
-    // ========================================================
-
-    if (volumeSlider) {
-        audio.volume = Number(
-            volumeSlider.value,
-        );
-    }
-
-
-    // ========================================================
-    // 6. 재생 / 일시정지
-    // ========================================================
-
-    if (playButton) {
-        playButton.addEventListener(
-            "click",
-            async () => {
-                if (audio.paused) {
-                    try {
-                        await audio.play();
-                    } catch (error) {
-                        console.error(
-                            "BGM 재생 중 오류 발생:",
-                            error,
-                        );
-
-                        if (errorMessage) {
-                            errorMessage.hidden = false;
-                        }
-                    }
-
-                    return;
-                }
-
+    toggleButton.addEventListener(
+        "click",
+        async () => {
+            // 현재 음악이 재생 중이면 정지함.
+            if (!audio.paused) {
                 audio.pause();
-            },
-        );
-    }
 
-
-    // ========================================================
-    // 7. 처음부터 다시 듣기
-    // ========================================================
-
-    if (restartButton) {
-        restartButton.addEventListener(
-            "click",
-            async () => {
-                // 재생 위치를 처음으로 이동함.
+                // 다시 누르면 새로운 곡을 선택하도록
+                // 현재 위치를 처음으로 초기화함.
                 audio.currentTime = 0;
 
-                try {
-                    // 처음으로 이동한 뒤 바로 재생함.
-                    await audio.play();
-                } catch (error) {
-                    console.error(
-                        "BGM 다시 듣기 중 오류 발생:",
-                        error,
-                    );
-                }
-            },
-        );
-    }
+                updateButtonState(false);
 
-
-    // ========================================================
-    // 8. 음량 조절
-    // ========================================================
-
-    if (volumeSlider) {
-        volumeSlider.addEventListener(
-            "input",
-            () => {
-                const volume = Number(
-                    volumeSlider.value,
-                );
-
-                audio.volume = volume;
-
-                // 음량을 직접 올리면 음소거 해제함.
-                if (volume > 0) {
-                    audio.muted = false;
-                }
-
-                updateMuteButton();
-            },
-        );
-    }
-
-
-    // ========================================================
-    // 9. 음소거 / 음소거 해제
-    // ========================================================
-
-    if (muteButton) {
-        muteButton.addEventListener(
-            "click",
-            () => {
-                audio.muted = !audio.muted;
-
-                updateMuteButton();
-            },
-        );
-    }
-
-
-    // ========================================================
-    // 10. 음원 전체 길이 표시
-    // ========================================================
-
-    audio.addEventListener(
-        "loadedmetadata",
-        () => {
-            if (durationText) {
-                durationText.textContent = formatTime(
-                    audio.duration,
-                );
+                return;
             }
 
-            if (progressBar) {
-                progressBar.max = audio.duration;
-            }
+            // 멈춰 있는 상태에서 클릭하면
+            // 새로운 랜덤 음악 선택 후 재생함.
+            await playRandomMusic();
         },
     );
 
 
     // ========================================================
-    // 11. 재생 중 진행바와 현재 시간 갱신
-    // ========================================================
-
-    audio.addEventListener(
-        "timeupdate",
-        () => {
-            if (currentTimeText) {
-                currentTimeText.textContent = formatTime(
-                    audio.currentTime,
-                );
-            }
-
-            if (progressBar) {
-                progressBar.value = audio.currentTime;
-            }
-        },
-    );
-
-
-    // ========================================================
-    // 12. 진행바 직접 이동
-    // ========================================================
-
-    if (progressBar) {
-        progressBar.addEventListener(
-            "input",
-            () => {
-                audio.currentTime = Number(
-                    progressBar.value,
-                );
-            },
-        );
-    }
-
-
-    // ========================================================
-    // 13. 재생 상태에 맞춰 버튼 변경
-    // ========================================================
-
-    audio.addEventListener(
-        "play",
-        updatePlayButton,
-    );
-
-    audio.addEventListener(
-        "pause",
-        updatePlayButton,
-    );
-
-
-    // ========================================================
-    // 14. 음악이 끝났을 때 초기화
+    // 6. 음악이 끝난 경우 상태 초기화
     // ========================================================
 
     audio.addEventListener(
@@ -319,38 +204,22 @@ document.addEventListener("DOMContentLoaded", () => {
         () => {
             audio.currentTime = 0;
 
-            if (progressBar) {
-                progressBar.value = 0;
-            }
-
-            if (currentTimeText) {
-                currentTimeText.textContent = "0:00";
-            }
-
-            updatePlayButton();
+            updateButtonState(false);
         },
     );
 
 
     // ========================================================
-    // 15. 음원 로딩 실패 처리
+    // 7. 음원 오류 처리
     // ========================================================
 
     audio.addEventListener(
         "error",
         () => {
-            audio.pause();
+            updateButtonState(false);
 
             if (errorMessage) {
                 errorMessage.hidden = false;
-            }
-
-            if (playButton) {
-                playButton.disabled = true;
-            }
-
-            if (restartButton) {
-                restartButton.disabled = true;
             }
 
             console.error(
@@ -362,54 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ========================================================
-    // 16. Listen 모달이 닫히면 음악 일시정지
-    // ========================================================
-
-    const listenModal = document.querySelector(
-        "#listen-modal",
-    );
-
-    if (listenModal) {
-        const listenCloseButtons = listenModal.querySelectorAll(
-            "[data-modal-close]",
-        );
-
-        listenCloseButtons.forEach(
-            (button) => {
-                button.addEventListener(
-                    "click",
-                    () => {
-                        audio.pause();
-                    },
-                );
-            },
-        );
-    }
-
-
-    // ========================================================
-    // 17. Photo / Read로 이동하면 음악 일시정지
-    // ========================================================
-
-    const otherModalButtons = document.querySelectorAll(
-        '[data-modal-open="photo-modal"], '
-        + '[data-modal-open="read-modal"]',
-    );
-
-    otherModalButtons.forEach(
-        (button) => {
-            button.addEventListener(
-                "click",
-                () => {
-                    audio.pause();
-                },
-            );
-        },
-    );
-
-
-    // ========================================================
-    // 18. 페이지를 떠날 때 음악 종료 및 초기화
+    // 8. 페이지 이동 시 음악 종료
     // ========================================================
 
     window.addEventListener(
@@ -422,9 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ========================================================
-    // 19. 초기 버튼 상태 설정
+    // 9. 초기 상태
     // ========================================================
 
-    updatePlayButton();
-    updateMuteButton();
+    updateButtonState(false);
 });
