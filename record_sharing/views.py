@@ -77,12 +77,9 @@ def share_create(request, record_id):
                 messages.error(request, error)
         return _back_to_record(request, record_id)
 
-    result = share_record_with_friends(
-        record,
-        request.user,
-        form.cleaned_data["friends"],
-        share_location=form.cleaned_data["share_location"],
-    )
+    records = list(form.cleaned_data["record_ids"])
+    results = [share_record_with_friends(record_item, request.user, form.cleaned_data["friends"], share_location=form.cleaned_data["share_location"]) for record_item in records]
+    result = {"shared": [item for result_item in results for item in result_item["shared"]], "failed": [item for result_item in results for item in result_item["failed"]]}
 
     # 성공한 사람과 실패한 사람을 나눠서 안내한다.
     # 3명을 골랐는데 1명만 실패했다면, 나머지 2명은 공유된 상태다.
