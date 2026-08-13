@@ -34,7 +34,7 @@ class Record(models.Model):
         CLOUDY = "cloudy", "구름"
         RAINY = "rainy", "비"
         THUNDER = "thunder", "천둥"
-        DUST = "dust", "황사"
+        DUST = "dust", "미세먼지"
         SNOWY = "snowy", "눈"
 
     user = models.ForeignKey(
