@@ -81,7 +81,7 @@
     --card-line: #f3e2d6;
     --muted: #9a8f88;
 
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
     margin: 0 auto 48px;
     text-align: center;
 }
@@ -110,7 +110,7 @@
 }
 
 .record-detail-shell--shared .record-detail-card {
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
 }
 
 .sharing-button {
