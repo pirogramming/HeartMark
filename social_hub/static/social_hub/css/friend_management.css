@@ -17,7 +17,7 @@
 .friend-book {
     position: relative;
     min-height: calc(100vh - 100px);
-    padding: 80px max(24px, 7vw) 100px;
+    padding: 38px max(24px, 7vw) 100px;
     overflow: hidden;
     color: var(--friend-ink);
     background: #fff8e8;
