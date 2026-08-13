@@ -57,11 +57,12 @@
 }
 
 .shared-mailbox__toolbar {
+    width: min(980px, 100%);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 22px;
+    justify-content: flex-end;
+    gap: 14px;
+    margin: -15px auto 22px;
 }
 
 .shared-mailbox__count {

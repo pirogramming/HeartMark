@@ -29,7 +29,7 @@
 .friend-board {
     position: relative;
     z-index: 1;
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
     margin-inline: auto;
 }
 
