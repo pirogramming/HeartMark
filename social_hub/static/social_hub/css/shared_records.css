@@ -337,6 +337,7 @@
 }
 
 .shared-mailbox > .friend-empty {
+    width: min(980px, 100%);
     display: grid;
     min-height: 380px;
     place-items: center;
