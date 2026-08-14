@@ -62,7 +62,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 14px;
-    margin: -15px auto 22px;
+    margin: -25px auto 22px;
 }
 
 .shared-mailbox__count {
