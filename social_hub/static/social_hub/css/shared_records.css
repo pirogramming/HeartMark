@@ -200,13 +200,16 @@
     display: grid;
     align-content: start;
     gap: 15px;
+    min-height: 230px;
     min-width: 0;
 }
 
 .shared-record-card__title {
-    margin: 0 0 10px;
+    padding-bottom: 8px;
+    margin: 0;
+    border-bottom: 1px solid rgba(214, 128, 97, 0.24);
     color: var(--shared-ink);
-    font-size: 1.08rem;
+    font-size: 1.2rem;
     line-height: 1.35;
 }
 
@@ -248,6 +251,7 @@
 }
 
 .shared-place {
+    margin-top: auto;
     display: grid;
     grid-template-columns: 38px 1fr;
     align-items: center;
