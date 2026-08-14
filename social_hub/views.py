@@ -153,6 +153,7 @@ def shared_records(request):
                 "sender_name": _display_name(share.sender),
                 "sender_character_url": _character_url(share.sender),
                 "record_id": record.pk,
+                "title": record.title or "오늘의 기록",
                 "record_date": date_format(record.created_at, "Y년 n월 j일"),
                 "main_emotion": f"{record.main_emotion:02d}",
                 "main_emotion_name": EMOTION_NAMES.get(record.main_emotion, f"감정 {record.main_emotion}"),
