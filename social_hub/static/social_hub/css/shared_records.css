@@ -177,8 +177,8 @@
 .shared-record-card__body {
     display: grid;
     grid-template-columns: minmax(145px, 0.78fr) minmax(0, 1.22fr);
-    gap: 18px;
-    padding: 20px;
+    gap: 22px;
+    padding: 20px 20px 12px;
 }
 
 .shared-record-card__photo {
@@ -198,8 +198,9 @@
 
 .shared-record-card__content {
     display: grid;
+    grid-template-rows: auto auto minmax(5.2em, 1fr);
     align-content: start;
-    gap: 15px;
+    gap: 18px;
     min-height: 230px;
     min-width: 0;
 }
@@ -240,7 +241,7 @@
 
 .shared-record-card__content > p {
     display: -webkit-box;
-    min-height: 4.8em;
+    min-height: 5.2em;
     margin: 0;
     overflow: hidden;
     color: #6f5b4d;
@@ -313,7 +314,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    padding: 14px 20px 18px;
+    padding: 4px 20px 20px;
     margin-top: auto;
 }
 
