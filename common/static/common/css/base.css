@@ -852,3 +852,15 @@ input {
         display: none;
     }
 }
+
+@media (min-width: 1700px) {
+    .page-particles::before {
+        background-image: url("../images/page-particles-final-desktop.png");
+        background-size: 2700px 1800px;
+    }
+
+    .page-particles::after {
+        background-image: url("../images/page-particles-repeat-desktop.png");
+        background-size: 2700px 900px;
+    }
+}
