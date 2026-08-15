@@ -325,6 +325,7 @@
 .shared-record-card__footer a {
     display: inline-grid;
     place-items: center;
+    margin-left: auto;
     min-height: 41px;
     padding: 0 17px;
     border: 1px solid #58463a;
@@ -474,6 +475,7 @@
 
     .shared-record-card__footer a {
         width: 100%;
+        margin-left: 0;
     }
 
     .shared-record-notice {
