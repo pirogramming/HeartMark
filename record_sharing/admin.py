@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import RecordShare
+from .models import RecordShare, RecordShareComment
 
 
 @admin.register(RecordShare)
@@ -13,3 +13,10 @@ class RecordShareAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at",)
     # FK 를 드롭다운 대신 검색창으로. 기록·사용자가 많아져도 admin 이 느려지지 않는다.
     raw_id_fields = ("record", "sender", "receiver")
+
+
+@admin.register(RecordShareComment)
+class RecordShareCommentAdmin(admin.ModelAdmin):
+    list_display = ("share", "author", "content", "created_at")
+    search_fields = ("author__username", "content")
+    raw_id_fields = ("share", "author")

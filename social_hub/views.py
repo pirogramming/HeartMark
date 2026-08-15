@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.formats import date_format
+from django.utils import timezone
 
 from friendships.models import Invitation
 from friendships.services import (
@@ -144,6 +145,7 @@ def friend_management(request):
 def shared_records(request):
     """은아의 공유 서비스가 허용한 기록과 장소 정보만 화면 형태로 변환한다."""
     items = []
+    open_comment_share = request.GET.get("comments")
     for share in get_shared_records(request.user):
         record = share.record
         place = get_shared_place_data(share, request.user)
@@ -162,6 +164,21 @@ def shared_records(request):
                 "share_location": bool(place and place["is_visible"]),
                 "place_name": place["name"] if place and place["is_visible"] else "",
                 "detail_url": reverse("record_sharing:shared_detail", args=[share.pk]),
+                "comment_url": reverse("record_sharing:comment_create", args=[share.pk]),
+                "comments_open": open_comment_share == str(share.pk),
+                "comments": [
+                    {
+                        "author_name": _display_name(comment.author),
+                        "content": comment.content,
+                        "created_at": date_format(timezone.localtime(comment.created_at), "n/j H:i"),
+                        "is_mine": comment.author_id == request.user.pk,
+                        "delete_url": reverse(
+                            "record_sharing:comment_delete",
+                            args=[share.pk, comment.pk],
+                        ),
+                    }
+                    for comment in share.comments.select_related("author").all()
+                ],
             }
         )
 

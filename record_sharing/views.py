@@ -19,7 +19,7 @@ from django.views.decorators.http import require_POST
 from records.models import Record
 
 from .forms import RecordShareForm
-from .models import RecordShare
+from .models import RecordShare, RecordShareComment
 from .services import (
     RecordShareError,
     can_view_shared_record,
@@ -199,4 +199,47 @@ def shared_detail(request, pk):
             "place": get_shared_place_data(share, request.user),
             "shared_list_url": reverse("record_sharing:shared_list"),
         },
+    )
+
+
+@login_required(login_url="accounts:login")
+@require_POST
+def comment_create(request, pk):
+    """공유 당사자만 해당 마음 편지에 댓글을 남길 수 있다."""
+    share = get_object_or_404(RecordShare, pk=pk, revoked_at__isnull=True)
+    if request.user.pk not in {share.sender_id, share.receiver_id}:
+        raise Http404
+
+    content = request.POST.get("content", "").strip()
+    if not content:
+        messages.error(request, "댓글 내용을 입력해 주세요.")
+    elif len(content) > 300:
+        messages.error(request, "댓글은 300자 이내로 입력해 주세요.")
+    else:
+        RecordShareComment.objects.create(share=share, author=request.user, content=content)
+        messages.success(request, "마음 한마디를 남겼어요.")
+
+    return redirect(
+        f"{reverse('social_hub:shared_records')}?comments={share.pk}"
+        f"#shared-record-{share.pk}"
+    )
+
+
+@login_required(login_url="accounts:login")
+@require_POST
+def comment_delete(request, pk, comment_id):
+    """댓글 작성자 본인만 댓글을 삭제할 수 있다."""
+    share = get_object_or_404(RecordShare, pk=pk, revoked_at__isnull=True)
+    comment = get_object_or_404(
+        RecordShareComment,
+        pk=comment_id,
+        share=share,
+        author=request.user,
+    )
+    comment.delete()
+    messages.success(request, "댓글을 삭제했어요.")
+
+    return redirect(
+        f"{reverse('social_hub:shared_records')}?comments={share.pk}"
+        f"#shared-record-{share.pk}"
     )

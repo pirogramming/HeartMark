@@ -163,3 +163,26 @@ class RecordShare(models.Model):
         # (Django 는 기본적으로 save() 시 검증을 하지 않는다. friendships.Friendship 도 같은 방식)
         self.full_clean()
         return super().save(*args, **kwargs)
+
+
+class RecordShareComment(models.Model):
+    """공유된 기록에 남기는 짧은 댓글."""
+
+    share = models.ForeignKey(
+        RecordShare,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="record_share_comments",
+    )
+    content = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"{self.author}: {self.content[:20]}"
