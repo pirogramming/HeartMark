@@ -538,10 +538,30 @@
 
 .person-card__more {
     width: 42px;
+    height: 40px;
     padding: 0;
     border-color: transparent;
     background: transparent;
-    font-size: 1rem;
+    color: #8f7a69;
+    display: inline-grid;
+    place-items: center;
+    transition: color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.person-card__more svg {
+    width: 20px;
+    height: 20px;
+}
+
+.person-card__more:hover {
+    color: #bd6f65;
+    background: #fff0e8;
+    transform: translateY(-1px);
+}
+
+.person-card__more:focus-visible {
+    outline: 2px solid #e9b8ae;
+    outline-offset: 2px;
 }
 
 .waiting-sticker {
