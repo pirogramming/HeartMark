@@ -853,7 +853,7 @@ input {
     }
 }
 
-@media (min-width: 1700px) {
+@media (min-width: 1700px) and (min-height: 1000px) {
     .page-particles::before {
         background-image: url("../images/page-particles-final-desktop.png");
         background-size: 2700px 1800px;
