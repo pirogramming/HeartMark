@@ -402,11 +402,12 @@
 .shared-comment {
     padding: 9px 11px;
     border-radius: 12px;
-    background: #f8f4fd;
+    background: #fffcf5;
+    border: 1px solid #eee5d9;
 }
 
 .shared-comment--mine {
-    background: #f8f4fd;
+    background: #fffcf5;
 }
 
 .shared-comment > div {
