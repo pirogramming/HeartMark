@@ -14,7 +14,7 @@ from friendships.services import (
     get_received_requests,
     get_sent_requests,
 )
-from record_sharing.services import get_shared_place_data, get_shared_records
+from record_sharing.services import get_sent_records, get_shared_place_data, get_shared_records
 from records.models import EMOTION_NAMES, Record
 
 
@@ -184,3 +184,39 @@ def shared_records(request):
 
     context = {"shared_records": items}
     return render(request, "social_hub/shared_records.html", context)
+
+
+@login_required(login_url="accounts:login")
+def sent_records(request):
+    """내가 누구에게 어떤 기록을 보냈는지 확인하고 공유를 취소한다."""
+    items = []
+    for share in get_sent_records(request.user):
+        record = share.record
+        items.append(
+            {
+                "share_id": share.pk,
+                "receiver_id": share.receiver_id,
+                "receiver_name": _display_name(share.receiver),
+                "receiver_character_url": _character_url(share.receiver),
+                "record_id": record.pk,
+                "title": record.title or "오늘의 기록",
+                "record_date": date_format(record.created_at, "Y년 n월 j일"),
+                "shared_at": date_format(timezone.localtime(share.created_at), "Y년 n월 j일 H:i"),
+                "main_emotion": f"{record.main_emotion:02d}",
+                "main_emotion_name": EMOTION_NAMES.get(
+                    record.main_emotion,
+                    f"감정 {record.main_emotion}",
+                ),
+                "image_url": record.image.url if record.image else "",
+                "content_preview": record.content,
+                "share_location": share.share_location,
+                "detail_url": reverse("records:detail", args=[record.pk]),
+                "revoke_url": reverse("record_sharing:revoke", args=[record.pk]),
+            }
+        )
+
+    return render(
+        request,
+        "social_hub/sent_records.html",
+        {"sent_records": items, "next_url": request.get_full_path()},
+    )

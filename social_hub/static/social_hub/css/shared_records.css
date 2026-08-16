@@ -569,6 +569,63 @@
     box-shadow: 0 10px 26px rgba(70, 49, 37, 0.14);
 }
 
+.sent-record-card__status {
+    padding: 7px 9px;
+    border-radius: 999px;
+    color: #817870;
+    background: #eeeae6;
+    font-size: 0.66rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sent-record-card__status--location {
+    color: #b2614f;
+    background: #ffe7d9;
+}
+
+.sent-record-card__footer {
+    align-items: center;
+}
+
+.sent-record-card__footer > time {
+    color: var(--shared-muted);
+    font-size: 0.7rem;
+}
+
+.sent-record-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.sent-record-card__actions form {
+    margin: 0;
+}
+
+.sent-record-card__actions button,
+.sent-empty__link {
+    display: inline-grid;
+    min-height: 41px;
+    padding: 0 15px;
+    place-items: center;
+    border: 1px solid #d59b88;
+    border-radius: 11px;
+    color: #a95748;
+    background: #fff2ee;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sent-empty__link {
+    margin-top: 12px;
+    color: var(--shared-ink);
+    background: var(--shared-accent);
+}
+
 @media (max-width: 1023px) {
     .shared-mailbox {
         padding: 64px 32px 80px;
@@ -657,6 +714,22 @@
     .shared-record-card__footer a {
         width: 100%;
         margin-left: 0;
+    }
+
+    .sent-record-card__footer,
+    .sent-record-card__actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .sent-record-card__actions {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .sent-record-card__actions form,
+    .sent-record-card__actions button {
+        width: 100%;
     }
 
     .shared-record-notice {

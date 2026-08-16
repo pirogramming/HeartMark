@@ -101,6 +101,16 @@ def get_shared_records(user):
     )
 
 
+def get_sent_records(user):
+    """`user`가 친구들에게 보낸, 아직 취소하지 않은 마음 편지 목록."""
+    return (
+        _active_shares()
+        .filter(sender=user)
+        .select_related("record", "receiver", "record__place")
+        .order_by("-created_at")
+    )
+
+
 def get_active_shares_for_record(record, sender):
     """`sender` 가 이 기록을 지금 누구에게 공유 중인지.
 
