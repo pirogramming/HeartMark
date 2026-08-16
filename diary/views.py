@@ -8,7 +8,8 @@ from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
 from bgm.services import get_available_music
-# 담당 C가 만든 실제 기록 모델을 가져옵니다.
+
+# 담당 C가 만든 실제 기록 모델 가져옴.
 from records.models import Record
 
 
@@ -49,7 +50,7 @@ EMOTION_NAME_MAP = {
 감정 하나마다 다른 색을 사용하는 것이 아니라,
 
 비슷한 색상 계열의 감정을
-하나의 그래프 조각으로 묶어서 표시
+하나의 그래프 조각으로 묶어서 표시함.
 
 예:
 사랑, 짝사랑
@@ -60,11 +61,12 @@ EMOTION_NAME_MAP = {
 
 중요:
 여기서는 감정 이름이 아니라
-감정 번호를 기준으로 그룹을 지정
+감정 번호를 기준으로 그룹 지정함.
 
 같은 이름의 감정이 여러 번호에 존재하더라도
-번호 기준으로 안정적으로 처리할 수 있음
+번호 기준으로 안정적으로 처리할 수 있음.
 """
+
 EMOTION_COLOR_GROUP_MAP = {
     1: "blue",
     2: "pink",
@@ -91,7 +93,7 @@ EMOTION_COLOR_GROUP_MAP = {
 
 def get_emotion_name(emotion_number):
     """
-    감정 번호를 화면에 표시할 감정 이름으로 변환
+    감정 번호를 화면에 표시할 감정 이름으로 변환함.
 
     예:
     1 → "슬픔"
@@ -100,14 +102,14 @@ def get_emotion_name(emotion_number):
 
     try:
         # JSONField 값이나 폼 값이 문자열일 수도 있으므로
-        # 비교하기 전에 정수로 변환
+        # 비교하기 전에 정수로 변환함.
         emotion_number = int(
             emotion_number,
         )
 
     except (TypeError, ValueError):
         # 값이 없거나 숫자로 바꿀 수 없다면
-        # 빈 문자열을 반환
+        # 빈 문자열 반환함.
         return ""
 
     return EMOTION_NAME_MAP.get(
@@ -119,7 +121,7 @@ def get_emotion_name(emotion_number):
 def get_emotion_color_group(emotion_number):
     """
     감정 번호를 감정별 그래프에서 사용할
-    색상 그룹 이름으로 변환
+    색상 그룹 이름으로 변환함.
 
     예:
     2 → pink
@@ -145,7 +147,7 @@ def get_emotion_color_group(emotion_number):
 def diary_list(request):
     """
     현재 로그인한 사용자가 작성한 실제 Record를 조회하여
-    전체 / 감정별 / 장소별 목록 페이지에 전달
+    전체 / 감정별 / 장소별 목록 페이지에 전달함.
     """
 
     # ========================================================
@@ -174,7 +176,7 @@ def diary_list(request):
 
 
     # 허용하지 않는 탭 이름이 들어오면
-    # 전체 기록 탭으로 돌려놓음
+    # 전체 기록 탭으로 돌려놓음.
     if selected_tab not in {
         "all",
         "emotion",
@@ -215,7 +217,7 @@ def diary_list(request):
 
         except ValueError:
             # 잘못된 날짜 값이 들어오면
-            # 필터를 무시
+            # 필터 무시함.
             selected_start_date = ""
 
 
@@ -256,11 +258,11 @@ def diary_list(request):
         )
 
 
-    # QuerySet을 리스트로 변환
+    # QuerySet을 리스트로 변환함.
     #
     # 이후 여러 번 반복하면서
-    # 감정/장소 데이터를 계산하기 때문에
-    # 한 번 리스트로 만들어 사용
+    # 감정 / 장소 데이터를 계산하기 때문에
+    # 한 번 리스트로 만들어 사용함.
     records = list(
         records_queryset,
     )
@@ -273,13 +275,13 @@ def diary_list(request):
     for record in records:
 
         # 대표 감정 번호를
-        # 사람이 읽을 수 있는 이름으로 바꿈
+        # 사람이 읽을 수 있는 이름으로 바꿈.
         record.main_emotion_name = get_emotion_name(
             record.main_emotion,
         )
 
         # 지도나 다른 화면에서도 필요할 수 있으므로
-        # 대표 감정의 색상 그룹도 record에 임시로 추가
+        # 대표 감정의 색상 그룹도 record에 임시로 추가함.
         record.main_emotion_color_group = (
             get_emotion_color_group(
                 record.main_emotion,
@@ -292,15 +294,11 @@ def diary_list(request):
     # ========================================================
 
     """
-    여기서 중요한 점:
-
     record.emotions 전체를 사용하는 것이 아니라
-    record.main_emotion만 사용
+    record.main_emotion만 사용함.
 
     따라서 사용자가 기록할 때 선택한 감정이 3개여도
-
-    대표 감정 1개만
-    감정별 그래프 집계에 포함됨
+    대표 감정 1개만 감정별 그래프 집계에 포함됨.
     """
 
     main_emotion_numbers = []
@@ -330,15 +328,16 @@ def diary_list(request):
     #     12: 1,
     #     11: 1
     # }
+
     emotion_counts = Counter(
         main_emotion_numbers,
     )
 
 
-    # 모든 감정 정보를 담는 목록
+    # 모든 감정 정보를 담는 목록.
     #
     # 기존 기능과의 호환을 위해
-    # 기록 횟수가 0인 감정도 emotions에는 남겨둠
+    # 기록 횟수가 0인 감정도 emotions에는 남겨둠.
     emotions = []
 
     for emotion_id, emotion_name in EMOTION_NAME_MAP.items():
@@ -355,10 +354,10 @@ def diary_list(request):
                 "name": emotion_name,
 
                 # 해당 감정이 대표 감정으로
-                # 기록된 횟수
+                # 기록된 횟수.
                 "record_count": record_count,
 
-                # 도넛 그래프에서 사용할 색상 그룹
+                # 도넛 그래프에서 사용할 색상 그룹.
                 "color_group": (
                     get_emotion_color_group(
                         emotion_id,
@@ -374,10 +373,10 @@ def diary_list(request):
 
     """
     도넛 그래프에는
-    한 번도 기록되지 않은 감정은 나오면 안 됨
+    한 번도 기록되지 않은 감정은 나오면 안 됨.
 
     따라서 record_count가 1 이상인 감정만
-    recorded_emotions에 넣음
+    recorded_emotions에 넣음.
     """
 
     recorded_emotions = [
@@ -386,7 +385,7 @@ def diary_list(request):
         if emotion["record_count"] > 0
     ]
 
-    # 기록 횟수 많은 순으로 정렬
+    # 기록 횟수 많은 순으로 정렬함.
     recorded_emotions.sort(
         key=lambda emotion: emotion["record_count"],
         reverse=True,
@@ -400,7 +399,7 @@ def diary_list(request):
     """
     기존 emotion_modal이나 다른 화면에서
     top_emotions를 사용할 수도 있으므로
-    이 데이터는 유지
+    이 데이터는 유지함.
     """
 
     if recorded_emotions:
@@ -428,7 +427,7 @@ def diary_list(request):
     # ========================================================
 
     """
-    같은 색상 그룹에 속한 감정들을 하나로 합침
+    같은 색상 그룹에 속한 감정들을 하나로 합침.
 
     예:
 
@@ -442,10 +441,10 @@ def diary_list(request):
         count = 4
         emotions = ["만족", "신남", "기쁨"]
 
-    가 됩니다.
+    가 됨.
 
     JavaScript는 이 데이터를 사용하여
-    원 그래프 조각 크기를 계산할 수 있음
+    원 그래프 조각 크기를 계산할 수 있음.
     """
 
     emotion_chart_group_dict = {}
@@ -467,34 +466,30 @@ def diary_list(request):
 
 
         # 해당 색상 그룹이 처음 등장하면
-        # 기본 구조를 생성
+        # 기본 구조 생성함.
         if color_group not in emotion_chart_group_dict:
 
             emotion_chart_group_dict[color_group] = {
                 "color_group": color_group,
 
                 # 이 색상 그룹에 속한
-                # 대표 감정 기록 수의 총합
+                # 대표 감정 기록 수 총합.
                 "record_count": 0,
 
-                # hover 시 보여줄 감정 이름 목록
+                # hover 시 보여줄 감정 이름 목록.
                 "emotion_names": [],
             }
 
 
         # 색상 그룹의 전체 기록 수에
-        # 현재 감정 기록 수를 더함
+        # 현재 감정 기록 수 더함.
         emotion_chart_group_dict[
             color_group
         ]["record_count"] += record_count
 
 
         # 같은 이름을 중복해서
-        # 툴팁에 표시하지 않도록 함
-        #
-        # 예:
-        # 감정 번호 1, 6, 10이 모두 "슬픔"이어도
-        # hover에는 "슬픔" 한 번만 표시함
+        # 툴팁에 표시하지 않도록 함.
         if (
             emotion_name
             not in emotion_chart_group_dict[
@@ -509,7 +504,7 @@ def diary_list(request):
 
 
     # 딕셔너리를 템플릿에서 사용하기 쉬운
-    # 리스트 형태로 바꿈
+    # 리스트 형태로 바꿈.
     emotion_chart_groups = list(
         emotion_chart_group_dict.values()
     )
@@ -518,18 +513,6 @@ def diary_list(request):
     # ========================================================
     # 11. 전체 대표 감정 기록 수
     # ========================================================
-
-    """
-    현재 Record 하나당 대표 감정이 하나이므로
-    정상적인 데이터라면 records 개수와 같음
-
-    그래프 가운데의
-
-    전체 기록
-    8개
-
-    를 표시할 때 사용할 값
-    """
 
     total_record_count = sum(
         emotion["record_count"]
@@ -547,14 +530,14 @@ def diary_list(request):
     for record in records:
 
         # Record에 연결된 Place가 없으면
-        # 지도에 표시할 수 없으므로 제외
+        # 지도에 표시할 수 없으므로 제외함.
         if not record.place:
             continue
 
 
         # Place 모델의 district에는
         # "성북구", "강남구"와 같은
-        # 서울 자치구 이름이 저장됨
+        # 서울 자치구 이름이 저장됨.
         district_name = (
             record.place.district.strip()
             if record.place.district
@@ -562,7 +545,7 @@ def diary_list(request):
         )
 
 
-        # 구 이름이 없다면 제외
+        # 구 이름이 없다면 제외함.
         if not district_name:
             continue
 
@@ -573,7 +556,7 @@ def diary_list(request):
 
 
         # 대표 감정 정보가 없으면
-        # 지도 감정 색상을 정할 수 없으므로 제외
+        # 지도 감정 색상을 정할 수 없으므로 제외함.
         if not emotion_name:
             continue
 
@@ -607,14 +590,14 @@ def diary_list(request):
     ) in district_records.items():
 
         # 해당 구에서 기록된
-        # 대표 감정 이름 목록
+        # 대표 감정 이름 목록.
         emotion_names = [
             item["emotion_name"]
             for item in district_record_list
         ]
 
 
-        # 가장 많이 기록된 감정 계산
+        # 가장 많이 기록된 감정 계산함.
         emotion_name_counts = Counter(
             emotion_names,
         )
@@ -625,7 +608,7 @@ def diary_list(request):
         )
 
 
-        # 가장 최근 기록 계산
+        # 가장 최근 기록 계산함.
         latest_record = max(
             district_record_list,
             key=lambda item: item[
@@ -636,20 +619,20 @@ def diary_list(request):
 
         district_map_data.append(
             {
-                # SVG path의 id와 비교할 구 이름
+                # SVG path의 id와 비교할 구 이름.
                 "district_name": district_name,
 
-                # 해당 구에서 작성한 기록 수
+                # 해당 구에서 작성한 기록 수.
                 "visit_count": len(
                     district_record_list,
                 ),
 
-                # 해당 구에서 가장 많이 기록된 감정
+                # 해당 구에서 가장 많이 기록된 감정.
                 "dominant_emotion": (
                     dominant_emotion
                 ),
 
-                # 해당 구에서 가장 최근 대표 감정
+                # 해당 구에서 가장 최근 대표 감정.
                 "latest_emotion": (
                     latest_record[
                         "emotion_name"
@@ -708,19 +691,19 @@ def diary_list(request):
         # 감정별 기록
         # ----------------------------------------------------
 
-        # 모든 감정
+        # 모든 감정.
         "emotions": emotions,
 
-        # 실제 대표 감정으로 기록된 감정만
+        # 실제 대표 감정으로 기록된 감정만.
         "recorded_emotions": recorded_emotions,
 
-        # 가장 많이 기록한 대표 감정
+        # 가장 많이 기록한 대표 감정.
         "top_emotions": top_emotions,
 
-        # 도넛 그래프용 색상 그룹 데이터
+        # 도넛 그래프용 색상 그룹 데이터.
         "emotion_chart_groups": emotion_chart_groups,
 
-        # 도넛 그래프 가운데 표시할 전체 기록 수
+        # 도넛 그래프 가운데 표시할 전체 기록 수.
         "total_record_count": total_record_count,
 
 
@@ -772,23 +755,23 @@ def diary_list(request):
 def emotion_calendar(request):
     """
     현재 로그인한 사용자의 기록을 날짜별로 정리하여
-    감정 캘린더 페이지에 전달
+    감정 캘린더 페이지에 전달함.
 
-    같은 날짜에 기록이 여러 개 있다면
-    가장 최근에 작성한 기록의 대표 감정을 사용
+    같은 날짜에 기록이 여러 개라면
+    가장 최근에 작성한 기록의 대표 감정을 사용함.
     """
 
     # 오늘 날짜를 기준으로
-    # 캘린더 최초 연도와 월을 설정
+    # 캘린더 최초 연도와 월 설정함.
     today = timezone.localdate()
 
 
-    # 최신 기록부터 조회
+    # 최신 기록부터 조회함.
     #
     # 아래에서 날짜별 데이터에
     # 처음 들어간 기록만 사용하므로
     # 같은 날짜에 여러 기록이 있으면
-    # 가장 최신 기록이 남음
+    # 가장 최신 기록이 남음.
     records = Record.objects.filter(
         user=request.user,
     ).order_by(
@@ -797,14 +780,14 @@ def emotion_calendar(request):
 
 
     # JavaScript에 전달할
-    # 날짜별 감정 데이터
+    # 날짜별 감정 데이터.
     calendar_emotions = {}
 
 
     for record in records:
 
         # created_at을
-        # 한국 시간 기준 날짜로 변환
+        # 한국 시간 기준 날짜로 변환함.
         created_date = timezone.localtime(
             record.created_at,
         ).date()
@@ -816,7 +799,7 @@ def emotion_calendar(request):
 
 
         # 이미 같은 날짜의 최신 기록이 있다면
-        # 오래된 기록은 건너뜀
+        # 오래된 기록은 건너뜀.
         if date_key in calendar_emotions:
             continue
 
@@ -833,32 +816,35 @@ def emotion_calendar(request):
         calendar_emotions[
             date_key
         ] = {
-            # 감정 번호
+            # 감정 번호.
             "number": emotion_number,
 
-            # 감정 이름
+            # 감정 이름.
             "name": get_emotion_name(
                 emotion_number,
             ),
 
-            # 감정 이미지 파일명
+            # 감정 이미지 파일명.
             "image_name": (
                 f"emotion-{emotion_number:02d}.png"
             ),
 
-            # 상세 페이지 이동용 기록 ID
+            # 상세 페이지 이동용 기록 ID.
+            #
+            # 같은 날짜의 기록 중
+            # 가장 최근 기록의 ID가 저장됨.
             "record_id": record.pk,
         }
 
 
     context = {
-        # 최초 화면에 표시할 연도
+        # 최초 화면에 표시할 연도.
         "calendar_year": today.year,
 
-        # 최초 화면에 표시할 월
+        # 최초 화면에 표시할 월.
         "calendar_month": today.month,
 
-        # 날짜별 대표 감정 데이터
+        # 날짜별 대표 감정 데이터.
         "calendar_emotions": (
             calendar_emotions
         ),
@@ -876,46 +862,185 @@ def emotion_calendar(request):
 def diary_detail(request, pk):
     """
     현재 로그인한 사용자가 작성한 기록 하나를 조회하여
-    다이어리 상세 페이지에 전달
+    다이어리 상세 페이지에 전달함.
 
-    pk는 기록의 고유 번호
+    같은 날짜에 여러 개의 기록이 존재하면
+    최신 기록부터 과거 기록 순으로 이동할 수 있도록
+    같은 날짜의 기록 정보도 함께 전달함.
+
+    pk는 기록의 고유 번호.
 
     예:
     /diary/2/
-    → id가 2인 Record를 조회
+    → id가 2인 Record 조회함.
     """
+
+    # ========================================================
+    # 1. 현재 상세 기록 조회
+    # ========================================================
 
     # 다른 사용자의 기록을
     # 주소로 직접 접근하지 못하도록
-    # user=request.user 조건을 함께 사용
+    # user=request.user 조건 함께 사용함.
     record = get_object_or_404(
         Record,
         pk=pk,
         user=request.user,
     )
 
-    # 현재 사용할 수 있는 전체 BGM 목록 조회함.
+
+    # ========================================================
+    # 2. 현재 사용할 수 있는 BGM 조회
+    # ========================================================
+
+    # 기존 Listen 기능 유지함.
     musics = get_available_music()
 
-    # 대표 감정 번호
-    # 대표 감정 정보입니다.
+
+    # ========================================================
+    # 3. 현재 기록의 날짜 계산
+    # ========================================================
+
+    # created_at은 시간까지 가지고 있으므로
+    # 현재 시간대 기준 날짜만 추출함.
     #
-    # Record.main_emotion에는 1~20 사이 번호가 저장됩니다.
+    # 예:
+    # 2026-08-16 21:35
+    # →
+    # 2026-08-16
+    record_date = timezone.localtime(
+        record.created_at,
+    ).date()
+
+
+    # ========================================================
+    # 4. 같은 날짜의 모든 기록 조회
+    # ========================================================
+
+    # 현재 기록과 같은 날 작성된 기록만 조회함.
+    #
+    # -created_at을 사용하여
+    # 가장 최근 기록부터 과거 기록 순으로 정렬함.
+    #
+    # 예:
+    #
+    # 20:30
+    # 15:40
+    # 10:20
+    same_day_records = list(
+        Record.objects
+        .filter(
+            user=request.user,
+            created_at__date=record_date,
+        )
+        .order_by(
+            "-created_at",
+        )
+    )
+
+
+    # ========================================================
+    # 5. 현재 기록이 몇 번째 기록인지 찾기
+    # ========================================================
+
+    # 같은 날짜의 기록 목록 안에서
+    # 현재 보고 있는 record 위치 저장함.
+    current_record_index = 0
+
+
+    for index, same_day_record in enumerate(
+        same_day_records,
+    ):
+
+        if same_day_record.pk == record.pk:
+
+            current_record_index = index
+
+            break
+
+
+    # ========================================================
+    # 6. 왼쪽 화살표용 더 최근 기록
+    # ========================================================
+
+    # 목록이 최신순이므로
+    #
+    # index 0 → 가장 최근
+    # index 1 → 두 번째
+    # index 2 → 세 번째
+    #
+    # 현재 index보다 하나 작은 기록이
+    # 더 최근 기록임.
+    newer_record = None
+
+
+    if current_record_index > 0:
+
+        newer_record = same_day_records[
+            current_record_index - 1
+        ]
+
+
+    # ========================================================
+    # 7. 오른쪽 화살표용 더 과거 기록
+    # ========================================================
+
+    # 현재 index보다 하나 큰 기록이
+    # 더 과거의 기록임.
+    older_record = None
+
+
+    if (
+        current_record_index
+        < len(same_day_records) - 1
+    ):
+
+        older_record = same_day_records[
+            current_record_index + 1
+        ]
+
+
+    # ========================================================
+    # 8. 현재 기록 번호와 전체 기록 수
+    # ========================================================
+
+    # Python index는 0부터 시작하지만
+    # 화면에는 1부터 표시함.
+    #
+    # index 0 → 1 / 3
+    # index 1 → 2 / 3
+    # index 2 → 3 / 3
+    current_record_number = (
+        current_record_index + 1
+    )
+
+
+    same_day_record_count = len(
+        same_day_records,
+    )
+
+
+    # ========================================================
+    # 9. 대표 감정
+    # ========================================================
+
+    # Record.main_emotion에는
+    # 1~20 사이 번호가 저장됨.
     main_emotion_number = int(
         record.main_emotion,
     )
 
 
     main_emotion = {
-        # 감정 번호
+        # 감정 번호.
         "number": main_emotion_number,
 
-        # 화면에 표시할 감정 이름
+        # 화면에 표시할 감정 이름.
         "name": get_emotion_name(
             main_emotion_number,
         ),
 
-        # 실제 감정 이미지 파일명
+        # 실제 감정 이미지 파일명.
         "image_name": (
             f"emotion-{main_emotion_number:02d}.png"
         ),
@@ -923,7 +1048,7 @@ def diary_detail(request, pk):
 
 
     # ========================================================
-    # 보조 감정
+    # 10. 보조 감정
     # ========================================================
 
     secondary_emotions = []
@@ -941,7 +1066,7 @@ def diary_detail(request, pk):
 
 
         # 대표 감정은 가운데에서 따로 표시하므로
-        # 보조 감정 목록에서는 제외
+        # 보조 감정 목록에서는 제외함.
         if (
             emotion_number
             == main_emotion_number
@@ -964,8 +1089,12 @@ def diary_detail(request, pk):
         )
 
 
+    # ========================================================
+    # 11. 왼쪽 / 오른쪽 보조 감정 지정
+    # ========================================================
+
     # 감정은 최대 3개이므로
-    # 대표 감정 제외 후 보조 감정은 최대 2개
+    # 대표 감정 제외 후 보조 감정은 최대 2개임.
     left_emotion = (
         secondary_emotions[0]
         if len(secondary_emotions) >= 1
@@ -980,20 +1109,57 @@ def diary_detail(request, pk):
     )
 
 
+    # ========================================================
+    # 12. 템플릿에 전달할 데이터
+    # ========================================================
+
     context = {
-        # 기록 전체 정보
+        # ----------------------------------------------------
+        # 현재 기록
+        # ----------------------------------------------------
         "record": record,
 
-        # 가운데 대표 감정
+
+        # ----------------------------------------------------
+        # 감정 정보
+        # ----------------------------------------------------
+
+        # 가운데 대표 감정.
         "main_emotion": main_emotion,
 
-        # 왼쪽 보조 감정
+        # 왼쪽 보조 감정.
         "left_emotion": left_emotion,
 
-        # 오른쪽 보조 감정
+        # 오른쪽 보조 감정.
         "right_emotion": right_emotion,
 
+
+        # ----------------------------------------------------
+        # 같은 날짜 기록 이동
+        # ----------------------------------------------------
+
+        # 왼쪽 화살표:
+        # 현재 기록보다 더 최근 기록.
+        "newer_record": newer_record,
+
+        # 오른쪽 화살표:
+        # 현재 기록보다 더 과거 기록.
+        "older_record": older_record,
+
+        # 현재 몇 번째 기록인지.
+        "current_record_number": (
+            current_record_number
+        ),
+
+        # 같은 날짜의 전체 기록 개수.
+        "same_day_record_count": (
+            same_day_record_count
+        ),
+
+
+        # ----------------------------------------------------
         # 음악
+        # ----------------------------------------------------
         "musics": musics,
     }
 
