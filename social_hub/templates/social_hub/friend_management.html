@@ -10,13 +10,8 @@
 
 {% block content %}
 <section class="friend-book">
-    {% if messages %}
-    <div class="friend-book__messages" aria-live="polite">
-        {% for message in messages %}
-        <p class="friend-book__message friend-book__message--{{ message.tags|default:'info' }}">{{ message }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
+    {# 친구 요청·수락·거절·삭제 및 기록 공유 결과 메시지는 화면에 표시하지 않습니다. #}
+    {% for message in messages %}{% endfor %}
 
     <header class="friend-book__intro">
         <span class="friend-book__eyebrow">HeartMark Friends</span>
