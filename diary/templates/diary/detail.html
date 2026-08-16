@@ -15,12 +15,6 @@
     href="{% static 'diary/css/detail.css' %}"
 >
 
-<!-- BGM 플레이어 전용 CSS 불러옴. -->
-<link
-    rel="stylesheet"
-    href="{% static 'bgm/css/music_player.css' %}"
->
-
 {% endblock %}
 
 
@@ -35,17 +29,7 @@
 
         <!-- 기록 장소 -->
         <h1 class="record-detail-location">
-
-            {% if record.place %}
-                {{ record.place.name }}
-
-            {% elif record.place_name %}
-                {{ record.place_name }}
-
-            {% else %}
-                장소 정보 없음
-            {% endif %}
-
+            {{ display_place_name }}
         </h1>
 
 
@@ -61,15 +45,15 @@
 
 
     <!-- ==================================================
-        같은 날짜의 다른 기록 이동
+        같은 날짜 기록 이동
 
-        같은 날 작성한 기록이 2개 이상일 때만 표시함.
+        기록이 2개 이상일 때만 표시함.
 
-        왼쪽 화살표:
-        더 최근 기록으로 이동함.
+        왼쪽:
+        더 최근 기록.
 
-        오른쪽 화살표:
-        더 과거 기록으로 이동함.
+        오른쪽:
+        더 과거 기록.
     ================================================== -->
     {% if same_day_record_count > 1 %}
 
@@ -78,17 +62,12 @@
         aria-label="같은 날짜의 다른 기록 보기"
     >
 
-        <!-- ==================================================
-            더 최근 기록
-        ================================================== -->
+        <!-- 더 최근 기록 -->
         {% if newer_record %}
 
             <a
                 href="{% url 'diary:detail' newer_record.pk %}"
-                class="
-                    record-day-navigation__button
-                    record-day-navigation__button--previous
-                "
+                class="record-day-navigation__button"
                 aria-label="더 최근 기록 보기"
             >
                 <span aria-hidden="true">
@@ -98,10 +77,7 @@
 
         {% else %}
 
-            <!--
-                현재 기록이 가장 최근 기록이면
-                왼쪽 화살표 비활성화함.
-            -->
+            <!-- 가장 최근 기록에서는 왼쪽 버튼 비활성화함. -->
             <span
                 class="
                     record-day-navigation__button
@@ -115,9 +91,7 @@
         {% endif %}
 
 
-        <!-- ==================================================
-            현재 기록 위치
-        ================================================== -->
+        <!-- 현재 기록 위치 -->
         <div class="record-day-navigation__status">
 
             <span class="record-day-navigation__label">
@@ -133,17 +107,12 @@
         </div>
 
 
-        <!-- ==================================================
-            더 과거 기록
-        ================================================== -->
+        <!-- 더 과거 기록 -->
         {% if older_record %}
 
             <a
                 href="{% url 'diary:detail' older_record.pk %}"
-                class="
-                    record-day-navigation__button
-                    record-day-navigation__button--next
-                "
+                class="record-day-navigation__button"
                 aria-label="더 과거 기록 보기"
             >
                 <span aria-hidden="true">
@@ -153,10 +122,7 @@
 
         {% else %}
 
-            <!--
-                현재 기록이 가장 오래된 기록이면
-                오른쪽 화살표 비활성화함.
-            -->
+            <!-- 가장 오래된 기록에서는 오른쪽 버튼 비활성화함. -->
             <span
                 class="
                     record-day-navigation__button
@@ -175,7 +141,7 @@
 
 
     <!-- ==================================================
-        감정 카드 영역
+        감정 카드
     ================================================== -->
     <section
         class="emotion-summary"
@@ -196,13 +162,11 @@
             "
         >
 
-            <!-- 보조 감정 표시 -->
             <span class="emotion-card-badge">
                 보조 감정
             </span>
 
 
-            <!-- 감정 이미지 -->
             <div class="emotion-card-image-wrapper">
 
                 <img
@@ -214,7 +178,6 @@
             </div>
 
 
-            <!-- 감정 이름 -->
             <h2 class="emotion-card-name">
                 {{ left_emotion.name }}
             </h2>
@@ -225,7 +188,7 @@
 
 
         <!-- ==================================================
-            가운데 대표 감정
+            대표 감정
         ================================================== -->
         <article
             class="
@@ -236,7 +199,6 @@
             "
         >
 
-            <!-- 대표 감정 표시 -->
             <span
                 class="
                     emotion-card-badge
@@ -247,7 +209,6 @@
             </span>
 
 
-            <!-- 대표 감정 이미지 -->
             <div
                 class="
                     emotion-card-image-wrapper
@@ -267,7 +228,6 @@
             </div>
 
 
-            <!-- 대표 감정 이름 -->
             <h2
                 class="
                     emotion-card-name
@@ -294,13 +254,11 @@
             "
         >
 
-            <!-- 보조 감정 표시 -->
             <span class="emotion-card-badge">
                 보조 감정
             </span>
 
 
-            <!-- 감정 이미지 -->
             <div class="emotion-card-image-wrapper">
 
                 <img
@@ -312,7 +270,6 @@
             </div>
 
 
-            <!-- 감정 이름 -->
             <h2 class="emotion-card-name">
                 {{ right_emotion.name }}
             </h2>
@@ -325,7 +282,7 @@
 
 
     <!-- ==================================================
-        Photo / Read / Listen 버튼
+        Photo / Read / Listen
     ================================================== -->
     <nav
         class="record-detail-actions"
@@ -333,7 +290,7 @@
     >
 
         <!-- ==================================================
-            Photo 버튼
+            Photo
         ================================================== -->
         <button
             type="button"
@@ -356,7 +313,6 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-image-icon lucide-image"
                 >
 
                     <rect
@@ -391,7 +347,7 @@
 
 
         <!-- ==================================================
-            Read 버튼
+            Read
         ================================================== -->
         <button
             type="button"
@@ -414,7 +370,6 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-book-heart-icon lucide-book-heart"
                 >
 
                     <path
@@ -438,7 +393,7 @@
 
 
         <!-- ==================================================
-            Listen BGM 재생 / 정지 버튼
+            Listen
         ================================================== -->
         <button
             type="button"
@@ -459,11 +414,7 @@
                 aria-hidden="true"
             >
 
-                <!-- ==================================================
-                    BGM 꺼짐 상태
-
-                    헤드셋 + 사선 아이콘 표시함.
-                ================================================== -->
+                <!-- BGM 꺼짐 -->
                 <span
                     class="
                         bgm-icon
@@ -482,7 +433,6 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-headphone-off-icon lucide-headphone-off"
                     >
                         <path d="M21 14h-1.343"/>
 
@@ -499,16 +449,13 @@
                         <path
                             d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 2.636-6.364"
                         />
+
                     </svg>
 
                 </span>
 
 
-                <!-- ==================================================
-                    BGM 재생 중 상태
-
-                    일반 헤드셋 아이콘 표시함.
-                ================================================== -->
+                <!-- BGM 재생 중 -->
                 <span
                     class="
                         bgm-icon
@@ -528,7 +475,6 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-headphones-icon lucide-headphones"
                     >
 
                         <path
@@ -554,18 +500,16 @@
 
 
 <!-- ==================================================
-    BGM 플레이어 데이터
+    BGM 플레이어
 
-    static 폴더의 5개 BGM을 불러옴.
-    화면에는 표시되지 않음.
+    실제 음원 데이터와 audio 요소는
+    BGM 템플릿에서 관리함.
 ================================================== -->
 {% include "bgm/music_player.html" %}
 
 
 <!-- ==================================================
     Photo 팝업
-
-    record.image에 저장된 실제 업로드 사진 표시함.
 ================================================== -->
 <div
     class="record-content-modal"
@@ -574,7 +518,7 @@
     hidden
 >
 
-    <!-- 어두운 배경 클릭 시 팝업 닫음. -->
+    <!-- 팝업 바깥 클릭 시 닫음. -->
     <button
         type="button"
         class="record-content-modal__backdrop"
@@ -593,9 +537,6 @@
         aria-label="기록 사진"
     >
 
-        <!-- ==================================================
-            Photo 팝업 상단
-        ================================================== -->
         <header
             class="
                 record-content-modal__header
@@ -615,9 +556,6 @@
         </header>
 
 
-        <!-- ==================================================
-            사진 영역
-        ================================================== -->
         <div class="record-content-modal__photo">
 
             {% if record.image %}
@@ -644,8 +582,6 @@
 
 <!-- ==================================================
     Read 팝업
-
-    record.content에 저장된 실제 일기 내용 표시함.
 ================================================== -->
 <div
     class="record-content-modal"
@@ -654,7 +590,7 @@
     hidden
 >
 
-    <!-- 어두운 배경 클릭 시 팝업 닫음. -->
+    <!-- 팝업 바깥 클릭 시 닫음. -->
     <button
         type="button"
         class="record-content-modal__backdrop"
@@ -673,25 +609,18 @@
         aria-labelledby="read-modal-title"
     >
 
-        <!-- ==================================================
-            Read 팝업 상단
-        ================================================== -->
         <header class="record-content-modal__header">
 
-            <div>
-
-                <h2
-                    class="record-content-modal__title"
-                    id="read-modal-title"
-                >
-                    {% if record.title %}
-                        {{ record.title }}
-                    {% else %}
-                        제목 없는 기록
-                    {% endif %}
-                </h2>
-
-            </div>
+            <h2
+                class="record-content-modal__title"
+                id="read-modal-title"
+            >
+                {% if record.title %}
+                    {{ record.title }}
+                {% else %}
+                    제목 없는 기록
+                {% endif %}
+            </h2>
 
 
             <button
@@ -706,9 +635,6 @@
         </header>
 
 
-        <!-- ==================================================
-            일기 내용
-        ================================================== -->
         <div class="record-content-modal__diary">
 
             {% if record.content %}
@@ -728,23 +654,15 @@
         </div>
 
 
-        <!-- ==================================================
-            Read 팝업 하단 장소 / 날짜
-        ================================================== -->
         <footer class="record-content-modal__footer">
 
+            <!-- 현재 기록 장소 -->
             <span>
-
-                {% if record.place %}
-                    {{ record.place.name }}
-
-                {% elif record.place_name %}
-                    {{ record.place_name }}
-                {% endif %}
-
+                {{ display_place_name }}
             </span>
 
 
+            <!-- 현재 기록 날짜 -->
             <time
                 datetime="{{ record.created_at|date:'Y-m-d' }}"
             >
@@ -762,13 +680,12 @@
 
 {% block extra_js %}
 
-<!-- Photo / Read 팝업 동작 담당함. -->
+<!-- Photo / Read 팝업 -->
 <script
     src="{% static 'diary/js/detail.js' %}"
 ></script>
 
-
-<!-- BGM 재생 / 정지 동작 담당함. -->
+<!-- BGM 재생 / 정지 -->
 <script
     src="{% static 'bgm/js/music_player.js' %}"
 ></script>
