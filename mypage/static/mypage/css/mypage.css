@@ -1255,21 +1255,34 @@
     }
 
     .attendance-arrow {
-        top: 73%;
+        top: auto;
+        bottom: -48px;
         width: 34px;
         height: 34px;
         font-size: 1.65rem;
+        transform: none;
     }
 
     .attendance-arrow--prev {
-        left: -14px;
+        left: calc(50% - 72px);
     }
 
     .attendance-arrow--next {
-        right: -14px;
+        right: auto;
+        left: calc(50% + 38px);
+    }
+
+    .attendance-arrow:not(:disabled):hover {
+        transform: scale(1.06);
+    }
+
+    .attendance-arrow:not(:disabled):active {
+        transform: scale(0.95);
     }
 
     .attendance-pagination {
+        min-height: 34px;
+        align-items: center;
         gap: 6px;
         margin-top: 18px;
     }
@@ -1331,6 +1344,18 @@
         padding-left: 0;
     }
 
+    .weekly-mood-card {
+        height: auto;
+        min-height: 0;
+        padding-bottom: 30px;
+    }
+
+    .weekly-mood-copy {
+        width: 100%;
+        min-width: 0;
+        gap: 12px;
+    }
+
     .weekly-mood-illustration {
         width: 118px;
         height: 118px;
@@ -1346,7 +1371,13 @@
     }
 
     .weekly-mood-content p {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
         font-size: 0.9rem;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
     }
 
     .place-ticket {
