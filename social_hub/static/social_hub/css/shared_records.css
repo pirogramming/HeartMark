@@ -698,6 +698,16 @@
         min-height: 0;
     }
 
+    .shared-record-card__content {
+        grid-template-rows: auto auto auto;
+        gap: 14px;
+        min-height: 0;
+    }
+
+    .shared-record-card__content > p {
+        min-height: 0;
+    }
+
     .shared-record-card__footer {
         align-items: stretch;
         flex-direction: column;
