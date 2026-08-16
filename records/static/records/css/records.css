@@ -729,7 +729,7 @@
 .record-create-layout {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.55fr);
+    grid-template-columns: minmax(360px, 0.98fr) minmax(0, 1.55fr);
     grid-template-rows: minmax(0, 1fr) auto auto;
     gap: clamp(34px, 4vw, 68px);
     row-gap: 12px;
@@ -763,16 +763,17 @@
 }
 
 .record-create-layout .photo-box {
-    width: min(100%, 350px);
+    width: min(100%, 440px);
     min-height: 0;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 33 / 35;
     align-self: center;
 }
 
 .record-create-layout #record-photo-preview {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 }
 
 .record-create-layout .emotion-picker {
@@ -828,11 +829,11 @@
 .record-modal--fullscreen .record-create-layout {
     width: min(1500px, 100%);
     margin: 0 auto;
-    grid-template-columns: minmax(300px, 0.75fr) minmax(520px, 1.6fr);
+    grid-template-columns: minmax(440px, 0.98fr) minmax(520px, 1.6fr);
 }
 
 .record-modal--fullscreen .record-create-layout__left {
-    width: min(100%, 390px);
+    width: min(100%, 460px);
     justify-self: center;
 }
 
@@ -853,8 +854,10 @@
 }
 
 .record-modal--fullscreen .record-create-layout .photo-box {
-    width: 100%;
-    max-height: calc(100vh - 260px);
+    width: min(100%, 440px);
+    height: auto;
+    max-height: none;
+    aspect-ratio: 33 / 35;
 }
 
 body.record-modal-open {
@@ -1052,12 +1055,25 @@ body.record-delete-modal-open {
     border: 1.5px solid var(--record-ink);
     border-radius: 12px;
     color: var(--record-muted);
+    background: rgba(255, 255, 255, 0.46);
+    transition: aspect-ratio 180ms ease;
+}
+
+.record-detail-photo--landscape {
+    aspect-ratio: 4 / 3;
+    align-self: center;
+}
+
+.record-detail-photo--square {
+    aspect-ratio: 1 / 1;
+    align-self: center;
 }
 
 .record-detail-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 }
 
 .record-detail-content {
@@ -1214,7 +1230,7 @@ body.record-delete-modal-open {
 }
 
 @media (max-width: 760px) {
-    .record-detail-layout {
+.record-detail-layout {
         grid-template-columns: 1fr;
     }
 
@@ -1236,6 +1252,14 @@ body.record-delete-modal-open {
     .record-detail-actions {
         align-self: flex-end;
     }
+}
+
+.record-detail-layout--landscape {
+    grid-template-columns: minmax(360px, 1fr) minmax(360px, 1.25fr);
+}
+
+.record-detail-layout--square {
+    grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.35fr);
 }
 
 .site-messages {
@@ -1321,12 +1345,32 @@ body.record-delete-modal-open {
     border: 2px solid var(--record-ink);
     border-radius: 9px;
     background: rgba(255, 255, 244, 0.55);
+    transition: width 180ms ease, aspect-ratio 180ms ease;
+}
+
+.record-edit-main--landscape {
+    grid-template-columns: minmax(420px, 1fr) minmax(520px, 1.35fr);
+}
+
+.record-edit-main--landscape .record-edit-left {
+    width: min(100%, 480px);
+}
+
+.record-edit-photo--landscape {
+    max-height: none;
+    aspect-ratio: 4 / 3;
+}
+
+.record-edit-photo--square {
+    max-height: none;
+    aspect-ratio: 1 / 1;
 }
 
 .record-edit-photo > img:first-child {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 }
 
 .record-edit-photo__empty {
