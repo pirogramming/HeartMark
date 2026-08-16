@@ -1590,17 +1590,17 @@ body.record-edit-open .site-main {
 
     .record-create-layout,
     .record-modal--fullscreen .record-create-layout {
-        grid-template-columns: minmax(230px, 0.8fr) minmax(340px, 1.2fr);
+        grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
         gap: 30px;
         row-gap: 14px;
     }
 
     .record-modal--fullscreen .record-create-layout__left {
-        width: min(100%, 340px);
+        width: min(100%, 380px);
     }
 
     .record-modal--fullscreen .record-create-layout .emotion-picker {
-        grid-template-columns: minmax(230px, 0.8fr) minmax(340px, 1.2fr);
+        grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
         column-gap: 30px;
     }
 
@@ -1636,7 +1636,7 @@ body.record-edit-open .site-main {
     }
 
     .record-create-layout .photo-box {
-        width: min(100%, 300px);
+        width: min(100%, 350px);
     }
 
     .record-create-layout .weather-picker {
