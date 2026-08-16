@@ -20,7 +20,7 @@
     padding: 38px max(24px, 7vw) 100px;
     overflow: hidden;
     color: var(--friend-ink);
-    background: #fff8e8;
+    background: transparent;
 }
 
 .friend-book__intro,
