@@ -1107,7 +1107,7 @@
 @media (max-width: 767px) {
     .mypage-screen {
         min-height: calc(100vh - 72px);
-        padding: 62px 14px 52px;
+        padding: 30px 14px 52px;
     }
 
     .mypage-profile {
