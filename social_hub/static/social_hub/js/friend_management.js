@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmMessage = document.querySelector("#friend-confirm-message");
     const deleteForm = document.querySelector("#friend-delete-form");
 
+    document.querySelectorAll(".friend-book__message").forEach((message) => {
+        window.setTimeout(() => {
+            message.style.opacity = "0";
+            message.style.transform = "translateY(-8px)";
+            window.setTimeout(() => message.remove(), 350);
+        }, 3000);
+    });
+
     function selectTab(tabName) {
         tabs.forEach((tab) => {
             const selected = tab.dataset.friendTab === tabName;

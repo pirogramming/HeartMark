@@ -16,16 +16,16 @@
 .shared-mailbox {
     position: relative;
     min-height: calc(100vh - 100px);
-    padding: 80px max(24px, 7vw) 100px;
+    padding: 38px max(24px, 7vw) 100px;
     color: var(--shared-ink);
-    background: var(--shared-bg);
+    background: transparent;
 }
 
 .shared-mailbox__header,
 .shared-mailbox__toolbar,
 .shared-record-grid,
 .shared-mailbox > .friend-empty {
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
     margin-inline: auto;
 }
 
@@ -57,11 +57,12 @@
 }
 
 .shared-mailbox__toolbar {
+    width: min(980px, 100%);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 22px;
+    justify-content: flex-end;
+    gap: 14px;
+    margin: -25px auto 22px;
 }
 
 .shared-mailbox__count {
@@ -101,6 +102,7 @@
 .shared-record-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
     gap: 24px;
 }
 
@@ -176,8 +178,8 @@
 .shared-record-card__body {
     display: grid;
     grid-template-columns: minmax(145px, 0.78fr) minmax(0, 1.22fr);
-    gap: 18px;
-    padding: 20px;
+    gap: 22px;
+    padding: 20px 20px 12px;
 }
 
 .shared-record-card__photo {
@@ -197,9 +199,20 @@
 
 .shared-record-card__content {
     display: grid;
+    grid-template-rows: auto auto minmax(5.2em, 1fr);
     align-content: start;
-    gap: 15px;
+    gap: 18px;
+    min-height: 230px;
     min-width: 0;
+}
+
+.shared-record-card__title {
+    padding-bottom: 8px;
+    margin: 0;
+    border-bottom: 1px solid rgba(214, 128, 97, 0.24);
+    color: var(--shared-ink);
+    font-size: 1.2rem;
+    line-height: 1.35;
 }
 
 .shared-record-card__emotion {
@@ -229,7 +242,7 @@
 
 .shared-record-card__content > p {
     display: -webkit-box;
-    min-height: 4.8em;
+    min-height: 5.2em;
     margin: 0;
     overflow: hidden;
     color: #6f5b4d;
@@ -240,6 +253,7 @@
 }
 
 .shared-place {
+    margin-top: auto;
     display: grid;
     grid-template-columns: 38px 1fr;
     align-items: center;
@@ -298,10 +312,10 @@
 
 .shared-record-card__footer {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 14px;
-    padding: 14px 20px 18px;
+    padding: 4px 20px 20px;
     margin-top: auto;
 }
 
@@ -313,6 +327,7 @@
 .shared-record-card__footer a {
     display: inline-grid;
     place-items: center;
+    margin-left: auto;
     min-height: 41px;
     padding: 0 17px;
     border: 1px solid #58463a;
@@ -322,6 +337,178 @@
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
+}
+
+.shared-record-card__comments {
+    position: relative;
+    flex: 1 1 auto;
+    width: 0;
+    min-width: 0;
+}
+
+.shared-record-card__comments > summary {
+    display: inline-flex;
+    min-width: 42px;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 10px;
+    border: 1px solid #dfc6b2;
+    border-radius: 50px;
+    color: #8a6e5d;
+    background: #fffaf2;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.shared-record-card__comments > summary::-webkit-details-marker {
+    display: none;
+}
+
+.shared-record-card__comments > summary:hover,
+.shared-record-card__comments[open] > summary {
+    border-color: #dfaa8c;
+    color: #b86f55;
+    background: #ffe7d0;
+}
+
+.shared-record-card__comments > summary svg {
+    width: 20px;
+    height: 20px;
+}
+
+.shared-record-card__comments > summary span {
+    min-width: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.shared-comment-panel {
+    width: 100%;
+    padding-top: 12px;
+}
+
+.shared-comment-list {
+    display: grid;
+    max-height: 150px;
+    gap: 8px;
+    margin-bottom: 9px;
+    overflow-y: auto;
+}
+
+.shared-comment {
+    padding: 9px 11px;
+    border-radius: 12px;
+    background: #fffcf5;
+    border: 1px solid #eee5d9;
+}
+
+.shared-comment--mine {
+    background: #fffcf5;
+}
+
+.shared-comment > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.shared-comment strong {
+    font-size: 0.75rem;
+}
+
+.shared-comment time {
+    color: var(--shared-muted);
+    font-size: 0.62rem;
+}
+
+.shared-comment__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.shared-comment__meta form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.shared-comment__meta button {
+    display: inline-grid;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    color: #9a7e6d;
+    background: transparent;
+    cursor: pointer;
+}
+
+.shared-comment__meta button:hover {
+    color: #c66f5a;
+    background: #fff;
+}
+
+.shared-comment__meta svg {
+    width: 14px;
+    height: 14px;
+}
+
+.shared-comment p,
+.shared-comment-empty {
+    margin: 4px 0 0;
+    color: #685448;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.shared-comment-empty {
+    padding: 10px 4px;
+    text-align: center;
+}
+
+.shared-comment-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+}
+
+.shared-comment-form input {
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #e1ccba;
+    border-radius: 11px;
+    color: var(--shared-ink);
+    background: #fff;
+    font: inherit;
+    font-size: 0.75rem;
+    outline: none;
+}
+
+.shared-comment-form input:focus {
+    border-color: #d99576;
+    box-shadow: 0 0 0 3px rgba(217, 149, 118, 0.13);
+}
+
+.shared-comment-form button {
+    min-width: 60px;
+    border: 1px solid #80604d;
+    border-radius: 11px;
+    color: var(--shared-ink);
+    background: var(--shared-accent);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
 }
 
 .shared-record-card__photo > span {
@@ -336,6 +523,7 @@
 }
 
 .shared-mailbox > .friend-empty {
+    width: min(980px, 100%);
     display: grid;
     min-height: 380px;
     place-items: center;
@@ -380,6 +568,63 @@
     color: var(--shared-ink);
     background: #fff1e1;
     box-shadow: 0 10px 26px rgba(70, 49, 37, 0.14);
+}
+
+.sent-record-card__status {
+    padding: 7px 9px;
+    border-radius: 999px;
+    color: #817870;
+    background: #eeeae6;
+    font-size: 0.66rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sent-record-card__status--location {
+    color: #b2614f;
+    background: #ffe7d9;
+}
+
+.sent-record-card__footer {
+    align-items: center;
+}
+
+.sent-record-card__footer > time {
+    color: var(--shared-muted);
+    font-size: 0.7rem;
+}
+
+.sent-record-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.sent-record-card__actions form {
+    margin: 0;
+}
+
+.sent-record-card__actions button,
+.sent-empty__link {
+    display: inline-grid;
+    min-height: 41px;
+    padding: 0 15px;
+    place-items: center;
+    border: 1px solid #d59b88;
+    border-radius: 11px;
+    color: #a95748;
+    background: #fff2ee;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sent-empty__link {
+    margin-top: 12px;
+    color: var(--shared-ink);
+    background: var(--shared-accent);
 }
 
 @media (max-width: 1023px) {
@@ -453,13 +698,48 @@
         min-height: 0;
     }
 
+    .shared-record-card__content {
+        grid-template-rows: auto auto auto;
+        gap: 14px;
+        min-height: 0;
+    }
+
+    .shared-record-card__content > p {
+        min-height: 0;
+    }
+
     .shared-record-card__footer {
         align-items: stretch;
         flex-direction: column;
         padding: 10px 16px 18px;
     }
 
+    .shared-comment-panel {
+        width: 100%;
+    }
+
+    .shared-record-card__comments {
+        width: 100%;
+    }
+
     .shared-record-card__footer a {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .sent-record-card__footer,
+    .sent-record-card__actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .sent-record-card__actions {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .sent-record-card__actions form,
+    .sent-record-card__actions button {
         width: 100%;
     }
 

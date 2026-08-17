@@ -10,16 +10,11 @@
 {% block content %}
 <section class="shared-mailbox">
     <header class="shared-mailbox__header">
-        <span class="shared-mailbox__eyebrow">Shared Heartmarks</span>
         <h1>받은 마음 편지</h1>
         <p>친구가 조심스럽게 건넨 마음자국을 모아 봤어요.</p>
     </header>
 
     <div class="shared-mailbox__toolbar">
-        <div class="shared-mailbox__count">
-            <span aria-hidden="true">✉</span>
-            <strong>{{ shared_records|length }}통</strong>의 마음 편지가 도착했어요.
-        </div>
         <a href="{% url 'social_hub:friend_management' %}">친구 관리</a>
     </div>
 
@@ -32,6 +27,5 @@
     {% else %}
         {% include "social_hub/partials/empty_state.html" with empty_type="shared_records" %}
     {% endif %}
-
 </section>
 {% endblock %}
