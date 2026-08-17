@@ -2093,9 +2093,27 @@ body.modal-open .site-header {
 
     .emotion-modal-content,
     .location-modal-content {
-        width: calc(100% - 28px);
+        /*
+            화면 좌우에 20px씩 여백 남김.
+        */
+        width: calc(100% - 40px);
 
-        padding: 20px;
+        /*
+            width 계산에 padding까지 포함함.
+            한쪽으로 튀어나오는 현상 방지함.
+        */
+        box-sizing: border-box;
+
+        /*
+            팝업 자체를 가운데 정렬함.
+        */
+        margin-left: auto;
+        margin-right: auto;
+
+        /*
+            모바일에서는 내부 여백 축소함.
+        */
+        padding: 16px;
     }
 }
 
