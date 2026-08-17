@@ -1093,10 +1093,14 @@ body.record-delete-modal-open {
 
 .record-detail-title {
     height: 36px;
+    max-width: 100%;
     margin: 0;
+    overflow: hidden;
     color: var(--record-ink);
     font-size: clamp(1.15rem, 2vw, 1.55rem);
     line-height: 36px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .record-detail-body {
