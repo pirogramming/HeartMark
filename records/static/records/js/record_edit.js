@@ -10,9 +10,32 @@
     const message = form.querySelector("#record-edit-message");
     const imageInput = form.querySelector("#record-edit-image-input");
     const preview = form.querySelector("#record-edit-preview");
+    const photoFrame = form.querySelector("#record-edit-photo");
+    const editMain = form.querySelector(".record-edit-main");
     const emptyState = form.querySelector("#record-edit-photo-empty");
     let previewUrl = null;
     let showRequiredMessage = false;
+
+    const applyPhotoOrientation = () => {
+        if (!preview?.naturalWidth || !preview?.naturalHeight) return;
+        const ratio = preview.naturalWidth / preview.naturalHeight;
+        photoFrame?.classList.remove(
+            "record-edit-photo--landscape",
+            "record-edit-photo--square",
+        );
+        editMain?.classList.remove("record-edit-main--landscape");
+        if (ratio >= 1.15) {
+            photoFrame?.classList.add("record-edit-photo--landscape");
+            editMain?.classList.add("record-edit-main--landscape");
+        } else if (ratio > 0.85) {
+            photoFrame?.classList.add("record-edit-photo--square");
+        }
+    };
+
+    if (preview && !preview.hidden) {
+        if (preview.complete) applyPhotoOrientation();
+        else preview.addEventListener("load", applyPhotoOrientation, { once: true });
+    }
 
     const getMissingLabels = () => {
         const weather = form.querySelector('input[name="weather"]:checked');
@@ -80,6 +103,7 @@
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         previewUrl = URL.createObjectURL(file);
         preview.src = previewUrl;
+        preview.onload = applyPhotoOrientation;
         preview.hidden = false;
         emptyState.hidden = true;
         updateRequiredMessage();

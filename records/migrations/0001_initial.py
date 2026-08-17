@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Record',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('weather', models.CharField(choices=[('sunny', '해'), ('cloudy', '구름'), ('rainy', '비'), ('thunder', '천둥'), ('dust', '황사'), ('snowy', '눈')], max_length=10)),
+                ('weather', models.CharField(choices=[('sunny', '해'), ('cloudy', '구름'), ('rainy', '비'), ('thunder', '천둥'), ('dust', '미세먼지'), ('snowy', '눈')], max_length=10)),
                 ('content', models.TextField(max_length=500)),
                 ('image', models.ImageField(blank=True, upload_to='records/%Y/%m/%d/')),
                 ('emotions', models.JSONField(default=list)),
