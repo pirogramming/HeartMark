@@ -198,6 +198,20 @@
     object-fit: contain;
 }
 
+/* 보낸 마음 편지 목록은 원본 사진 비율과 관계없이 같은 미리보기 규격을 사용합니다. */
+.sent-record-card .shared-record-card__photo {
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+    align-self: start;
+}
+
+.sent-record-card .shared-record-card__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 .shared-record-card__content {
     display: grid;
     grid-template-rows: auto auto minmax(5.2em, 1fr);
