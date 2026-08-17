@@ -32,10 +32,16 @@ def home(request):
     selected_character_image = "5.png"
     show_onboarding_tutorial = False
     home_prompt = ""
+    home_display_name = ""
 
     if request.user.is_authenticated:
         home_prompt = choice(HOME_PROMPTS)
         profile = getattr(request.user, "profile", None)
+        home_display_name = (
+            (profile.display_name if profile else "")
+            or request.user.first_name
+            or request.user.username
+        )
         if profile and profile.character_id:
             selected_character_image = f"{profile.character_id}.png"
             show_onboarding_tutorial = not profile.tutorial_completed
@@ -50,6 +56,7 @@ def home(request):
             "selected_character_image": selected_character_image,
             "show_onboarding_tutorial": show_onboarding_tutorial,
             "home_prompt": home_prompt,
+            "home_display_name": home_display_name,
         },
     )
 
