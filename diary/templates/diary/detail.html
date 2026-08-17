@@ -29,6 +29,8 @@
 
         <!-- 기록 장소 -->
         <h1 class="record-detail-location">
+
+            <!-- 장소 아이콘 -->
             <span
                 class="record-detail-location-icon"
                 aria-hidden="true"
@@ -44,17 +46,32 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                 >
-                    <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
-                    <circle cx="12" cy="10" r="3"/>
+                    <path
+                        d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"
+                    />
+                    <circle
+                        cx="12"
+                        cy="10"
+                        r="3"
+                    />
                 </svg>
             </span>
-            {% if record.place %}
-                {{ record.place.name }}
-            {% elif record.place_name %}
-                {{ record.place_name }}
-            {% else %}
-                장소 정보 없음
-            {% endif %}
+
+
+            <!--
+                view에서 정리한 장소명 표시함.
+
+                직접 선택한 장소:
+                → place.name 표시함.
+
+                현재 위치 기록:
+                → place_name에 저장된 장소명 또는 주소 표시함.
+
+                장소 정보가 없는 경우:
+                → "장소 정보 없음" 표시함.
+            -->
+            {{ display_place_name }}
+
         </h1>
 
 
