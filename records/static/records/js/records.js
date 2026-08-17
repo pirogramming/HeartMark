@@ -92,6 +92,21 @@
         photoRemove.hidden = false;
     };
 
+    const keepOnlyFirstPhoto = (input) => {
+        const selectedFiles = Array.from(input.files || []);
+        if (selectedFiles.length <= 1) return selectedFiles[0] || null;
+
+        try {
+            const singleFile = new DataTransfer();
+            singleFile.items.add(selectedFiles[0]);
+            input.files = singleFile.files;
+            return input.files[0];
+        } catch (error) {
+            input.value = "";
+            return null;
+        }
+    };
+
     const clearPhoto = () => {
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         previewUrl = null;
@@ -149,12 +164,15 @@
             updateRequiredMessage();
         })
     );
-    fileInputs.forEach((input) =>
+    fileInputs.forEach((input) => {
+        input.removeAttribute("multiple");
         input.addEventListener("change", () => {
-            showPhoto(input.files[0]);
+            const file = keepOnlyFirstPhoto(input);
+            if (file) showPhoto(file);
+            else clearPhoto();
             updateRequiredMessage();
-        })
-    );
+        });
+    });
     photoRemove?.addEventListener("click", () => {
         clearPhoto();
         updateRequiredMessage();
