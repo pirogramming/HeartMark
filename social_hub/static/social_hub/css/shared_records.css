@@ -664,8 +664,22 @@
     }
 
     .shared-record-card__sender {
-        grid-template-columns: 46px 1fr 42px;
-        padding: 14px;
+        grid-template-columns: 46px minmax(0, 1fr) max-content;
+        gap: 9px;
+        padding: 14px 12px;
+    }
+
+    .shared-record-card__sender > div {
+        min-width: 0;
+    }
+
+    .sent-record-card__status {
+        box-sizing: border-box;
+        max-width: none;
+        padding: 7px 8px;
+        justify-self: end;
+        font-size: 0.62rem;
+        line-height: 1.2;
     }
 
     .shared-record-card__avatar {
