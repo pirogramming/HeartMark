@@ -2093,9 +2093,27 @@ body.modal-open .site-header {
 
     .emotion-modal-content,
     .location-modal-content {
-        width: calc(100% - 28px);
+        /*
+            화면 좌우에 20px씩 여백 남김.
+        */
+        width: calc(100% - 40px);
 
-        padding: 20px;
+        /*
+            width 계산에 padding까지 포함함.
+            한쪽으로 튀어나오는 현상 방지함.
+        */
+        box-sizing: border-box;
+
+        /*
+            팝업 자체를 가운데 정렬함.
+        */
+        margin-left: auto;
+        margin-right: auto;
+
+        /*
+            모바일에서는 내부 여백 축소함.
+        */
+        padding: 16px;
     }
 }
 
@@ -2107,161 +2125,23 @@ body.modal-open .site-header {
 @media (max-width: 480px) {
 
     /* -----------------------------------------------------
-       페이지 전체
-       ----------------------------------------------------- */
-
-    .diary-list-container {
-        /* 좌우 12px 여백 */
-        width: calc(100% - 24px);
-    }
-
-
-    /* -----------------------------------------------------
-       감정별 보드
-       ----------------------------------------------------- */
-
-    .emotion-summary-board {
-        padding:
-            16px
-            8px
-            14px;
-
-        border-radius: 16px;
-    }
-
-
-    /* -----------------------------------------------------
-       감정 도넛 그래프
-       ----------------------------------------------------- */
-
-    .emotion-chart-section {
-        min-height: 225px;
-    }
-
-
-    .emotion-chart-wrapper {
-        width: min(
-            220px,
-            70vw
-        );
-    }
-
-
-    .emotion-chart-background,
-    .emotion-chart-segment {
-        /* 작은 화면 도넛 띠 축소 */
-        stroke-width: 34;
-    }
-
-
-    .emotion-chart-segment:hover {
-        stroke-width: 37;
-    }
-
-
-    .emotion-chart-center-count {
-        font-size: 23px;
-    }
-
-
-    .emotion-chart-center-label {
-        font-size: 10px;
-    }
-
-
-    /* -----------------------------------------------------
-       감정 안내 문구
-       ----------------------------------------------------- */
-
-    .emotion-card-guide {
-        gap: 5px;
-
-        margin-bottom: 12px;
-
-        font-size: 10px;
-    }
-
-
-    .emotion-card-guide-line {
-        width: 24px;
-    }
-
-
-    /* -----------------------------------------------------
-       감정 카드
-       ----------------------------------------------------- */
-
-    .emotion-record-card-list {
-        /* 아주 작은 화면도 4개 고정 */
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr));
-
-        gap: 5px;
-    }
-
-
-    .emotion-record-card {
-        /* 카드 최대한 컴팩트하게 축소 */
-        flex-direction: column;
-        justify-content: center;
-
-        gap: 2px;
-
-        min-height: 64px;
-
-        padding:
-            5px
-            3px;
-    }
-
-
-    .emotion-record-card-image {
-        width: 27px;
-        height: 27px;
-    }
-
-
-    .emotion-record-card-image img {
-        width: 25px;
-        height: 25px;
-    }
-
-
-    .emotion-record-card-info {
-        /* 모바일에서는 중앙 정렬 */
-        align-items: center;
-
-        gap: 1px;
-    }
-
-
-    .emotion-record-card-name {
-        max-width: 100%;
-
-        overflow: hidden;
-
-        font-size: 9px;
-
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-
-    .emotion-record-card-count {
-        font-size: 8px;
-
-        white-space: nowrap;
-    }
-
-
-    /* -----------------------------------------------------
-       전체 기록 카드
+       전체 기록 / 감정별 팝업 / 장소별 팝업 카드
        ----------------------------------------------------- */
 
     .diary-grid,
     .emotion-modal-grid,
     .location-modal-grid {
-        /* 전체 기록만 한 줄 하나 */
-        grid-template-columns: 1fr;
+        /*
+            작은 모바일에서도
+            카드 2개씩 배치함.
+        */
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        /*
+            화면이 작으므로
+            카드 사이 간격 축소함.
+        */
+        gap: 10px;
     }
 }
