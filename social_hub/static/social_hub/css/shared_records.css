@@ -125,7 +125,7 @@
 
 .shared-record-card__sender {
     display: grid;
-    grid-template-columns: 52px 1fr auto;
+    grid-template-columns: 52px minmax(0, 1fr) max-content;
     align-items: center;
     gap: 12px;
     padding: 18px 20px;
@@ -152,6 +152,7 @@
 
 .shared-record-card__sender > div {
     display: grid;
+    min-width: 0;
     gap: 3px;
 }
 
@@ -571,12 +572,16 @@
 }
 
 .sent-record-card__status {
+    box-sizing: border-box;
+    max-width: none;
     padding: 7px 9px;
     border-radius: 999px;
     color: #817870;
     background: #eeeae6;
     font-size: 0.66rem;
     font-weight: 700;
+    justify-self: end;
+    line-height: 1.2;
     white-space: nowrap;
 }
 

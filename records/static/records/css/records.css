@@ -1049,7 +1049,7 @@ body.record-delete-modal-open {
 .record-detail-photo {
     position: relative;
     display: grid;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: var(--record-photo-ratio, 3 / 4);
     overflow: hidden;
     place-items: center;
     border: 1.5px solid var(--record-ink);
@@ -1060,12 +1060,12 @@ body.record-delete-modal-open {
 }
 
 .record-detail-photo--landscape {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: var(--record-photo-ratio, 4 / 3);
     align-self: center;
 }
 
 .record-detail-photo--square {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--record-photo-ratio, 1 / 1);
     align-self: center;
 }
 

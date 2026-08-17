@@ -122,14 +122,14 @@
 /* 정사각형과 세로 사진은 각 원본에 가까운 프레임 비율을 사용한다. */
 .record-detail-shell--shared .record-detail-photo--square {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: var(--record-photo-ratio, 1 / 1);
     align-self: start;
     background: rgba(255, 255, 255, 0.42);
 }
 
 .record-detail-shell--shared .record-detail-photo--portrait {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: var(--record-photo-ratio, 3 / 4);
     align-self: start;
     background: rgba(255, 255, 255, 0.42);
 }
@@ -143,7 +143,7 @@
 
 .record-detail-shell--shared .record-detail-photo--landscape {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: var(--record-photo-ratio, 16 / 9);
     background: rgba(255, 255, 255, 0.42);
 }
 

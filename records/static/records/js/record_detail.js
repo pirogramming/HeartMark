@@ -9,6 +9,10 @@
             if (!naturalWidth || !naturalHeight) return;
 
             const ratio = naturalWidth / naturalHeight;
+            photoFrame.style.setProperty(
+                "--record-photo-ratio",
+                `${naturalWidth} / ${naturalHeight}`,
+            );
             photoFrame.classList.remove(
                 "record-detail-photo--landscape",
                 "record-detail-photo--square",
