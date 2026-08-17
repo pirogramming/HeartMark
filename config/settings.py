@@ -25,9 +25,27 @@ def load_local_env():
 
 load_local_env()
 
-SECRET_KEY = "development-only"
-DEBUG = True
-ALLOWED_HOSTS = []
+
+def env_bool(name, default=False):
+    return os.environ.get(name, str(default)).strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def env_list(name, default=""):
+    return [item.strip() for item in os.environ.get(name, default).split(",") if item.strip()]
+
+
+DEBUG = env_bool("DJANGO_DEBUG", True)
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "development-only")
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
+CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
+
+if not DEBUG and SECRET_KEY == "development-only":
+    raise RuntimeError("DJANGO_SECRET_KEY must be set when DJANGO_DEBUG=False")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -57,6 +75,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -96,9 +115,27 @@ TIME_ZONE = "Asia/Seoul"
 USE_I18N = True
 USE_TZ = True
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-MEDIA_URL = "media/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [path for path in [BASE_DIR / "static"] if path.exists()]
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if DEBUG
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = env_bool("DJANGO_SECURE_COOKIES", False)
+    CSRF_COOKIE_SECURE = env_bool("DJANGO_SECURE_COOKIES", False)
 
 LOGIN_URL = "/accounts/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
