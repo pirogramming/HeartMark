@@ -1077,7 +1077,8 @@ body.record-delete-modal-open {
 }
 
 .record-detail-content {
-    min-height: 100%;
+    min-height: 0;
+    align-self: start;
     padding: 4px 12px;
     background-image: repeating-linear-gradient(
         to bottom,
@@ -1099,7 +1100,7 @@ body.record-delete-modal-open {
 }
 
 .record-detail-body {
-    min-height: 100%;
+    min-height: 36px;
 }
 
 .record-detail-emotions {
@@ -1240,7 +1241,7 @@ body.record-delete-modal-open {
     }
 
     .record-detail-content {
-        min-height: 280px;
+        min-height: 0;
     }
 
     .record-detail-footer,
@@ -1918,7 +1919,7 @@ body.record-edit-open .site-main {
     }
 
     .record-detail-content {
-        min-height: 260px;
+        min-height: 0;
     }
 
     .record-detail-footer,
