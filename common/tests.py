@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from accounts.models import UserProfile
 from .views import HOME_PROMPTS
 from locations.models import Place
 from locations.services import VERIFIED_LOCATION_SESSION_KEY
@@ -24,6 +25,53 @@ class HomePromptTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["home_prompt"], "")
+
+    def test_home_uses_the_profile_display_name(self):
+        user = get_user_model().objects.create_user(
+            username="original-name",
+            password="test-pass",
+            first_name="changed-name",
+        )
+        UserProfile.objects.create(user=user, display_name="changed-name")
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("common:home"))
+
+        self.assertEqual(response.context["home_display_name"], "changed-name")
+        self.assertContains(response, "changed-name님,")
+
+
+class HomeTutorialTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="tutorial-user",
+            password="test-password",
+        )
+        self.profile = UserProfile.objects.create(
+            user=self.user,
+            display_name=self.user.username,
+            character_id=1,
+        )
+        self.client.force_login(self.user)
+
+    def test_tutorial_is_visible_only_on_the_first_home_visit(self):
+        first_response = self.client.get(reverse("common:home"))
+        second_response = self.client.get(reverse("common:home"))
+
+        self.profile.refresh_from_db()
+        self.assertTrue(first_response.context["show_onboarding_tutorial"])
+        self.assertFalse(second_response.context["show_onboarding_tutorial"])
+        self.assertTrue(self.profile.tutorial_completed)
+
+    def test_tutorial_is_hidden_after_completion(self):
+        response = self.client.post(reverse("common:complete_home_tutorial"))
+
+        self.assertEqual(response.status_code, 200)
+        self.profile.refresh_from_db()
+        self.assertTrue(self.profile.tutorial_completed)
+
+        home_response = self.client.get(reverse("common:home"))
+        self.assertFalse(home_response.context["show_onboarding_tutorial"])
 
 
 class HomeRecordEntryTests(TestCase):

@@ -672,6 +672,16 @@
     overflow: visible;
 }
 
+.frequent-place-card {
+    display: flex;
+    align-items: center;
+}
+
+.frequent-place-card .place-map,
+.frequent-place-card .place-ticket {
+    margin: 0 auto;
+}
+
 .weekly-mood-content {
     display: grid;
     grid-template-columns: 145px 1fr;
@@ -1097,7 +1107,7 @@
 @media (max-width: 767px) {
     .mypage-screen {
         min-height: calc(100vh - 72px);
-        padding: 62px 14px 52px;
+        padding: 30px 14px 52px;
     }
 
     .mypage-profile {

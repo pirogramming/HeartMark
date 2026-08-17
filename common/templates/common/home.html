@@ -29,7 +29,7 @@
     <section class="home-start" aria-labelledby="home-start-title">
         <div class="home-start-copy">
             {% if user.is_authenticated %}
-                <h2 id="home-start-title">{{ user.username }}님,<br>오늘을 기록하세요</h2>
+                <h2 id="home-start-title">{{ home_display_name }}님,<br>오늘을 기록하세요</h2>
             {% else %}
                 <h2 id="home-start-title">로그인을 해주세요!</h2>
             {% endif %}

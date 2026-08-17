@@ -219,7 +219,7 @@ body.page-home {
     position: fixed;
     inset: 0;
     z-index: 1000;
-    background: rgba(0, 0, 0, 0.68);
+    background: transparent;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -245,10 +245,22 @@ body.page-home {
 .tutorial-spotlight {
     position: fixed;
     z-index: 1002;
-    display: grid;
+    display: none;
     place-items: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 3px solid #ffd15c;
+    border-radius: 14px;
+    background: #fff8e8;
+    box-shadow:
+        0 0 0 2px rgba(255, 145, 63, 0.45),
+        0 0 26px rgba(255, 209, 92, 0.9);
     pointer-events: none;
     transition: left 0.24s ease, top 0.24s ease, width 0.24s ease, height 0.24s ease;
+}
+
+.tutorial-spotlight.is-circle-target {
+    border-radius: 50%;
 }
 
 .tutorial-spotlight.has-image {
@@ -311,11 +323,6 @@ body.page-home {
     z-index: 1002;
     pointer-events: none;
     filter: drop-shadow(0 0 18px rgba(255, 209, 92, 0.76));
-}
-
-.tutorial-spotlight:not(.has-image):not(.is-hidden):not(.is-speech) {
-    border-radius: 999px;
-    box-shadow: 0 0 16px rgba(255, 209, 92, 0.48);
 }
 
 .tutorial-live-target--ring {
