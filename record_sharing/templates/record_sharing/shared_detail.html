@@ -8,6 +8,38 @@
 <link rel="stylesheet" href="{% static 'record_sharing/css/record_sharing.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const photo = document.querySelector(".record-detail-shell--shared .record-detail-photo img");
+    if (!photo) return;
+
+    const applyPhotoOrientation = () => {
+        const frame = photo.closest(".record-detail-photo");
+        if (!frame) return;
+
+        const ratio = photo.naturalWidth / photo.naturalHeight;
+        frame.classList.remove(
+            "record-detail-photo--landscape",
+            "record-detail-photo--square",
+            "record-detail-photo--portrait"
+        );
+
+        if (ratio > 1.15) {
+            frame.classList.add("record-detail-photo--landscape");
+        } else if (ratio < 0.87) {
+            frame.classList.add("record-detail-photo--portrait");
+        } else {
+            frame.classList.add("record-detail-photo--square");
+        }
+    };
+
+    if (photo.complete) applyPhotoOrientation();
+    else photo.addEventListener("load", applyPhotoOrientation, { once: true });
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <section class="record-detail-shell record-detail-shell--shared">
     <header class="shared-letter-header">
