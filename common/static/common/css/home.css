@@ -574,6 +574,20 @@ body.page-home {
 }
 
 @media (max-width: 767px) {
+    body.page-home {
+        background: linear-gradient(
+            to bottom,
+            #fff8e8 0,
+            #fff8e8 calc(68svh + 195px),
+            #FFFFF4 calc(68svh + 195px),
+            #FFFFF4 100%
+        );
+    }
+
+    .home-hero .home-character {
+        display: none;
+    }
+
     .home-page {
         margin-top: -150px;
     }
