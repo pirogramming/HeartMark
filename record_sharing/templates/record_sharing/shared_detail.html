@@ -18,7 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const frame = photo.closest(".record-detail-photo");
         if (!frame) return;
 
-        const ratio = photo.naturalWidth / photo.naturalHeight;
+        const { naturalWidth, naturalHeight } = photo;
+        if (!naturalWidth || !naturalHeight) return;
+
+        const ratio = naturalWidth / naturalHeight;
+        frame.style.setProperty(
+            "--record-photo-ratio",
+            `${naturalWidth} / ${naturalHeight}`
+        );
         frame.classList.remove(
             "record-detail-photo--landscape",
             "record-detail-photo--square",
