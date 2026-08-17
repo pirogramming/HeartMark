@@ -806,7 +806,7 @@ input {
 
 @media (max-width: 767px) {
     .site-main {
-        padding-top: 150px;
+        padding-top: 90px;
     }
     .page-particle--15 {
         --particle-top: 83vh;
@@ -814,7 +814,7 @@ input {
     }
 
     .site-header {
-        top: 8px;
+        top: 4px;
         width: calc(100% - 28px);
         height: auto;
         flex-direction: row;
@@ -822,12 +822,12 @@ input {
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        padding: 12px 0 0;
+        padding: 0;
     }
 
     .site-logo img {
         height: 58px;
-        transform: translateY(4px);
+        transform: translateY(0);
     }
 
     .nav-toggle {
