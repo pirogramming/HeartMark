@@ -671,6 +671,16 @@
     overflow: visible;
 }
 
+.frequent-place-card {
+    display: flex;
+    align-items: center;
+}
+
+.frequent-place-card .place-map,
+.frequent-place-card .place-ticket {
+    margin: 0 auto;
+}
+
 .weekly-mood-content {
     display: grid;
     grid-template-columns: 145px 1fr;
