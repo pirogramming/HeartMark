@@ -368,33 +368,6 @@
                 hidden
             {% endif %}
         >
-            <!--
-                장소별 기록 제목 영역은 현재 사용하지 않으므로
-                기존 코드 그대로 주석 처리
-            -->
-
-            <!--
-            <div class="diary-list-header">
-
-                <div class="diary-list-summary">
-                    <div>
-                        <h1 class="diary-list-title">
-                            장소별 기록
-                        </h1>
-
-                        <p class="diary-list-description">
-                            장소를 선택하면 그곳에서 남긴 기록을 확인할 수 있어요.
-                        </p>
-                    </div>
-
-                    <span class="diary-list-count">
-                        {{ records|length }}개
-                    </span>
-                </div>
-
-            </div>
-            -->
-
 
             <div class="location-map-section">
 
@@ -403,14 +376,6 @@
 
                     {% include "diary/partials/seoul_map.html" %}
 
-
-                    <!--
-                        Django에서 계산한 구별 기록 데이터를
-                        JavaScript가 읽을 수 있도록 숨겨서 출력
-
-                        화면에는 보이지 않지만 diary.js에서
-                        아래 data-* 값을 사용
-                    -->
                     <div
                         id="district-map-data"
                         hidden
@@ -428,14 +393,6 @@
                 </div>
             </div>
 
-
-            <!--
-                장소별 기록 카드를 추가로 표시할 필요가 생기면
-                아래 영역에 작성할 수 있음
-
-                현재는 지도 클릭 시 팝업으로 기록을 보여주므로
-                반복문 내부를 비워둔 상태
-            -->
             <div class="diary-grid">
                 {% for record in records %}
 

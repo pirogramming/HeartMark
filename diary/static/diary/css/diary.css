@@ -441,7 +441,7 @@
     display: flex;
     flex-direction: column;
 
-    min-height: 130px;
+    min-height: 100px;
     padding: 15px 14px 8px;
 }
 
@@ -495,23 +495,82 @@
 
 
 .diary-card-location {
+    /*
+        남아 있는 가로 공간 사용.
+        부모가 flex일 때 장소 영역이 자연스럽게 늘어남.
+    */
     flex: 1;
 
+    /*
+        장소명이 길어졌을 때
+        flex 요소가 카드 밖으로 밀려나지 않도록 함.
+    */
     min-width: 0;
 
     margin: 0;
 
-    overflow: hidden;
+    /*
+        아이콘과 장소명을 가로로 배치.
+    */
+    display: flex;
+
+    /*
+        아이콘과 글자를 세로 중앙으로 정렬.
+        현재 위아래가 어긋나 보이는 문제 해결.
+    */
+    align-items: center;
+
+    /*
+        아이콘과 글자 사이 간격.
+        숫자가 커질수록 둘 사이가 멀어짐.
+    */
+    gap: 6px;
 
     color: #7c776f;
 
     font-size: 12px;
     line-height: 1.4;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
+
+/* 장소 아이콘 */
+.diary-card-location svg {
+    /*
+        장소명이 아무리 길어도
+        아이콘 크기가 줄어들지 않도록 고정.
+    */
+    flex-shrink: 0;
+
+    /*
+        아이콘 크기 고정.
+    */
+    width: 15px;
+    height: 15px;
+}
+
+
+/* 장소명 */
+.diary-card-location-text {
+    /*
+        flex 안에서 글자가 정상적으로 줄어들 수 있도록 함.
+    */
+    min-width: 0;
+
+    /*
+        부모 안에서 사용할 수 있는 공간만 사용.
+    */
+    overflow: hidden;
+
+    /*
+        넘친 장소명을 ...으로 표시.
+    */
+    text-overflow: ellipsis;
+
+    /*
+        장소명을 한 줄로 유지.
+    */
+    white-space: nowrap;
+}
 
 .diary-card-location--empty {
     /* 장소 없음 스타일 */
@@ -826,7 +885,7 @@
 
 
 .emotion-chart-center-count {
-    color: #8b71d1;
+    color: #000000;
 
     font-size: 34px;
     font-weight: 800;
