@@ -275,14 +275,10 @@ body {
 
 /* 여기서부터 아래부분입니다 */
 .page-particle--repeat {
-    display: none;
-}
-
-.page-home .page-particle--repeat {
     display: block;
 }
 
-.page-home .page-particle--19.page-particle--repeat {
+.page-particle--19.page-particle--repeat {
     --particle-image: url("/static/accounts/images/particle_018.png");
     --particle-size: clamp(26px, 2.7vw, 46px);
     --particle-top: calc(clamp(280px, 50vh, 520px) + 108vh);
@@ -290,94 +286,94 @@ body {
     --particle-rotate: -8deg;
 }
 
-.page-home .page-particle--1.page-particle--repeat {
+.page-particle--1.page-particle--repeat {
     --particle-top: calc(clamp(240px, 42vh, 430px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_033.png");
     left: 0;
 }
 
-.page-home .page-particle--2.page-particle--repeat {
+.page-particle--2.page-particle--repeat {
     --particle-top: calc(clamp(390px, 68vh, 700px) + 108vh);
     --particle-size: clamp(40px, 4vw, 72px);
     --particle-image: url("/static/accounts/images/particle_022.png");
     left: clamp(64px, 11vw, 170px);
 }
 
-.page-home .page-particle--3.page-particle--repeat {
+.page-particle--3.page-particle--repeat {
     --particle-top: calc(clamp(130px, 21vh, 240px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_021.png");
     left: clamp(58px, 10vw, 160px);
 }
 
-.page-home .page-particle--4.page-particle--repeat {
+.page-particle--4.page-particle--repeat {
     --particle-top: calc(clamp(390px, 68vh, 700px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_055.png");
     left: clamp(260px, 42vw, 620px);
 }
 
-.page-home .page-particle--5.page-particle--repeat {
+.page-particle--5.page-particle--repeat {
     --particle-top: calc(clamp(520px, 90vh, 880px) + 108vh);
     --particle-size: clamp(40px, 4vw, 72px);
     --particle-image: url("/static/accounts/images/particle_003.png");
     left: clamp(36px, 7vw, 112px);
 }
 
-.page-home .page-particle--6.page-particle--repeat {
+.page-particle--6.page-particle--repeat {
     --particle-top: calc(clamp(430px, 75vh, 760px) + 108vh);
     left: clamp(560px, 85vw, calc(100% - 72px));
 }
 
-.page-home .page-particle--7.page-particle--repeat {
+.page-particle--7.page-particle--repeat {
     --particle-top: calc(clamp(72px, 10vh, 130px) + 108vh);
     left: 100%;
 }
 
-.page-home .page-particle--8.page-particle--repeat {
+.page-particle--8.page-particle--repeat {
     --particle-top: calc(clamp(270px, 47vh, 480px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_002.png");
     left: clamp(620px, 93vw, calc(100% - 24px));
 }
 
-.page-home .page-particle--9.page-particle--repeat {
+.page-particle--9.page-particle--repeat {
     --particle-top: calc(clamp(480px, 84vh, 820px) + 108vh);
     left: clamp(440px, 71vw, calc(100% - 180px));
 }
 
-.page-home .page-particle--10.page-particle--repeat {
+.page-particle--10.page-particle--repeat {
     --particle-top: calc(clamp(150px, 25vh, 290px) + 108vh);
     left: clamp(390px, 65vw, calc(100% - 260px));
 }
 
-.page-home .page-particle--12.page-particle--repeat {
+.page-particle--12.page-particle--repeat {
     --particle-top: calc(clamp(8px, 1vh, 24px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_020.png");
     left: clamp(560px, 85vw, calc(100% - 80px));
 }
 
-.page-home .page-particle--13.page-particle--repeat {
+.page-particle--13.page-particle--repeat {
     --particle-top: calc(clamp(32px, 5vh, 70px) + 108vh);
     left: clamp(12px, 2vw, 34px);
 }
 
-.page-home .page-particle--14.page-particle--repeat {
+.page-particle--14.page-particle--repeat {
     --particle-top: calc(clamp(460px, 80vh, 800px) + 108vh);
     left: clamp(620px, 94vw, calc(100% - 24px));
 }
 
-.page-home .page-particle--15.page-particle--repeat {
+.page-particle--15.page-particle--repeat {
     --particle-top: calc(clamp(520px, 90vh, 880px) + 108vh);
     --particle-size: clamp(36px, 3vw, 64px);
     --particle-image: url("/static/accounts/images/particle_019.png");
     left: clamp(210px, 33vw, 500px);
 }
 
-.page-home .page-particle--16.page-particle--repeat {
+.page-particle--16.page-particle--repeat {
     --particle-top: calc(clamp(8px, 1vh, 24px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_011.png");
     left: clamp(220px, 35vw, 520px);
 }
 
-.page-home .page-particle--18.page-particle--repeat {
+.page-particle--18.page-particle--repeat {
     --particle-top: calc(clamp(180px, 31vh, 330px) + 108vh);
     --particle-image: url("/static/accounts/images/particle_007.png");
     left: clamp(150px, 25vw, 380px);
