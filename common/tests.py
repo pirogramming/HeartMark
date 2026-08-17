@@ -26,6 +26,20 @@ class HomePromptTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["home_prompt"], "")
 
+    def test_home_uses_the_profile_display_name(self):
+        user = get_user_model().objects.create_user(
+            username="original-name",
+            password="test-pass",
+            first_name="changed-name",
+        )
+        UserProfile.objects.create(user=user, display_name="changed-name")
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("common:home"))
+
+        self.assertEqual(response.context["home_display_name"], "changed-name")
+        self.assertContains(response, "changed-name님,")
+
 
 class HomeTutorialTests(TestCase):
     def setUp(self):
