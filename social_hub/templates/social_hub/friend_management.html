@@ -14,7 +14,6 @@
     {% for message in messages %}{% endfor %}
 
     <header class="friend-book__intro">
-        <span class="friend-book__eyebrow">HeartMark Friends</span>
         <h1>나의 친구 수첩</h1>
         <p>친구와 마음자국을 조심스럽게 나눠 보세요.</p>
         <div class="friend-book__toolbar">
@@ -27,10 +26,8 @@
     <section class="member-finder" aria-labelledby="member-finder-title">
         <div class="member-finder__heading">
             <div>
-                <span class="member-finder__eyebrow">MEMBER SEARCH</span>
                 <h2 id="member-finder-title">가입한 친구 찾기</h2>
             </div>
-            <p>마음자국에 가입한 친구의 이름이나 아이디를 검색해 보세요.</p>
         </div>
 
         <form class="member-finder__form" method="get" action="{% url 'social_hub:friend_management' %}">
