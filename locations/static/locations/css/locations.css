@@ -6,14 +6,16 @@
 
 :root {
     /* 페이지 배경은 common/css/base.css(body 배경 + .page-particles)가 담당한다.
-       이 값은 검색 결과 hover 같은 옅은 강조 배경에만 쓴다. */
-    --loc-bg: #fbf1e2;            /* 크림/베이지 강조 배경 */
-    --loc-card-bg: #fffaf2;       /* 카드/지도 박스 배경 (배경보다 살짝 밝은 톤) */
-    --loc-border: #e7d9c3;        /* 카드·지도·검색창 테두리 */
+       마이페이지(mypage.css)·기록쓰기(records.css)와 톤을 맞추기 위해
+       아래 값들은 그 두 화면의 --mypage-*/--record-* 토큰과 동일하게 맞춰뒀다. */
+    --loc-bg: #ffe7d0;            /* 버튼·배지·hover 강조 배경 (--record-accent와 동일) */
+    --loc-card-bg: #fffff4;       /* 카드/지도 박스 배경 (--record-page와 동일) */
+    --loc-border: #ecd9c2;        /* 검색창·드롭다운의 옅은 테두리 */
+    --loc-line: rgba(98, 76, 61, 0.28); /* 점선 구분선, 지도 SVG 선 (--record-line과 동일) */
     --loc-primary: #d86f12;       /* 헤더의 "로그인" 링크(common/css/base.css .nav-auth-link)와 같은 주황 계열로 통일 */
     --loc-primary-soft: #f3c48c;  /* 선택된 구를 칠할 때 쓰는 옅은 주황 */
-    --loc-text: #2b2b2b;
-    --loc-text-muted: #837b6c;
+    --loc-text: #46372d;          /* --mypage-ink/--record-ink와 동일한 잉크 브라운 */
+    --loc-text-muted: #8d796a;    /* --mypage-muted/--record-muted와 동일 */
 }
 
 /* 이 파일이 담당하는 두 화면 안에서만 box-sizing을 border-box로 맞춰서
@@ -32,16 +34,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 28px;
-    border: none;
-    border-radius: 999px;
+    padding: 16px 28px;
+    /* 마이페이지(.mypage-save-button)·기록쓰기(.record-submit)와 같은 손그림 느낌의
+       비대칭 모서리 + 잉크색 테두리 스타일로 맞춘다. */
+    border: 1.5px solid var(--loc-text);
+    border-radius: 15px 12px 17px 11px;
     font-size: 20px;
-    /* 손글씨 폰트(온글잎 박다현체)는 굵기가 하나뿐이라 볼드가 합성되면서 뭉개져 보인다.
-       그래서 이 두 화면의 버튼은 전부 기본 굵기로 둔다. */
-    font-weight: 400;
+    font-weight: 700;
     text-decoration: none;
     cursor: pointer;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn:disabled {
@@ -49,18 +51,28 @@
     cursor: not-allowed;
 }
 
-.btn:not(:disabled):hover {
-    transform: translateY(-1px);
+.btn-primary {
+    color: #fffff4;
+    /* 카드 배경(--loc-card-bg)과 톤이 너무 가까워 버튼이 안 보이던 문제를 고쳐서,
+       진한 주황(--loc-primary)을 채워 눈에 띄게 한다. */
+    background: var(--loc-primary);
+    border-color: var(--loc-primary);
+    /* .record-submit과 동일한 하드 오프셋 그림자로 "스티커" 느낌을 맞춘다. */
+    box-shadow: 3px 4px 0 rgba(70, 55, 45, 0.16);
 }
 
-.btn-primary {
-    background: var(--loc-primary);
-    color: #fff;
+.btn-primary:not(:disabled):hover {
+    background: #c2620f;
+    transform: translateY(-1px) rotate(-1deg);
 }
 
 .btn-secondary {
-    background: #eee6d8;
     color: var(--loc-text);
+    background: var(--loc-card-bg);
+}
+
+.btn-secondary:not(:disabled):hover {
+    transform: translateY(-1px);
 }
 
 /* 스크린리더 전용 텍스트 (place-select-search의 label에서 사용) */
@@ -95,10 +107,12 @@
     max-width: 620px;
     height: fit-content;
     background: var(--loc-card-bg);
-    border: 1px solid var(--loc-border);
-    border-radius: 32px;
+    /* mypage/records의 카드(.record-page-card, .profile-editor__panel)와 같은
+       잉크색 테두리로 통일한다. */
+    border: 1.5px solid var(--loc-text);
+    border-radius: 28px;
     padding: 40px 36px 44px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 32px rgba(70, 55, 45, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -108,9 +122,10 @@
 .place-select-map {
     width: 100%;
     height: 340px;
-    border-radius: 24px;
+    border: 2px solid var(--loc-text);
+    border-radius: 20px;
     overflow: hidden; /* 카카오맵 SDK가 그린 지도도 이 모서리에 맞춰 잘리도록 */
-    background: #eef1ea;
+    background: var(--loc-card-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,9 +141,12 @@
     margin: 0;
     width: 100%;
     padding: 16px 24px;
-    background: #fff;
-    border: 1px solid var(--loc-border);
-    border-radius: 999px;
+    /* .seoul-map-address와 통일: 카드 배경 + 테두리 + 그림자로 흰색 박스 느낌을 줘서
+       주소 텍스트가 잘 보이게 한다. */
+    background: var(--loc-card-bg);
+    border: 1.5px solid var(--loc-text);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(70, 55, 45, 0.08);
     color: var(--loc-text);
     font-size: 19px;
     text-align: center;
@@ -163,9 +181,12 @@
 
 .place-select-search input {
     width: 100%;
-    padding: 16px 22px;
+    padding: 15px 20px;
+    /* .record-page-field input과 같은 옅은 라인 테두리(pill이 아닌 둥근 사각형) */
     border: 1px solid var(--loc-border);
-    border-radius: 999px;
+    border-radius: 12px;
+    background: var(--loc-card-bg);
+    color: var(--loc-text);
     font-size: 19px;
 }
 
@@ -176,7 +197,10 @@
     max-height: 300px;
     overflow-y: auto;
     border: 1px solid var(--loc-border);
-    border-radius: 20px;
+    border-radius: 18px;
+    background: var(--loc-card-bg);
+    /* .attendance-period-filter 드롭다운과 같은 팝오버 그림자 */
+    box-shadow: 0 10px 26px rgba(70, 55, 45, 0.1);
 }
 
 .place-select-search-item {
@@ -184,7 +208,8 @@
     font-size: 18px;
     color: var(--loc-text);
     cursor: pointer;
-    border-bottom: 1px solid var(--loc-border);
+    /* mypage/records 전반의 점선 구분선 스타일과 통일 */
+    border-bottom: 1px dashed var(--loc-line);
 }
 
 .place-select-search-item:last-child {
@@ -236,8 +261,8 @@
    SVG presentation attribute는 외부 스타일시트보다 우선순위가 낮기 때문에
    !important 없이 아래 규칙만으로 그대로 덮어쓸 수 있다. */
 .seoul-map-wrap path {
-    fill: #fff;
-    stroke: var(--loc-border);
+    fill: var(--loc-card-bg);
+    stroke: var(--loc-line);
     stroke-width: 2;
     transition: fill 0.2s ease;
 }
@@ -258,6 +283,15 @@
 
 .seoul-map-address {
     margin: 0;
+    width: 100%;
+    max-width: 760px;
+    /* 배경 파티클 위에 텍스트만 있으면 잘 안 보여서, 화면 1의 주소 박스(.place-select-address)와
+       같은 카드 배경 + 테두리를 넣어 가독성을 높인다. */
+    padding: 16px 24px;
+    background: var(--loc-card-bg);
+    border: 1.5px solid var(--loc-text);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(70, 55, 45, 0.08);
     font-size: 21px;
     color: var(--loc-text-muted);
     text-align: center;
