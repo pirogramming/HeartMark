@@ -17,10 +17,10 @@
 .friend-book {
     position: relative;
     min-height: calc(100vh - 100px);
-    padding: 80px max(24px, 7vw) 100px;
+    padding: 38px max(24px, 7vw) 100px;
     overflow: hidden;
     color: var(--friend-ink);
-    background: #fff8e8;
+    background: transparent;
 }
 
 .friend-book__intro,
@@ -29,7 +29,7 @@
 .friend-board {
     position: relative;
     z-index: 1;
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
     margin-inline: auto;
 }
 
@@ -209,7 +209,7 @@
     position: relative;
     display: grid;
     justify-items: center;
-    margin-bottom: 48px;
+    margin-bottom: 26px;
     text-align: center;
 }
 
@@ -255,7 +255,7 @@
     display: flex;
     width: 100%;
     justify-content: flex-end;
-    margin: 34px 0 22px;
+    margin: 22px 0 10px;
 }
 
 .friend-book__mail-link:hover {
@@ -538,10 +538,30 @@
 
 .person-card__more {
     width: 42px;
+    height: 40px;
     padding: 0;
     border-color: transparent;
     background: transparent;
-    font-size: 1rem;
+    color: #8f7a69;
+    display: inline-grid;
+    place-items: center;
+    transition: color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+.person-card__more svg {
+    width: 20px;
+    height: 20px;
+}
+
+.person-card__more:hover {
+    color: #bd6f65;
+    background: #fff0e8;
+    transform: translateY(-1px);
+}
+
+.person-card__more:focus-visible {
+    outline: 2px solid #e9b8ae;
+    outline-offset: 2px;
 }
 
 .waiting-sticker {
@@ -800,11 +820,12 @@
     background: #fff9eb;
     box-shadow: 0 8px 22px rgba(85, 60, 45, 0.12);
     text-align: center;
+    transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .friend-book__message--success {
-    border-color: #b9d6ad;
-    background: #f4faed;
+    border-color: #ede2ff;
+    background: #f8f4ff;
 }
 
 .friend-book__message--error {

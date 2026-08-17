@@ -1089,6 +1089,91 @@ body.record-content-modal-open {
 }
 
 /* ==================================================
+   Listen BGM 버튼
+================================================== */
+
+/*
+    Listen 버튼의 아이콘 영역.
+
+    재생 상태에 따라
+    헤드셋 / 사선 헤드셋 아이콘을 교체함.
+*/
+.record-action-icon--listen {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* 아이콘 컨테이너 */
+.bgm-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+}
+
+
+/* SVG 크기 고정 */
+.bgm-icon svg {
+    display: block;
+
+    width: 24px;
+    height: 24px;
+}
+
+
+/*
+    BGM 재생 중인 Listen 버튼.
+
+    기존 버튼 디자인은 유지하고
+    테두리와 배경만 살짝 강조함.
+*/
+.record-action-button--listen.is-playing {
+    border-color: #9eb4d8;
+
+    background-color: #f5f8ff;
+
+    box-shadow:
+        0 7px 18px rgba(75, 104, 158, 0.12);
+}
+
+
+/* 재생 중 아이콘 강조 */
+.record-action-button--listen.is-playing
+.record-action-icon {
+    color: #4f6fa7;
+}
+
+
+/*
+    음원이 하나도 없는 경우.
+
+    버튼 클릭 불가능 상태 표시함.
+*/
+.record-action-button--listen:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* 숨김 속성 우선 적용 */
+.bgm-icon[hidden] {
+    display: none;
+}
+
+
+/* BGM 오류 안내는 화면에서 숨김. */
+#bgm-error {
+    display: none;
+}
+
+/* ==================================================
    모바일 팝업
 ================================================== */
 

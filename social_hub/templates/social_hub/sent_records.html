@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}보낸 마음 편지 | 마음자국{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'social_hub/css/shared_records.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="shared-mailbox shared-mailbox--sent">
+    <header class="shared-mailbox__header">
+        <h1>보낸 마음 편지</h1>
+        <p>친구에게 건넨 마음자국과 공유 상태를 한눈에 확인해요.</p>
+    </header>
+
+    <div class="shared-mailbox__toolbar">
+        <a href="{% url 'social_hub:shared_records' %}">받은 마음 편지</a>
+    </div>
+
+    {% if sent_records %}
+    <div class="shared-record-grid">
+        {% for sent_record in sent_records %}
+            {% include "social_hub/partials/sent_record_card.html" with item=sent_record %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="friend-empty" data-empty-state>
+        <div class="friend-empty__illustration" aria-hidden="true">✉</div>
+        <strong>아직 보낸 마음 편지가 없어요.</strong>
+        <p>친구 관리에서 마음자국을 골라 첫 편지를 보내 보세요.</p>
+        <a class="sent-empty__link" href="{% url 'social_hub:friend_management' %}">친구 관리로 가기</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

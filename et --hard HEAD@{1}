@@ -1,0 +1,40 @@
+[33m07e90b2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/locations[m[33m)[m HEAD@{0}: reset: moving to origin/develop
+[33m484a23e[m[33m ([m[1;31morigin/feat/locations[m[33m)[m HEAD@{1}: commit: style: 디자인 통일
+[33m79589a1[m[33m ([m[1;32mdevelop[m[33m)[m HEAD@{2}: pull origin develop: Fast-forward
+[33m97589d0[m HEAD@{3}: checkout: moving from develop to feat/locations
+[33m79589a1[m[33m ([m[1;32mdevelop[m[33m)[m HEAD@{4}: pull origin develop: Fast-forward
+[33me6ad39a[m HEAD@{5}: pull origin develop: Fast-forward
+[33ma6dc2de[m HEAD@{6}: checkout: moving from staging to develop
+[33mfe9d46c[m[33m ([m[1;31morigin/staging[m[33m, [m[1;32mstaging[m[33m)[m HEAD@{7}: checkout: moving from feat/locations to staging
+[33m97589d0[m HEAD@{8}: commit: style: 지도 위치 수정, '서울' 텍스트 제거
+[33m0a4f66f[m HEAD@{9}: commit: fix: locations 배경 적용
+[33ma6dc2de[m HEAD@{10}: merge develop: Fast-forward
+[33mb8093bc[m HEAD@{11}: checkout: moving from develop to feat/locations
+[33ma6dc2de[m HEAD@{12}: pull origin develop: Fast-forward
+[33mb8093bc[m HEAD@{13}: checkout: moving from staging to develop
+[33mfe9d46c[m[33m ([m[1;31morigin/staging[m[33m, [m[1;32mstaging[m[33m)[m HEAD@{14}: commit: fix: 포기
+[33mcef4db9[m HEAD@{15}: commit: feat: setup staging CI/CD pipeline
+[33m5d38511[m HEAD@{16}: checkout: moving from feat/locations to staging
+[33mb8093bc[m HEAD@{17}: merge develop: Fast-forward
+[33mc6c094e[m HEAD@{18}: checkout: moving from develop to feat/locations
+[33mb8093bc[m HEAD@{19}: pull origin develop: Fast-forward
+[33mc6c094e[m HEAD@{20}: checkout: moving from feat/locations to develop
+[33mc6c094e[m HEAD@{21}: merge develop: Fast-forward
+[33m4395c79[m HEAD@{22}: checkout: moving from staging to feat/locations
+[33m5d38511[m HEAD@{23}: commit: feat: deploy.yml 파일 추가
+[33mc6c094e[m HEAD@{24}: merge develop: Fast-forward
+[33mf947d64[m HEAD@{25}: checkout: moving from develop to staging
+[33mc6c094e[m HEAD@{26}: pull origin develop: Fast-forward
+[33mf947d64[m HEAD@{27}: checkout: moving from staging to develop
+[33mf947d64[m HEAD@{28}: checkout: moving from develop to staging
+[33mf947d64[m HEAD@{29}: pull origin develop: Fast-forward
+[33me13c39c[m HEAD@{30}: checkout: moving from feature/record-sharing to develop
+[33mbd5a546[m[33m ([m[1;31morigin/feature/record-sharing[m[33m, [m[1;32mfeature/record-sharing[m[33m)[m HEAD@{31}: checkout: moving from develop to feature/record-sharing
+[33me13c39c[m HEAD@{32}: reset: moving to origin/develop
+[33m346a1ae[m[33m ([m[1;32mfix/location-verification[m[33m)[m HEAD@{33}: checkout: moving from fix/location-verification to develop
+[33m346a1ae[m[33m ([m[1;32mfix/location-verification[m[33m)[m HEAD@{34}: checkout: moving from develop to fix/location-verification
+[33m346a1ae[m[33m ([m[1;32mfix/location-verification[m[33m)[m HEAD@{35}: pull origin develop: Fast-forward
+[33m8e5a5a6[m HEAD@{36}: pull origin develop: Fast-forward
+[33mbb2c3cd[m HEAD@{37}: checkout: moving from feat/locations to develop
+[33m4395c79[m HEAD@{38}: checkout: moving from develop to feat/locations
+[33mbb2c3cd[m HEAD@{39}: clone: from https://github.com/pirogramming/HeartMark.git

@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.formats import date_format
+from django.utils import timezone
 
 from friendships.models import Invitation
 from friendships.services import (
@@ -13,7 +14,7 @@ from friendships.services import (
     get_received_requests,
     get_sent_requests,
 )
-from record_sharing.services import get_shared_place_data, get_shared_records
+from record_sharing.services import get_sent_records, get_shared_place_data, get_shared_records
 from records.models import EMOTION_NAMES, Record
 
 
@@ -144,6 +145,7 @@ def friend_management(request):
 def shared_records(request):
     """은아의 공유 서비스가 허용한 기록과 장소 정보만 화면 형태로 변환한다."""
     items = []
+    open_comment_share = request.GET.get("comments")
     for share in get_shared_records(request.user):
         record = share.record
         place = get_shared_place_data(share, request.user)
@@ -153,6 +155,7 @@ def shared_records(request):
                 "sender_name": _display_name(share.sender),
                 "sender_character_url": _character_url(share.sender),
                 "record_id": record.pk,
+                "title": record.title or "오늘의 기록",
                 "record_date": date_format(record.created_at, "Y년 n월 j일"),
                 "main_emotion": f"{record.main_emotion:02d}",
                 "main_emotion_name": EMOTION_NAMES.get(record.main_emotion, f"감정 {record.main_emotion}"),
@@ -161,8 +164,59 @@ def shared_records(request):
                 "share_location": bool(place and place["is_visible"]),
                 "place_name": place["name"] if place and place["is_visible"] else "",
                 "detail_url": reverse("record_sharing:shared_detail", args=[share.pk]),
+                "comment_url": reverse("record_sharing:comment_create", args=[share.pk]),
+                "comments_open": open_comment_share == str(share.pk),
+                "comments": [
+                    {
+                        "author_name": _display_name(comment.author),
+                        "content": comment.content,
+                        "created_at": date_format(timezone.localtime(comment.created_at), "n/j H:i"),
+                        "is_mine": comment.author_id == request.user.pk,
+                        "delete_url": reverse(
+                            "record_sharing:comment_delete",
+                            args=[share.pk, comment.pk],
+                        ),
+                    }
+                    for comment in share.comments.select_related("author").all()
+                ],
             }
         )
 
     context = {"shared_records": items}
     return render(request, "social_hub/shared_records.html", context)
+
+
+@login_required(login_url="accounts:login")
+def sent_records(request):
+    """내가 누구에게 어떤 기록을 보냈는지 확인하고 공유를 취소한다."""
+    items = []
+    for share in get_sent_records(request.user):
+        record = share.record
+        items.append(
+            {
+                "share_id": share.pk,
+                "receiver_id": share.receiver_id,
+                "receiver_name": _display_name(share.receiver),
+                "receiver_character_url": _character_url(share.receiver),
+                "record_id": record.pk,
+                "title": record.title or "오늘의 기록",
+                "record_date": date_format(record.created_at, "Y년 n월 j일"),
+                "shared_at": date_format(timezone.localtime(share.created_at), "Y년 n월 j일 H:i"),
+                "main_emotion": f"{record.main_emotion:02d}",
+                "main_emotion_name": EMOTION_NAMES.get(
+                    record.main_emotion,
+                    f"감정 {record.main_emotion}",
+                ),
+                "image_url": record.image.url if record.image else "",
+                "content_preview": record.content,
+                "share_location": share.share_location,
+                "detail_url": reverse("records:detail", args=[record.pk]),
+                "revoke_url": reverse("record_sharing:revoke", args=[record.pk]),
+            }
+        )
+
+    return render(
+        request,
+        "social_hub/sent_records.html",
+        {"sent_records": items, "next_url": request.get_full_path()},
+    )

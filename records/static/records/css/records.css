@@ -72,13 +72,21 @@
     height: 38px;
     padding: 0;
     place-items: center;
-    border: 1.5px solid var(--record-ink);
+    border: 0;
     border-radius: 10px 8px 11px 7px;
     color: var(--record-ink);
     background: rgba(255, 249, 235, 0.92);
-    font-size: 1.65rem;
+    font-size: 0;
     line-height: 1;
     cursor: pointer;
+    background-image: url("../images/fullscreen.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+}
+
+.record-modal--fullscreen .record-icon-button {
+    background-image: url("../images/minimize.svg");
 }
 
 .record-paper {
@@ -721,7 +729,7 @@
 .record-create-layout {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.55fr);
+    grid-template-columns: minmax(360px, 0.98fr) minmax(0, 1.55fr);
     grid-template-rows: minmax(0, 1fr) auto auto;
     gap: clamp(34px, 4vw, 68px);
     row-gap: 12px;
@@ -755,16 +763,17 @@
 }
 
 .record-create-layout .photo-box {
-    width: min(100%, 350px);
+    width: min(100%, 440px);
     min-height: 0;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 33 / 35;
     align-self: center;
 }
 
 .record-create-layout #record-photo-preview {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 }
 
 .record-create-layout .emotion-picker {
@@ -820,11 +829,11 @@
 .record-modal--fullscreen .record-create-layout {
     width: min(1500px, 100%);
     margin: 0 auto;
-    grid-template-columns: minmax(300px, 0.75fr) minmax(520px, 1.6fr);
+    grid-template-columns: minmax(440px, 0.98fr) minmax(520px, 1.6fr);
 }
 
 .record-modal--fullscreen .record-create-layout__left {
-    width: min(100%, 390px);
+    width: min(100%, 460px);
     justify-self: center;
 }
 
@@ -845,8 +854,10 @@
 }
 
 .record-modal--fullscreen .record-create-layout .photo-box {
-    width: 100%;
-    max-height: calc(100vh - 260px);
+    width: min(100%, 440px);
+    height: auto;
+    max-height: none;
+    aspect-ratio: 33 / 35;
 }
 
 body.record-modal-open {
@@ -910,14 +921,14 @@ body.record-modal-open {
 
 .record-detail-shell {
     min-height: calc(100vh - 90px);
-    padding: 48px 24px;
-    background: #fff8e8;
+    padding: 24px 24px 32px;
+    background: transparent;
 }
 
 .record-detail-card {
-    width: min(1180px, calc(100vw - 48px));
+    width: min(1120px, calc(100vw - 48px));
     max-width: 100%;
-    padding: clamp(28px, 4vw, 56px);
+    padding: clamp(22px, 3vw, 34px);
     margin: 0 auto;
     border: 1.5px solid var(--record-ink);
     border-radius: 30px;
@@ -986,8 +997,8 @@ body.record-delete-modal-open {
 
 .record-detail-header {
     justify-content: space-between;
-    padding-bottom: 18px;
-    margin-bottom: 28px;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
     border-bottom: 1px dashed rgba(141, 121, 106, 0.38);
 }
 
@@ -1030,8 +1041,8 @@ body.record-delete-modal-open {
 
 .record-detail-layout {
     display: grid;
-    grid-template-columns: minmax(260px, 0.8fr) minmax(360px, 1.4fr);
-    gap: clamp(38px, 5vw, 70px);
+    grid-template-columns: minmax(230px, 0.7fr) minmax(360px, 1.5fr);
+    gap: clamp(28px, 4vw, 48px);
     align-items: stretch;
 }
 
@@ -1044,12 +1055,25 @@ body.record-delete-modal-open {
     border: 1.5px solid var(--record-ink);
     border-radius: 12px;
     color: var(--record-muted);
+    background: rgba(255, 255, 255, 0.46);
+    transition: aspect-ratio 180ms ease;
+}
+
+.record-detail-photo--landscape {
+    aspect-ratio: 4 / 3;
+    align-self: center;
+}
+
+.record-detail-photo--square {
+    aspect-ratio: 1 / 1;
+    align-self: center;
 }
 
 .record-detail-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 }
 
 .record-detail-content {
@@ -1064,6 +1088,18 @@ body.record-delete-modal-open {
     );
     font-size: 1rem;
     line-height: 36px;
+}
+
+.record-detail-title {
+    height: 36px;
+    margin: 0;
+    color: var(--record-ink);
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    line-height: 36px;
+}
+
+.record-detail-body {
+    min-height: 100%;
 }
 
 .record-detail-emotions {
@@ -1139,8 +1175,8 @@ body.record-delete-modal-open {
     align-items: center;
     justify-content: space-between;
     gap: 28px;
-    padding-top: 24px;
-    margin-top: 26px;
+    padding-top: 16px;
+    margin-top: 18px;
     border-top: 1px dashed rgba(141, 121, 106, 0.38);
 }
 
@@ -1194,7 +1230,7 @@ body.record-delete-modal-open {
 }
 
 @media (max-width: 760px) {
-    .record-detail-layout {
+.record-detail-layout {
         grid-template-columns: 1fr;
     }
 
@@ -1216,6 +1252,14 @@ body.record-delete-modal-open {
     .record-detail-actions {
         align-self: flex-end;
     }
+}
+
+.record-detail-layout--landscape {
+    grid-template-columns: minmax(360px, 1fr) minmax(360px, 1.25fr);
+}
+
+.record-detail-layout--square {
+    grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.35fr);
 }
 
 .site-messages {
@@ -1301,12 +1345,32 @@ body.record-delete-modal-open {
     border: 2px solid var(--record-ink);
     border-radius: 9px;
     background: rgba(255, 255, 244, 0.55);
+    transition: width 180ms ease, aspect-ratio 180ms ease;
+}
+
+.record-edit-main--landscape {
+    grid-template-columns: minmax(420px, 1fr) minmax(520px, 1.35fr);
+}
+
+.record-edit-main--landscape .record-edit-left {
+    width: min(100%, 480px);
+}
+
+.record-edit-photo--landscape {
+    max-height: none;
+    aspect-ratio: 4 / 3;
+}
+
+.record-edit-photo--square {
+    max-height: none;
+    aspect-ratio: 1 / 1;
 }
 
 .record-edit-photo > img:first-child {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 }
 
 .record-edit-photo__empty {
@@ -1526,17 +1590,17 @@ body.record-edit-open .site-main {
 
     .record-create-layout,
     .record-modal--fullscreen .record-create-layout {
-        grid-template-columns: minmax(230px, 0.8fr) minmax(340px, 1.2fr);
+        grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
         gap: 30px;
         row-gap: 14px;
     }
 
     .record-modal--fullscreen .record-create-layout__left {
-        width: min(100%, 340px);
+        width: min(100%, 380px);
     }
 
     .record-modal--fullscreen .record-create-layout .emotion-picker {
-        grid-template-columns: minmax(230px, 0.8fr) minmax(340px, 1.2fr);
+        grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
         column-gap: 30px;
     }
 
@@ -1572,7 +1636,7 @@ body.record-edit-open .site-main {
     }
 
     .record-create-layout .photo-box {
-        width: min(100%, 300px);
+        width: min(100%, 350px);
     }
 
     .record-create-layout .weather-picker {

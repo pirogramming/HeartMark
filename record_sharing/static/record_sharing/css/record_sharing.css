@@ -71,7 +71,7 @@
 
 /* 공유 기록 상세: 편지 머리말은 유지하고, 기록 본문은 records 상세 레이아웃을 쓴다. */
 .record-detail-shell--shared {
-    padding: 80px max(24px, 7vw) 100px;
+    padding: 38px max(24px, 7vw) 100px;
 }
 
 .shared-letter-header {
@@ -81,7 +81,7 @@
     --card-line: #f3e2d6;
     --muted: #9a8f88;
 
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
     margin: 0 auto 48px;
     text-align: center;
 }
@@ -110,7 +110,7 @@
 }
 
 .record-detail-shell--shared .record-detail-card {
-    width: min(1120px, 100%);
+    width: min(980px, 100%);
 }
 
 .sharing-button {

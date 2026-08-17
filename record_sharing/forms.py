@@ -3,6 +3,7 @@
 from django import forms
 
 from friendships.services import get_friends
+from records.models import Record
 
 
 class RecordShareForm(forms.Form):
@@ -26,6 +27,8 @@ class RecordShareForm(forms.Form):
         },
     )
 
+    record_ids = forms.ModelMultipleChoiceField(queryset=Record.objects.none(), required=True)
+
     # '장소도 함께 공유' 체크박스.
     # required=False 가 중요하다. 체크박스는 체크를 안 하면 아예 값이 안 넘어오는데,
     # required=True 면 "체크 안 함"이 오류가 되어버린다.
@@ -38,3 +41,4 @@ class RecordShareForm(forms.Form):
         # 폼을 만들 때마다 친구 목록을 다시 계산하므로, 방금 친구를 끊었다면
         # 그 사람은 바로 선택지에서 사라진다.
         self.fields["friends"].queryset = get_friends(user) if user else None
+        self.fields["record_ids"].queryset = Record.objects.filter(user=user).order_by("-created_at") if user else Record.objects.none()

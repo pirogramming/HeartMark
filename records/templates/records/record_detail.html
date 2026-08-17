@@ -27,16 +27,21 @@
             </div>
         </header>
 
-        <div class="record-detail-layout">
-            <div class="record-detail-photo">
+        <div class="record-detail-layout" data-record-detail-layout>
+            <div class="record-detail-photo" data-record-photo-frame>
                 {% if record.image %}
-                <img src="{{ record.image.url }}" alt="기록 사진">
+                <img src="{{ record.image.url }}" alt="기록 사진" data-record-detail-image>
                 {% else %}
                 <p>등록된 사진이 없어요.</p>
                 {% endif %}
             </div>
 
-            <div class="record-detail-content">{{ record.content|linebreaksbr }}</div>
+            <div class="record-detail-content">
+                {% if record.title %}
+                <h1 class="record-detail-title">{{ record.title }}</h1>
+                {% endif %}
+                <div class="record-detail-body">{{ record.content|linebreaksbr }}</div>
+            </div>
         </div>
 
         <footer class="record-detail-footer">
