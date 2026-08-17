@@ -1,49 +1,87 @@
 {% load static %}
 
 
-{% if musics %}
+<!-- ==================================================
+    랜덤 BGM 재생용 음원 목록
 
-<!--
-    랜덤 BGM 재생에 사용할 음원 목록.
+    DB를 사용하지 않고
+    static 폴더의 실제 mp3 파일 직접 연결함.
 
-    화면에는 표시하지 않고
-    music_player.js에서 data 속성을 읽어 사용함.
--->
+    팀원이 Git pull 후
+    별도의 음악 데이터 등록 없이 바로 재생 가능함.
+================================================== -->
 <div
     id="bgm-music-list"
     hidden
 >
-    {% for music in musics %}
 
-        <div
-            class="bgm-music-data"
-            data-music-id="{{ music.id }}"
-            data-title="{{ music.title }}"
-            data-artist="{{ music.artist }}"
-            data-src="{% static 'bgm/audio/' %}{{ music.file_name }}"
-        ></div>
+    <!-- 1번 곡 -->
+    <div
+        class="bgm-music-data"
+        data-title="Down Town"
+        data-artist="Retro BGM Chan"
+        data-src="{% static 'bgm/audio/retro-bgm-chan-down-town-523653.mp3' %}"
+    ></div>
 
-    {% endfor %}
+
+    <!-- 2번 곡 -->
+    <div
+        class="bgm-music-data"
+        data-title="Good Morning"
+        data-artist="Retro BGM Chan"
+        data-src="{% static 'bgm/audio/retro-bgm-chan-good-morning-516296.mp3' %}"
+    ></div>
+
+
+    <!-- 3번 곡 -->
+    <div
+        class="bgm-music-data"
+        data-title="Home At Night"
+        data-artist="Retro BGM Chan"
+        data-src="{% static 'bgm/audio/retro-bgm-chan-home-at-night-516298.mp3' %}"
+    ></div>
+
+
+    <!-- 4번 곡 -->
+    <div
+        class="bgm-music-data"
+        data-title="Home Town"
+        data-artist="Retro BGM Chan"
+        data-src="{% static 'bgm/audio/retro-bgm-chan-home-town-516297.mp3' %}"
+    ></div>
+
+
+    <!-- 5번 곡 -->
+    <div
+        class="bgm-music-data"
+        data-title="Shop"
+        data-artist="Retro BGM Chan"
+        data-src="{% static 'bgm/audio/retro-bgm-chan-shop-516323.mp3' %}"
+    ></div>
+
 </div>
 
 
-<!--
-    실제 음악 재생 담당.
+<!-- ==================================================
+    실제 음악 재생 요소
 
-    플레이어 UI는 표시하지 않음.
--->
+    화면에는 표시하지 않고
+    JavaScript에서 제어함.
+================================================== -->
 <audio
     id="bgm-audio"
     preload="metadata"
 ></audio>
 
 
-<!-- 음원 오류 안내 -->
+<!-- ==================================================
+    음원 오류 안내
+
+    현재 CSS에서 숨김 처리됨.
+================================================== -->
 <p
     id="bgm-error"
     hidden
 >
     음악을 불러올 수 없습니다.
 </p>
-
-{% endif %}
