@@ -4,6 +4,11 @@
         return;
     }
 
+    // 가장 작은 반응형 구간에서는 홈 튜토리얼을 표시하지 않는다.
+    if (window.matchMedia("(max-width: 767px)").matches) {
+        return;
+    }
+
     const imageBase = "/static/accounts/images/";
     const DEBUG_SHOW_ALL_IMAGES = false;
     const steps = [
@@ -11,56 +16,36 @@
             target: '[data-tutorial-target="record-write"]',
             title: "기록작성",
             text: "오늘 머문 장소와 마음을 남기는 곳이에요.",
-            image: "tutorial-record-write.png",
-            imageWidth: 120,
-            imageHeight: 46,
-            imageOffsetX: 0,
-            imageOffsetY: -20,
             cardOffsetY: 38,
+            navStep: true,
         },
         {
             target: '[data-tutorial-target="record-list"]',
             title: "기록보기",
             text: "남겨둔 마음자국들을 한곳에서 다시 볼 수 있어요.",
-            image: "tutorial-record-list.png",
-            imageWidth: 120,
-            imageHeight: 46,
-            imageOffsetX: 0,
-            imageOffsetY: -20,
             cardOffsetY: 38,
+            navStep: true,
         },
         {
             target: '[data-tutorial-target="calendar"]',
             title: "달력",
             text: "날짜별로 쌓인 기록과 마음의 흐름을 확인해요.",
-            image: "tutorial-calendar.png",
-            imageWidth: 120,
-            imageHeight: 46,
-            imageOffsetX: 0,
-            imageOffsetY: -20,
             cardOffsetY: 38,
+            navStep: true,
         },
         {
             target: '[data-tutorial-target="mypage"]',
             title: "마이페이지",
             text: "프로필과 캐릭터 설정을 관리할 수 있어요.",
-            image: "tutorial-mypage.png",
-            imageWidth: 120,
-            imageHeight: 46,
-            imageOffsetX: 0,
-            imageOffsetY: -20,
             cardOffsetY: 38,
+            navStep: true,
         },
         {
             target: '[data-tutorial-target="auth"]',
             title: "로그아웃",
             text: "사용을 마친 뒤에는 여기에서 계정을 안전하게 나갈 수 있어요.",
-            image: "tutorial-logout.png",
-            imageWidth: 120,
-            imageHeight: 46,
-            imageOffsetX: 0,
-            imageOffsetY: -20,
             cardOffsetY: 38,
+            navStep: true,
         },
         {
             target: '[data-tutorial-target="quick-start"]',
@@ -72,22 +57,19 @@
             cardLarge: true,
             shape: "circle",
             highlightPadding: 0,
-            highlightOffsetY: -34,
-            hideHighlight: true,
-            liveRing: true,
-            liveTarget: true,
+            viewportY: 0.34,
+            mobileViewportY: 0.22,
         },
         {
             target: '[data-tutorial-target="speech-actions"]',
             title: "오늘의 질문",
             text: "로그인할 때마다 새로운 질문으로 오늘의 마음을 꺼내볼 수 있어요.",
             cardWidth: 430,
-            cardPlacement: "right",
-            cardOffsetX: 34,
-            cardOffsetY: 18,
+            cardPlacement: "bottom",
+            cardOffsetX: 0,
+            cardOffsetY: 28,
             cardLarge: true,
-            spotlightClass: "tutorial-spotlight--speech",
-            hideHighlight: true,
+            viewportY: 0.34,
         },
         {
             target: '[data-tutorial-target="selected-character"]',
@@ -97,8 +79,11 @@
             cardPlacement: "top",
             cardOffsetX: 0,
             cardOffsetY: -72,
+            tabletCardOffsetY: -100,
+            wideCardOffsetY: -100,
             cardLarge: true,
             shape: "circle",
+            tabletHighlightTrimBottom: 48,
         },
     ];
 
@@ -144,8 +129,15 @@
         const margin = 18;
         const cardWidth = Math.min(step.cardWidth || 360, window.innerWidth - 32);
         const estimatedHeight = 142;
-        const cardOffsetX = step.cardOffsetX || 0;
-        const cardOffsetY = step.cardOffsetY || 0;
+        const mobileNavOffsetX = step.navStep && window.innerWidth <= 767 ? -16 : 0;
+        const cardOffsetX = (step.cardOffsetX || 0) + mobileNavOffsetX;
+        const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1200;
+        const isWideScreen = window.innerWidth >= 1700;
+        const cardOffsetY = isWideScreen && step.wideCardOffsetY !== undefined
+            ? step.wideCardOffsetY
+            : isTablet && step.tabletCardOffsetY !== undefined
+                ? step.tabletCardOffsetY
+                : (step.cardOffsetY || 0);
         let left = rect.left + rect.width / 2 - cardWidth / 2 + cardOffsetX;
         let top = rect.bottom + 18 + cardOffsetY;
 
@@ -190,6 +182,7 @@
         }
 
         const clone = target.cloneNode(true);
+        const targetStyle = window.getComputedStyle(target);
         clone.removeAttribute("id");
         clone.removeAttribute("href");
         clone.removeAttribute("data-tutorial-target");
@@ -198,6 +191,14 @@
         clone.style.pointerEvents = "none";
         clone.style.width = rect.width + "px";
         clone.style.height = rect.height + "px";
+        clone.style.boxSizing = "border-box";
+        clone.style.color = targetStyle.color;
+        clone.style.fontFamily = targetStyle.fontFamily;
+        clone.style.fontSize = targetStyle.fontSize;
+        clone.style.fontWeight = targetStyle.fontWeight;
+        clone.style.lineHeight = targetStyle.lineHeight;
+        clone.style.backgroundColor = targetStyle.backgroundColor;
+        clone.style.borderRadius = targetStyle.borderRadius;
         if (step.spotlightClass) {
             clone.classList.add(step.spotlightClass);
         }
@@ -277,11 +278,25 @@
             return;
         }
 
-        target.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+        const viewportY = window.innerWidth <= 767 && step.mobileViewportY
+            ? step.mobileViewportY
+            : step.viewportY;
+
+        if (viewportY) {
+            const initialRect = target.getBoundingClientRect();
+            const targetCenter = window.scrollY + initialRect.top + initialRect.height / 2;
+            const scrollTop = targetCenter - window.innerHeight * viewportY;
+            window.scrollTo({ top: Math.max(0, scrollTop), behavior: "auto" });
+        } else {
+            target.scrollIntoView({ behavior: "auto", block: "center", inline: "center" });
+        }
 
         window.setTimeout(() => {
             const rect = target.getBoundingClientRect();
             const padding = step.highlightPadding || (step.shape === "circle" ? 12 : 10);
+            const usesTabletHighlightTrim = window.innerWidth >= 1024 && window.innerWidth <= 1200;
+            const highlightTrimBottom = usesTabletHighlightTrim ? (step.tabletHighlightTrimBottom || 0) : 0;
+            const highlightOffsetX = step.navStep ? -3 : (step.highlightOffsetX || 0);
 
             if (step.liveTarget) {
                 activeLiveTarget = target;
@@ -291,10 +306,10 @@
 
             highlight.classList.toggle("is-circle", step.shape === "circle");
             highlight.classList.toggle("is-hidden", Boolean(step.image) || Boolean(step.hideHighlight));
-            highlight.style.left = rect.left - padding + "px";
+            highlight.style.left = rect.left - padding + highlightOffsetX + "px";
             highlight.style.top = rect.top - padding + (step.highlightOffsetY || 0) + "px";
             highlight.style.width = rect.width + padding * 2 + "px";
-            highlight.style.height = rect.height + padding * 2 + "px";
+            highlight.style.height = rect.height + padding * 2 - highlightTrimBottom + "px";
 
             if (step.image) {
                 const placement = getImagePlacement(step, rect);
@@ -311,6 +326,7 @@
 
             spotlight.classList.toggle("has-image", Boolean(step.image));
             spotlight.classList.toggle("is-circle-image", step.imageShape === "circle");
+            spotlight.classList.toggle("is-circle-target", step.shape === "circle");
             spotlight.classList.toggle("no-image-border", step.imageBorder === false);
             spotlight.classList.toggle("is-speech", step.spotlightClass === "tutorial-spotlight--speech");
             spotlight.classList.toggle("is-hidden", Boolean(step.liveTarget));
