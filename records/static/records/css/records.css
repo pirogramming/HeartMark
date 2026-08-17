@@ -1918,8 +1918,32 @@ body.record-edit-open .site-main {
     }
 
     .record-detail-photo {
-        width: min(100%, 330px);
+        width: min(78vw, 270px);
+        height: auto;
+        aspect-ratio: auto;
         margin-inline: auto;
+    }
+
+    .record-detail-photo--square {
+        width: min(86vw, 310px);
+        height: auto;
+        aspect-ratio: auto;
+        max-height: none;
+    }
+
+    .record-detail-photo--landscape {
+        width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+        max-height: none;
+    }
+
+    .record-detail-photo img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
     }
 
     .record-detail-content {

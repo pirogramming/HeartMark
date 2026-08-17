@@ -165,6 +165,32 @@
 
     .record-detail-shell--shared .record-detail-photo--landscape {
         width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+    }
+
+    .record-detail-shell--shared .record-detail-photo--portrait {
+        width: min(78vw, 270px);
+        height: auto;
+        aspect-ratio: auto;
+        margin-inline: auto;
+    }
+
+    .record-detail-shell--shared .record-detail-photo--square {
+        width: min(86vw, 310px);
+        height: auto;
+        aspect-ratio: auto;
+        max-height: none;
+        margin-inline: auto;
+    }
+
+    .record-detail-shell--shared .record-detail-photo img,
+    .record-detail-shell--shared .record-detail-photo--landscape img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
     }
 
     .record-detail-shell--shared .record-detail-layout:has(.record-detail-photo--landscape) .record-detail-content {
