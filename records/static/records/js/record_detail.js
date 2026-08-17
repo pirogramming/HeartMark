@@ -16,10 +16,12 @@
             photoFrame.classList.remove(
                 "record-detail-photo--landscape",
                 "record-detail-photo--square",
+                "record-detail-photo--tall",
             );
             detailLayout?.classList.remove(
                 "record-detail-layout--landscape",
                 "record-detail-layout--square",
+                "record-detail-layout--tall",
             );
 
             if (ratio >= 1.15) {
@@ -28,6 +30,9 @@
             } else if (ratio > 0.85) {
                 photoFrame.classList.add("record-detail-photo--square");
                 detailLayout?.classList.add("record-detail-layout--square");
+            } else if (ratio < 0.68) {
+                photoFrame.classList.add("record-detail-photo--tall");
+                detailLayout?.classList.add("record-detail-layout--tall");
             }
         };
 

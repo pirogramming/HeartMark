@@ -1069,6 +1069,27 @@ body.record-delete-modal-open {
     align-self: center;
 }
 
+/* 세로로 긴 캡처는 원본 전체를 보이되 상세 카드 높이를 늘리지 않는다. */
+.record-detail-photo--tall {
+    width: min(100%, 360px);
+    height: min(48dvh, 520px);
+    aspect-ratio: auto;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.record-detail-photo.record-detail-photo--tall img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
 .record-detail-photo img {
     width: 100%;
     height: 100%;
@@ -1265,6 +1286,10 @@ body.record-delete-modal-open {
 
 .record-detail-layout--square {
     grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.35fr);
+}
+
+.record-detail-layout--tall {
+    grid-template-columns: minmax(280px, 0.75fr) minmax(360px, 1.45fr);
 }
 
 .site-messages {
@@ -2208,5 +2233,23 @@ body.record-edit-open .site-main {
 
     .record-create-layout .record-paper__footer {
         padding-top: 4px;
+    }
+}
+
+/* 모바일 상세 화면에서도 세로로 긴 캡처 전체를 제한된 높이 안에 표시한다. */
+@media (max-width: 767px) {
+    .record-detail-photo.record-detail-photo--tall {
+        width: min(82vw, 300px);
+        height: min(46dvh, 440px);
+        max-height: min(46dvh, 440px);
+        aspect-ratio: auto;
+    }
+
+    .record-detail-photo.record-detail-photo--tall img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
     }
 }
