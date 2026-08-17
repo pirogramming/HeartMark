@@ -8,6 +8,14 @@
     </div>
     <div class="person-card__actions">
         <button class="soft-button soft-button--primary" type="button" data-open-share-modal data-preselect-friend="{{ person.id }}">기록 공유</button>
-        <button class="person-card__more" type="button" aria-label="{{ person.name }} 친구 메뉴" data-delete-friend data-delete-url="{{ person.delete_url }}">•••</button>
+        <button class="person-card__more" type="button" aria-label="{{ person.name }} 친구 삭제" title="친구 삭제" data-delete-friend data-delete-url="{{ person.delete_url }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 11v6"/>
+                <path d="M14 11v6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                <path d="M3 6h18"/>
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+        </button>
     </div>
 </article>

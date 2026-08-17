@@ -1,0 +1,47 @@
+{% load static %}
+<article class="shared-record-card sent-record-card">
+    <header class="shared-record-card__sender">
+        <span class="shared-record-card__avatar">
+            <img src="{{ item.receiver_character_url }}" alt="">
+        </span>
+        <div>
+            <strong>{{ item.receiver_name }}님에게 보낸 마음 편지</strong>
+            <time>{{ item.shared_at }} 전송</time>
+        </div>
+        <span class="sent-record-card__status{% if item.share_location %} sent-record-card__status--location{% endif %}">
+            {% if item.share_location %}장소 공개{% else %}장소 비공개{% endif %}
+        </span>
+    </header>
+
+    <div class="shared-record-card__body">
+        <div class="shared-record-card__photo">
+            {% if item.image_url %}
+            <img src="{{ item.image_url }}" alt="{{ item.record_date }} 기록 사진">
+            {% else %}
+            <span>기록에 사진이 없어요.</span>
+            {% endif %}
+        </div>
+
+        <div class="shared-record-card__content">
+            <h3 class="shared-record-card__title">{{ item.title }}</h3>
+            <div class="shared-record-card__emotion">
+                <img src="{% static 'records/images/emotions/emotion-' %}{{ item.main_emotion }}.png" alt="대표 감정 {{ item.main_emotion_name }}">
+                <span><small>대표 감정</small><strong>{{ item.main_emotion_name }}</strong></span>
+            </div>
+            <p>{{ item.content_preview }}</p>
+        </div>
+    </div>
+
+    <footer class="shared-record-card__footer sent-record-card__footer">
+        <time>{{ item.record_date }}의 마음자국</time>
+        <div class="sent-record-card__actions">
+            <a href="{{ item.detail_url }}">기록 보러가기</a>
+            <form method="post" action="{{ item.revoke_url }}">
+                {% csrf_token %}
+                <input type="hidden" name="receiver" value="{{ item.receiver_id }}">
+                <input type="hidden" name="next" value="{{ next_url }}">
+                <button type="submit" onclick="return confirm('{{ item.receiver_name }}님에게 보낸 공유를 취소할까요?')">공유 취소</button>
+            </form>
+        </div>
+    </footer>
+</article>
