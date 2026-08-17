@@ -52,13 +52,17 @@
 }
 
 .btn-primary {
-    color: var(--loc-text);
-    background: var(--loc-bg);
+    color: #fffff4;
+    /* 카드 배경(--loc-card-bg)과 톤이 너무 가까워 버튼이 안 보이던 문제를 고쳐서,
+       진한 주황(--loc-primary)을 채워 눈에 띄게 한다. */
+    background: var(--loc-primary);
+    border-color: var(--loc-primary);
     /* .record-submit과 동일한 하드 오프셋 그림자로 "스티커" 느낌을 맞춘다. */
     box-shadow: 3px 4px 0 rgba(70, 55, 45, 0.16);
 }
 
 .btn-primary:not(:disabled):hover {
+    background: #c2620f;
     transform: translateY(-1px) rotate(-1deg);
 }
 
@@ -137,9 +141,12 @@
     margin: 0;
     width: 100%;
     padding: 16px 24px;
-    /* .record-verified-place / .record-detail-place 칩과 같은 살구색 배지 스타일 */
-    background: var(--loc-bg);
+    /* .seoul-map-address와 통일: 카드 배경 + 테두리 + 그림자로 흰색 박스 느낌을 줘서
+       주소 텍스트가 잘 보이게 한다. */
+    background: var(--loc-card-bg);
+    border: 1.5px solid var(--loc-text);
     border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(70, 55, 45, 0.08);
     color: var(--loc-text);
     font-size: 19px;
     text-align: center;
@@ -276,6 +283,15 @@
 
 .seoul-map-address {
     margin: 0;
+    width: 100%;
+    max-width: 760px;
+    /* 배경 파티클 위에 텍스트만 있으면 잘 안 보여서, 화면 1의 주소 박스(.place-select-address)와
+       같은 카드 배경 + 테두리를 넣어 가독성을 높인다. */
+    padding: 16px 24px;
+    background: var(--loc-card-bg);
+    border: 1.5px solid var(--loc-text);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(70, 55, 45, 0.08);
     font-size: 21px;
     color: var(--loc-text-muted);
     text-align: center;
