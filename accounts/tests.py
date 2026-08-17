@@ -58,3 +58,39 @@ class LoginRedirectTests(TestCase):
             response.context["character_url"],
             "/static/accounts/images/4.png",
         )
+
+
+class SignupTests(TestCase):
+    def test_duplicate_username_is_rejected(self):
+        User = get_user_model()
+        User.objects.create_user(username="duplicate-user", password="test-password")
+
+        response = self.client.post(
+            reverse("accounts:signup"),
+            {
+                "username": "duplicate-user",
+                "password": "test-password",
+                "password_confirm": "test-password",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(User.objects.filter(username="duplicate-user").count(), 1)
+        self.assertIn("username", response.context["errors"])
+
+    def test_duplicate_username_with_different_case_is_rejected(self):
+        User = get_user_model()
+        User.objects.create_user(username="DuplicateUser", password="test-password")
+
+        response = self.client.post(
+            reverse("accounts:signup"),
+            {
+                "username": "duplicateuser",
+                "password": "test-password",
+                "password_confirm": "test-password",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(User.objects.filter(username__iexact="duplicateuser").count(), 1)
+        self.assertIn("username", response.context["errors"])

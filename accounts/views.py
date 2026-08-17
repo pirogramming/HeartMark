@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 
@@ -89,7 +90,7 @@ def signup_view(request):
 
         if not username:
             errors["username"] = "아이디를 입력해주세요."
-        elif User.objects.filter(username=username).exists():
+        elif User.objects.filter(username__iexact=username).exists():
             errors["username"] = "이미 사용 중인 아이디입니다."
 
         if not password:
@@ -103,8 +104,13 @@ def signup_view(request):
             errors["password_confirm"] = "비밀번호가 일치하지 않습니다."
 
         if not errors:
-            user = User.objects.create_user(username=username, password=password)
-            UserProfile.objects.create(user=user, display_name=username)
+            try:
+                with transaction.atomic():
+                    user = User.objects.create_user(username=username, password=password)
+                    UserProfile.objects.create(user=user, display_name=username)
+            except IntegrityError:
+                errors["username"] = "이미 사용 중인 아이디입니다."
+                return render(request, "accounts/signup.html", {"errors": errors, "username": username})
             login(
                 request,
                 user,
