@@ -37,6 +37,21 @@
         else preview.addEventListener("load", applyPhotoOrientation, { once: true });
     }
 
+    const keepOnlyFirstPhoto = (input) => {
+        const selectedFiles = Array.from(input.files || []);
+        if (selectedFiles.length <= 1) return selectedFiles[0] || null;
+
+        try {
+            const singleFile = new DataTransfer();
+            singleFile.items.add(selectedFiles[0]);
+            input.files = singleFile.files;
+            return input.files[0];
+        } catch (error) {
+            input.value = "";
+            return null;
+        }
+    };
+
     const getMissingLabels = () => {
         const weather = form.querySelector('input[name="weather"]:checked');
         const content = form.querySelector('textarea[name="content"]');
@@ -97,8 +112,9 @@
     }));
     updateEmotions();
 
+    imageInput?.removeAttribute("multiple");
     imageInput?.addEventListener("change", () => {
-        const file = imageInput.files[0];
+        const file = keepOnlyFirstPhoto(imageInput);
         if (!file?.type.startsWith("image/")) return;
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         previewUrl = URL.createObjectURL(file);

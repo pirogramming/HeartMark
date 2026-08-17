@@ -42,6 +42,12 @@ class RecordForm(forms.ModelForm):
             raise forms.ValidationError("감정은 최대 3개까지 선택할 수 있습니다.")
         return [int(emotion) for emotion in emotions]
 
+    def clean_image(self):
+        uploaded_images = self.files.getlist("image")
+        if len(uploaded_images) > 1:
+            raise forms.ValidationError("사진은 한 장만 선택할 수 있어요.")
+        return self.cleaned_data.get("image")
+
     def clean_main_emotion(self):
         return int(self.cleaned_data["main_emotion"])
 

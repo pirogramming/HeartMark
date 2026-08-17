@@ -153,7 +153,8 @@
 }
 
 .record-detail-shell--shared .record-detail-layout:has(.record-detail-photo--landscape) .record-detail-content {
-    min-height: 100%;
+    min-height: 0;
+    align-self: start;
 }
 
 @media (max-width: 760px) {
@@ -167,7 +168,7 @@
     }
 
     .record-detail-shell--shared .record-detail-layout:has(.record-detail-photo--landscape) .record-detail-content {
-        min-height: 220px;
+        min-height: 0;
     }
 }
 
