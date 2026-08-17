@@ -754,7 +754,7 @@ input {
     display: block;
     width: 24px;
     height: 2px;
-    background: #171717;
+    background: #5b3a24;
     border-radius: 2px;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
