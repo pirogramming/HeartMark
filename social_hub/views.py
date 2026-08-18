@@ -221,7 +221,7 @@ def sent_records(request):
                 "image_url": record.image.url if record.image else "",
                 "content_preview": record.content,
                 "share_location": share.share_location,
-                "detail_url": reverse("records:detail", args=[record.pk]),
+                "detail_url": reverse("record_sharing:shared_detail", args=[share.pk]),
                 "revoke_url": reverse("record_sharing:revoke", args=[record.pk]),
                 "comment_url": reverse("record_sharing:comment_create", args=[share.pk]),
                 "comments_open": open_comment_share == str(share.pk),

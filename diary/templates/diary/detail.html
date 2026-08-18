@@ -609,9 +609,10 @@
 
             {% else %}
 
-                <p class="record-content-modal__empty">
-                    이 기록에 등록된 사진이 없습니다.
-                </p>
+                <img
+                    src="{% static 'records/images/default-record-image.png' %}"
+                    alt="{{ record.created_at|date:'Y년 n월 j일' }} 기본 기록 이미지"
+                >
 
             {% endif %}
 

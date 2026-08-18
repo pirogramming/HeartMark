@@ -56,11 +56,7 @@
         const weather = form.querySelector('input[name="weather"]:checked');
         const content = form.querySelector('textarea[name="content"]');
         const emotions = emotionInputs.filter((input) => input.checked);
-        const hasImage = Boolean(
-            emptyState?.hidden || imageInput?.files.length
-        );
         const missing = [];
-        if (!hasImage) missing.push("사진");
         if (!weather) missing.push("날씨");
         if (!content?.value.trim()) missing.push("오늘의 마음");
         if (!emotions.length) missing.push("감정");

@@ -120,7 +120,6 @@
     };
 
     const getCompletionState = () => ({
-        image: fileInputs.some((input) => input.files.length > 0),
         weather: Boolean(form?.querySelector('input[name="weather"]:checked')),
         content: Boolean(form?.querySelector('textarea[name="content"]')?.value.trim()),
         emotions: emotionInputs.some((input) => input.checked),
@@ -129,7 +128,6 @@
     const updateRequiredMessage = () => {
         const state = getCompletionState();
         const labels = {
-            image: "사진",
             weather: "날씨",
             content: "오늘의 마음",
             emotions: "감정",

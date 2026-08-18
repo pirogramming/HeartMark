@@ -27,13 +27,13 @@
                     {% endif %}
 
                     <div class="record-edit-photo__empty" id="record-edit-photo-empty"{% if record.image %} hidden{% endif %}>
-                        <p>오늘을 기억할 사진을 불러와 보세요</p>
+                        <p>사진을 선택하지 않으면 기본 이미지가 표시돼요</p>
                         <img src="{% static 'records/images/photo-actions/gallery.png' %}" alt="" aria-hidden="true">
                     </div>
 
                     <label class="record-edit-photo__button">
                         <span>{% if record.image %}사진 변경{% else %}사진 불러오기{% endif %}</span>
-                        <input id="record-edit-image-input" type="file" name="image" accept="image/*"{% if not record.image %} required{% endif %}>
+                        <input id="record-edit-image-input" type="file" name="image" accept="image/*">
                     </label>
                 </div>
                 {% for error in form.image.errors %}<p class="record-page-error">{{ error }}</p>{% endfor %}
@@ -138,6 +138,6 @@
 
 {% block extra_js %}
 {% if mode == "update" %}
-<script src="{% static 'records/js/record_edit.js' %}"></script>
+<script src="{% static 'records/js/record_edit.js' %}?v=optional-image-1"></script>
 {% endif %}
 {% endblock %}

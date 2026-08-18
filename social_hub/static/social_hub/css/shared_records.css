@@ -194,6 +194,14 @@
     align-self: start;
 }
 
+.shared-record-card__body--no-photo {
+    grid-template-columns: 1fr;
+}
+
+.shared-record-card__body--no-photo .shared-record-card__content {
+    min-height: 0;
+}
+
 .shared-record-card__photo img {
     display: block;
     width: 100%;
@@ -665,6 +673,10 @@
 
     .shared-record-card__body {
         grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
+    }
+
+    .shared-record-card__body--no-photo {
+        grid-template-columns: 1fr;
     }
 }
 
