@@ -189,6 +189,8 @@ def shared_detail(request, pk):
     if not share.is_active and share.record.user_id != request.user.pk:
         raise Http404
 
+    is_sender = request.user.pk == share.sender_id
+
     return render(
         request,
         "record_sharing/shared_detail.html",
@@ -198,6 +200,10 @@ def shared_detail(request, pk):
             # 장소는 반드시 이 함수를 거친 결과만 넘긴다.
             "place": get_shared_place_data(share, request.user),
             "shared_list_url": reverse("record_sharing:shared_list"),
+            "mailbox_url": reverse(
+                "social_hub:sent_records" if is_sender else "social_hub:shared_records"
+            ),
+            "mailbox_label": "보낸 편지함으로" if is_sender else "받은 편지함으로",
         },
     )
 

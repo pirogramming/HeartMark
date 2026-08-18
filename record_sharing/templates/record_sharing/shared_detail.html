@@ -1,70 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ share.sender.first_name|default:share.sender.username }}님의 기록 | 마음자국{% endblock %}
+{% block title %}{{ record.created_at|date:"Y년 n월 j일" }} 기록 | 마음자국{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'records/css/records.css' %}">
-<link rel="stylesheet" href="{% static 'record_sharing/css/record_sharing.css' %}">
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const photo = document.querySelector(".record-detail-shell--shared .record-detail-photo img");
-    if (!photo) return;
-
-    const applyPhotoOrientation = () => {
-        const frame = photo.closest(".record-detail-photo");
-        if (!frame) return;
-
-        const { naturalWidth, naturalHeight } = photo;
-        if (!naturalWidth || !naturalHeight) return;
-
-        const ratio = naturalWidth / naturalHeight;
-        frame.style.setProperty(
-            "--record-photo-ratio",
-            `${naturalWidth} / ${naturalHeight}`
-        );
-        frame.classList.remove(
-            "record-detail-photo--landscape",
-            "record-detail-photo--square",
-            "record-detail-photo--portrait"
-        );
-
-        if (ratio > 1.15) {
-            frame.classList.add("record-detail-photo--landscape");
-        } else if (ratio < 0.87) {
-            frame.classList.add("record-detail-photo--portrait");
-        } else {
-            frame.classList.add("record-detail-photo--square");
-        }
-    };
-
-    if (photo.complete) applyPhotoOrientation();
-    else photo.addEventListener("load", applyPhotoOrientation, { once: true });
-});
-</script>
 {% endblock %}
 
 {% block content %}
-<section class="record-detail-shell record-detail-shell--shared">
-    <header class="shared-letter-header">
-        <h1 class="sharing-title">
-            {{ share.sender.first_name|default:share.sender.username }}님의 마음자국
-        </h1>
-        <div class="sharing-toolbar">
-            <p class="sharing-count">{{ share.created_at|date:"n월 j일" }}에 나에게 공유되었어요.</p>
-            <a class="sharing-button-ghost" href="{% url 'social_hub:shared_records' %}">받은 편지함으로</a>
-        </div>
-    </header>
-
-    <article class="record-detail-card record-detail-card--shared">
+<section class="record-detail-shell">
+    <article class="record-detail-card">
         <header class="record-detail-header">
             <div class="record-detail-heading">
                 <p>{{ record.created_at|date:"Y년 n월 j일 l" }}</p>
                 {% if place.has_place and place.is_visible %}
-                <span class="record-detail-place">📍 {{ place.name|default:place.address }}</span>
+                <span class="record-detail-place">
+                    📍 {{ place.name|default:place.address }}{% if place.name and place.address %} · {{ place.address }}{% endif %}
+                </span>
+                {% elif place.has_place %}
+                <span class="record-detail-place">🔒 장소를 공개하지 않은 기록이에요.</span>
                 {% endif %}
             </div>
             <div class="record-detail-weather-wrap">
@@ -77,21 +31,26 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </header>
 
-        <div class="record-detail-layout{% if not record.image %} record-detail-layout--no-photo{% endif %}">
+        <div class="record-detail-layout{% if not record.image %} record-detail-layout--no-photo{% endif %}" data-record-detail-layout>
             {% if record.image %}
-            <div class="record-detail-photo">
-                <img src="{{ record.image.url }}" alt="{{ share.sender.first_name|default:share.sender.username }}님의 기록 사진">
+            <div class="record-detail-photo" data-record-photo-frame>
+                <img src="{{ record.image.url }}" alt="기록 사진" data-record-detail-image>
             </div>
             {% endif %}
 
-            <div class="record-detail-content">{{ record.content|linebreaksbr }}</div>
+            <div class="record-detail-content">
+                {% if record.title %}
+                <h1 class="record-detail-title">{{ record.title }}</h1>
+                {% endif %}
+                <div class="record-detail-body">{{ record.content|linebreaksbr }}</div>
+            </div>
         </div>
 
         <footer class="record-detail-footer">
-            <section class="record-detail-emotions" aria-labelledby="shared-record-emotions-title">
+            <section class="record-detail-emotions" aria-labelledby="record-detail-emotions-title">
                 <div class="record-detail-emotions-heading">
-                    <h2 id="shared-record-emotions-title">오늘의 감정</h2>
-                    <span>친구가 남긴 감정 스티커</span>
+                    <h2 id="record-detail-emotions-title">오늘의 감정</h2>
+                    <span>마음에 남은 감정 스티커</span>
                 </div>
                 <div class="record-detail-emotion-list">
                     {% for emotion in record.emotion_items %}
@@ -99,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         class="record-detail-emotion{% if emotion.is_main %} record-detail-emotion--main{% endif %}"
                         title="{{ emotion.name }}"
                     >
-                        {% if emotion.is_main %}<span>대표</span>{% endif %}
+                        <span class="record-detail-emotion-name">{{ emotion.name }}</span>
                         <img
                             src="{% static 'records/images/emotions/' %}{{ emotion.image_name }}"
                             alt="{% if emotion.is_main %}대표 감정: {% endif %}{{ emotion.name }}"
@@ -109,7 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </section>
 
+            <div class="record-detail-actions">
+                <a class="record-secondary-button" href="{{ mailbox_url }}">{{ mailbox_label }}</a>
+            </div>
         </footer>
     </article>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'records/js/record_detail.js' %}?v=shared-layout-1"></script>
 {% endblock %}
