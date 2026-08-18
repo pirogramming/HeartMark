@@ -548,6 +548,13 @@
     font-weight: 700;
 }
 
+.emotion-picker__guide {
+    margin: 3px 0 0;
+    color: var(--record-muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
 .emotion-picker__options {
     display: grid;
     grid-template-columns: repeat(10, minmax(48px, 1fr));
@@ -678,7 +685,7 @@
     font-size: 0.85rem;
 }
 
-.emotion-main-badge {
+.emotion-name-badge {
     position: absolute;
     top: -7px;
     right: -5px;
@@ -695,7 +702,7 @@
     transform: none;
 }
 
-.emotion-option--main .emotion-main-badge {
+.emotion-option input:checked ~ .emotion-name-badge {
     display: inline-block;
 }
 
@@ -843,10 +850,11 @@
     column-gap: clamp(34px, 4vw, 68px);
 }
 
-.record-modal--fullscreen .record-create-layout .emotion-picker__heading {
-    grid-column: 1;
-    width: min(100%, 390px);
-    justify-self: center;
+.record-modal--fullscreen .record-create-layout .emotion-picker__intro {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding-left: clamp(44px, 3.5vw, 58px);
+    box-sizing: border-box;
 }
 
 .record-modal--fullscreen .record-create-layout .emotion-picker__options {
@@ -1182,7 +1190,7 @@ body.record-delete-modal-open {
     height: 62px;
 }
 
-.record-detail-emotion--main > span {
+.record-detail-emotion-name {
     position: absolute;
     top: -13px;
     right: -8px;
@@ -1634,8 +1642,10 @@ body.record-edit-open .site-main {
         column-gap: 30px;
     }
 
-    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
-        width: min(100%, 300px);
+    .record-modal--fullscreen .record-create-layout .emotion-picker__intro {
+        grid-column: 1 / -1;
+        width: 100%;
+        padding-left: 30px;
     }
 
     .record-create-layout__left,
@@ -1814,9 +1824,10 @@ body.record-edit-open .site-main {
         display: block;
     }
 
-    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
+    .record-modal--fullscreen .record-create-layout .emotion-picker__intro {
         width: min(100%, 300px);
         margin-inline: auto;
+        padding-left: 0;
     }
 
     .record-create-layout .record-date {
@@ -1883,7 +1894,7 @@ body.record-edit-open .site-main {
         height: clamp(39px, 11vw, 48px);
     }
 
-    .emotion-main-badge {
+    .emotion-name-badge {
         top: -5px;
         right: -2px;
         padding: 2px 5px;
@@ -2174,8 +2185,10 @@ body.record-edit-open .site-main {
         column-gap: 34px;
     }
 
-    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
-        width: min(100%, 310px);
+    .record-modal--fullscreen .record-create-layout .emotion-picker__intro {
+        grid-column: 1 / -1;
+        width: 100%;
+        padding-left: 34px;
     }
 
     .record-create-layout__left,

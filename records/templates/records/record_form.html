@@ -78,10 +78,15 @@
         </div>
 
         <section class="record-edit-emotions" aria-labelledby="record-edit-emotions-title">
-            <div class="emotion-picker__heading">
-                <h2 id="record-edit-emotions-title">오늘의 감정</h2>
-                <span>최대 3개</span>
-                <output id="record-edit-emotion-count" aria-live="polite">{{ selected_emotions|length }} / 3</output>
+            <div class="emotion-picker__intro">
+                <div class="emotion-picker__heading">
+                    <h2 id="record-edit-emotions-title">오늘의 감정</h2>
+                    <span>최대 3개</span>
+                    <output id="record-edit-emotion-count" aria-live="polite">{{ selected_emotions|length }} / 3</output>
+                </div>
+                <p class="emotion-picker__guide">
+                    첫 번째로 선택한 감정이 대표 감정으로 적용돼요.
+                </p>
             </div>
             <div class="record-edit-emotion-grid">
                 {% for number in emotion_numbers %}
@@ -94,7 +99,7 @@
                         {% if number in selected_emotions %}checked{% endif %}
                     >
                     <span class="emotion-icon emotion-icon--{{ number }}"></span>
-                    <span class="emotion-main-badge" aria-hidden="true">대표</span>
+                    <span class="emotion-name-badge" aria-hidden="true">{{ emotion_name }}</span>
                     <span class="sr-only">{{ emotion_name }}</span>
                 </label>
                 {% endfor %}
