@@ -548,6 +548,13 @@
     font-weight: 700;
 }
 
+.emotion-picker__guide {
+    margin: 3px 0 0;
+    color: var(--record-muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
 .emotion-picker__options {
     display: grid;
     grid-template-columns: repeat(10, minmax(48px, 1fr));
@@ -678,7 +685,7 @@
     font-size: 0.85rem;
 }
 
-.emotion-main-badge {
+.emotion-name-badge {
     position: absolute;
     top: -7px;
     right: -5px;
@@ -695,7 +702,7 @@
     transform: none;
 }
 
-.emotion-option--main .emotion-main-badge {
+.emotion-option input:checked ~ .emotion-name-badge {
     display: inline-block;
 }
 
@@ -843,10 +850,11 @@
     column-gap: clamp(34px, 4vw, 68px);
 }
 
-.record-modal--fullscreen .record-create-layout .emotion-picker__heading {
-    grid-column: 1;
-    width: min(100%, 390px);
-    justify-self: center;
+.record-modal--fullscreen .record-create-layout .emotion-picker__intro {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding-left: clamp(44px, 3.5vw, 58px);
+    box-sizing: border-box;
 }
 
 .record-modal--fullscreen .record-create-layout .emotion-picker__options {
@@ -1182,7 +1190,7 @@ body.record-delete-modal-open {
     height: 62px;
 }
 
-.record-detail-emotion--main > span {
+.record-detail-emotion-name {
     position: absolute;
     top: -13px;
     right: -8px;
@@ -1572,6 +1580,37 @@ body.record-edit-open .site-main {
 
 /* Tablet: 768px - 1023px */
 @media (max-width: 1023px) {
+    .record-delete-overlay {
+        padding: 20px;
+    }
+
+    .record-delete-modal {
+        width: min(68vw, 500px);
+        padding: 34px 26px;
+        border-radius: 22px;
+    }
+
+    .record-delete-modal h2 {
+        font-size: 1.45rem;
+    }
+
+    .record-delete-modal p {
+        margin-top: 17px;
+        font-size: 0.9rem;
+        line-height: 1.55;
+    }
+
+    .record-delete-modal form {
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .record-delete-modal button {
+        min-width: 94px;
+        padding: 9px 14px;
+        font-size: 0.88rem;
+    }
+
     .record-overlay {
         padding: 24px 38px;
     }
@@ -1620,7 +1659,9 @@ body.record-edit-open .site-main {
 
     .record-create-layout,
     .record-modal--fullscreen .record-create-layout {
+        height: auto;
         grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+        grid-template-rows: auto auto auto;
         gap: 30px;
         row-gap: 14px;
     }
@@ -1634,8 +1675,10 @@ body.record-edit-open .site-main {
         column-gap: 30px;
     }
 
-    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
-        width: min(100%, 300px);
+    .record-modal--fullscreen .record-create-layout .emotion-picker__intro {
+        grid-column: 1 / -1;
+        width: 100%;
+        padding-left: 30px;
     }
 
     .record-create-layout__left,
@@ -1769,9 +1812,7 @@ body.record-edit-open .site-main {
 
     .record-modal__controls,
     .record-modal--fullscreen .record-modal__controls {
-        position: fixed;
-        top: 12px;
-        right: 12px;
+        display: none;
     }
 
     .record-icon-button {
@@ -1814,9 +1855,10 @@ body.record-edit-open .site-main {
         display: block;
     }
 
-    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
+    .record-modal--fullscreen .record-create-layout .emotion-picker__intro {
         width: min(100%, 300px);
         margin-inline: auto;
+        padding-left: 0;
     }
 
     .record-create-layout .record-date {
@@ -1883,7 +1925,7 @@ body.record-edit-open .site-main {
         height: clamp(39px, 11vw, 48px);
     }
 
-    .emotion-main-badge {
+    .emotion-name-badge {
         top: -5px;
         right: -2px;
         padding: 2px 5px;
@@ -2026,32 +2068,34 @@ body.record-edit-open .site-main {
     }
 
     .record-delete-overlay {
-        padding: 16px;
+        padding: 12px;
     }
 
     .record-delete-modal {
-        width: 100%;
-        padding: 38px 20px;
-        border-radius: 24px;
+        width: min(86vw, 320px);
+        padding: 24px 16px;
+        border-radius: 18px;
     }
 
     .record-delete-modal h2 {
-        font-size: 1.55rem;
+        font-size: 1.2rem;
     }
 
     .record-delete-modal p {
-        margin-top: 20px;
-        font-size: 0.92rem;
-        line-height: 1.6;
+        margin-top: 12px;
+        font-size: 0.82rem;
+        line-height: 1.5;
     }
 
     .record-delete-modal form {
-        gap: 10px;
-        margin-top: 28px;
+        gap: 8px;
+        margin-top: 18px;
     }
 
     .record-delete-modal button {
-        min-width: 100px;
+        min-width: 82px;
+        padding: 8px 12px;
+        font-size: 0.82rem;
     }
 
     .record-edit-shell {
@@ -2117,8 +2161,8 @@ body.record-edit-open .site-main {
     }
 }
 
-/* Compact PC: keep the desktop layout usable around 1024px. */
-@media (min-width: 1024px) and (max-width: 1279px) {
+/* Compact PC / browser zoom: switch to the tighter tablet-like layout. */
+@media (min-width: 1024px) and (max-width: 1600px) {
     .record-overlay {
         padding: 22px 40px;
     }
@@ -2164,7 +2208,9 @@ body.record-edit-open .site-main {
     }
 
     .record-create-layout {
+        height: auto;
         grid-template-columns: minmax(250px, 0.82fr) minmax(0, 1.18fr);
+        grid-template-rows: auto auto auto;
         gap: 34px;
         row-gap: 12px;
     }
@@ -2174,8 +2220,10 @@ body.record-edit-open .site-main {
         column-gap: 34px;
     }
 
-    .record-modal--fullscreen .record-create-layout .emotion-picker__heading {
-        width: min(100%, 310px);
+    .record-modal--fullscreen .record-create-layout .emotion-picker__intro {
+        grid-column: 1 / -1;
+        width: 100%;
+        padding-left: 34px;
     }
 
     .record-create-layout__left,
