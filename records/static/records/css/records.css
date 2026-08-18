@@ -1810,9 +1810,7 @@ body.record-edit-open .site-main {
 
     .record-modal__controls,
     .record-modal--fullscreen .record-modal__controls {
-        position: fixed;
-        top: 12px;
-        right: 12px;
+        display: none;
     }
 
     .record-icon-button {
