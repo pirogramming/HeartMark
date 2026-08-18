@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💗 HeartMark
+# 💗 마음자국
 
 **사진, 감정, 장소를 함께 기록해 나만의 감정 지도를 만드는 위치 기반 기록 서비스**
 
@@ -110,9 +110,7 @@ flowchart LR
     Django -->|지도 API| KakaoMap["Kakao Maps"]
 ```
 
-- EC2(Ubuntu)에서 `heartmark.service`(systemd)가 Gunicorn 프로세스를 상시 구동합니다.
-- Nginx가 앞단에서 요청을 받아 정적/미디어 파일은 직접 서빙하고, 나머지는 Gunicorn으로 프록시합니다.
-- 배포 설정 템플릿: [`deploy/README.md`](deploy/README.md) · [`deploy/heartmark.service`](deploy/heartmark.service) · [`deploy/nginx-heartmark.conf`](deploy/nginx-heartmark.conf)
+
 
 <details>
 <summary>운영 서버 배포 절차 보기</summary>
