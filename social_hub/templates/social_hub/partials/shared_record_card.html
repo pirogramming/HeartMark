@@ -35,50 +35,7 @@
     </div>
 
     <footer class="shared-record-card__footer">
-        <details class="shared-record-card__comments"{% if item.comments_open %} open{% endif %}>
-            <summary aria-label="댓글 보기 및 작성" title="댓글 보기 및 작성">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
-                </svg>
-                <span>{{ item.comments|length }}</span>
-            </summary>
-            <div class="shared-comment-panel">
-                <div class="shared-comment-list">
-                    {% for comment in item.comments %}
-                    <div class="shared-comment{% if comment.is_mine %} shared-comment--mine{% endif %}">
-                        <div>
-                            <strong>{{ comment.author_name }}</strong>
-                            <span class="shared-comment__meta">
-                                <time>{{ comment.created_at }}</time>
-                                {% if comment.is_mine %}
-                                <form method="post" action="{{ comment.delete_url }}">
-                                    {% csrf_token %}
-                                    <button type="submit" aria-label="댓글 삭제" title="댓글 삭제">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M10 11v6"/>
-                                            <path d="M14 11v6"/>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
-                                            <path d="M3 6h18"/>
-                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                                {% endif %}
-                            </span>
-                        </div>
-                        <p>{{ comment.content }}</p>
-                    </div>
-                    {% empty %}
-                    <p class="shared-comment-empty">아직 댓글이 없어요. 첫 마음을 남겨 보세요!</p>
-                    {% endfor %}
-                </div>
-                <form class="shared-comment-form" method="post" action="{{ item.comment_url }}">
-                    {% csrf_token %}
-                    <input type="text" name="content" maxlength="300" placeholder="마음 한마디를 남겨 주세요" aria-label="댓글 내용" required>
-                    <button type="submit">남기기</button>
-                </form>
-            </div>
-        </details>
+        {% include "social_hub/partials/shared_record_comments.html" %}
         <a href="{{ item.detail_url }}">기록 보러가기</a>
     </footer>
 </article>

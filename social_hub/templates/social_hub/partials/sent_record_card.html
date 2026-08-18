@@ -1,5 +1,5 @@
 {% load static %}
-<article class="shared-record-card sent-record-card">
+<article class="shared-record-card sent-record-card" id="shared-record-{{ item.share_id }}">
     <header class="shared-record-card__sender">
         <span class="shared-record-card__avatar">
             <img src="{{ item.receiver_character_url }}" alt="">
@@ -33,6 +33,7 @@
     </div>
 
     <footer class="shared-record-card__footer sent-record-card__footer">
+        {% include "social_hub/partials/shared_record_comments.html" %}
         <time>{{ item.record_date }}의 마음자국</time>
         <div class="sent-record-card__actions">
             <a href="{{ item.detail_url }}">기록 보러가기</a>
