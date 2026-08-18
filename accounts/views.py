@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST
 
 from .models import UserProfile
 
@@ -174,4 +175,14 @@ def character_select_view(request):
 
 def logout_view(request):
     logout(request)
+    return redirect("common:home")
+
+
+@login_required(login_url="accounts:login")
+@require_POST
+def delete_account_view(request):
+    user = request.user
+    with transaction.atomic():
+        logout(request)
+        user.delete()
     return redirect("common:home")

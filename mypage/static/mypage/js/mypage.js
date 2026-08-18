@@ -57,6 +57,31 @@
         });
     }
 
+    const deleteDialog = document.querySelector("#account-delete-dialog");
+    const openDeleteButton = document.querySelector("#open-account-delete");
+    const closeDeleteButton = deleteDialog?.querySelector(".account-delete-dialog__close");
+    const cancelDeleteButton = deleteDialog?.querySelector(".account-delete-dialog__cancel");
+    if (deleteDialog && openDeleteButton) {
+        const openDeleteDialog = () => {
+            deleteDialog.hidden = false;
+            cancelDeleteButton?.focus();
+        };
+        const closeDeleteDialog = () => {
+            deleteDialog.hidden = true;
+            openDeleteButton.focus();
+        };
+
+        openDeleteButton.addEventListener("click", openDeleteDialog);
+        closeDeleteButton?.addEventListener("click", closeDeleteDialog);
+        cancelDeleteButton?.addEventListener("click", closeDeleteDialog);
+        deleteDialog.addEventListener("click", (event) => {
+            if (event.target === deleteDialog) closeDeleteDialog();
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && !deleteDialog.hidden) closeDeleteDialog();
+        });
+    }
+
     const slider = document.querySelector("#attendance-slider");
     const track = slider?.querySelector(".attendance-track");
     const pages = [...(slider?.querySelectorAll(".attendance-page") || [])];

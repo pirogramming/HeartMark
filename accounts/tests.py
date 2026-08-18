@@ -60,6 +60,32 @@ class LoginRedirectTests(TestCase):
         )
 
 
+class AccountDeleteTests(TestCase):
+    def test_logged_in_user_can_delete_account(self):
+        user = get_user_model().objects.create_user(
+            username="delete-user",
+            password="test-password",
+        )
+        self.client.force_login(user)
+
+        response = self.client.post(reverse("accounts:delete_account"))
+
+        self.assertRedirects(response, reverse("common:home"))
+        self.assertFalse(get_user_model().objects.filter(pk=user.pk).exists())
+
+    def test_delete_account_requires_post(self):
+        user = get_user_model().objects.create_user(
+            username="delete-get-user",
+            password="test-password",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("accounts:delete_account"))
+
+        self.assertEqual(response.status_code, 405)
+        self.assertTrue(get_user_model().objects.filter(pk=user.pk).exists())
+
+
 class SignupTests(TestCase):
     def test_duplicate_username_is_rejected(self):
         User = get_user_model()

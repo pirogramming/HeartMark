@@ -228,6 +228,37 @@
         </div>
     </section>
 
+    <form
+        class="mypage-account-actions"
+        id="account-delete-form"
+        method="post"
+        action="{% url 'accounts:delete_account' %}"
+    >
+        {% csrf_token %}
+        <button class="mypage-account-delete-button" id="open-account-delete" type="button">탈퇴하기</button>
+    </form>
+
+    <div class="account-delete-dialog" id="account-delete-dialog" hidden>
+        <div
+            class="account-delete-dialog__panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="account-delete-title"
+            aria-describedby="account-delete-description"
+        >
+            <button class="account-delete-dialog__close" type="button" aria-label="닫기">&times;</button>
+            <div class="account-delete-dialog__mark" aria-hidden="true">!</div>
+            <h2 id="account-delete-title">정말 탈퇴할까요?</h2>
+            <p id="account-delete-description">
+                탈퇴하면 계정과 기록이 삭제되고 복구할 수 없어요.
+            </p>
+            <div class="account-delete-dialog__actions">
+                <button class="account-delete-dialog__cancel" type="button">계속 사용할래요</button>
+                <button class="account-delete-dialog__confirm" type="submit" form="account-delete-form">탈퇴하기</button>
+            </div>
+        </div>
+    </div>
+
     <div class="profile-editor" id="profile-editor" hidden>
         <div
             class="profile-editor__panel"
