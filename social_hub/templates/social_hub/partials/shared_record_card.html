@@ -24,7 +24,7 @@
             <h3 class="shared-record-card__title">{{ item.title }}</h3>
             <div class="shared-record-card__emotion">
                 <img
-                    src="{% static 'records/images/emotions/emotion-' %}{{ item.main_emotion }}.png"
+                    src="{{ item.main_emotion_image_url }}"
                     alt="대표 감정 {{ item.main_emotion_name }}"
                     title="{{ item.main_emotion_name }}"
                 >

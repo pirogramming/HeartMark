@@ -251,6 +251,11 @@ def _build_attendance(user, start_date=None, end_date=None):
             "record": record,
             "emotion_number": emotion_number,
             "emotion_label": EMOTION_LABELS.get(emotion_number, "감정") if emotion_number else "",
+            "emotion_image_url": (
+                static(f"records/images/emotions/emotion-{emotion_number}.png")
+                if emotion_number
+                else ""
+            ),
             "is_future": is_future,
             "is_today": day == today,
         })
@@ -350,6 +355,11 @@ def mypage(request):
         "is_attendance_filtered": year is not None,
         "attendance_joined_date": joined_at.date().isoformat(),
         "character_url": _get_character_url(request.user),
+        "weekly_emotion_image_url": (
+            static(f"records/images/emotions/emotion-{insights['weekly_emotion']}.png")
+            if insights["weekly_emotion"]
+            else ""
+        ),
         **insights,
     }
     return render(request, "mypage/mypage.html", context)

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
+from django.templatetags.static import static
 from django.utils import timezone
 
 from records.models import Record
@@ -320,6 +321,10 @@ def diary_list(request):
                     get_emotion_color_group(
                         emotion_id,
                     )
+                ),
+
+                "image_url": static(
+                    f"records/images/emotions/emotion-{emotion_id:02d}.png"
                 ),
             }
         )

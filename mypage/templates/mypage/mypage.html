@@ -119,7 +119,7 @@
                                     {% if day.emotion_number %}
                                     <img
                                         class="attendance-day__emotion"
-                                        src="{% static 'records/images/emotions/emotion-' %}{{ day.emotion_number }}.png"
+                                        src="{{ day.emotion_image_url }}"
                                         title="{{ day.emotion_label }}"
                                         alt="{{ day.date|date:'n월 j일' }}의 대표 감정"
                                     >
@@ -178,7 +178,7 @@
                 <div class="weekly-mood-content">
                     <div class="weekly-mood-illustration{% if not weekly_emotion %} weekly-mood-illustration--empty{% endif %}">
                         {% if weekly_emotion %}
-                        <img src="{% static 'records/images/emotions/emotion-' %}{{ weekly_emotion }}.png" alt="이번 주에 가장 많이 기록한 감정">
+                        <img src="{{ weekly_emotion_image_url }}" alt="이번 주에 가장 많이 기록한 감정">
                         {% else %}
                         {% endif %}
                     </div>

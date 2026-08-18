@@ -159,6 +159,9 @@ def shared_records(request):
                 "record_date": date_format(record.created_at, "Y년 n월 j일"),
                 "main_emotion": f"{record.main_emotion:02d}",
                 "main_emotion_name": EMOTION_NAMES.get(record.main_emotion, f"감정 {record.main_emotion}"),
+                "main_emotion_image_url": static(
+                    f"records/images/emotions/emotion-{record.main_emotion:02d}.png"
+                ),
                 "image_url": record.image.url if record.image else "",
                 "content_preview": record.content,
                 "share_location": bool(place and place["is_visible"]),
@@ -206,6 +209,9 @@ def sent_records(request):
                 "main_emotion_name": EMOTION_NAMES.get(
                     record.main_emotion,
                     f"감정 {record.main_emotion}",
+                ),
+                "main_emotion_image_url": static(
+                    f"records/images/emotions/emotion-{record.main_emotion:02d}.png"
                 ),
                 "image_url": record.image.url if record.image else "",
                 "content_preview": record.content,
