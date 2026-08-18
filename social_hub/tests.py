@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from accounts.models import UserProfile
 from friendships.models import Friendship, Invitation
-from record_sharing.models import RecordShare
+from record_sharing.models import RecordShare, RecordShareComment
 from records.models import Record
 
 
@@ -157,3 +157,54 @@ class SentRecordsViewTests(TestCase):
 
         self.assertNotContains(response, "친구에게 보낼 기록")
         self.assertContains(response, "아직 보낸 마음 편지가 없어요.")
+
+    def test_both_participants_see_all_comments_in_their_mailboxes(self):
+        share = RecordShare.objects.create(
+            record=self.record,
+            sender=self.sender,
+            receiver=self.receiver,
+        )
+        RecordShareComment.objects.create(
+            share=share,
+            author=self.sender,
+            content="보낸 사람이 남긴 댓글",
+        )
+        RecordShareComment.objects.create(
+            share=share,
+            author=self.receiver,
+            content="받은 사람이 남긴 댓글",
+        )
+
+        self.client.force_login(self.sender)
+        sent_response = self.client.get(reverse("social_hub:sent_records"))
+        self.assertContains(sent_response, "보낸 사람이 남긴 댓글")
+        self.assertContains(sent_response, "받은 사람이 남긴 댓글")
+
+        self.client.force_login(self.receiver)
+        received_response = self.client.get(reverse("social_hub:shared_records"))
+        self.assertContains(received_response, "보낸 사람이 남긴 댓글")
+        self.assertContains(received_response, "받은 사람이 남긴 댓글")
+
+    def test_comment_creation_returns_each_participant_to_their_mailbox(self):
+        share = RecordShare.objects.create(
+            record=self.record,
+            sender=self.sender,
+            receiver=self.receiver,
+        )
+        comment_url = reverse("record_sharing:comment_create", args=[share.pk])
+
+        self.client.force_login(self.sender)
+        sender_response = self.client.post(comment_url, {"content": "발신자 댓글"})
+        self.assertRedirects(
+            sender_response,
+            f"{reverse('social_hub:sent_records')}?comments={share.pk}#shared-record-{share.pk}",
+            fetch_redirect_response=False,
+        )
+
+        self.client.force_login(self.receiver)
+        receiver_response = self.client.post(comment_url, {"content": "수신자 댓글"})
+        self.assertRedirects(
+            receiver_response,
+            f"{reverse('social_hub:shared_records')}?comments={share.pk}#shared-record-{share.pk}",
+            fetch_redirect_response=False,
+        )

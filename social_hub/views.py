@@ -31,6 +31,22 @@ def _character_url(user):
     return static(f"accounts/images/{character_id}.png")
 
 
+def _comment_items(share, user):
+    return [
+        {
+            "author_name": _display_name(comment.author),
+            "content": comment.content,
+            "created_at": date_format(timezone.localtime(comment.created_at), "n/j H:i"),
+            "is_mine": comment.author_id == user.pk,
+            "delete_url": reverse(
+                "record_sharing:comment_delete",
+                args=[share.pk, comment.pk],
+            ),
+        }
+        for comment in share.comments.all()
+    ]
+
+
 def _friend_item(user):
     return {
         "id": user.pk,
@@ -169,19 +185,7 @@ def shared_records(request):
                 "detail_url": reverse("record_sharing:shared_detail", args=[share.pk]),
                 "comment_url": reverse("record_sharing:comment_create", args=[share.pk]),
                 "comments_open": open_comment_share == str(share.pk),
-                "comments": [
-                    {
-                        "author_name": _display_name(comment.author),
-                        "content": comment.content,
-                        "created_at": date_format(timezone.localtime(comment.created_at), "n/j H:i"),
-                        "is_mine": comment.author_id == request.user.pk,
-                        "delete_url": reverse(
-                            "record_sharing:comment_delete",
-                            args=[share.pk, comment.pk],
-                        ),
-                    }
-                    for comment in share.comments.select_related("author").all()
-                ],
+                "comments": _comment_items(share, request.user),
             }
         )
 
@@ -193,6 +197,7 @@ def shared_records(request):
 def sent_records(request):
     """내가 누구에게 어떤 기록을 보냈는지 확인하고 공유를 취소한다."""
     items = []
+    open_comment_share = request.GET.get("comments")
     for share in get_sent_records(request.user):
         record = share.record
         items.append(
@@ -218,6 +223,9 @@ def sent_records(request):
                 "share_location": share.share_location,
                 "detail_url": reverse("records:detail", args=[record.pk]),
                 "revoke_url": reverse("record_sharing:revoke", args=[record.pk]),
+                "comment_url": reverse("record_sharing:comment_create", args=[share.pk]),
+                "comments_open": open_comment_share == str(share.pk),
+                "comments": _comment_items(share, request.user),
             }
         )
 

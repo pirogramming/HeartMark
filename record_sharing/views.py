@@ -219,10 +219,8 @@ def comment_create(request, pk):
         RecordShareComment.objects.create(share=share, author=request.user, content=content)
         messages.success(request, "마음 한마디를 남겼어요.")
 
-    return redirect(
-        f"{reverse('social_hub:shared_records')}?comments={share.pk}"
-        f"#shared-record-{share.pk}"
-    )
+    mailbox = "social_hub:sent_records" if request.user.pk == share.sender_id else "social_hub:shared_records"
+    return redirect(f"{reverse(mailbox)}?comments={share.pk}#shared-record-{share.pk}")
 
 
 @login_required(login_url="accounts:login")
@@ -239,7 +237,5 @@ def comment_delete(request, pk, comment_id):
     comment.delete()
     messages.success(request, "댓글을 삭제했어요.")
 
-    return redirect(
-        f"{reverse('social_hub:shared_records')}?comments={share.pk}"
-        f"#shared-record-{share.pk}"
-    )
+    mailbox = "social_hub:sent_records" if request.user.pk == share.sender_id else "social_hub:shared_records"
+    return redirect(f"{reverse(mailbox)}?comments={share.pk}#shared-record-{share.pk}")

@@ -98,6 +98,7 @@ def get_shared_records(user):
         _active_shares()
         .filter(receiver=user, sender__in=friend_ids)
         .select_related("record", "sender", "record__place")
+        .prefetch_related("comments__author")
     )
 
 
@@ -107,6 +108,7 @@ def get_sent_records(user):
         _active_shares()
         .filter(sender=user)
         .select_related("record", "receiver", "record__place")
+        .prefetch_related("comments__author")
         .order_by("-created_at")
     )
 

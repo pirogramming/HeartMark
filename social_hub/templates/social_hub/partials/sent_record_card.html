@@ -1,5 +1,5 @@
 {% load static %}
-<article class="shared-record-card sent-record-card">
+<article class="shared-record-card sent-record-card" id="shared-record-{{ item.share_id }}">
     <header class="shared-record-card__sender">
         <span class="shared-record-card__avatar">
             <img src="{{ item.receiver_character_url }}" alt="">
@@ -32,16 +32,19 @@
         </div>
     </div>
 
-    <footer class="shared-record-card__footer sent-record-card__footer">
-        <time>{{ item.record_date }}의 마음자국</time>
-        <div class="sent-record-card__actions">
-            <a href="{{ item.detail_url }}">기록 보러가기</a>
-            <form method="post" action="{{ item.revoke_url }}">
-                {% csrf_token %}
-                <input type="hidden" name="receiver" value="{{ item.receiver_id }}">
-                <input type="hidden" name="next" value="{{ next_url }}">
-                <button type="submit" onclick="return confirm('{{ item.receiver_name }}님에게 보낸 공유를 취소할까요?')">공유 취소</button>
-            </form>
+    <footer class="shared-record-card__footer shared-record-card__footer--stacked sent-record-card__footer">
+        {% include "social_hub/partials/shared_record_comments.html" %}
+        <div class="shared-record-card__footer-row">
+            <time>{{ item.record_date }}의 마음자국</time>
+            <div class="sent-record-card__actions">
+                <a href="{{ item.detail_url }}">기록 보러가기</a>
+                <form method="post" action="{{ item.revoke_url }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="receiver" value="{{ item.receiver_id }}">
+                    <input type="hidden" name="next" value="{{ next_url }}">
+                    <button type="submit" onclick="return confirm('{{ item.receiver_name }}님에게 보낸 공유를 취소할까요?')">공유 취소</button>
+                </form>
+            </div>
         </div>
     </footer>
 </article>
