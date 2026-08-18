@@ -49,11 +49,9 @@
                 <span class="letter-stamp" aria-hidden="true">HEART<br>MAIL</span>
             </header>
 
-            <div class="letter-body">
+            <div class="letter-body{% if not item.record.image %} letter-body--no-photo{% endif %}">
                 {% if item.record.image %}
                 <img class="letter-photo" src="{{ item.record.image.url }}" alt="기록 사진">
-                {% else %}
-                <div class="letter-photo letter-photo-empty">사진 없음</div>
                 {% endif %}
 
                 <div>

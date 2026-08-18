@@ -297,6 +297,14 @@
     padding: 20px 22px;
 }
 
+.letter-body--no-photo {
+    grid-template-columns: 1fr;
+}
+
+.record-detail-shell--shared .record-detail-layout--no-photo {
+    grid-template-columns: 1fr;
+}
+
 .letter-photo {
     width: 100%;
     aspect-ratio: 1 / 1;

@@ -45,7 +45,7 @@ class Record(models.Model):
     weather = models.CharField(max_length=10, choices=Weather.choices)
     title = models.CharField(max_length=20, blank=True)
     content = models.TextField(max_length=500)
-    image = models.ImageField(upload_to="records/%Y/%m/%d/")
+    image = models.ImageField(upload_to="records/%Y/%m/%d/", blank=True)
     emotions = models.JSONField(default=list)
     main_emotion = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(20)],

@@ -20,10 +20,11 @@ def uploaded_image(name="record.gif"):
 
 
 class RecordFormTests(TestCase):
-    def test_image_weather_content_and_emotion_are_required(self):
+    def test_weather_content_and_emotion_are_required_but_image_is_optional(self):
         form = RecordForm(data={})
         self.assertFalse(form.is_valid())
-        for field in ("image", "weather", "content", "emotions", "main_emotion"):
+        self.assertNotIn("image", form.errors)
+        for field in ("weather", "content", "emotions", "main_emotion"):
             self.assertIn(field, form.errors)
 
     def test_more_than_three_emotions_are_rejected(self):
@@ -100,6 +101,24 @@ class RecordCreateViewTests(TestCase):
         self.assertEqual(record.place_name, self.place.name)
         # 저장에 쓰인 인증은 소진되어야 다음 기록이 이 장소를 재사용하지 않는다.
         self.assertNotIn(VERIFIED_LOCATION_SESSION_KEY, self.client.session)
+
+    def test_record_can_be_created_without_an_image(self):
+        self.client.force_login(self.user)
+        self.verify_location()
+
+        response = self.client.post(reverse("records:create"), {
+            "weather": "sunny",
+            "content": "사진 없이 남긴 기록",
+            "emotions": ["1"],
+            "main_emotion": "1",
+            "place_name": self.place.name,
+            "latitude": str(self.place.latitude),
+            "longitude": str(self.place.longitude),
+        })
+
+        record = Record.objects.get()
+        self.assertRedirects(response, reverse("records:detail", args=[record.pk]))
+        self.assertFalse(record.image)
 
     def test_location_verification_is_required(self):
         self.client.force_login(self.user)

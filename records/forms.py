@@ -4,6 +4,7 @@ from .models import Record
 
 
 class RecordForm(forms.ModelForm):
+    image = forms.ImageField(required=False)
     emotions = forms.MultipleChoiceField(
         choices=[(str(number), f"감정 {number}") for number in range(1, 21)],
         required=True,

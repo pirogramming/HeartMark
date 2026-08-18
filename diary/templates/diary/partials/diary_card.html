@@ -1,3 +1,4 @@
+{% load static %}
 <!-- 일기 기록 카드 1개 감싸는 태그 -->
 <article class="diary-card">
     <!-- 카드 전체를 클릭할 수 있도록 하는 링크 -->
@@ -16,9 +17,11 @@
                     class="diary-card-image"
                 >
             {% else %}
-                <div class="diary-card-image-placeholder">
-                    <span>사진 없음</span>
-                </div>
+                <img
+                    src="{% static 'records/images/default-record-image.png' %}"
+                    alt="{{ record.created_at|date:'Y년 n월 j일' }} 기본 기록 이미지"
+                    class="diary-card-image"
+                >
             {% endif %}
 
             

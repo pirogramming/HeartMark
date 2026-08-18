@@ -77,14 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </header>
 
-        <div class="record-detail-layout">
+        <div class="record-detail-layout{% if not record.image %} record-detail-layout--no-photo{% endif %}">
+            {% if record.image %}
             <div class="record-detail-photo">
-                {% if record.image %}
                 <img src="{{ record.image.url }}" alt="{{ share.sender.first_name|default:share.sender.username }}님의 기록 사진">
-                {% else %}
-                <p>등록된 사진이 없어요.</p>
-                {% endif %}
             </div>
+            {% endif %}
 
             <div class="record-detail-content">{{ record.content|linebreaksbr }}</div>
         </div>

@@ -13,14 +13,12 @@
         </span>
     </header>
 
-    <div class="shared-record-card__body">
+    <div class="shared-record-card__body{% if not item.image_url %} shared-record-card__body--no-photo{% endif %}">
+        {% if item.image_url %}
         <div class="shared-record-card__photo">
-            {% if item.image_url %}
             <img src="{{ item.image_url }}" alt="{{ item.record_date }} 기록 사진">
-            {% else %}
-            <span>기록에 사진이 없어요.</span>
-            {% endif %}
         </div>
+        {% endif %}
 
         <div class="shared-record-card__content">
             <h3 class="shared-record-card__title">{{ item.title }}</h3>
