@@ -1580,6 +1580,37 @@ body.record-edit-open .site-main {
 
 /* Tablet: 768px - 1023px */
 @media (max-width: 1023px) {
+    .record-delete-overlay {
+        padding: 20px;
+    }
+
+    .record-delete-modal {
+        width: min(68vw, 500px);
+        padding: 34px 26px;
+        border-radius: 22px;
+    }
+
+    .record-delete-modal h2 {
+        font-size: 1.45rem;
+    }
+
+    .record-delete-modal p {
+        margin-top: 17px;
+        font-size: 0.9rem;
+        line-height: 1.55;
+    }
+
+    .record-delete-modal form {
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .record-delete-modal button {
+        min-width: 94px;
+        padding: 9px 14px;
+        font-size: 0.88rem;
+    }
+
     .record-overlay {
         padding: 24px 38px;
     }
@@ -2037,32 +2068,34 @@ body.record-edit-open .site-main {
     }
 
     .record-delete-overlay {
-        padding: 16px;
+        padding: 12px;
     }
 
     .record-delete-modal {
-        width: 100%;
-        padding: 38px 20px;
-        border-radius: 24px;
+        width: min(86vw, 320px);
+        padding: 24px 16px;
+        border-radius: 18px;
     }
 
     .record-delete-modal h2 {
-        font-size: 1.55rem;
+        font-size: 1.2rem;
     }
 
     .record-delete-modal p {
-        margin-top: 20px;
-        font-size: 0.92rem;
-        line-height: 1.6;
+        margin-top: 12px;
+        font-size: 0.82rem;
+        line-height: 1.5;
     }
 
     .record-delete-modal form {
-        gap: 10px;
-        margin-top: 28px;
+        gap: 8px;
+        margin-top: 18px;
     }
 
     .record-delete-modal button {
-        min-width: 100px;
+        min-width: 82px;
+        padding: 8px 12px;
+        font-size: 0.82rem;
     }
 
     .record-edit-shell {
