@@ -34,8 +34,10 @@
         </div>
     </div>
 
-    <footer class="shared-record-card__footer">
+    <footer class="shared-record-card__footer shared-record-card__footer--stacked">
         {% include "social_hub/partials/shared_record_comments.html" %}
-        <a href="{{ item.detail_url }}">기록 보러가기</a>
+        <div class="shared-record-card__footer-row shared-record-card__footer-row--end">
+            <a href="{{ item.detail_url }}">기록 보러가기</a>
+        </div>
     </footer>
 </article>

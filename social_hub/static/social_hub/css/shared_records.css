@@ -604,11 +604,30 @@
     background: #ffe7d9;
 }
 
-.sent-record-card__footer {
-    align-items: center;
+.shared-record-card__footer--stacked {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
 }
 
-.sent-record-card__footer > time {
+.shared-record-card__footer--stacked .shared-record-card__comments {
+    width: 100%;
+    flex: none;
+}
+
+.shared-record-card__footer-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.shared-record-card__footer-row--end {
+    justify-content: flex-end;
+}
+
+.shared-record-card__footer-row > time {
     color: var(--shared-muted);
     font-size: 0.7rem;
 }
@@ -761,6 +780,7 @@
     }
 
     .sent-record-card__footer,
+    .shared-record-card__footer-row,
     .sent-record-card__actions {
         align-items: stretch;
         flex-direction: column;
