@@ -1659,7 +1659,9 @@ body.record-edit-open .site-main {
 
     .record-create-layout,
     .record-modal--fullscreen .record-create-layout {
+        height: auto;
         grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+        grid-template-rows: auto auto auto;
         gap: 30px;
         row-gap: 14px;
     }
@@ -2159,8 +2161,8 @@ body.record-edit-open .site-main {
     }
 }
 
-/* Compact PC: keep the desktop layout usable around 1024px. */
-@media (min-width: 1024px) and (max-width: 1279px) {
+/* Compact PC / browser zoom: switch to the tighter tablet-like layout. */
+@media (min-width: 1024px) and (max-width: 1600px) {
     .record-overlay {
         padding: 22px 40px;
     }
@@ -2206,7 +2208,9 @@ body.record-edit-open .site-main {
     }
 
     .record-create-layout {
+        height: auto;
         grid-template-columns: minmax(250px, 0.82fr) minmax(0, 1.18fr);
+        grid-template-rows: auto auto auto;
         gap: 34px;
         row-gap: 12px;
     }
