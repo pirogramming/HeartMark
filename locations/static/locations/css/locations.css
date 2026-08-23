@@ -7,7 +7,7 @@
 :root {
     /* 페이지 배경은 common/css/base.css(body 배경 + .page-particles)가 담당한다.
        마이페이지(mypage.css)·기록쓰기(records.css)와 톤을 맞추기 위해
-       아래 값들은 그 두 화면의 --mypage-*/--record-* 토큰과 동일하게 맞춰뒀다. */
+       아래 값들은 그 두 화면의 --mypage-*--record-* 토큰과 동일하게 맞춰뒀다. */
     --loc-bg: #ffe7d0;            /* 버튼·배지·hover 강조 배경 (--record-accent와 동일) */
     --loc-card-bg: #fffff4;       /* 카드/지도 박스 배경 (--record-page와 동일) */
     --loc-border: #ecd9c2;        /* 검색창·드롭다운의 옅은 테두리 */
