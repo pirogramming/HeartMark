@@ -22,8 +22,8 @@
    padding/border를 넣어도 width 계산이 어긋나지 않게 한다. */
 .place-select,
 .place-select *,
-.seoul-map-page,
-.seoul-map-page * {
+.korea-map-page,
+.korea-map-page * {
     box-sizing: border-box;
 }
 
@@ -229,7 +229,7 @@
 /* =====================================================================
    화면 2. 지도 (map.html)
    ===================================================================== */
-.seoul-map-page {
+.korea-map-page {
     min-height: calc(100vh - 100px);
     /* "서울" 제목(약 50px)과 그 아래 간격이 빠진 만큼 지도부터 위로 끌어올린다.
        위 여백 48px를 없애고 나머지 30px는 음수 margin으로 당긴다

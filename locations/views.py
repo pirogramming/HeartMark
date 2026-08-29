@@ -93,10 +93,32 @@ def reverse_geocode(request):
 
     # "구" 이름은 지번 주소의 region_2depth_name에 들어있다 (예: "마포구").
     # 도로명 주소 쪽에도 같은 필드가 있지만 지번 주소가 항상 오는 편이라 그쪽을 우선 사용.
-    district = (address or road_address or {}).get("region_2depth_name", "")
+    # district = (address or road_address or {}).get("region_2depth_name", "")
 
-    return JsonResponse({"address": full_address, "district": district})
+    # return JsonResponse({"address": full_address, "district": district})
 
+    # 지번 주소 우선 사용.
+    region_address = address or road_address or {}
+
+    # 시도명 추출.
+    region_1depth_name = region_address.get(
+        "region_1depth_name",
+        "",
+    ).strip()
+
+    # 시군구명 추출.
+    district = region_address.get(
+        "region_2depth_name",
+        "",
+    ).strip()
+
+    return JsonResponse(
+        {
+            "address": full_address,
+            "region_1depth_name": region_1depth_name,
+            "district": district,
+        }
+    )
 
 @require_GET
 def search_address(request):
@@ -128,22 +150,47 @@ def search_address(request):
 
     documents = response.json().get("documents") or []
 
-    results = [
-        {
-            "name": document.get("place_name", ""),
-            # 도로명 주소가 없는 건물(신축 등)도 있어서 지번 주소로 대체.
-            "address": document.get("road_address_name") or document.get("address_name", ""),
-            "lat": document.get("y"),  # 키워드 검색 응답은 y=위도, x=경도 (coord2address와 동일 규칙)
-            "lng": document.get("x"),
-            "district": _extract_district(document.get("address_name", "")),
-            "kakao_place_id": document.get("id", ""),
-        }
-        for document in documents
-    ]
+    results = []
+
+    for document in documents:
+        address_name = document.get(
+            "address_name",
+            "",
+        )
+
+        (
+            region_1depth_name,
+            district,
+        ) = _extract_region_names(
+            address_name,
+        )
+
+        results.append(
+            {
+                "name": document.get(
+                    "place_name",
+                    "",
+                ),
+                "address": (
+                    document.get("road_address_name")
+                    or address_name
+                ),
+                "lat": document.get("y"),
+                "lng": document.get("x"),
+                "region_1depth_name": (
+                    region_1depth_name
+                ),
+                "district": district,
+                "kakao_place_id": document.get(
+                    "id",
+                    "",
+                ),
+            }
+        )
 
     return JsonResponse(results, safe=False)
 
-
+'''
 def _extract_district(address_name):
     """
     "서울 마포구 ~~~" 형태의 지번 주소 문자열에서 "구" 이름만 뽑아낸다.
@@ -157,6 +204,73 @@ def _extract_district(address_name):
         if part.endswith("구"):
             return part
     return ""
+'''
+# 전국 지도 수정본
+def _normalize_region_1depth_name(region_name):
+    """시도 약칭을 정식 명칭으로 변환함."""
+
+    region_name_map = {
+        "서울": "서울특별시",
+        "부산": "부산광역시",
+        "대구": "대구광역시",
+        "인천": "인천광역시",
+        "광주": "광주광역시",
+        "대전": "대전광역시",
+        "울산": "울산광역시",
+        "세종": "세종특별자치시",
+        "경기": "경기도",
+        "강원": "강원특별자치도",
+        "충북": "충청북도",
+        "충남": "충청남도",
+        "전북": "전북특별자치도",
+        "전남": "전라남도",
+        "경북": "경상북도",
+        "경남": "경상남도",
+        "제주": "제주특별자치도",
+    }
+
+    return region_name_map.get(
+        region_name,
+        region_name,
+    )
+
+
+def _extract_region_names(address_name):
+    """주소에서 시도명과 시군구명을 추출함."""
+
+    parts = address_name.split()
+
+    if not parts:
+        return "", ""
+
+    region_1depth_name = (
+        _normalize_region_1depth_name(parts[0])
+    )
+
+    # 세종은 하위 시군구 없이 단일 지역으로 처리.
+    if region_1depth_name == "세종특별자치시":
+        return (
+            region_1depth_name,
+            "세종특별자치시",
+        )
+
+    if len(parts) < 2:
+        return region_1depth_name, ""
+
+    district = parts[1]
+
+    # 일반구가 있는 도시 처리.
+    # 예: "경기 수원시 영통구" → "수원시 영통구"
+    if (
+        len(parts) >= 3
+        and parts[1].endswith("시")
+        and parts[2].endswith("구")
+    ):
+        district = (
+            f"{parts[1]} {parts[2]}"
+        )
+
+    return region_1depth_name, district
 
 
 @require_POST
@@ -181,6 +295,10 @@ def confirm_place(request):
     longitude = payload.get("longitude")
     address = payload.get("address")
     district = payload.get("district")
+    region_1depth_name = payload.get(
+        "region_1depth_name",
+        "",
+    ).strip()
 
     # Place 모델에서 필수(blank=False)인 필드들은 저장 전에 미리 검증해서
     # 빈 값으로 DB 에러가 나는 대신 명확한 400 응답을 준다.
@@ -193,10 +311,14 @@ def confirm_place(request):
     place = Place.objects.create(
         name=payload.get("name", ""),
         address=address,
+        region_1depth_name=region_1depth_name,
         district=district,
         latitude=latitude,
         longitude=longitude,
-        kakao_place_id=payload.get("kakao_place_id", ""),
+        kakao_place_id=payload.get(
+            "kakao_place_id",
+            "",
+        ),
     )
 
     set_verified_place(request, place)

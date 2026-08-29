@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function clearDistrictStyles() {
         document
-            .querySelectorAll(".seoul-map path")
+            .querySelectorAll(".korea-map path")
             .forEach((path) => {
 
                 // JavaScript fill 제거
@@ -178,14 +178,14 @@ document.addEventListener("DOMContentLoaded", () => {
             // 구 이름과 같은 SVG path 탐색
             const path =
                 document.getElementById(
-                    district.district
+                    region.regionCode
                 );
 
 
             // SVG path가 없는 경우 제외
             if (!path) {
                 console.warn(
-                    `SVG에서 구를 찾지 못했습니다: ${district.district}`
+                    `SVG에서 구를 찾지 못했습니다: ${region.regionCode}`
                 );
 
                 return;

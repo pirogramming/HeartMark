@@ -1504,7 +1504,7 @@ body.modal-open .site-header {
 }
 
 
-.seoul-map {
+.korea-map {
     display: block;
 
     width: 100%;
@@ -1512,7 +1512,7 @@ body.modal-open .site-header {
 }
 
 
-.seoul-map path {
+.korea-map path {
     /* 서울 구역 기본 스타일 */
     fill: #ffffff;
     stroke: #777777;
@@ -1526,13 +1526,13 @@ body.modal-open .site-header {
 }
 
 
-.seoul-map path:focus {
+.korea-map path:focus {
     /* SVG 기본 포커스 제거 */
     outline: none;
 }
 
 
-.seoul-map path.has-record {
+.korea-map path.has-record {
     /* 기록 있는 구역 */
     stroke-width: 2;
 
@@ -1540,7 +1540,7 @@ body.modal-open .site-header {
 }
 
 
-.seoul-map path.has-record:hover {
+.korea-map path.has-record:hover {
     /* 기록 있는 구역 hover */
     filter: brightness(0.94);
 }

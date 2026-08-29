@@ -23,7 +23,28 @@ class Place(models.Model):
     # 서울의 "구" 이름만 따로 저장 (예: "서대문구").
     # 카카오 API 응답의 region_2depth_name을 그대로 저장해두면,
     # 화면 2에서 구 단위 지도를 그릴 때마다 address 문자열을 매번 파싱하지 않아도 된다.
-    district = models.CharField(max_length=20)
+    # district = models.CharField(max_length=20)
+
+    # 시군구 이름 저장.
+    # 예: 마포구, 춘천시, 태안군
+    district = models.CharField(
+        max_length=50,
+    )
+
+    # 시도 이름 저장.
+    # 예: 서울특별시, 강원특별자치도, 충청남도
+    region_1depth_name = models.CharField(
+        max_length=30,
+        blank=True,
+    )
+
+    # 전국 SVG의 시군구 코드 저장.
+    # 예: 마포구 11140
+    sigungu_code = models.CharField(
+        max_length=5,
+        blank=True,
+        db_index=True,
+    )
 
     # 위도/경도. C가 records.Record에 임시로 넣어둔 필드와 타입을 맞췄다
     # (DecimalField, 소수점 7자리) — 나중에 Record가 이 모델을 FK로 참조하도록
